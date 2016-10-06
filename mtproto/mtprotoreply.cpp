@@ -6,6 +6,7 @@
 MTProtoReply::MTProtoReply(const QByteArray &data, int dcid, QObject *parent) : MTProtoStream(data, parent), _dcid(dcid)
 {
     this->_bodystart = 0;
+    this->_sessionid = 0;
 
     if(this->length() == 4)
     {
@@ -46,9 +47,19 @@ bool MTProtoReply::isError() const
     return this->length() == 4;
 }
 
+int MTProtoReply::dcid() const
+{
+    return this->_dcid;
+}
+
 TLInt MTProtoReply::errorCode() const
 {
     return this->_errorcode;
+}
+
+TLLong MTProtoReply::sessionId() const
+{
+    return this->_sessionid;
 }
 
 TLLong MTProtoReply::messageId() const
@@ -95,9 +106,9 @@ void MTProtoReply::readEncryptedMessage()
     this->_data.replace(this->_buffer.pos(), this->_buffer.bytesAvailable(), Aes::decrypt(this->_data.mid(this->_buffer.pos()), aeskey, aesiv));
 
     this->readTLLong(); // server_salt
-    this->readTLLong(); // session_id
-
+    this->_sessionid = this->readTLLong();
     this->_messageid = this->readTLLong();
+
     Q_ASSERT((qAbs((this->_messageid % 4)) == 1) || (qAbs((this->_messageid % 4)) == 3));
 
     this->readTLInt(); // seq_no

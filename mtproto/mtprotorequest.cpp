@@ -49,6 +49,8 @@ void MTProtoRequest::setSeqNo(TLInt seqno)
 
 void MTProtoRequest::setBody(MTProtoStream *body)
 {
+    body->setParent(this); // Take ownership
+
     this->_constructorid = body->peekTLConstructor();
     this->_body = body;
 }
@@ -80,6 +82,9 @@ TLLong MTProtoRequest::generateMessageId()
         this->_msgid = unixtime + ticks;
 
     this->_lastmsgid = this->_msgid = qMax(this->_msgid, this->_lastmsgid + 4);
+
+    if(!this->_mainmsgid)
+        this->_mainmsgid = this->_msgid;
 
     Q_ASSERT((this->_msgid % 2) == 0);
     return this->_msgid;

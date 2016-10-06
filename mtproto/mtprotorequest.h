@@ -47,7 +47,7 @@ class MTProtoRequest : public QObject
         TLLong _mainmsgid;
         TLLong _msgid;
         TLInt _seqno;
-        const MTProtoStream* _body;
+        MTProtoStream* _body;
 
     private:
         static QHash<int, bool> _firstmap;

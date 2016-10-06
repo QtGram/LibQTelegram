@@ -14,7 +14,9 @@ class MTProtoReply : public MTProtoStream
         explicit MTProtoReply(const QByteArray& data, TLLong messageid, int dcid, QObject *parent = 0);
         virtual ~MTProtoReply();
         bool isError() const;
+        int dcid() const;
         TLInt errorCode() const;
+        TLLong sessionId() const;
         TLLong messageId() const;
         TLConstructor constructorId() const;
         QByteArray cbody() const;
@@ -30,6 +32,7 @@ class MTProtoReply : public MTProtoStream
         int _bodystart;
         TLInt128 _messagekey;
         TLLong _authorizationkeyid;
+        TLLong _sessionid;
         TLLong _messageid;
         TLInt _messagelength;
         TLInt _errorcode;

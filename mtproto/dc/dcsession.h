@@ -1,6 +1,7 @@
 #ifndef DCSESSION_H
 #define DCSESSION_H
 
+#include <QTimer>
 #include "dc.h"
 #include "../../config/telegramconfig.h"
 #include "../../types/basic.h"
@@ -21,7 +22,13 @@ class DCSession : public QObject
     private:
         void generateSessionId();
 
+    private slots:
+        void sendAck();
+        void queueAck(MTProtoStream*);
+
     private:
+        QTimer* _acktimer;
+        TLVector<TLLong> _ackqueue;
         TLLong _sessionid;
         TLLong _lastmsgid;
         DC* _dc;

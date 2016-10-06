@@ -208,7 +208,6 @@ SOURCES += \
     mtproto/dc/dc.cpp \
     mtproto/dc/dcauthorization.cpp \
     mtproto/dc/dcconnection.cpp \
-    mtproto/dc/dcmessagepool.cpp \
     mtproto/dc/dcsession.cpp \
     mtproto/dc/dcsessionmanager.cpp \
     mtproto/decompiler/mtprotodecompilerbase.cpp \
@@ -425,7 +424,6 @@ HEADERS +=\
     mtproto/dc/dc.h \
     mtproto/dc/dcauthorization.h \
     mtproto/dc/dcconnection.h \
-    mtproto/dc/dcmessagepool.h \
     mtproto/dc/dcsession.h \
     mtproto/dc/dcsessionmanager.h \
     mtproto/decompiler/mtprotodecompilerbase.h \

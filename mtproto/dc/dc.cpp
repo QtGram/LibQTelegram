@@ -6,9 +6,9 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::configurationReceived, this, &DC::configurationReceived);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
-    connect(this->_mtservicehandler, SIGNAL(configurationReceived(Config*)), this, SIGNAL(configurationReceived(Config*)));
-    connect(this->_mtservicehandler, SIGNAL(migrateDC(int)), this, SIGNAL(migrateDC(int)));
     connect(this, &DC::connected, this, &DC::sendPendingRequests);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
 }
@@ -26,10 +26,10 @@ int DC::id() const
 
 MTProtoRequest *DC::popRequest(TLLong msgid)
 {
-    if(!this->_requests.contains(msgid))
+    if(!this->_sentrequests.contains(msgid))
         return NULL;
 
-    return this->_requests.take(msgid);
+    return this->_sentrequests.take(msgid);
 }
 
 void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
@@ -94,8 +94,7 @@ void DC::handleReply(MTProtoReply *mtreply)
         return;
     }
 
-    //TODO: Free memory
-    MTProtoRequest* req = this->_requests[mtreply->messageId()];
+    MTProtoRequest* req = this->_sentrequests[mtreply->messageId()];
 
     if(!req)
     {
@@ -105,6 +104,9 @@ void DC::handleReply(MTProtoReply *mtreply)
 
     MTProtoStream mtstream(mtreply->body());
     emit req->replied(&mtstream);
+
+    this->_sentrequests.remove(mtreply->messageId());
+    req->deleteLater();
 }
 
 void DC::sendPendingRequests()
@@ -134,8 +136,6 @@ TLLong DC::send(MTProtoRequest *req)
     {
         if(req->encrypted())
         {
-            this->_requests[req->mainMessageId()] = req;
-
             DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
 
             if(dcconfig.authorization() < DCConfig::Authorized)
@@ -144,9 +144,19 @@ TLLong DC::send(MTProtoRequest *req)
             req->setSeqNo(this->generateContentMsgNo());
         }
 
+        if(this->_sentrequests.contains(req->messageId()))
+            this->_sentrequests.remove(req->messageId());
+
         QByteArray reqpayload = req->build();
+
+        if(req->encrypted())
+            this->_sentrequests[req->messageId()] = req;
+
         this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
         this->write(reqpayload);
+
+        if(!req->encrypted())
+            req->deleteLater(); // Plain requests are handled manually
     }
     else
     {

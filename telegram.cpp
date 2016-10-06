@@ -140,8 +140,7 @@ void Telegram::tryConnect()
     TelegramConfig::config()->setDebugMode(true);
 
     DCSession* dcsession = DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
-//    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, true, this->_apiid, this->_apphash);
-    MTProtoRequest* req = TelegramAPI::authCheckPhone(dcsession, this->_phonenumber);
+    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, true, this->_apiid, this->_apihash);
     connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
 }
 
