@@ -126,14 +126,14 @@ void DCAuthorization::handleDHParamsFail()
 void DCAuthorization::handleDHParamsOk()
 {
     ClientDHInnerData clientdhinnerdata;
-    clientdhinnerdata.setNonce(this->_dhnonce);
-    clientdhinnerdata.setServerNonce(this->_dhservernonce);
+    clientdhinnerdata.setNonce(this->_respq->nonce());
+    clientdhinnerdata.setServerNonce(this->_respq->serverNonce());
     clientdhinnerdata.setRetryId(this->_retryid);
     clientdhinnerdata.setGB(this->_g_b);
 
     TLBytes encclientdhinnerdata;
     this->encryptClientDHInnerData(&clientdhinnerdata, this->_tmpaeskey, this->_tmpaesiv, encclientdhinnerdata);
-    MTProtoAPI::setClientDHParams(this->_dcsession, this->_dhnonce, this->_dhservernonce, encclientdhinnerdata);
+    MTProtoAPI::setClientDHParams(this->_dcsession, this->_respq->nonce(), this->_respq->serverNonce(), encclientdhinnerdata);
 }
 
 void DCAuthorization::handleAuthorized()
@@ -161,7 +161,7 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
     serverdhparams.read(mtstream);
 
     TLBytes newnonce = ByteConverter::serialize(this->_newnonce);
-    TLBytes servernonce = ByteConverter::serialize(serverdhparams.serverNonce());
+    TLBytes servernonce = ByteConverter::serialize(this->_respq->serverNonce());
 
     this->_tmpaeskey = Sha1::hash(newnonce + servernonce) + Sha1::hash(servernonce + newnonce).left(12);
     this->_tmpaesiv = Sha1::hash(servernonce + newnonce).mid(12, 8) + Sha1::hash(newnonce + newnonce) + newnonce.left(4);
@@ -194,9 +194,6 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 
     dcconfig.setServerTime(serverdhinnerdata.serverTime());
     dcconfig.setAuthorizationKey(Math::modExp(serverdhinnerdata.gA(), serverdhinnerdata.dhPrime(), b));
-
-    this->_dhnonce = serverdhinnerdata.nonce();
-    this->_dhservernonce = serverdhinnerdata.serverNonce();
 
     this->authorize();
 }
@@ -249,6 +246,9 @@ void DCAuthorization::onConfigurationReceived(Config *config)
 {
     foreach(const DcOption* dcoption, config->dcOptions())
     {
+        if(dcoption->isMediaOnly()) // NOTE: "Media Only" DCs needs investigation
+            continue;
+
         DCConfig& dcconfig = TelegramConfig::config()->setDcConfig(dcoption->id(), dcoption->isIpv6());
         dcconfig.setHost(dcoption->ipAddress());
         dcconfig.setPort(dcoption->port());

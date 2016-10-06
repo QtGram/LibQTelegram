@@ -48,8 +48,6 @@ class DCAuthorization : public QObject
         ResPQ* _respq;
         TLInt128 _nonce;
         TLInt256 _newnonce;
-        TLInt128 _dhnonce;
-        TLInt128 _dhservernonce;
         TLInt _retryid;
 
     private:
