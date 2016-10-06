@@ -14,7 +14,7 @@ TelegramConfig* TelegramConfig::_config = NULL;
 
 TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0)
 {
-    this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QDir::separator() + CONFIG_FOLDER;
+    this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
 
     this->_devicemodel = "Unknown Device";
     this->_osversion = "Unknown OS";
