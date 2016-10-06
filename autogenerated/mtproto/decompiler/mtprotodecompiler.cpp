@@ -5,7 +5,7 @@
 
 QHash< TLConstructor, std::function<void(MTProtoDecompiler*, QString&, MTProtoStream&)> > MTProtoDecompiler::_ctordispatcher;
 
-void MTProtoDecompiler::decompile(int direction, TLLong messageid, const QByteArray& data) 
+void MTProtoDecompiler::decompile(int dcid, int direction, TLLong messageid, const QByteArray& data) 
 {
 	QString result;
 	MTProtoStream mtstream(data);
@@ -15,9 +15,9 @@ void MTProtoDecompiler::decompile(int direction, TLLong messageid, const QByteAr
 		return;
 	
 	if(direction == MTProtoDecompiler::DIRECTION_IN)
-		qDebug().noquote() << "IN" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
+		qDebug().noquote() << "DC" << dcid << "IN" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
 	else if(direction == MTProtoDecompiler::DIRECTION_OUT)
-		qDebug().noquote() << "OUT" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
+		qDebug().noquote() << "DC" << dcid << "OUT" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
 }
 
 void MTProtoDecompiler::doDecompile(QString& result, MTProtoStream& mtstream, TLLong messageid) 

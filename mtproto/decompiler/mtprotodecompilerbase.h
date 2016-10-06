@@ -16,7 +16,7 @@ class MTProtoDecompilerBase : public QObject
 
     public:
         explicit MTProtoDecompilerBase(QObject *parent = 0);
-        virtual void decompile(int direction, TLLong messageid, const QByteArray& data) = 0;
+        virtual void decompile(int dcid, int direction, TLLong messageid, const QByteArray& data) = 0;
 
     private:
         bool isPrintable(const QByteArray& ba);

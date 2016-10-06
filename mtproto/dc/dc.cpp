@@ -40,7 +40,7 @@ void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
     if(!this->_mtdecompiler)
         this->_mtdecompiler = new MTProtoDecompiler();
 
-    this->_mtdecompiler->decompile(direction, messageid, body);
+    this->_mtdecompiler->decompile(this->_dcid, direction, messageid, body);
 }
 
 TLInt DC::getPacketLength()
