@@ -31,44 +31,38 @@ QJsonObject DCConfig::toJson()
     jsonobj["port"] = this->_port;
     jsonobj["servertime"] = this->_servertime;
     jsonobj["serversalt"] = this->_serversalt;
+    jsonobj["authorization"] = this->_authorization;
     jsonobj["authorizationkey"] = QString(this->_authorizationkey.toHex());
-    jsonobj["ipv6"] = this->_ipv6 ? "true" : "false";
+    jsonobj["ipv6"] = this->_ipv6;
 
     return jsonobj;
 }
 
 bool DCConfig::fromJson(const QJsonObject &jsonobj)
 {
-    if(!jsonobj.contains("host"))
-        return false;
+    if(jsonobj.contains("id"))
+        this->_id = jsonobj["id"].toInt();
 
-    this->_host = jsonobj["host"].toString();
+    if(jsonobj.contains("host"))
+        this->_host = jsonobj["host"].toString();
 
-    if(!jsonobj.contains("port"))
-        return false;
+    if(jsonobj.contains("port"))
+        this->_port = jsonobj["port"].toInt();
 
-    this->_port = jsonobj["port"].toInt();
+    if(jsonobj.contains("servertime"))
+        this->_servertime = jsonobj["servertime"].toInt();
 
-    if(!jsonobj.contains("servertime"))
-        return false;
+    if(jsonobj.contains("serversalt"))
+        this->_serversalt = jsonobj["serversalt"].toInt();
 
-    this->_servertime = jsonobj["servertime"].toInt();
+    if(jsonobj.contains("authorization"))
+        this->_authorization = jsonobj["authorization"].toInt();
 
-    if(!jsonobj.contains("serversalt"))
-        return false;
+    if(jsonobj.contains("authorizationkey"))
+        this->_authorizationkey = QByteArray::fromHex(jsonobj["authorizationkey"].toString().toUtf8());
 
-    this->_servertime = jsonobj["serversalt"].toInt();
-
-    if(!jsonobj.contains("authorizationkey"))
-        return false;
-
-    QByteArray authkeyhex = jsonobj["serversalt"].toString().toUtf8();
-    this->_authorizationkey = QByteArray::fromHex(authkeyhex);
-
-    if(!this->_authorizationkey.isEmpty())
-        this->_authorization = DCConfig::Authorized;
-    else
-        this->_authorization = DCConfig::NotAuthorized;
+    if(jsonobj.contains("ipv6"))
+        this->_ipv6 = jsonobj["ipv6"].toBool();
 
     return true;
 }

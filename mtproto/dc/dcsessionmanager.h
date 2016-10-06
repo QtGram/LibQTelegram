@@ -25,6 +25,7 @@ class DCSessionManager: public QObject
 
     public:
         DCSession* mainSession() const;
+        DCSession* createMainSession(const DCConfig& dcconfig);
         DCSession* createMainSession(const QString& host, qint16 port, int dcid);
         DCSession* createMainSession(int dcid);
         DCSession* createSession(int dcid);

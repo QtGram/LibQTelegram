@@ -77,6 +77,11 @@ DCSession *DCSessionManager::mainSession() const
     return this->_mainsession;
 }
 
+DCSession *DCSessionManager::createMainSession(const DCConfig &dcconfig)
+{
+    return this->createMainSession(dcconfig.host(), dcconfig.port(), dcconfig.id());
+}
+
 DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port, int dcid)
 {
     DCSession* oldsession = this->_mainsession;
@@ -113,8 +118,7 @@ DCSession *DCSessionManager::createSession(int dcid)
 void DCSessionManager::onAuthorized(DC* dc)
 {
     Q_ASSERT(this->_dcauthorizations.contains(dc));
-
-    TelegramConfig::config()->save(); // Update DC Configuration file
+    DC_CONFIG_SAVE;
 
     DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
     dcauthorization->deleteLater();

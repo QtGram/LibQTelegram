@@ -1,6 +1,9 @@
 #ifndef TELEGRAMCONFIG_H
 #define TELEGRAMCONFIG_H
 
+#define DC_CONFIG_SIGNED_DCID TelegramConfig::config()->signedDcId()
+#define DC_CONFIG_SAVE TelegramConfig::config()->save()
+
 #define GET_DC_CONFIG_FROM_DCID(dcid) TelegramConfig::config()->dcConfig(dcid)
 #define GET_DC_CONFIG_FROM_DC(dc) GET_DC_CONFIG_FROM_DCID(dc->id())
 #define GET_DC_CONFIG_FROM_SESSION(dcsession) GET_DC_CONFIG_FROM_DC(dcsession->dc())
@@ -20,6 +23,7 @@ class TelegramConfig
         static TelegramConfig* init(TLInt layernum, TLInt apiid, const QString& apihash, const QString& publickey, const QString &phonenumber);
 
     public:
+        int signedDcId() const;
         DCConfig& dcConfig(int dcid);
         DCConfig& setDcConfig(int dcid, bool ipv6);
         void save();

@@ -38,7 +38,6 @@ TelegramConfig *TelegramConfig::init(TLInt layernum, TLInt apiid, const QString 
         return TelegramConfig::_config;
 
     TelegramConfig::_config = new TelegramConfig();
-
     TelegramConfig::_config->_layernum = layernum;
     TelegramConfig::_config->_apiid = apiid;
     TelegramConfig::_config->_apihash = apihash;
@@ -47,6 +46,28 @@ TelegramConfig *TelegramConfig::init(TLInt layernum, TLInt apiid, const QString 
     TelegramConfig::_config->load();
 
     return TelegramConfig::_config;
+}
+
+int TelegramConfig::signedDcId() const
+{
+    if(this->_ipv6)
+    {
+        foreach(const DCConfig& dcconfig, this->_dcconfigipv6.values())
+        {
+            if(dcconfig.authorization() == DCConfig::Signed)
+                return dcconfig.id();
+        }
+    }
+    else
+    {
+        foreach(const DCConfig& dcconfig, this->_dcconfig.values())
+        {
+            if(dcconfig.authorization() == DCConfig::Signed)
+                return dcconfig.id();
+        }
+    }
+
+    return -1;
 }
 
 DCConfig &TelegramConfig::dcConfig(int dcid)
