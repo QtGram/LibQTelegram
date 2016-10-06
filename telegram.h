@@ -13,7 +13,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
     Q_PROPERTY(QString publicKey READ publicKey WRITE setPublicKey NOTIFY publicKeyChanged)
     Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
     Q_PROPERTY(QString phoneNumber READ phoneNumber WRITE setPhoneNumber NOTIFY phoneNumberChanged)
-    Q_PROPERTY(QString appHash READ appHash WRITE setAppHash NOTIFY appHashChanged)
+    Q_PROPERTY(QString apiHash READ apiHash WRITE setApiHash NOTIFY apiHashChanged)
     Q_PROPERTY(qint32 apiId READ apiId WRITE setApiId NOTIFY apiIdChanged)
     Q_PROPERTY(qint32 port READ port WRITE setPort NOTIFY portChanged)
     Q_PROPERTY(qint32 dcId READ dcId WRITE setDcId NOTIFY dcIdChanged)
@@ -23,7 +23,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
         explicit Telegram(QObject *parent = 0);
         const QString& publicKey() const;
         const QString& host() const;
-        const QString& appHash() const;
+        const QString& apiHash() const;
         const QString& phoneNumber() const;
         qint32 apiId() const;
         qint32 port() const;
@@ -33,7 +33,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
     public:
         void setPublicKey(const QString& publickey);
         void setHost(const QString& host);
-        void setAppHash(const QString& apphash);
+        void setApiHash(const QString& apphash);
         void setPhoneNumber(const QString& phonenumber);
         void setApiId(qint32 appid);
         void setPort(qint32 port);
@@ -49,7 +49,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
     signals:
         void publicKeyChanged();
         void hostChanged();
-        void appHashChanged();
+        void apiHashChanged();
         void phoneNumberChanged();
         void apiIdChanged();
         void portChanged();
@@ -60,7 +60,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
         QString _publickey;
         QString _host;
         QString _phonenumber;
-        QString _apphash;
+        QString _apihash;
         qint32 _apiid;
         qint32 _port;
         qint32 _dcid;

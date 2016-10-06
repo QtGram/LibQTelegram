@@ -20,9 +20,9 @@ qint32 Telegram::apiId() const
     return this->_apiid;
 }
 
-const QString &Telegram::appHash() const
+const QString &Telegram::apiHash() const
 {
-    return this->_apphash;
+    return this->_apihash;
 }
 
 const QString &Telegram::phoneNumber() const
@@ -67,14 +67,14 @@ void Telegram::setHost(const QString &host)
     emit hostChanged();
 }
 
-void Telegram::setAppHash(const QString &apphash)
+void Telegram::setApiHash(const QString &apphash)
 {
-    if(this->_apphash == apphash)
+    if(this->_apihash == apphash)
         return;
 
-    this->_apphash = apphash;
+    this->_apihash = apphash;
     this->tryConnect();
-    emit appHashChanged();
+    emit apiHashChanged();
 }
 
 void Telegram::setPhoneNumber(const QString &phonenumber)
@@ -130,17 +130,18 @@ void Telegram::setDebugMode(bool dbgmode)
 
 void Telegram::tryConnect()
 {
-    if(this->_publickey.isEmpty() || this->_host.isEmpty() || this->_phonenumber.isEmpty() || this->_apphash.isEmpty())
+    if(this->_publickey.isEmpty() || this->_host.isEmpty() || this->_phonenumber.isEmpty() || this->_apihash.isEmpty())
         return;
 
     if(!this->_apiid || !this->_port || !this->_dcid)
         return;
 
-    TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apphash, this->_publickey, this->_phonenumber);
+    TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
     TelegramConfig::config()->setDebugMode(true);
 
     DCSession* dcsession = DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
-    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, true, this->_apiid, this->_apphash);
+//    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, true, this->_apiid, this->_apphash);
+    MTProtoRequest* req = TelegramAPI::authCheckPhone(dcsession, this->_phonenumber);
     connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
 }
 
