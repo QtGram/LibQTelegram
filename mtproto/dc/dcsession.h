@@ -24,7 +24,7 @@ class DCSession : public QObject
 
     private slots:
         void sendAck();
-        void queueAck(MTProtoStream*);
+        void queueAck(MTProtoReply *);
 
     private:
         QTimer* _acktimer;

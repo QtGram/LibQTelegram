@@ -128,6 +128,22 @@ void Telegram::setDebugMode(bool dbgmode)
     emit debugModeChanged();
 }
 
+void Telegram::signIn(const TLString &phonecode)
+{
+    MTProtoRequest* req = TelegramAPI::authSignIn(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode);
+    connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);
+
+    this->_phonecodehash.clear();
+}
+
+void Telegram::signUp(const TLString &firstname, const TLString &lastname, const TLString &phonecode)
+{
+    MTProtoRequest* req = TelegramAPI::authSignUp(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode, firstname, lastname);
+    connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);
+
+    this->_phonecodehash.clear();
+}
+
 void Telegram::tryConnect()
 {
     if(this->_publickey.isEmpty() || this->_host.isEmpty() || this->_phonenumber.isEmpty() || this->_apihash.isEmpty())
@@ -139,12 +155,39 @@ void Telegram::tryConnect()
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
     TelegramConfig::config()->setDebugMode(true);
 
-    DCSession* dcsession = DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
-    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, true, this->_apiid, this->_apihash);
-    connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
+    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
+
+    if(dcconfig.authorization() < DCConfig::Signed)
+    {
+        MTProtoRequest* req = TelegramAPI::authSendCode(DC_MAIN_SESSION, this->_phonenumber, true, this->_apiid, this->_apihash);
+        connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
+    }
 }
 
-void Telegram::onAuthCheckPhoneReplied(MTProtoStream *mtstream)
+void Telegram::onAuthCheckPhoneReplied(MTProtoReply *mtreply)
 {
-    qDebug() << "REPLY";
+    AuthSentCode sentcode;
+    sentcode.read(mtreply);
+
+    this->_phonecodehash = sentcode.phoneCodeHash();
+
+    if(sentcode.isPhoneRegistered())
+    {
+        emit signInRequested();
+        return;
+    }
+
+    emit signUpRequested();
+}
+
+void Telegram::onLoginCompleted(MTProtoReply *mtreply)
+{
+    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(mtreply->dcid());
+
+    AuthAuthorization authorization;
+    authorization.read(mtreply);
+
+    dcconfig.setAuthorization(DCConfig::Signed);
+    emit loginCompleted();
 }

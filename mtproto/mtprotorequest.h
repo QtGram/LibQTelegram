@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include "mtprotostream.h"
+#include "mtprotoreply.h"
 
 class MTProtoRequest : public QObject
 {
@@ -37,7 +38,7 @@ class MTProtoRequest : public QObject
         QByteArray buildPlain();
 
     signals:
-        void replied(MTProtoStream* reply);
+        void replied(MTProtoReply* reply);
 
     private:
         TLLong& _lastmsgid;

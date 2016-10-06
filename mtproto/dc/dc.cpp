@@ -102,8 +102,7 @@ void DC::handleReply(MTProtoReply *mtreply)
         return;
     }
 
-    MTProtoStream mtstream(mtreply->body());
-    emit req->replied(&mtstream);
+    emit req->replied(mtreply);
 
     this->_sentrequests.remove(mtreply->messageId());
     req->deleteLater();

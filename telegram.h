@@ -40,13 +40,21 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
         void setDcId(qint32 dcid);
         void setDebugMode(bool dbgmode);
 
+    public slots:
+        void signIn(const TLString& phonecode);
+        void signUp(const TLString& firstname, const TLString& lastname, const TLString& phonecode);
+
     private:
         void tryConnect();
 
     private slots:
-        void onAuthCheckPhoneReplied(MTProtoStream* mtstream);
+        void onAuthCheckPhoneReplied(MTProtoReply *mtreply);
+        void onLoginCompleted(MTProtoReply* mtreply);
 
     signals:
+        void signUpRequested();
+        void signInRequested();
+        void loginCompleted();
         void publicKeyChanged();
         void hostChanged();
         void apiHashChanged();
@@ -65,6 +73,9 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
         qint32 _port;
         qint32 _dcid;
         bool _debugmode;
+
+     private:
+        TLString _phonecodehash;
 };
 
 #endif // TELEGRAM_H

@@ -64,7 +64,7 @@ void DCSession::sendAck()
     req->deleteLater();
 }
 
-void DCSession::queueAck(MTProtoStream *)
+void DCSession::queueAck(MTProtoReply *)
 {
     MTProtoRequest* req = qobject_cast<MTProtoRequest*>(this->sender());
 
