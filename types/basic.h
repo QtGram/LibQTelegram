@@ -4,7 +4,7 @@
 #include <QtGlobal>
 #include <QString>
 
-#define IS_FLAG_SET(flags, bitno) flags & (1 << bitno)
+#define IS_FLAG_SET(flags, bitno) ((flags & (1 << bitno)) ? true : false)
 #define SET_FLAG_BIT(flags, bitno) flags |= (1 << bitno)
 #define UNSET_FLAG_BIT(flags, bitno) flags & ~(1 << bitno)
 #define SET_FLAG_BIT_VALUE(flags, bitno, v) flags |= ((v ? 1 : 0) << bitno)
