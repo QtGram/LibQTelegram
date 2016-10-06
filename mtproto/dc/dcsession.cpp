@@ -13,6 +13,21 @@ DCSession::DCSession(DC *dc, QObject *parent) : QObject(parent), _lastmsgid(0), 
     this->generateSessionId();
 }
 
+bool DCSession::ownedDc() const
+{
+    return this->_owneddc;
+}
+
+TLLong DCSession::sessionId() const
+{
+    return this->_sessionid;
+}
+
+TLLong *DCSession::lastMsgId()
+{
+    return &this->_lastmsgid;
+}
+
 DC *DCSession::dc() const
 {
     return this->_dc;
@@ -25,7 +40,7 @@ void DCSession::setOwnedDC(bool b)
 
 MTProtoRequest *DCSession::sendPlain(MTProtoStream *mtstream)
 {
-    MTProtoRequest* req = new MTProtoRequest(this->_lastmsgid, this->_dc->id(), this);
+    MTProtoRequest* req = new MTProtoRequest(&this->_lastmsgid, this->_dc->id());
     req->setBody(mtstream); // Take ownership
 
     this->_dc->send(req);
@@ -34,7 +49,7 @@ MTProtoRequest *DCSession::sendPlain(MTProtoStream *mtstream)
 
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 {
-    MTProtoRequest* req = new MTProtoRequest(this->_lastmsgid, this->_dc->id(), this);
+    MTProtoRequest* req = new MTProtoRequest(&this->_lastmsgid, this->_dc->id());
     req->setSessionId(this->_sessionid);
     req->setBody(mtstream); // Take ownership
 
@@ -55,7 +70,7 @@ void DCSession::sendAck()
     mtstream->writeTLConstructor(TLTypes::MsgsAck);
     mtstream->writeTLVector(this->_ackqueue);
 
-    MTProtoRequest* req = new MTProtoRequest(this->_lastmsgid, this->_dc->id());
+    MTProtoRequest* req = new MTProtoRequest(&this->_lastmsgid, this->_dc->id());
     req->setSessionId(this->_sessionid);
     req->setBody(mtstream); // Take ownership
 

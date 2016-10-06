@@ -163,13 +163,13 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
     TLBytes newnonce = ByteConverter::serialize(this->_newnonce);
     TLBytes servernonce = ByteConverter::serialize(serverdhparams.serverNonce());
 
-    this->_tmpaeskey = Sha1::hash(newnonce + servernonce) + Sha1::hash(servernonce + newnonce).mid(0, 12);
-    this->_tmpaesiv = Sha1::hash(servernonce + newnonce).mid(12, 8) + Sha1::hash(newnonce + newnonce) + newnonce.mid(0, 4);
+    this->_tmpaeskey = Sha1::hash(newnonce + servernonce) + Sha1::hash(servernonce + newnonce).left(12);
+    this->_tmpaesiv = Sha1::hash(servernonce + newnonce).mid(12, 8) + Sha1::hash(newnonce + newnonce) + newnonce.left(4);
 
     TLBytes answer = Aes::decrypt(serverdhparams.encryptedAnswer(), this->_tmpaeskey, this->_tmpaesiv);
 
     // Sanity checks
-    TLBytes sha1answer = answer.mid(0, Sha1::BYTES_COUNT);
+    TLBytes sha1answer = answer.left(Sha1::BYTES_COUNT);
     answer = answer.mid(Sha1::BYTES_COUNT, 564); // Strip SHA1 part
     Q_ASSERT(sha1answer == Sha1::hash(answer));
 

@@ -24,14 +24,6 @@ int DC::id() const
     return this->_dcid;
 }
 
-MTProtoRequest *DC::popRequest(TLLong msgid)
-{
-    if(!this->_sentrequests.contains(msgid))
-        return NULL;
-
-    return this->_sentrequests.take(msgid);
-}
-
 void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
 {
     if(!TelegramConfig::config()->debugMode())
@@ -65,7 +57,14 @@ void DC::handleReply(const QByteArray &message)
 {
     MTProtoReply mtreply(message, this->_dcid);
 
-    Q_ASSERT((mtreply.messageId() % 2) != 0);
+    if(mtreply.isError())
+    {
+        qDebug() << "ERROR:" << mtreply.errorCode();
+        return;
+    }
+
+    if(((mtreply.messageId() % 4) != 1) && ((mtreply.messageId() % 4) != 3))
+        qFatal("Invalid server MessageId %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
 
     TLInt servertime = mtreply.messageId() >> 32;
     DCConfig& dcconfig = GET_DC_CONFIG_FROM_DC(this);
@@ -76,12 +75,6 @@ void DC::handleReply(const QByteArray &message)
 
 void DC::handleReply(MTProtoReply *mtreply)
 {
-    if(mtreply->isError())
-    {
-        qDebug() << "ERROR:" << mtreply->errorCode();
-        return;
-    }
-
     if(this->_mtservicehandler->handle(mtreply))
         return;
 
@@ -113,7 +106,7 @@ void DC::sendPendingRequests()
     int idx = 0;
     DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
 
-    for(int i = 0; i < this->_pendingrequests.length(); i++)
+    while(idx < this->_pendingrequests.length())
     {
         MTProtoRequest* req = this->_pendingrequests[idx];
 
@@ -166,6 +159,21 @@ TLLong DC::send(MTProtoRequest *req)
     }
 
     return req->messageId();
+}
+
+void DC::takeRequests(TLLong sessionid, TLLong* lastmsgid, DC *fromdc)
+{
+    QList<TLLong> messageids = fromdc->_sentrequests.keys();
+    qSort(messageids); // Sort by messageid
+
+    foreach(TLLong messageid, messageids)
+    {
+        MTProtoRequest* req = fromdc->_sentrequests[messageid];
+        req->setDcId(this->_dcid);
+        req->setLastMsgId(lastmsgid);
+        req->setSessionId(sessionid);
+        this->_pendingrequests << req;
+    }
 }
 
 void DC::onDCReadyRead()

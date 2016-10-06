@@ -18,20 +18,21 @@ class DCSessionManager: public QObject
         DC* createDC(int id);
         void doAuthorization(DCSession* dcsession);
         void initSession(DCSession* dcsession);
-        void closeSession(DCSession* dcsession, bool closedc = false);
+        void closeSession(DCSession* dcsession);
 
     public:
         static DCSessionManager* instance();
 
     public:
         DCSession* mainSession() const;
-        DCSession* createMainSession(const QString& host, qint16 port, int id);
-        DCSession* createSession(int id);
+        DCSession* createMainSession(const QString& host, qint16 port, int dcid);
+        DCSession* createMainSession(int dcid);
+        DCSession* createSession(int dcid);
 
     private slots:
         void onAuthorized(DC *dc);
         void onAuthorizationReply(MTProtoReply *mtreply);
-        void onMigrateDC(int dcid);
+        void onMigrateDC(int fromdcid, int todcid);
 
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;

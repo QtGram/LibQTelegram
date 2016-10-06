@@ -14,6 +14,9 @@ class DCSession : public QObject
 
     public:
         explicit DCSession(DC* dc, QObject *parent = 0);
+        bool ownedDc() const;
+        TLLong sessionId() const;
+        TLLong* lastMsgId();
         DC* dc() const;
         void setOwnedDC(bool b);
         MTProtoRequest* sendPlain(MTProtoStream *mtstream);

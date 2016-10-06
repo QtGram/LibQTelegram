@@ -16,12 +16,13 @@ class MTProtoServiceHandler : public QObject
     signals:
         void configurationReceived(Config* config);
         void serviceHandled(MTProtoReply* mtreply);
-        void migrateDC(int dcid);
+        void migrateDC(int fromdcid, int todcid);
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);
         bool handleRpcResult(MTProtoReply* mtreply);
         bool handleRpcError(MTProtoReply* mtreply);
+        bool handleBadMsgNotification(MTProtoReply* mtreply);
         bool handleGzipPacked(MTProtoReply* mtreply);
         bool handleNewSessionCreated(MTProtoReply* mtreply);
         bool handleMsgAck(MTProtoReply* mtreply);

@@ -17,15 +17,16 @@ class MTProtoRequest : public QObject
     Q_OBJECT
 
     public:
-        explicit MTProtoRequest(TLLong& lastmsgid, int dcid, QObject *parent = 0);
+        explicit MTProtoRequest(TLLong* lastmsgid, int dcid, QObject *parent = 0);
         TLConstructor constructorId() const;
-        TLLong mainMessageId() const;
         TLLong messageId() const;
         bool encrypted() const;
         const QByteArray& body() const;
         QByteArray build();
 
-    public: // Encrypted setters
+    public:
+        void setDcId(int dcid);
+        void setLastMsgId(TLLong* lastmsgid);
         void setSessionId(TLLong sessionid);
         void setSeqNo(TLInt seqno);
         void setBody(MTProtoStream *body);
@@ -41,7 +42,7 @@ class MTProtoRequest : public QObject
         void replied(MTProtoReply* reply);
 
     private:
-        TLLong& _lastmsgid;
+        TLLong* _lastmsgid;
         int _dcid;
         TLConstructor _constructorid;
         TLLong _sessionid;

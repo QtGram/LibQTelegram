@@ -20,7 +20,7 @@ class DC : public DCConnection
     public:
         void sendPendingRequests();
         TLLong send(MTProtoRequest *req);
-        MTProtoRequest* popRequest(TLLong msgid);
+        void takeRequests(TLLong sessionid, TLLong *lastmsgid, DC* fromdc);
 
     private:
         void decompile(int direction, TLLong messageid, const QByteArray &body);
@@ -35,7 +35,7 @@ class DC : public DCConnection
     signals:
         void authorizationReply(MTProtoReply* mtreply);
         void configurationReceived(Config* config);
-        void migrateDC(int dcid);
+        void migrateDC(int fromdcid, int dcid);
 
     private:
         QList<MTProtoRequest*> _pendingrequests;

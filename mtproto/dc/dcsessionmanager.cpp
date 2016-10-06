@@ -53,12 +53,12 @@ void DCSessionManager::initSession(DCSession *dcsession)
         this->doAuthorization(this->_mainsession);
 }
 
-void DCSessionManager::closeSession(DCSession *dcsession, bool closedc)
+void DCSessionManager::closeSession(DCSession *dcsession)
 {
     DC* dc = dcsession->dc();
     Q_ASSERT(dc != NULL);
 
-    if(closedc)
+    if(dcsession->ownedDc())
         dc->close();
 
     dcsession->deleteLater();
@@ -77,26 +77,33 @@ DCSession *DCSessionManager::mainSession() const
     return this->_mainsession;
 }
 
-DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port, int id)
+DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port, int dcid)
 {
-    if(this->_mainsession)
-    {
-        this->closeSession(this->_mainsession, true);
-        this->_mainsession = NULL;
-    }
-
-    DC* dc = this->createDC(host, port, id);
+    DCSession* oldsession = this->_mainsession;
+    DC* dc = this->createDC(host, port, dcid);
 
     this->_mainsession = new DCSession(dc, this);
     this->_mainsession->setOwnedDC(true);
+
+    if(oldsession)
+    {
+        dc->takeRequests(this->_mainsession->sessionId(), this->_mainsession->lastMsgId(), oldsession->dc());
+        this->closeSession(oldsession);
+    }
 
     this->initSession(this->_mainsession);
     return this->_mainsession;
 }
 
-DCSession *DCSessionManager::createSession(int id)
+DCSession *DCSessionManager::createMainSession(int dcid)
 {
-    DC* dc = this->createDC(id);
+    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(dcid);
+    return this->createMainSession(dcconfig.host(), dcconfig.port(), dcid);
+}
+
+DCSession *DCSessionManager::createSession(int dcid)
+{
+    DC* dc = this->createDC(dcid);
     DCSession* dcsession = new DCSession(dc, this);
 
     this->initSession(dcsession);
@@ -125,7 +132,8 @@ void DCSessionManager::onAuthorizationReply(MTProtoReply *mtreply)
     dcauthorization->authorizeReply(mtreply);
 }
 
-void DCSessionManager::onMigrateDC(int dcid)
+void DCSessionManager::onMigrateDC(int fromdcid, int todcid)
 {
-    DCSession* dcession = this->createSession(dcid);
+    qDebug().noquote() << "DC" << fromdcid << "->" << todcid;
+    this->createMainSession(todcid);
 }

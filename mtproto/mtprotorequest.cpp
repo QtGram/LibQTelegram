@@ -6,7 +6,7 @@
 
 QHash<int, bool> MTProtoRequest::_firstmap;
 
-MTProtoRequest::MTProtoRequest(TLLong &lastmsgid, int dcid, QObject *parent) : QObject(parent), _lastmsgid(lastmsgid), _dcid(dcid), _constructorid(0), _sessionid(0), _mainmsgid(0), _msgid(0), _seqno(0), _body(NULL)
+MTProtoRequest::MTProtoRequest(TLLong *lastmsgid, int dcid, QObject *parent) : QObject(parent), _lastmsgid(lastmsgid), _dcid(dcid), _constructorid(0), _sessionid(0), _msgid(0), _seqno(0), _body(NULL)
 {
     TRY_INIT_FIRST(dcid);
     this->generateMessageId(); // Preparate a messageId
@@ -15,11 +15,6 @@ MTProtoRequest::MTProtoRequest(TLLong &lastmsgid, int dcid, QObject *parent) : Q
 TLConstructor MTProtoRequest::constructorId() const
 {
     return this->_constructorid;
-}
-
-TLLong MTProtoRequest::mainMessageId() const
-{
-    return this->_mainmsgid;
 }
 
 TLLong MTProtoRequest::messageId() const
@@ -68,6 +63,16 @@ QByteArray MTProtoRequest::build()
     return request;
 }
 
+void MTProtoRequest::setDcId(int dcid)
+{
+    this->_dcid = dcid;
+}
+
+void MTProtoRequest::setLastMsgId(TLLong *lastmsgid)
+{
+    this->_lastmsgid = lastmsgid;
+}
+
 TLLong MTProtoRequest::generateMessageId()
 {
     Q_ASSERT(this->_dcid > 0);
@@ -81,12 +86,16 @@ TLLong MTProtoRequest::generateMessageId()
     else
         this->_msgid = unixtime + ticks;
 
-    this->_lastmsgid = this->_msgid = qMax(this->_msgid, this->_lastmsgid + 4);
+    this->_msgid += 0x1238;
 
-    if(!this->_mainmsgid)
-        this->_mainmsgid = this->_msgid;
+    if((this->_msgid % 2) != 0)
+        this->_msgid++;
 
-    Q_ASSERT((this->_msgid % 2) == 0);
+    *this->_lastmsgid = this->_msgid = qMax(this->_msgid, (*this->_lastmsgid) + 4);
+
+    if((this->_msgid % 4) != 0)
+        qFatal("MessageId %llx not divisible by 4 (yields %lld)", this->_msgid, this->_msgid % 4);
+
     return this->_msgid;
 }
 

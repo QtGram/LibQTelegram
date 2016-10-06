@@ -20,6 +20,9 @@ bool MTProtoServiceHandler::handle(MTProtoReply *mtreply)
     if(mtreply->constructorId() == TLTypes::RpcError)
         return this->handleRpcError(mtreply);
 
+    if(mtreply->constructorId() == TLTypes::BadMsgNotification)
+        return this->handleBadMsgNotification(mtreply);
+
     if(mtreply->constructorId() == TLTypes::GzipPacked)
         return this->handleGzipPacked(mtreply);
 
@@ -77,7 +80,47 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
             return true;
         }
 
-        emit migrateDC(dcnum.toInt());
+        emit migrateDC(this->_dcid, dcnum.toInt());
+    }
+
+    return true;
+}
+
+bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
+{
+    BadMsgNotification badmsgnotification;
+    badmsgnotification.read(mtreply);
+
+    if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadMsgNotification)
+    {
+        if(badmsgnotification.errorCode() == 16)
+            qWarning() << "BadMsgNotification: msg_id too low";
+        else if(badmsgnotification.errorCode() == 17)
+            qWarning() << "BadMsgNotification: msg_id too high";
+        else if(badmsgnotification.errorCode() == 18)
+            qWarning() << "BadMsgNotification: Incorrect two lower order msg_id bits";
+        else if(badmsgnotification.errorCode() == 19)
+            qWarning() << "BadMsgNotification: Container msg_id is the same as msg_id of a previously received message";
+        else if(badmsgnotification.errorCode() == 20)
+            qWarning() << "BadMsgNotification: Message too old";
+        else if(badmsgnotification.errorCode() == 32)
+            qWarning() << "BadMsgNotification: msg_seqno too low";
+        else if(badmsgnotification.errorCode() == 33)
+            qWarning() << "BadMsgNotification: msg_seqno too high";
+        else if(badmsgnotification.errorCode() == 34)
+            qWarning() << "BadMsgNotification: Even msg_seqno expected";
+        else if(badmsgnotification.errorCode() == 35)
+            qWarning() << "BadMsgNotification: Odd msg_seqno expected";
+        else if(badmsgnotification.errorCode() == 48)
+            qWarning() << "BadMsgNotification: Incorrect Server Salt";
+        else if(badmsgnotification.errorCode() == 64)
+            qWarning() << "BadMsgNotification: Invalid container";
+        else
+            qWarning("BadMsgNotification: unknown error code %d", badmsgnotification.errorCode());
+    }
+    else if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadServerSalt)
+    {
+        qDebug() << "Handle Bad Server Salt"; // TODO: "Handle Bad Server Salt"
     }
 
     return true;

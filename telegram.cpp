@@ -160,7 +160,7 @@ void Telegram::tryConnect()
 
     if(dcconfig.authorization() < DCConfig::Signed)
     {
-        MTProtoRequest* req = TelegramAPI::authSendCode(DC_MAIN_SESSION, this->_phonenumber, true, this->_apiid, this->_apihash);
+        MTProtoRequest* req = TelegramAPI::authSendCode(DC_MAIN_SESSION, this->_phonenumber, false, this->_apiid, this->_apihash);
         connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
     }
 }
