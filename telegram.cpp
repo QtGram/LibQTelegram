@@ -128,7 +128,7 @@ void Telegram::setDebugMode(bool dbgmode)
     emit debugModeChanged();
 }
 
-void Telegram::signIn(const TLString &phonecode)
+void Telegram::signIn(const QString &phonecode)
 {
     MTProtoRequest* req = TelegramAPI::authSignIn(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode);
     connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);
@@ -136,7 +136,7 @@ void Telegram::signIn(const TLString &phonecode)
     this->_phonecodehash.clear();
 }
 
-void Telegram::signUp(const TLString &firstname, const TLString &lastname, const TLString &phonecode)
+void Telegram::signUp(const QString &firstname, const QString &lastname, const QString &phonecode)
 {
     MTProtoRequest* req = TelegramAPI::authSignUp(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode, firstname, lastname);
     connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);

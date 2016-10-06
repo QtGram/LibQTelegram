@@ -41,8 +41,8 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
         void setDebugMode(bool dbgmode);
 
     public slots:
-        void signIn(const TLString& phonecode);
-        void signUp(const TLString& firstname, const TLString& lastname, const TLString& phonecode);
+        void signIn(const QString& phonecode);
+        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
 
     private:
         void tryConnect();
