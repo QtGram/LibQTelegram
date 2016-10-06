@@ -81,7 +81,7 @@ void DC::handleReply(MTProtoReply *mtreply)
     this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
     DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
 
-    if(dcconfig.authorization() != DCConfig::Authorized)
+    if(dcconfig.authorization() < DCConfig::Authorized)
     {
         emit authorizationReply(mtreply);
         return;
