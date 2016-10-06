@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
-QT       += network
+QT       += network quick
 
 TARGET = QTelegram
 TEMPLATE = lib
@@ -223,7 +223,8 @@ SOURCES += \
     types/mtproto/rpcresult.cpp \
     types/byteconverter.cpp \
     types/telegramobject.cpp \
-    telegram.cpp
+    telegram.cpp \
+    telegraminitializer.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -440,7 +441,8 @@ HEADERS +=\
     types/basic.h \
     types/byteconverter.h \
     types/telegramobject.h \
-    telegram.h
+    telegram.h \
+    telegraminitializer.h
 
 unix {
     target.path = /usr/lib
