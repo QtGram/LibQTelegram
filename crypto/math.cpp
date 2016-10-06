@@ -107,12 +107,12 @@ TLBytes Math::modExp(const TLBytes &n, const TLBytes &m, const TLBytes &e)
 
 int Math::padRequired(int len, int by)
 {
-    int i = len;
+    int pad = by - (len % by);
 
-    while(i % by)
-        i++;
+    if((pad > 0) && (pad < by))
+        return pad;
 
-    return i - len;
+    return 0;
 }
 
 void Math::randomize(TLBytes &ba, int from, int len)
