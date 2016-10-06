@@ -59,7 +59,7 @@ void DC::handleReply(const QByteArray &message)
 
     if(mtreply.isError())
     {
-        qDebug() << "ERROR:" << mtreply.errorCode();
+        qDebug() << "DC" << this->_dcid << "ERROR" << qAbs(mtreply.errorCode());
         return;
     }
 
