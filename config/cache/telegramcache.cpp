@@ -106,11 +106,13 @@ void TelegramCache::save() const
     this->saveToFile<Dialog>(this->_dialogs, "dialogs");
     this->saveToFile<User>(this->_users, "users");
     this->saveToFile<Chat>(this->_chats, "chats");
+    this->saveToFile<Message>(this->_messages, "messages");
 }
 
 void TelegramCache::load()
 {
-    this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
-    this->loadFromFile<User>(this->_users, "users");
+    this->loadFromFile<Message>(this->_messages, "messages");
     this->loadFromFile<Chat>(this->_chats, "chats");
+    this->loadFromFile<User>(this->_users, "users");
+    this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
 }
