@@ -2,6 +2,7 @@
 #define BASIC_H
 
 #include <QtGlobal>
+#include <QMetaType>
 #include <QString>
 
 #define IS_FLAG_SET(flags, bitno) ((flags & (1 << bitno)) ? true : false)
@@ -30,8 +31,10 @@ class TLString: public QByteArray
         TLString(): QByteArray() { }
         TLString(const QByteArray& rhs): QByteArray(rhs) { }
         TLString(const QString& rhs): QByteArray(rhs.toUtf8()) { }
-        QString toQString() const { return QString::fromUtf8(*this); }
+        QString toString() const { return QString::fromUtf8(*this); }
 };
+
+Q_DECLARE_METATYPE(TLString)
 
 template<typename T> using TLVector = QList<T>;
 

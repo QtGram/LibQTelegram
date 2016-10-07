@@ -11,10 +11,10 @@
 #define TG_NAME(prefix, name) QString("%1%2").arg(prefix, name).toUtf8().constData()
 
 #define REGISTER_TYPE(type) \
-    qRegisterMetaType<type>();
+    qRegisterMetaType<type>()
 
 #define REGISTER_OBJECT(objectname) \
-    qmlRegisterType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, TG_NAME(prefix, #objectname));
+    qmlRegisterType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, TG_NAME(prefix, #objectname))
 
 TelegramInitializer::TelegramInitializer()
 {
@@ -23,12 +23,15 @@ TelegramInitializer::TelegramInitializer()
 
 void TelegramInitializer::initialize(const QString &uri, const QString &prefix)
 {
-    REGISTER_TYPE(TLTrue)
-    REGISTER_TYPE(TLBool)
-    REGISTER_TYPE(TLInt)
+    REGISTER_TYPE(TLTrue);
+    REGISTER_TYPE(TLBool);
+    REGISTER_TYPE(TLInt);
+    REGISTER_TYPE(TLBytes);
+    REGISTER_TYPE(TLString);
 
     REGISTER_OBJECT(User);
     REGISTER_OBJECT(Chat);
+    REGISTER_OBJECT(Message);
 
     REGISTER_OBJECT(Telegram);
     REGISTER_OBJECT(DialogObject);
