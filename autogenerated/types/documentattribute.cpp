@@ -38,12 +38,33 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 		this->_flags = mtstream->readTLInt();
 		this->_is_mask = IS_FLAG_SET(this->_flags, 1);
 		this->_alt = mtstream->readTLString();
-		RESET_TLTYPE(InputStickerSet, this->_stickerset);
-		this->_stickerset->read(mtstream);
+		TLInt stickerset_ctor = mtstream->peekTLConstructor();
+		
+		if(stickerset_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputStickerSet, this->_stickerset);
+			this->_stickerset->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_stickerset);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			RESET_TLTYPE(MaskCoords, this->_mask_coords);
-			this->_mask_coords->read(mtstream);
+			TLInt mask_coords_ctor = mtstream->peekTLConstructor();
+			
+			if(mask_coords_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MaskCoords, this->_mask_coords);
+				this->_mask_coords->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_mask_coords);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo)
@@ -92,12 +113,17 @@ void DocumentAttribute::write(MTProtoStream* mtstream)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_alt);
-		Q_ASSERT(this->_stickerset != NULL);
-		this->_stickerset->write(mtstream);
+		if(this->_stickerset != NULL)
+			this->_stickerset->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			Q_ASSERT(this->_mask_coords != NULL);
-			this->_mask_coords->write(mtstream);
+			if(this->_mask_coords != NULL)
+				this->_mask_coords->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo)

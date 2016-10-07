@@ -97,8 +97,18 @@ void MessageEntity::read(MTProtoStream* mtstream)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
-		RESET_TLTYPE(InputUser, this->_user_id_inputmessageentitymentionname);
-		this->_user_id_inputmessageentitymentionname->read(mtstream);
+		TLInt user_id_inputmessageentitymentionname_ctor = mtstream->peekTLConstructor();
+		
+		if(user_id_inputmessageentitymentionname_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputUser, this->_user_id_inputmessageentitymentionname);
+			this->_user_id_inputmessageentitymentionname->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_user_id_inputmessageentitymentionname);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -188,8 +198,10 @@ void MessageEntity::write(MTProtoStream* mtstream)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
-		Q_ASSERT(this->_user_id_inputmessageentitymentionname != NULL);
-		this->_user_id_inputmessageentitymentionname->write(mtstream);
+		if(this->_user_id_inputmessageentitymentionname != NULL)
+			this->_user_id_inputmessageentitymentionname->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

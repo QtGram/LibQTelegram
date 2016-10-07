@@ -21,10 +21,31 @@ void UserProfilePhoto::read(MTProtoStream* mtstream)
 	if(this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto)
 	{
 		this->_photo_id = mtstream->readTLLong();
-		RESET_TLTYPE(FileLocation, this->_photo_small);
-		this->_photo_small->read(mtstream);
-		RESET_TLTYPE(FileLocation, this->_photo_big);
-		this->_photo_big->read(mtstream);
+		TLInt photo_small_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_small_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(FileLocation, this->_photo_small);
+			this->_photo_small->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo_small);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt photo_big_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_big_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(FileLocation, this->_photo_big);
+			this->_photo_big->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo_big);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -39,10 +60,15 @@ void UserProfilePhoto::write(MTProtoStream* mtstream)
 	if(this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto)
 	{
 		mtstream->writeTLLong(this->_photo_id);
-		Q_ASSERT(this->_photo_small != NULL);
-		this->_photo_small->write(mtstream);
-		Q_ASSERT(this->_photo_big != NULL);
-		this->_photo_big->write(mtstream);
+		if(this->_photo_small != NULL)
+			this->_photo_small->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_photo_big != NULL)
+			this->_photo_big->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

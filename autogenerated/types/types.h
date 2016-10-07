@@ -163,10 +163,10 @@
 #include "inputgame.h"
 #include "highscore.h"
 #include "messageshighscores.h"
-#include "../../types/mtproto/mtprotomessage.h"
-#include "../../types/mtproto/messagecontainer.h"
-#include "../../types/mtproto/rpcresult.h"
 #include "../../types/mtproto/messagecopy.h"
+#include "../../types/mtproto/mtprotomessage.h"
 #include "../../types/mtproto/mtprotoobject.h"
+#include "../../types/mtproto/rpcresult.h"
+#include "../../types/mtproto/messagecontainer.h"
 
 #endif // TYPES_H

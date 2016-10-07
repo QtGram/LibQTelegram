@@ -19,8 +19,19 @@ void TopPeer::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == TopPeer::ctorTopPeer)
 	{
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_rating = mtstream->readTLDouble();
 	}
 }
@@ -34,8 +45,11 @@ void TopPeer::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == TopPeer::ctorTopPeer)
 	{
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLDouble(this->_rating);
 	}
 }

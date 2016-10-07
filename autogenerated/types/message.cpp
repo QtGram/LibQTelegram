@@ -48,12 +48,33 @@ void Message::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 8))
 			this->_from_id = mtstream->readTLInt();
 		
-		RESET_TLTYPE(Peer, this->_to_id);
-		this->_to_id->read(mtstream);
+		TLInt to_id_ctor = mtstream->peekTLConstructor();
+		
+		if(to_id_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_to_id);
+			this->_to_id->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_to_id);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
-			this->_fwd_from->read(mtstream);
+			TLInt fwd_from_ctor = mtstream->peekTLConstructor();
+			
+			if(fwd_from_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->_fwd_from->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_fwd_from);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -66,14 +87,34 @@ void Message::read(MTProtoStream* mtstream)
 		this->_message = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 9))
 		{
-			RESET_TLTYPE(MessageMedia, this->_media);
-			this->_media->read(mtstream);
+			TLInt media_ctor = mtstream->peekTLConstructor();
+			
+			if(media_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MessageMedia, this->_media);
+				this->_media->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_media);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))
@@ -97,14 +138,35 @@ void Message::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 8))
 			this->_from_id = mtstream->readTLInt();
 		
-		RESET_TLTYPE(Peer, this->_to_id);
-		this->_to_id->read(mtstream);
+		TLInt to_id_ctor = mtstream->peekTLConstructor();
+		
+		if(to_id_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_to_id);
+			this->_to_id->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_to_id);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 3))
 			this->_reply_to_msg_id = mtstream->readTLInt();
 		
 		this->_date = mtstream->readTLInt();
-		RESET_TLTYPE(MessageAction, this->_action);
-		this->_action->read(mtstream);
+		TLInt action_ctor = mtstream->peekTLConstructor();
+		
+		if(action_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(MessageAction, this->_action);
+			this->_action->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_action);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -126,12 +188,17 @@ void Message::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 8))
 			mtstream->writeTLInt(this->_from_id);
 		
-		Q_ASSERT(this->_to_id != NULL);
-		this->_to_id->write(mtstream);
+		if(this->_to_id != NULL)
+			this->_to_id->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_fwd_from != NULL);
-			this->_fwd_from->write(mtstream);
+			if(this->_fwd_from != NULL)
+				this->_fwd_from->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -144,14 +211,18 @@ void Message::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_message);
 		if(IS_FLAG_SET(this->_flags, 9))
 		{
-			Q_ASSERT(this->_media != NULL);
-			this->_media->write(mtstream);
+			if(this->_media != NULL)
+				this->_media->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))
@@ -170,14 +241,19 @@ void Message::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 8))
 			mtstream->writeTLInt(this->_from_id);
 		
-		Q_ASSERT(this->_to_id != NULL);
-		this->_to_id->write(mtstream);
+		if(this->_to_id != NULL)
+			this->_to_id->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 3))
 			mtstream->writeTLInt(this->_reply_to_msg_id);
 		
 		mtstream->writeTLInt(this->_date);
-		Q_ASSERT(this->_action != NULL);
-		this->_action->write(mtstream);
+		if(this->_action != NULL)
+			this->_action->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

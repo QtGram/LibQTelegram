@@ -29,6 +29,7 @@ class DC : public DCConnection
         TLInt getPacketLength();
 
     private slots:
+        void repeatLastRequest();
         void handleReply(MTProtoReply* mtreply);
         void onDCReadyRead();
 
@@ -44,6 +45,7 @@ class DC : public DCConnection
         MTProtoDecompiler* _mtdecompiler;
         TLInt _lastpacketlen;
         TLInt _contentmsgno;
+        TLLong _lastmsgid;
         int _dcid;
 };
 

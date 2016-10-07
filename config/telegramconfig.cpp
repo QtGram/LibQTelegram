@@ -15,6 +15,7 @@ TelegramConfig* TelegramConfig::_config = NULL;
 TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0)
 {
     this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
+    this->_updatesstate = new UpdatesState();
 
     this->_devicemodel = "Unknown Device";
     this->_osversion = "Unknown OS";
@@ -100,6 +101,11 @@ DCConfig &TelegramConfig::setDcConfig(int dcid, bool ipv6)
         this->_dcconfig[dcid] = DCConfig(ipv6);
 
     return this->_dcconfig[dcid];
+}
+
+UpdatesState *TelegramConfig::updateState()
+{
+    return this->_updatesstate;
 }
 
 void TelegramConfig::save()

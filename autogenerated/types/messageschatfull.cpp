@@ -18,8 +18,19 @@ void MessagesChatFull::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesChatFull::ctorMessagesChatFull)
 	{
-		RESET_TLTYPE(ChatFull, this->_full_chat);
-		this->_full_chat->read(mtstream);
+		TLInt full_chat_ctor = mtstream->peekTLConstructor();
+		
+		if(full_chat_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatFull, this->_full_chat);
+			this->_full_chat->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_full_chat);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
@@ -34,8 +45,11 @@ void MessagesChatFull::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesChatFull::ctorMessagesChatFull)
 	{
-		Q_ASSERT(this->_full_chat != NULL);
-		this->_full_chat->write(mtstream);
+		if(this->_full_chat != NULL)
+			this->_full_chat->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}

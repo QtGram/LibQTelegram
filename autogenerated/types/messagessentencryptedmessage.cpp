@@ -22,8 +22,18 @@ void MessagesSentEncryptedMessage::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
 	{
 		this->_date = mtstream->readTLInt();
-		RESET_TLTYPE(EncryptedFile, this->_file);
-		this->_file->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(EncryptedFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -40,8 +50,10 @@ void MessagesSentEncryptedMessage::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
 	{
 		mtstream->writeTLInt(this->_date);
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

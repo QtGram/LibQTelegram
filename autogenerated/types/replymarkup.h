@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "keyboardbuttonrow.h"
 #include "../../types/telegramobject.h"
+#include "keyboardbuttonrow.h"
 
 class ReplyMarkup: public TelegramObject
 {

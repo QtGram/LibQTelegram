@@ -20,8 +20,18 @@ void InputNotifyPeer::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputNotifyPeer::ctorInputNotifyPeer)
 	{
-		RESET_TLTYPE(InputPeer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputPeer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -37,8 +47,10 @@ void InputNotifyPeer::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputNotifyPeer::ctorInputNotifyPeer)
 	{
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

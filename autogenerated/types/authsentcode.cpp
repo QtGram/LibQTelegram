@@ -24,13 +24,34 @@ void AuthSentCode::read(MTProtoStream* mtstream)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_phone_registered = IS_FLAG_SET(this->_flags, 0);
-		RESET_TLTYPE(AuthSentCodeType, this->_type);
-		this->_type->read(mtstream);
+		TLInt type_ctor = mtstream->peekTLConstructor();
+		
+		if(type_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(AuthSentCodeType, this->_type);
+			this->_type->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_type);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_phone_code_hash = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			RESET_TLTYPE(AuthCodeType, this->_next_type);
-			this->_next_type->read(mtstream);
+			TLInt next_type_ctor = mtstream->peekTLConstructor();
+			
+			if(next_type_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(AuthCodeType, this->_next_type);
+				this->_next_type->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_next_type);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 2))
@@ -48,13 +69,18 @@ void AuthSentCode::write(MTProtoStream* mtstream)
 	if(this->_constructorid == AuthSentCode::ctorAuthSentCode)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_type != NULL);
-		this->_type->write(mtstream);
+		if(this->_type != NULL)
+			this->_type->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_phone_code_hash);
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			Q_ASSERT(this->_next_type != NULL);
-			this->_next_type->write(mtstream);
+			if(this->_next_type != NULL)
+				this->_next_type->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 2))

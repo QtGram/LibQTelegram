@@ -26,25 +26,78 @@ void UserFull::read(MTProtoStream* mtstream)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_blocked = IS_FLAG_SET(this->_flags, 0);
-		RESET_TLTYPE(User, this->_user);
-		this->_user->read(mtstream);
+		TLInt user_ctor = mtstream->peekTLConstructor();
+		
+		if(user_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(User, this->_user);
+			this->_user->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_user);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 1))
 			this->_about = mtstream->readTLString();
 		
-		RESET_TLTYPE(ContactsLink, this->_link);
-		this->_link->read(mtstream);
-		if(IS_FLAG_SET(this->_flags, 2))
+		TLInt link_ctor = mtstream->peekTLConstructor();
+		
+		if(link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Photo, this->_profile_photo);
-			this->_profile_photo->read(mtstream);
+			RESET_TLTYPE(ContactsLink, this->_link);
+			this->_link->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_link);
+			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
-		this->_notify_settings->read(mtstream);
+		if(IS_FLAG_SET(this->_flags, 2))
+		{
+			TLInt profile_photo_ctor = mtstream->peekTLConstructor();
+			
+			if(profile_photo_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(Photo, this->_profile_photo);
+				this->_profile_photo->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_profile_photo);
+				mtstream->readTLConstructor(); // Skip Null
+			}
+		}
+		
+		TLInt notify_settings_ctor = mtstream->peekTLConstructor();
+		
+		if(notify_settings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->_notify_settings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_notify_settings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 3))
 		{
-			RESET_TLTYPE(BotInfo, this->_bot_info);
-			this->_bot_info->read(mtstream);
+			TLInt bot_info_ctor = mtstream->peekTLConstructor();
+			
+			if(bot_info_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(BotInfo, this->_bot_info);
+				this->_bot_info->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_bot_info);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 }
@@ -59,25 +112,38 @@ void UserFull::write(MTProtoStream* mtstream)
 	if(this->_constructorid == UserFull::ctorUserFull)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_user != NULL);
-		this->_user->write(mtstream);
+		if(this->_user != NULL)
+			this->_user->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 1))
 			mtstream->writeTLString(this->_about);
 		
-		Q_ASSERT(this->_link != NULL);
-		this->_link->write(mtstream);
+		if(this->_link != NULL)
+			this->_link->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_profile_photo != NULL);
-			this->_profile_photo->write(mtstream);
+			if(this->_profile_photo != NULL)
+				this->_profile_photo->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
-		Q_ASSERT(this->_notify_settings != NULL);
-		this->_notify_settings->write(mtstream);
+		if(this->_notify_settings != NULL)
+			this->_notify_settings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 3))
 		{
-			Q_ASSERT(this->_bot_info != NULL);
-			this->_bot_info->write(mtstream);
+			if(this->_bot_info != NULL)
+				this->_bot_info->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 }

@@ -12,6 +12,9 @@
 #define RESET_TLTYPE(classtype, type) if(type) type->deleteLater(); \
                                       type = new classtype();
 
+#define NULL_TLTYPE(type) if(type) type->deleteLater(); \
+                           type = NULL;
+
 typedef quint32 TLConstructor;
 typedef quint8 TLTrue;
 typedef bool TLBool;

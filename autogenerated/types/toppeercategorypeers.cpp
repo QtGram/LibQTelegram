@@ -19,8 +19,19 @@ void TopPeerCategoryPeers::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
 	{
-		RESET_TLTYPE(TopPeerCategory, this->_category);
-		this->_category->read(mtstream);
+		TLInt category_ctor = mtstream->peekTLConstructor();
+		
+		if(category_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(TopPeerCategory, this->_category);
+			this->_category->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_category);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<TopPeer>(this->_peers, false);
 	}
@@ -35,8 +46,11 @@ void TopPeerCategoryPeers::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
 	{
-		Q_ASSERT(this->_category != NULL);
-		this->_category->write(mtstream);
+		if(this->_category != NULL)
+			this->_category->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_peers, false);
 	}

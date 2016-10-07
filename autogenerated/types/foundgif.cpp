@@ -31,10 +31,31 @@ void FoundGif::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == FoundGif::ctorFoundGifCached)
 	{
 		this->_url = mtstream->readTLString();
-		RESET_TLTYPE(Photo, this->_photo);
-		this->_photo->read(mtstream);
-		RESET_TLTYPE(Document, this->_document);
-		this->_document->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt document_ctor = mtstream->peekTLConstructor();
+		
+		if(document_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Document, this->_document);
+			this->_document->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_document);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -58,10 +79,15 @@ void FoundGif::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == FoundGif::ctorFoundGifCached)
 	{
 		mtstream->writeTLString(this->_url);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
-		Q_ASSERT(this->_document != NULL);
-		this->_document->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_document != NULL)
+			this->_document->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

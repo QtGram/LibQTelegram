@@ -66,14 +66,34 @@ void User::read(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 5))
 		{
-			RESET_TLTYPE(UserProfilePhoto, this->_photo);
-			this->_photo->read(mtstream);
+			TLInt photo_ctor = mtstream->peekTLConstructor();
+			
+			if(photo_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(UserProfilePhoto, this->_photo);
+				this->_photo->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_photo);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			RESET_TLTYPE(UserStatus, this->_status);
-			this->_status->read(mtstream);
+			TLInt status_ctor = mtstream->peekTLConstructor();
+			
+			if(status_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(UserStatus, this->_status);
+				this->_status->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_status);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 14))
@@ -118,14 +138,18 @@ void User::write(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 5))
 		{
-			Q_ASSERT(this->_photo != NULL);
-			this->_photo->write(mtstream);
+			if(this->_photo != NULL)
+				this->_photo->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			Q_ASSERT(this->_status != NULL);
-			this->_status->write(mtstream);
+			if(this->_status != NULL)
+				this->_status->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 14))

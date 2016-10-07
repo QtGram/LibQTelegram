@@ -35,14 +35,58 @@ void ChatFull::read(MTProtoStream* mtstream)
 	if(this->_constructorid == ChatFull::ctorChatFull)
 	{
 		this->_id = mtstream->readTLInt();
-		RESET_TLTYPE(ChatParticipants, this->_participants);
-		this->_participants->read(mtstream);
-		RESET_TLTYPE(Photo, this->_chat_photo);
-		this->_chat_photo->read(mtstream);
-		RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
-		this->_notify_settings->read(mtstream);
-		RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
-		this->_exported_invite->read(mtstream);
+		TLInt participants_ctor = mtstream->peekTLConstructor();
+		
+		if(participants_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatParticipants, this->_participants);
+			this->_participants->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_participants);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt chat_photo_ctor = mtstream->peekTLConstructor();
+		
+		if(chat_photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_chat_photo);
+			this->_chat_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_chat_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt notify_settings_ctor = mtstream->peekTLConstructor();
+		
+		if(notify_settings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->_notify_settings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_notify_settings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt exported_invite_ctor = mtstream->peekTLConstructor();
+		
+		if(exported_invite_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
+			this->_exported_invite->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_exported_invite);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<BotInfo>(this->_bot_info, false);
 	}
 	else if(this->_constructorid == ChatFull::ctorChannelFull)
@@ -64,12 +108,45 @@ void ChatFull::read(MTProtoStream* mtstream)
 		this->_read_inbox_max_id = mtstream->readTLInt();
 		this->_read_outbox_max_id = mtstream->readTLInt();
 		this->_unread_count = mtstream->readTLInt();
-		RESET_TLTYPE(Photo, this->_chat_photo);
-		this->_chat_photo->read(mtstream);
-		RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
-		this->_notify_settings->read(mtstream);
-		RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
-		this->_exported_invite->read(mtstream);
+		TLInt chat_photo_ctor = mtstream->peekTLConstructor();
+		
+		if(chat_photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_chat_photo);
+			this->_chat_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_chat_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt notify_settings_ctor = mtstream->peekTLConstructor();
+		
+		if(notify_settings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->_notify_settings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_notify_settings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt exported_invite_ctor = mtstream->peekTLConstructor();
+		
+		if(exported_invite_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
+			this->_exported_invite->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_exported_invite);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<BotInfo>(this->_bot_info, false);
 		if(IS_FLAG_SET(this->_flags, 4))
 			this->_migrated_from_chat_id = mtstream->readTLInt();
@@ -93,14 +170,26 @@ void ChatFull::write(MTProtoStream* mtstream)
 	if(this->_constructorid == ChatFull::ctorChatFull)
 	{
 		mtstream->writeTLInt(this->_id);
-		Q_ASSERT(this->_participants != NULL);
-		this->_participants->write(mtstream);
-		Q_ASSERT(this->_chat_photo != NULL);
-		this->_chat_photo->write(mtstream);
-		Q_ASSERT(this->_notify_settings != NULL);
-		this->_notify_settings->write(mtstream);
-		Q_ASSERT(this->_exported_invite != NULL);
-		this->_exported_invite->write(mtstream);
+		if(this->_participants != NULL)
+			this->_participants->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_chat_photo != NULL)
+			this->_chat_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_notify_settings != NULL)
+			this->_notify_settings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_exported_invite != NULL)
+			this->_exported_invite->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_bot_info, false);
 	}
 	else if(this->_constructorid == ChatFull::ctorChannelFull)
@@ -120,12 +209,21 @@ void ChatFull::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_read_inbox_max_id);
 		mtstream->writeTLInt(this->_read_outbox_max_id);
 		mtstream->writeTLInt(this->_unread_count);
-		Q_ASSERT(this->_chat_photo != NULL);
-		this->_chat_photo->write(mtstream);
-		Q_ASSERT(this->_notify_settings != NULL);
-		this->_notify_settings->write(mtstream);
-		Q_ASSERT(this->_exported_invite != NULL);
-		this->_exported_invite->write(mtstream);
+		if(this->_chat_photo != NULL)
+			this->_chat_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_notify_settings != NULL)
+			this->_notify_settings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_exported_invite != NULL)
+			this->_exported_invite->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_bot_info, false);
 		if(IS_FLAG_SET(this->_flags, 4))
 			mtstream->writeTLInt(this->_migrated_from_chat_id);

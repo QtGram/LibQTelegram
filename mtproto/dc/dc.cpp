@@ -1,13 +1,15 @@
 #include "dc.h"
 #include "../../config/telegramconfig.h"
+#include "../mtprotoupdatehandler.h"
 #include "../mtprotoreply.h"
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(0), _dcid(dcid)
+DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(0), _lastmsgid(0), _dcid(dcid)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
     connect(this->_mtservicehandler, &MTProtoServiceHandler::configurationReceived, this, &DC::configurationReceived);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatLastRequest);
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
     connect(this, &DC::connected, this, &DC::sendPendingRequests);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
@@ -53,6 +55,14 @@ TLInt DC::getPacketLength()
     return 0;
 }
 
+void DC::repeatLastRequest()
+{
+    if(!this->_sentrequests.contains(this->_lastmsgid))
+        return;
+
+    this->send(this->_sentrequests[this->_lastmsgid]);
+}
+
 void DC::handleReply(const QByteArray &message)
 {
     MTProtoReply mtreply(message, this->_dcid);
@@ -76,6 +86,9 @@ void DC::handleReply(const QByteArray &message)
 void DC::handleReply(MTProtoReply *mtreply)
 {
     if(this->_mtservicehandler->handle(mtreply))
+        return;
+
+    if(UPDATE_HANDLER->handle(mtreply))
         return;
 
     this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
@@ -142,7 +155,10 @@ TLLong DC::send(MTProtoRequest *req)
         QByteArray reqpayload = req->build();
 
         if(req->encrypted())
+        {
             this->_sentrequests[req->messageId()] = req;
+            this->_lastmsgid = req->messageId();
+        }
 
         this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
         this->write(reqpayload);

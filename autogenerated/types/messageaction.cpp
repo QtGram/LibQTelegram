@@ -43,8 +43,18 @@ void MessageAction::read(MTProtoStream* mtstream)
 		this->_title = mtstream->readTLString();
 	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto)
 	{
-		RESET_TLTYPE(Photo, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == MessageAction::ctorMessageActionChatAddUser)
 		mtstream->readTLVector<TLInt>(this->_users, false);
@@ -97,8 +107,10 @@ void MessageAction::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_title);
 	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto)
 	{
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == MessageAction::ctorMessageActionChatAddUser)
 		mtstream->writeTLVector(this->_users, false);

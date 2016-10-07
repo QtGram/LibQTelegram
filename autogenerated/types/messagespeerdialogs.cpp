@@ -22,8 +22,18 @@ void MessagesPeerDialogs::read(MTProtoStream* mtstream)
 		mtstream->readTLVector<Message>(this->_messages, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
-		RESET_TLTYPE(UpdatesState, this->_state);
-		this->_state->read(mtstream);
+		TLInt state_ctor = mtstream->peekTLConstructor();
+		
+		if(state_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UpdatesState, this->_state);
+			this->_state->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_state);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -40,8 +50,10 @@ void MessagesPeerDialogs::write(MTProtoStream* mtstream)
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
-		Q_ASSERT(this->_state != NULL);
-		this->_state->write(mtstream);
+		if(this->_state != NULL)
+			this->_state->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

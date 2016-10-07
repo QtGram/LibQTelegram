@@ -27,21 +27,53 @@ void Dialog::read(MTProtoStream* mtstream)
 	if(this->_constructorid == Dialog::ctorDialog)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_top_message = mtstream->readTLInt();
 		this->_read_inbox_max_id = mtstream->readTLInt();
 		this->_read_outbox_max_id = mtstream->readTLInt();
 		this->_unread_count = mtstream->readTLInt();
-		RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
-		this->_notify_settings->read(mtstream);
+		TLInt notify_settings_ctor = mtstream->peekTLConstructor();
+		
+		if(notify_settings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->_notify_settings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_notify_settings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 			this->_pts = mtstream->readTLInt();
 		
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			RESET_TLTYPE(DraftMessage, this->_draft);
-			this->_draft->read(mtstream);
+			TLInt draft_ctor = mtstream->peekTLConstructor();
+			
+			if(draft_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(DraftMessage, this->_draft);
+				this->_draft->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_draft);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 }
@@ -56,21 +88,29 @@ void Dialog::write(MTProtoStream* mtstream)
 	if(this->_constructorid == Dialog::ctorDialog)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_top_message);
 		mtstream->writeTLInt(this->_read_inbox_max_id);
 		mtstream->writeTLInt(this->_read_outbox_max_id);
 		mtstream->writeTLInt(this->_unread_count);
-		Q_ASSERT(this->_notify_settings != NULL);
-		this->_notify_settings->write(mtstream);
+		if(this->_notify_settings != NULL)
+			this->_notify_settings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLInt(this->_pts);
 		
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			Q_ASSERT(this->_draft != NULL);
-			this->_draft->write(mtstream);
+			if(this->_draft != NULL)
+				this->_draft->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 }

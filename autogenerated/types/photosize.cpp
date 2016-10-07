@@ -25,8 +25,19 @@ void PhotoSize::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == PhotoSize::ctorPhotoSize)
 	{
 		this->_type = mtstream->readTLString();
-		RESET_TLTYPE(FileLocation, this->_location);
-		this->_location->read(mtstream);
+		TLInt location_ctor = mtstream->peekTLConstructor();
+		
+		if(location_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(FileLocation, this->_location);
+			this->_location->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_location);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_w = mtstream->readTLInt();
 		this->_h = mtstream->readTLInt();
 		this->_size = mtstream->readTLInt();
@@ -34,8 +45,19 @@ void PhotoSize::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == PhotoSize::ctorPhotoCachedSize)
 	{
 		this->_type = mtstream->readTLString();
-		RESET_TLTYPE(FileLocation, this->_location);
-		this->_location->read(mtstream);
+		TLInt location_ctor = mtstream->peekTLConstructor();
+		
+		if(location_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(FileLocation, this->_location);
+			this->_location->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_location);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_w = mtstream->readTLInt();
 		this->_h = mtstream->readTLInt();
 		this->_bytes = mtstream->readTLBytes();
@@ -56,8 +78,11 @@ void PhotoSize::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == PhotoSize::ctorPhotoSize)
 	{
 		mtstream->writeTLString(this->_type);
-		Q_ASSERT(this->_location != NULL);
-		this->_location->write(mtstream);
+		if(this->_location != NULL)
+			this->_location->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_w);
 		mtstream->writeTLInt(this->_h);
 		mtstream->writeTLInt(this->_size);
@@ -65,8 +90,11 @@ void PhotoSize::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == PhotoSize::ctorPhotoCachedSize)
 	{
 		mtstream->writeTLString(this->_type);
-		Q_ASSERT(this->_location != NULL);
-		this->_location->write(mtstream);
+		if(this->_location != NULL)
+			this->_location->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_w);
 		mtstream->writeTLInt(this->_h);
 		mtstream->writeTLBytes(this->_bytes);

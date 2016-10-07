@@ -227,8 +227,16 @@ MTProtoRequest* TelegramAPI::accountUpdateNotifySettings(DCSession* session, Inp
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountUpdateNotifySettings);
-	peer->write(mtstream);
-	settings->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(settings)
+		settings->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -238,7 +246,11 @@ MTProtoRequest* TelegramAPI::accountGetNotifySettings(DCSession* session, InputN
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountGetNotifySettings);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -301,8 +313,16 @@ MTProtoRequest* TelegramAPI::accountReportPeer(DCSession* session, InputPeer* pe
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountReportPeer);
-	peer->write(mtstream);
-	reason->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(reason)
+		reason->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -332,7 +352,11 @@ MTProtoRequest* TelegramAPI::accountGetPrivacy(DCSession* session, InputPrivacyK
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountGetPrivacy);
-	key->write(mtstream);
+	if(key)
+		key->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -342,7 +366,11 @@ MTProtoRequest* TelegramAPI::accountSetPrivacy(DCSession* session, InputPrivacyK
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountSetPrivacy);
-	key->write(mtstream);
+	if(key)
+		key->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector(rules);
 	
 	return session->sendEncrypted(mtstream);
@@ -372,7 +400,11 @@ MTProtoRequest* TelegramAPI::accountSetAccountTTL(DCSession* session, AccountDay
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::accountSetAccountTTL);
-	ttl->write(mtstream);
+	if(ttl)
+		ttl->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -461,7 +493,11 @@ MTProtoRequest* TelegramAPI::accountUpdatePasswordSettings(DCSession* session, T
 	
 	mtstream->writeTLConstructor(TLTypes::accountUpdatePasswordSettings);
 	mtstream->writeTLBytes(current_password_hash);
-	new_settings->write(mtstream);
+	if(new_settings)
+		new_settings->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -510,7 +546,11 @@ MTProtoRequest* TelegramAPI::usersGetFullUser(DCSession* session, InputUser* id)
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::usersGetFullUser);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -550,7 +590,11 @@ MTProtoRequest* TelegramAPI::contactsDeleteContact(DCSession* session, InputUser
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::contactsDeleteContact);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -570,7 +614,11 @@ MTProtoRequest* TelegramAPI::contactsBlock(DCSession* session, InputUser* id)
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::contactsBlock);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -580,7 +628,11 @@ MTProtoRequest* TelegramAPI::contactsUnblock(DCSession* session, InputUser* id)
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::contactsUnblock);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -657,8 +709,16 @@ MTProtoRequest* TelegramAPI::contactsResetTopPeerRating(DCSession* session, TopP
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::contactsResetTopPeerRating);
-	category->write(mtstream);
-	peer->write(mtstream);
+	if(category)
+		category->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -680,7 +740,11 @@ MTProtoRequest* TelegramAPI::messagesGetDialogs(DCSession* session, TLInt offset
 	mtstream->writeTLConstructor(TLTypes::messagesGetDialogs);
 	mtstream->writeTLInt(offset_date);
 	mtstream->writeTLInt(offset_id);
-	offset_peer->write(mtstream);
+	if(offset_peer)
+		offset_peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(limit);
 	
 	return session->sendEncrypted(mtstream);
@@ -691,7 +755,11 @@ MTProtoRequest* TelegramAPI::messagesGetHistory(DCSession* session, InputPeer* p
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetHistory);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(offset_id);
 	mtstream->writeTLInt(offset_date);
 	mtstream->writeTLInt(add_offset);
@@ -711,9 +779,17 @@ MTProtoRequest* TelegramAPI::messagesSearch(DCSession* session, InputPeer* peer,
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(q);
-	filter->write(mtstream);
+	if(filter)
+		filter->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(min_date);
 	mtstream->writeTLInt(max_date);
 	mtstream->writeTLInt(offset);
@@ -728,7 +804,11 @@ MTProtoRequest* TelegramAPI::messagesReadHistory(DCSession* session, InputPeer* 
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesReadHistory);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(max_id);
 	
 	return session->sendEncrypted(mtstream);
@@ -743,7 +823,11 @@ MTProtoRequest* TelegramAPI::messagesDeleteHistory(DCSession* session, InputPeer
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(max_id);
 	
 	return session->sendEncrypted(mtstream);
@@ -774,8 +858,16 @@ MTProtoRequest* TelegramAPI::messagesSetTyping(DCSession* session, InputPeer* pe
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSetTyping);
-	peer->write(mtstream);
-	action->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(action)
+		action->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -792,14 +884,23 @@ MTProtoRequest* TelegramAPI::messagesSendMessage(DCSession* session, InputPeer* 
 	SET_FLAG_BIT_VALUE(flags, 3, !entities.isEmpty());
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	if(IS_FLAG_SET(flags, 0))
 		mtstream->writeTLInt(reply_to_msg_id);
 	
 	mtstream->writeTLString(message);
 	mtstream->writeTLLong(random_id);
 	if(IS_FLAG_SET(flags, 2))
-		reply_markup->write(mtstream);
+	{
+		if(reply_markup)
+			reply_markup->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	if(IS_FLAG_SET(flags, 3))
 		mtstream->writeTLVector(entities);
@@ -819,14 +920,27 @@ MTProtoRequest* TelegramAPI::messagesSendMedia(DCSession* session, InputPeer* pe
 	SET_FLAG_BIT_VALUE(flags, 2, reply_markup);
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	if(IS_FLAG_SET(flags, 0))
 		mtstream->writeTLInt(reply_to_msg_id);
 	
-	media->write(mtstream);
+	if(media)
+		media->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLLong(random_id);
 	if(IS_FLAG_SET(flags, 2))
-		reply_markup->write(mtstream);
+	{
+		if(reply_markup)
+			reply_markup->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	
 	return session->sendEncrypted(mtstream);
@@ -841,10 +955,18 @@ MTProtoRequest* TelegramAPI::messagesForwardMessages(DCSession* session, InputPe
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	from_peer->write(mtstream);
+	if(from_peer)
+		from_peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector<TLInt>(id);
 	mtstream->writeTLVector<TLLong>(random_id);
-	to_peer->write(mtstream);
+	if(to_peer)
+		to_peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -854,7 +976,11 @@ MTProtoRequest* TelegramAPI::messagesReportSpam(DCSession* session, InputPeer* p
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesReportSpam);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -864,7 +990,11 @@ MTProtoRequest* TelegramAPI::messagesHideReportSpam(DCSession* session, InputPee
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesHideReportSpam);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -874,7 +1004,11 @@ MTProtoRequest* TelegramAPI::messagesGetPeerSettings(DCSession* session, InputPe
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetPeerSettings);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -916,7 +1050,11 @@ MTProtoRequest* TelegramAPI::messagesEditChatPhoto(DCSession* session, TLInt cha
 	
 	mtstream->writeTLConstructor(TLTypes::messagesEditChatPhoto);
 	mtstream->writeTLInt(chat_id);
-	photo->write(mtstream);
+	if(photo)
+		photo->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -927,7 +1065,11 @@ MTProtoRequest* TelegramAPI::messagesAddChatUser(DCSession* session, TLInt chat_
 	
 	mtstream->writeTLConstructor(TLTypes::messagesAddChatUser);
 	mtstream->writeTLInt(chat_id);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(fwd_limit);
 	
 	return session->sendEncrypted(mtstream);
@@ -939,7 +1081,11 @@ MTProtoRequest* TelegramAPI::messagesDeleteChatUser(DCSession* session, TLInt ch
 	
 	mtstream->writeTLConstructor(TLTypes::messagesDeleteChatUser);
 	mtstream->writeTLInt(chat_id);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -960,7 +1106,11 @@ MTProtoRequest* TelegramAPI::messagesForwardMessage(DCSession* session, InputPee
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesForwardMessage);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
 	mtstream->writeTLLong(random_id);
 	
@@ -983,7 +1133,11 @@ MTProtoRequest* TelegramAPI::messagesRequestEncryption(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesRequestEncryption);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(random_id);
 	mtstream->writeTLBytes(g_a);
 	
@@ -995,7 +1149,11 @@ MTProtoRequest* TelegramAPI::messagesAcceptEncryption(DCSession* session, InputE
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesAcceptEncryption);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBytes(g_b);
 	mtstream->writeTLLong(key_fingerprint);
 	
@@ -1017,7 +1175,11 @@ MTProtoRequest* TelegramAPI::messagesSetEncryptedTyping(DCSession* session, Inpu
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSetEncryptedTyping);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_typing);
 	
 	return session->sendEncrypted(mtstream);
@@ -1028,7 +1190,11 @@ MTProtoRequest* TelegramAPI::messagesReadEncryptedHistory(DCSession* session, In
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesReadEncryptedHistory);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(max_date);
 	
 	return session->sendEncrypted(mtstream);
@@ -1039,7 +1205,11 @@ MTProtoRequest* TelegramAPI::messagesSendEncrypted(DCSession* session, InputEncr
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSendEncrypted);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLLong(random_id);
 	mtstream->writeTLBytes(data);
 	
@@ -1051,10 +1221,18 @@ MTProtoRequest* TelegramAPI::messagesSendEncryptedFile(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSendEncryptedFile);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLLong(random_id);
 	mtstream->writeTLBytes(data);
-	file->write(mtstream);
+	if(file)
+		file->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1064,7 +1242,11 @@ MTProtoRequest* TelegramAPI::messagesSendEncryptedService(DCSession* session, In
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSendEncryptedService);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLLong(random_id);
 	mtstream->writeTLBytes(data);
 	
@@ -1146,7 +1328,11 @@ MTProtoRequest* TelegramAPI::messagesGetStickerSet(DCSession* session, InputStic
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetStickerSet);
-	stickerset->write(mtstream);
+	if(stickerset)
+		stickerset->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1156,7 +1342,11 @@ MTProtoRequest* TelegramAPI::messagesInstallStickerSet(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesInstallStickerSet);
-	stickerset->write(mtstream);
+	if(stickerset)
+		stickerset->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_archived);
 	
 	return session->sendEncrypted(mtstream);
@@ -1167,7 +1357,11 @@ MTProtoRequest* TelegramAPI::messagesUninstallStickerSet(DCSession* session, Inp
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesUninstallStickerSet);
-	stickerset->write(mtstream);
+	if(stickerset)
+		stickerset->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1177,8 +1371,16 @@ MTProtoRequest* TelegramAPI::messagesStartBot(DCSession* session, InputUser* bot
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesStartBot);
-	bot->write(mtstream);
-	peer->write(mtstream);
+	if(bot)
+		bot->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLLong(random_id);
 	mtstream->writeTLString(start_param);
 	
@@ -1190,7 +1392,11 @@ MTProtoRequest* TelegramAPI::messagesGetMessagesViews(DCSession* session, InputP
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetMessagesViews);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector<TLInt>(id);
 	mtstream->writeTLBool(is_increment);
 	
@@ -1214,7 +1420,11 @@ MTProtoRequest* TelegramAPI::messagesEditChatAdmin(DCSession* session, TLInt cha
 	
 	mtstream->writeTLConstructor(TLTypes::messagesEditChatAdmin);
 	mtstream->writeTLInt(chat_id);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_admin);
 	
 	return session->sendEncrypted(mtstream);
@@ -1237,7 +1447,11 @@ MTProtoRequest* TelegramAPI::messagesSearchGlobal(DCSession* session, TLString q
 	mtstream->writeTLConstructor(TLTypes::messagesSearchGlobal);
 	mtstream->writeTLString(q);
 	mtstream->writeTLInt(offset_date);
-	offset_peer->write(mtstream);
+	if(offset_peer)
+		offset_peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(offset_id);
 	mtstream->writeTLInt(limit);
 	
@@ -1296,7 +1510,11 @@ MTProtoRequest* TelegramAPI::messagesSaveGif(DCSession* session, InputDocument* 
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesSaveGif);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_unsave);
 	
 	return session->sendEncrypted(mtstream);
@@ -1312,10 +1530,23 @@ MTProtoRequest* TelegramAPI::messagesGetInlineBotResults(DCSession* session, Inp
 	SET_FLAG_BIT_VALUE(flags, 0, geo_point);
 	mtstream->writeTLInt(flags);
 	
-	bot->write(mtstream);
-	peer->write(mtstream);
+	if(bot)
+		bot->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	if(IS_FLAG_SET(flags, 0))
-		geo_point->write(mtstream);
+	{
+		if(geo_point)
+			geo_point->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	mtstream->writeTLString(query);
 	mtstream->writeTLString(offset);
@@ -1341,7 +1572,12 @@ MTProtoRequest* TelegramAPI::messagesSetInlineBotResults(DCSession* session, TLL
 		mtstream->writeTLString(next_offset);
 	
 	if(IS_FLAG_SET(flags, 3))
-		switch_pm->write(mtstream);
+	{
+		if(switch_pm)
+			switch_pm->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	
 	return session->sendEncrypted(mtstream);
@@ -1357,7 +1593,11 @@ MTProtoRequest* TelegramAPI::messagesSendInlineBotResult(DCSession* session, Inp
 	SET_FLAG_BIT_VALUE(flags, 0, reply_to_msg_id);
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	if(IS_FLAG_SET(flags, 0))
 		mtstream->writeTLInt(reply_to_msg_id);
 	
@@ -1373,7 +1613,11 @@ MTProtoRequest* TelegramAPI::messagesGetMessageEditData(DCSession* session, Inpu
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetMessageEditData);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
 	
 	return session->sendEncrypted(mtstream);
@@ -1391,13 +1635,22 @@ MTProtoRequest* TelegramAPI::messagesEditMessage(DCSession* session, InputPeer* 
 	SET_FLAG_BIT_VALUE(flags, 3, !entities.isEmpty());
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
 	if(IS_FLAG_SET(flags, 11))
 		mtstream->writeTLString(message);
 	
 	if(IS_FLAG_SET(flags, 2))
-		reply_markup->write(mtstream);
+	{
+		if(reply_markup)
+			reply_markup->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	if(IS_FLAG_SET(flags, 3))
 		mtstream->writeTLVector(entities);
@@ -1418,12 +1671,21 @@ MTProtoRequest* TelegramAPI::messagesEditInlineBotMessage(DCSession* session, In
 	SET_FLAG_BIT_VALUE(flags, 3, !entities.isEmpty());
 	mtstream->writeTLInt(flags);
 	
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	if(IS_FLAG_SET(flags, 11))
 		mtstream->writeTLString(message);
 	
 	if(IS_FLAG_SET(flags, 2))
-		reply_markup->write(mtstream);
+	{
+		if(reply_markup)
+			reply_markup->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+	}
 	
 	if(IS_FLAG_SET(flags, 3))
 		mtstream->writeTLVector(entities);
@@ -1442,7 +1704,11 @@ MTProtoRequest* TelegramAPI::messagesGetBotCallbackAnswer(DCSession* session, In
 	SET_FLAG_BIT_VALUE(flags, 0, !data.isEmpty());
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(msg_id);
 	if(IS_FLAG_SET(flags, 0))
 		mtstream->writeTLBytes(data);
@@ -1497,7 +1763,11 @@ MTProtoRequest* TelegramAPI::messagesSaveDraft(DCSession* session, TLInt reply_t
 	if(IS_FLAG_SET(flags, 0))
 		mtstream->writeTLInt(reply_to_msg_id);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(message);
 	if(IS_FLAG_SET(flags, 3))
 		mtstream->writeTLVector(entities);
@@ -1558,7 +1828,11 @@ MTProtoRequest* TelegramAPI::messagesSaveRecentSticker(DCSession* session, Input
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_unsave);
 	
 	return session->sendEncrypted(mtstream);
@@ -1607,7 +1881,11 @@ MTProtoRequest* TelegramAPI::messagesGetAttachedStickers(DCSession* session, Inp
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetAttachedStickers);
-	media->write(mtstream);
+	if(media)
+		media->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1621,9 +1899,17 @@ MTProtoRequest* TelegramAPI::messagesSetGameScore(DCSession* session, InputPeer*
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(score);
 	
 	return session->sendEncrypted(mtstream);
@@ -1638,8 +1924,16 @@ MTProtoRequest* TelegramAPI::messagesSetInlineGameScore(DCSession* session, Inpu
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	id->write(mtstream);
-	user_id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(score);
 	
 	return session->sendEncrypted(mtstream);
@@ -1650,9 +1944,17 @@ MTProtoRequest* TelegramAPI::messagesGetGameHighScores(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetGameHighScores);
-	peer->write(mtstream);
+	if(peer)
+		peer->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1662,8 +1964,16 @@ MTProtoRequest* TelegramAPI::messagesGetInlineGameHighScores(DCSession* session,
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::messagesGetInlineGameHighScores);
-	id->write(mtstream);
-	user_id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1694,8 +2004,16 @@ MTProtoRequest* TelegramAPI::updatesGetChannelDifference(DCSession* session, Inp
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::updatesGetChannelDifference);
-	channel->write(mtstream);
-	filter->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(filter)
+		filter->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(pts);
 	mtstream->writeTLInt(limit);
 	
@@ -1707,7 +2025,11 @@ MTProtoRequest* TelegramAPI::photosUpdateProfilePhoto(DCSession* session, InputP
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::photosUpdateProfilePhoto);
-	id->write(mtstream);
+	if(id)
+		id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1717,7 +2039,11 @@ MTProtoRequest* TelegramAPI::photosUploadProfilePhoto(DCSession* session, InputF
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::photosUploadProfilePhoto);
-	file->write(mtstream);
+	if(file)
+		file->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1737,7 +2063,11 @@ MTProtoRequest* TelegramAPI::photosGetUserPhotos(DCSession* session, InputUser* 
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::photosGetUserPhotos);
-	user_id->write(mtstream);
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(offset);
 	mtstream->writeTLLong(max_id);
 	mtstream->writeTLInt(limit);
@@ -1762,7 +2092,11 @@ MTProtoRequest* TelegramAPI::uploadGetFile(DCSession* session, InputFileLocation
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::uploadGetFile);
-	location->write(mtstream);
+	if(location)
+		location->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(offset);
 	mtstream->writeTLInt(limit);
 	
@@ -1860,7 +2194,11 @@ MTProtoRequest* TelegramAPI::channelsReadHistory(DCSession* session, InputChanne
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsReadHistory);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(max_id);
 	
 	return session->sendEncrypted(mtstream);
@@ -1871,7 +2209,11 @@ MTProtoRequest* TelegramAPI::channelsDeleteMessages(DCSession* session, InputCha
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsDeleteMessages);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector<TLInt>(id);
 	
 	return session->sendEncrypted(mtstream);
@@ -1882,8 +2224,16 @@ MTProtoRequest* TelegramAPI::channelsDeleteUserHistory(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsDeleteUserHistory);
-	channel->write(mtstream);
-	user_id->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1893,8 +2243,16 @@ MTProtoRequest* TelegramAPI::channelsReportSpam(DCSession* session, InputChannel
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsReportSpam);
-	channel->write(mtstream);
-	user_id->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector<TLInt>(id);
 	
 	return session->sendEncrypted(mtstream);
@@ -1905,7 +2263,11 @@ MTProtoRequest* TelegramAPI::channelsGetMessages(DCSession* session, InputChanne
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsGetMessages);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector<TLInt>(id);
 	
 	return session->sendEncrypted(mtstream);
@@ -1916,8 +2278,16 @@ MTProtoRequest* TelegramAPI::channelsGetParticipants(DCSession* session, InputCh
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsGetParticipants);
-	channel->write(mtstream);
-	filter->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(filter)
+		filter->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(offset);
 	mtstream->writeTLInt(limit);
 	
@@ -1929,8 +2299,16 @@ MTProtoRequest* TelegramAPI::channelsGetParticipant(DCSession* session, InputCha
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsGetParticipant);
-	channel->write(mtstream);
-	user_id->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1950,7 +2328,11 @@ MTProtoRequest* TelegramAPI::channelsGetFullChannel(DCSession* session, InputCha
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsGetFullChannel);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1975,7 +2357,11 @@ MTProtoRequest* TelegramAPI::channelsEditAbout(DCSession* session, InputChannel*
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsEditAbout);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(about);
 	
 	return session->sendEncrypted(mtstream);
@@ -1986,9 +2372,21 @@ MTProtoRequest* TelegramAPI::channelsEditAdmin(DCSession* session, InputChannel*
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsEditAdmin);
-	channel->write(mtstream);
-	user_id->write(mtstream);
-	role->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(role)
+		role->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -1998,7 +2396,11 @@ MTProtoRequest* TelegramAPI::channelsEditTitle(DCSession* session, InputChannel*
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsEditTitle);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(title);
 	
 	return session->sendEncrypted(mtstream);
@@ -2009,8 +2411,16 @@ MTProtoRequest* TelegramAPI::channelsEditPhoto(DCSession* session, InputChannel*
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsEditPhoto);
-	channel->write(mtstream);
-	photo->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(photo)
+		photo->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -2020,7 +2430,11 @@ MTProtoRequest* TelegramAPI::channelsCheckUsername(DCSession* session, InputChan
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsCheckUsername);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(username);
 	
 	return session->sendEncrypted(mtstream);
@@ -2031,7 +2445,11 @@ MTProtoRequest* TelegramAPI::channelsUpdateUsername(DCSession* session, InputCha
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsUpdateUsername);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLString(username);
 	
 	return session->sendEncrypted(mtstream);
@@ -2042,7 +2460,11 @@ MTProtoRequest* TelegramAPI::channelsJoinChannel(DCSession* session, InputChanne
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsJoinChannel);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -2052,7 +2474,11 @@ MTProtoRequest* TelegramAPI::channelsLeaveChannel(DCSession* session, InputChann
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsLeaveChannel);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -2062,7 +2488,11 @@ MTProtoRequest* TelegramAPI::channelsInviteToChannel(DCSession* session, InputCh
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsInviteToChannel);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLVector(users);
 	
 	return session->sendEncrypted(mtstream);
@@ -2073,8 +2503,16 @@ MTProtoRequest* TelegramAPI::channelsKickFromChannel(DCSession* session, InputCh
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsKickFromChannel);
-	channel->write(mtstream);
-	user_id->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
+	if(user_id)
+		user_id->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_kicked);
 	
 	return session->sendEncrypted(mtstream);
@@ -2085,7 +2523,11 @@ MTProtoRequest* TelegramAPI::channelsExportInvite(DCSession* session, InputChann
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsExportInvite);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -2095,7 +2537,11 @@ MTProtoRequest* TelegramAPI::channelsDeleteChannel(DCSession* session, InputChan
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsDeleteChannel);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	
 	return session->sendEncrypted(mtstream);
 }
@@ -2105,7 +2551,11 @@ MTProtoRequest* TelegramAPI::channelsToggleInvites(DCSession* session, InputChan
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsToggleInvites);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_enabled);
 	
 	return session->sendEncrypted(mtstream);
@@ -2116,7 +2566,11 @@ MTProtoRequest* TelegramAPI::channelsExportMessageLink(DCSession* session, Input
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsExportMessageLink);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
 	
 	return session->sendEncrypted(mtstream);
@@ -2127,7 +2581,11 @@ MTProtoRequest* TelegramAPI::channelsToggleSignatures(DCSession* session, InputC
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::channelsToggleSignatures);
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLBool(is_enabled);
 	
 	return session->sendEncrypted(mtstream);
@@ -2142,7 +2600,11 @@ MTProtoRequest* TelegramAPI::channelsUpdatePinnedMessage(DCSession* session, Inp
 	TLInt flags = 0;
 	mtstream->writeTLInt(flags);
 	
-	channel->write(mtstream);
+	if(channel)
+		channel->write(mtstream);
+	else
+		mtstream->writeTLConstructor(TLTypes::Null);
+	
 	mtstream->writeTLInt(id);
 	
 	return session->sendEncrypted(mtstream);

@@ -223,7 +223,16 @@ SOURCES += \
     types/byteconverter.cpp \
     types/telegramobject.cpp \
     telegram.cpp \
-    telegraminitializer.cpp
+    telegraminitializer.cpp \
+    models/dialogsmodel.cpp \
+    models/telegrammodel.cpp \
+    config/telegramruntime.cpp \
+    mtproto/mtprotoupdatehandler.cpp \
+    config/cache/telegramcache.cpp \
+    config/cache/cacheinitializer.cpp \
+    objects/dialogobject.cpp \
+    objects/messageobject.cpp \
+    types/telegramhelper.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -440,7 +449,17 @@ HEADERS +=\
     types/byteconverter.h \
     types/telegramobject.h \
     telegram.h \
-    telegraminitializer.h
+    telegraminitializer.h \
+    models/dialogsmodel.h \
+    models/telegrammodel.h \
+    config/telegramruntime.h \
+    mtproto/mtprotoupdatehandler.h \
+    config/cache/telegramcache.h \
+    config/cache/cacheinitializer.h \
+    objects/dialogobject.h \
+    objects/messageobject.h \
+    objects/objects.h \
+    types/telegramhelper.h
 
 unix {
     target.path = /usr/lib

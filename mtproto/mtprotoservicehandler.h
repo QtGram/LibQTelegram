@@ -17,6 +17,7 @@ class MTProtoServiceHandler : public QObject
         void configurationReceived(Config* config);
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
+        void saltChanged();
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);

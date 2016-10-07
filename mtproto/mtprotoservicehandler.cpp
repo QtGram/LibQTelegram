@@ -20,7 +20,7 @@ bool MTProtoServiceHandler::handle(MTProtoReply *mtreply)
     if(mtreply->constructorId() == TLTypes::RpcError)
         return this->handleRpcError(mtreply);
 
-    if(mtreply->constructorId() == TLTypes::BadMsgNotification)
+    if((mtreply->constructorId() == TLTypes::BadMsgNotification) || (mtreply->constructorId() == TLTypes::BadServerSalt))
         return this->handleBadMsgNotification(mtreply);
 
     if(mtreply->constructorId() == TLTypes::GzipPacked)
@@ -120,7 +120,11 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     }
     else if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadServerSalt)
     {
-        qDebug() << "Handle Bad Server Salt"; // TODO: "Handle Bad Server Salt"
+        DCConfig& config = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+        config.setServerSalt(badmsgnotification.newServerSalt());
+        DC_CONFIG_SAVE;
+
+        emit saltChanged();
     }
 
     return true;

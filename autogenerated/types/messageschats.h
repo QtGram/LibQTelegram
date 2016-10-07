@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "chat.h"
 #include "../../types/telegramobject.h"
+#include "chat.h"
 
 class MessagesChats: public TelegramObject
 {

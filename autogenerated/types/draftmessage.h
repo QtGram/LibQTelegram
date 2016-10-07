@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
 #include "messageentity.h"
+#include "../../types/telegramobject.h"
 
 class DraftMessage: public TelegramObject
 {

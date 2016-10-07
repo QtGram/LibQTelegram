@@ -18,8 +18,19 @@ void ContactsResolvedPeer::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer)
 	{
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
@@ -34,8 +45,11 @@ void ContactsResolvedPeer::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer)
 	{
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}

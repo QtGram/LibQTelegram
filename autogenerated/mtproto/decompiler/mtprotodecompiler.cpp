@@ -962,137 +962,6 @@ void MTProtoDecompiler::decompileTLVectorEx(QString& result, MTProtoStream& mtst
 
 void MTProtoDecompiler::initDispatchers() 
 {
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authCheckPhone] = &MTProtoDecompiler::decompile_authCheckPhone;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authSendCode] = &MTProtoDecompiler::decompile_authSendCode;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignUp] = &MTProtoDecompiler::decompile_authSignUp;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignIn] = &MTProtoDecompiler::decompile_authSignIn;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authExportAuthorization] = &MTProtoDecompiler::decompile_authExportAuthorization;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportAuthorization] = &MTProtoDecompiler::decompile_authImportAuthorization;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportBotAuthorization] = &MTProtoDecompiler::decompile_authImportBotAuthorization;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authCheckPassword] = &MTProtoDecompiler::decompile_authCheckPassword;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authRequestPasswordRecovery] = &MTProtoDecompiler::decompile_authRequestPasswordRecovery;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authRecoverPassword] = &MTProtoDecompiler::decompile_authRecoverPassword;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::authResendCode] = &MTProtoDecompiler::decompile_authResendCode;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetNotifySettings] = &MTProtoDecompiler::decompile_accountGetNotifySettings;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateProfile] = &MTProtoDecompiler::decompile_accountUpdateProfile;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetWallPapers] = &MTProtoDecompiler::decompile_accountGetWallPapers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateUsername] = &MTProtoDecompiler::decompile_accountUpdateUsername;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPrivacy] = &MTProtoDecompiler::decompile_accountGetPrivacy;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSetPrivacy] = &MTProtoDecompiler::decompile_accountSetPrivacy;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAccountTTL] = &MTProtoDecompiler::decompile_accountGetAccountTTL;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendChangePhoneCode] = &MTProtoDecompiler::decompile_accountSendChangePhoneCode;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountChangePhone] = &MTProtoDecompiler::decompile_accountChangePhone;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAuthorizations] = &MTProtoDecompiler::decompile_accountGetAuthorizations;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPassword] = &MTProtoDecompiler::decompile_accountGetPassword;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPasswordSettings] = &MTProtoDecompiler::decompile_accountGetPasswordSettings;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendConfirmPhoneCode] = &MTProtoDecompiler::decompile_accountSendConfirmPhoneCode;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetUsers] = &MTProtoDecompiler::decompile_usersGetUsers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetFullUser] = &MTProtoDecompiler::decompile_usersGetFullUser;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetStatuses] = &MTProtoDecompiler::decompile_contactsGetStatuses;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetContacts] = &MTProtoDecompiler::decompile_contactsGetContacts;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportContacts] = &MTProtoDecompiler::decompile_contactsImportContacts;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsDeleteContact] = &MTProtoDecompiler::decompile_contactsDeleteContact;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetBlocked] = &MTProtoDecompiler::decompile_contactsGetBlocked;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsExportCard] = &MTProtoDecompiler::decompile_contactsExportCard;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportCard] = &MTProtoDecompiler::decompile_contactsImportCard;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsSearch] = &MTProtoDecompiler::decompile_contactsSearch;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsResolveUsername] = &MTProtoDecompiler::decompile_contactsResolveUsername;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetTopPeers] = &MTProtoDecompiler::decompile_contactsGetTopPeers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessages] = &MTProtoDecompiler::decompile_messagesGetMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDialogs] = &MTProtoDecompiler::decompile_messagesGetDialogs;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetHistory] = &MTProtoDecompiler::decompile_messagesGetHistory;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearch] = &MTProtoDecompiler::decompile_messagesSearch;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadHistory] = &MTProtoDecompiler::decompile_messagesReadHistory;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteHistory] = &MTProtoDecompiler::decompile_messagesDeleteHistory;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteMessages] = &MTProtoDecompiler::decompile_messagesDeleteMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReceivedMessages] = &MTProtoDecompiler::decompile_messagesReceivedMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMessage] = &MTProtoDecompiler::decompile_messagesSendMessage;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMedia] = &MTProtoDecompiler::decompile_messagesSendMedia;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesForwardMessages] = &MTProtoDecompiler::decompile_messagesForwardMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerSettings] = &MTProtoDecompiler::decompile_messagesGetPeerSettings;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetChats] = &MTProtoDecompiler::decompile_messagesGetChats;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFullChat] = &MTProtoDecompiler::decompile_messagesGetFullChat;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditChatTitle] = &MTProtoDecompiler::decompile_messagesEditChatTitle;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditChatPhoto] = &MTProtoDecompiler::decompile_messagesEditChatPhoto;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesAddChatUser] = &MTProtoDecompiler::decompile_messagesAddChatUser;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteChatUser] = &MTProtoDecompiler::decompile_messagesDeleteChatUser;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesCreateChat] = &MTProtoDecompiler::decompile_messagesCreateChat;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesForwardMessage] = &MTProtoDecompiler::decompile_messagesForwardMessage;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDhConfig] = &MTProtoDecompiler::decompile_messagesGetDhConfig;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesRequestEncryption] = &MTProtoDecompiler::decompile_messagesRequestEncryption;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesAcceptEncryption] = &MTProtoDecompiler::decompile_messagesAcceptEncryption;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncrypted] = &MTProtoDecompiler::decompile_messagesSendEncrypted;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedFile] = &MTProtoDecompiler::decompile_messagesSendEncryptedFile;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedService] = &MTProtoDecompiler::decompile_messagesSendEncryptedService;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReceivedQueue] = &MTProtoDecompiler::decompile_messagesReceivedQueue;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadMessageContents] = &MTProtoDecompiler::decompile_messagesReadMessageContents;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAllStickers] = &MTProtoDecompiler::decompile_messagesGetAllStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetWebPagePreview] = &MTProtoDecompiler::decompile_messagesGetWebPagePreview;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesExportChatInvite] = &MTProtoDecompiler::decompile_messagesExportChatInvite;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesCheckChatInvite] = &MTProtoDecompiler::decompile_messagesCheckChatInvite;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesImportChatInvite] = &MTProtoDecompiler::decompile_messagesImportChatInvite;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetStickerSet] = &MTProtoDecompiler::decompile_messagesGetStickerSet;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesInstallStickerSet] = &MTProtoDecompiler::decompile_messagesInstallStickerSet;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesStartBot] = &MTProtoDecompiler::decompile_messagesStartBot;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessagesViews] = &MTProtoDecompiler::decompile_messagesGetMessagesViews;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesToggleChatAdmins] = &MTProtoDecompiler::decompile_messagesToggleChatAdmins;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesMigrateChat] = &MTProtoDecompiler::decompile_messagesMigrateChat;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGlobal] = &MTProtoDecompiler::decompile_messagesSearchGlobal;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDocumentByHash] = &MTProtoDecompiler::decompile_messagesGetDocumentByHash;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGifs] = &MTProtoDecompiler::decompile_messagesSearchGifs;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetSavedGifs] = &MTProtoDecompiler::decompile_messagesGetSavedGifs;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineBotResults] = &MTProtoDecompiler::decompile_messagesGetInlineBotResults;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendInlineBotResult] = &MTProtoDecompiler::decompile_messagesSendInlineBotResult;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessageEditData] = &MTProtoDecompiler::decompile_messagesGetMessageEditData;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditMessage] = &MTProtoDecompiler::decompile_messagesEditMessage;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetBotCallbackAnswer] = &MTProtoDecompiler::decompile_messagesGetBotCallbackAnswer;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerDialogs] = &MTProtoDecompiler::decompile_messagesGetPeerDialogs;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAllDrafts] = &MTProtoDecompiler::decompile_messagesGetAllDrafts;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFeaturedStickers] = &MTProtoDecompiler::decompile_messagesGetFeaturedStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetRecentStickers] = &MTProtoDecompiler::decompile_messagesGetRecentStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetArchivedStickers] = &MTProtoDecompiler::decompile_messagesGetArchivedStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMaskStickers] = &MTProtoDecompiler::decompile_messagesGetMaskStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAttachedStickers] = &MTProtoDecompiler::decompile_messagesGetAttachedStickers;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetGameScore] = &MTProtoDecompiler::decompile_messagesSetGameScore;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetGameHighScores] = &MTProtoDecompiler::decompile_messagesGetGameHighScores;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineGameHighScores] = &MTProtoDecompiler::decompile_messagesGetInlineGameHighScores;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetState] = &MTProtoDecompiler::decompile_updatesGetState;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetDifference] = &MTProtoDecompiler::decompile_updatesGetDifference;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetChannelDifference] = &MTProtoDecompiler::decompile_updatesGetChannelDifference;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::photosUpdateProfilePhoto] = &MTProtoDecompiler::decompile_photosUpdateProfilePhoto;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::photosUploadProfilePhoto] = &MTProtoDecompiler::decompile_photosUploadProfilePhoto;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::photosDeletePhotos] = &MTProtoDecompiler::decompile_photosDeletePhotos;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::photosGetUserPhotos] = &MTProtoDecompiler::decompile_photosGetUserPhotos;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::uploadGetFile] = &MTProtoDecompiler::decompile_uploadGetFile;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetConfig] = &MTProtoDecompiler::decompile_helpGetConfig;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetNearestDc] = &MTProtoDecompiler::decompile_helpGetNearestDc;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppUpdate] = &MTProtoDecompiler::decompile_helpGetAppUpdate;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetInviteText] = &MTProtoDecompiler::decompile_helpGetInviteText;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetSupport] = &MTProtoDecompiler::decompile_helpGetSupport;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppChangelog] = &MTProtoDecompiler::decompile_helpGetAppChangelog;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetTermsOfService] = &MTProtoDecompiler::decompile_helpGetTermsOfService;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteMessages] = &MTProtoDecompiler::decompile_channelsDeleteMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteUserHistory] = &MTProtoDecompiler::decompile_channelsDeleteUserHistory;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetMessages] = &MTProtoDecompiler::decompile_channelsGetMessages;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipants] = &MTProtoDecompiler::decompile_channelsGetParticipants;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipant] = &MTProtoDecompiler::decompile_channelsGetParticipant;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetChannels] = &MTProtoDecompiler::decompile_channelsGetChannels;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetFullChannel] = &MTProtoDecompiler::decompile_channelsGetFullChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsCreateChannel] = &MTProtoDecompiler::decompile_channelsCreateChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditAdmin] = &MTProtoDecompiler::decompile_channelsEditAdmin;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditTitle] = &MTProtoDecompiler::decompile_channelsEditTitle;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditPhoto] = &MTProtoDecompiler::decompile_channelsEditPhoto;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsJoinChannel] = &MTProtoDecompiler::decompile_channelsJoinChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsLeaveChannel] = &MTProtoDecompiler::decompile_channelsLeaveChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsInviteToChannel] = &MTProtoDecompiler::decompile_channelsInviteToChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsKickFromChannel] = &MTProtoDecompiler::decompile_channelsKickFromChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsExportInvite] = &MTProtoDecompiler::decompile_channelsExportInvite;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteChannel] = &MTProtoDecompiler::decompile_channelsDeleteChannel;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsToggleInvites] = &MTProtoDecompiler::decompile_channelsToggleInvites;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsExportMessageLink] = &MTProtoDecompiler::decompile_channelsExportMessageLink;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsToggleSignatures] = &MTProtoDecompiler::decompile_channelsToggleSignatures;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsUpdatePinnedMessage] = &MTProtoDecompiler::decompile_channelsUpdatePinnedMessage;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetAdminedPublicChannels] = &MTProtoDecompiler::decompile_channelsGetAdminedPublicChannels;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::Error] = &MTProtoDecompiler::decompile_Error;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::Null] = &MTProtoDecompiler::decompile_Null;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::InputPeerEmpty] = &MTProtoDecompiler::decompile_InputPeer;
@@ -1544,14 +1413,137 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::InputGameShortName] = &MTProtoDecompiler::decompile_InputGame;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::HighScore] = &MTProtoDecompiler::decompile_HighScore;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::MessagesHighScores] = &MTProtoDecompiler::decompile_MessagesHighScores;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::reqPq] = &MTProtoDecompiler::decompile_reqPq;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::reqDHParams] = &MTProtoDecompiler::decompile_reqDHParams;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::setClientDHParams] = &MTProtoDecompiler::decompile_setClientDHParams;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::rpcDropAnswer] = &MTProtoDecompiler::decompile_rpcDropAnswer;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::getFutureSalts] = &MTProtoDecompiler::decompile_getFutureSalts;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::ping] = &MTProtoDecompiler::decompile_ping;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::pingDelayDisconnect] = &MTProtoDecompiler::decompile_pingDelayDisconnect;
-	MTProtoDecompiler::_ctordispatcher[TLTypes::destroySession] = &MTProtoDecompiler::decompile_destroySession;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authCheckPhone] = &MTProtoDecompiler::decompile_authCheckPhone;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authSendCode] = &MTProtoDecompiler::decompile_authSendCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignUp] = &MTProtoDecompiler::decompile_authSignUp;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignIn] = &MTProtoDecompiler::decompile_authSignIn;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authExportAuthorization] = &MTProtoDecompiler::decompile_authExportAuthorization;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportAuthorization] = &MTProtoDecompiler::decompile_authImportAuthorization;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportBotAuthorization] = &MTProtoDecompiler::decompile_authImportBotAuthorization;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authCheckPassword] = &MTProtoDecompiler::decompile_authCheckPassword;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authRequestPasswordRecovery] = &MTProtoDecompiler::decompile_authRequestPasswordRecovery;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authRecoverPassword] = &MTProtoDecompiler::decompile_authRecoverPassword;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authResendCode] = &MTProtoDecompiler::decompile_authResendCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetNotifySettings] = &MTProtoDecompiler::decompile_accountGetNotifySettings;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateProfile] = &MTProtoDecompiler::decompile_accountUpdateProfile;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetWallPapers] = &MTProtoDecompiler::decompile_accountGetWallPapers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateUsername] = &MTProtoDecompiler::decompile_accountUpdateUsername;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPrivacy] = &MTProtoDecompiler::decompile_accountGetPrivacy;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSetPrivacy] = &MTProtoDecompiler::decompile_accountSetPrivacy;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAccountTTL] = &MTProtoDecompiler::decompile_accountGetAccountTTL;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendChangePhoneCode] = &MTProtoDecompiler::decompile_accountSendChangePhoneCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountChangePhone] = &MTProtoDecompiler::decompile_accountChangePhone;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAuthorizations] = &MTProtoDecompiler::decompile_accountGetAuthorizations;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPassword] = &MTProtoDecompiler::decompile_accountGetPassword;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPasswordSettings] = &MTProtoDecompiler::decompile_accountGetPasswordSettings;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendConfirmPhoneCode] = &MTProtoDecompiler::decompile_accountSendConfirmPhoneCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetUsers] = &MTProtoDecompiler::decompile_usersGetUsers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetFullUser] = &MTProtoDecompiler::decompile_usersGetFullUser;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetStatuses] = &MTProtoDecompiler::decompile_contactsGetStatuses;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetContacts] = &MTProtoDecompiler::decompile_contactsGetContacts;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportContacts] = &MTProtoDecompiler::decompile_contactsImportContacts;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsDeleteContact] = &MTProtoDecompiler::decompile_contactsDeleteContact;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetBlocked] = &MTProtoDecompiler::decompile_contactsGetBlocked;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsExportCard] = &MTProtoDecompiler::decompile_contactsExportCard;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportCard] = &MTProtoDecompiler::decompile_contactsImportCard;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsSearch] = &MTProtoDecompiler::decompile_contactsSearch;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsResolveUsername] = &MTProtoDecompiler::decompile_contactsResolveUsername;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetTopPeers] = &MTProtoDecompiler::decompile_contactsGetTopPeers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessages] = &MTProtoDecompiler::decompile_messagesGetMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDialogs] = &MTProtoDecompiler::decompile_messagesGetDialogs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetHistory] = &MTProtoDecompiler::decompile_messagesGetHistory;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearch] = &MTProtoDecompiler::decompile_messagesSearch;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadHistory] = &MTProtoDecompiler::decompile_messagesReadHistory;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteHistory] = &MTProtoDecompiler::decompile_messagesDeleteHistory;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteMessages] = &MTProtoDecompiler::decompile_messagesDeleteMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReceivedMessages] = &MTProtoDecompiler::decompile_messagesReceivedMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMessage] = &MTProtoDecompiler::decompile_messagesSendMessage;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMedia] = &MTProtoDecompiler::decompile_messagesSendMedia;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesForwardMessages] = &MTProtoDecompiler::decompile_messagesForwardMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerSettings] = &MTProtoDecompiler::decompile_messagesGetPeerSettings;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetChats] = &MTProtoDecompiler::decompile_messagesGetChats;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFullChat] = &MTProtoDecompiler::decompile_messagesGetFullChat;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditChatTitle] = &MTProtoDecompiler::decompile_messagesEditChatTitle;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditChatPhoto] = &MTProtoDecompiler::decompile_messagesEditChatPhoto;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesAddChatUser] = &MTProtoDecompiler::decompile_messagesAddChatUser;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteChatUser] = &MTProtoDecompiler::decompile_messagesDeleteChatUser;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesCreateChat] = &MTProtoDecompiler::decompile_messagesCreateChat;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesForwardMessage] = &MTProtoDecompiler::decompile_messagesForwardMessage;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDhConfig] = &MTProtoDecompiler::decompile_messagesGetDhConfig;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesRequestEncryption] = &MTProtoDecompiler::decompile_messagesRequestEncryption;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesAcceptEncryption] = &MTProtoDecompiler::decompile_messagesAcceptEncryption;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncrypted] = &MTProtoDecompiler::decompile_messagesSendEncrypted;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedFile] = &MTProtoDecompiler::decompile_messagesSendEncryptedFile;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedService] = &MTProtoDecompiler::decompile_messagesSendEncryptedService;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReceivedQueue] = &MTProtoDecompiler::decompile_messagesReceivedQueue;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadMessageContents] = &MTProtoDecompiler::decompile_messagesReadMessageContents;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAllStickers] = &MTProtoDecompiler::decompile_messagesGetAllStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetWebPagePreview] = &MTProtoDecompiler::decompile_messagesGetWebPagePreview;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesExportChatInvite] = &MTProtoDecompiler::decompile_messagesExportChatInvite;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesCheckChatInvite] = &MTProtoDecompiler::decompile_messagesCheckChatInvite;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesImportChatInvite] = &MTProtoDecompiler::decompile_messagesImportChatInvite;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetStickerSet] = &MTProtoDecompiler::decompile_messagesGetStickerSet;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesInstallStickerSet] = &MTProtoDecompiler::decompile_messagesInstallStickerSet;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesStartBot] = &MTProtoDecompiler::decompile_messagesStartBot;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessagesViews] = &MTProtoDecompiler::decompile_messagesGetMessagesViews;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesToggleChatAdmins] = &MTProtoDecompiler::decompile_messagesToggleChatAdmins;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesMigrateChat] = &MTProtoDecompiler::decompile_messagesMigrateChat;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGlobal] = &MTProtoDecompiler::decompile_messagesSearchGlobal;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDocumentByHash] = &MTProtoDecompiler::decompile_messagesGetDocumentByHash;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGifs] = &MTProtoDecompiler::decompile_messagesSearchGifs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetSavedGifs] = &MTProtoDecompiler::decompile_messagesGetSavedGifs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineBotResults] = &MTProtoDecompiler::decompile_messagesGetInlineBotResults;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendInlineBotResult] = &MTProtoDecompiler::decompile_messagesSendInlineBotResult;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessageEditData] = &MTProtoDecompiler::decompile_messagesGetMessageEditData;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditMessage] = &MTProtoDecompiler::decompile_messagesEditMessage;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetBotCallbackAnswer] = &MTProtoDecompiler::decompile_messagesGetBotCallbackAnswer;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerDialogs] = &MTProtoDecompiler::decompile_messagesGetPeerDialogs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAllDrafts] = &MTProtoDecompiler::decompile_messagesGetAllDrafts;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFeaturedStickers] = &MTProtoDecompiler::decompile_messagesGetFeaturedStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetRecentStickers] = &MTProtoDecompiler::decompile_messagesGetRecentStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetArchivedStickers] = &MTProtoDecompiler::decompile_messagesGetArchivedStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMaskStickers] = &MTProtoDecompiler::decompile_messagesGetMaskStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAttachedStickers] = &MTProtoDecompiler::decompile_messagesGetAttachedStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetGameScore] = &MTProtoDecompiler::decompile_messagesSetGameScore;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetGameHighScores] = &MTProtoDecompiler::decompile_messagesGetGameHighScores;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineGameHighScores] = &MTProtoDecompiler::decompile_messagesGetInlineGameHighScores;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetState] = &MTProtoDecompiler::decompile_updatesGetState;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetDifference] = &MTProtoDecompiler::decompile_updatesGetDifference;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetChannelDifference] = &MTProtoDecompiler::decompile_updatesGetChannelDifference;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::photosUpdateProfilePhoto] = &MTProtoDecompiler::decompile_photosUpdateProfilePhoto;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::photosUploadProfilePhoto] = &MTProtoDecompiler::decompile_photosUploadProfilePhoto;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::photosDeletePhotos] = &MTProtoDecompiler::decompile_photosDeletePhotos;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::photosGetUserPhotos] = &MTProtoDecompiler::decompile_photosGetUserPhotos;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::uploadGetFile] = &MTProtoDecompiler::decompile_uploadGetFile;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetConfig] = &MTProtoDecompiler::decompile_helpGetConfig;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetNearestDc] = &MTProtoDecompiler::decompile_helpGetNearestDc;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppUpdate] = &MTProtoDecompiler::decompile_helpGetAppUpdate;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetInviteText] = &MTProtoDecompiler::decompile_helpGetInviteText;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetSupport] = &MTProtoDecompiler::decompile_helpGetSupport;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppChangelog] = &MTProtoDecompiler::decompile_helpGetAppChangelog;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetTermsOfService] = &MTProtoDecompiler::decompile_helpGetTermsOfService;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteMessages] = &MTProtoDecompiler::decompile_channelsDeleteMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteUserHistory] = &MTProtoDecompiler::decompile_channelsDeleteUserHistory;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetMessages] = &MTProtoDecompiler::decompile_channelsGetMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipants] = &MTProtoDecompiler::decompile_channelsGetParticipants;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipant] = &MTProtoDecompiler::decompile_channelsGetParticipant;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetChannels] = &MTProtoDecompiler::decompile_channelsGetChannels;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetFullChannel] = &MTProtoDecompiler::decompile_channelsGetFullChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsCreateChannel] = &MTProtoDecompiler::decompile_channelsCreateChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditAdmin] = &MTProtoDecompiler::decompile_channelsEditAdmin;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditTitle] = &MTProtoDecompiler::decompile_channelsEditTitle;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditPhoto] = &MTProtoDecompiler::decompile_channelsEditPhoto;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsJoinChannel] = &MTProtoDecompiler::decompile_channelsJoinChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsLeaveChannel] = &MTProtoDecompiler::decompile_channelsLeaveChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsInviteToChannel] = &MTProtoDecompiler::decompile_channelsInviteToChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsKickFromChannel] = &MTProtoDecompiler::decompile_channelsKickFromChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsExportInvite] = &MTProtoDecompiler::decompile_channelsExportInvite;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteChannel] = &MTProtoDecompiler::decompile_channelsDeleteChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsToggleInvites] = &MTProtoDecompiler::decompile_channelsToggleInvites;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsExportMessageLink] = &MTProtoDecompiler::decompile_channelsExportMessageLink;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsToggleSignatures] = &MTProtoDecompiler::decompile_channelsToggleSignatures;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsUpdatePinnedMessage] = &MTProtoDecompiler::decompile_channelsUpdatePinnedMessage;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetAdminedPublicChannels] = &MTProtoDecompiler::decompile_channelsGetAdminedPublicChannels;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::ResPQ] = &MTProtoDecompiler::decompile_ResPQ;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::PQInnerData] = &MTProtoDecompiler::decompile_PQInnerData;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::ServerDHParamsFail] = &MTProtoDecompiler::decompile_ServerDHParams;
@@ -1581,6 +1573,7760 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::DestroySessionNone] = &MTProtoDecompiler::decompile_DestroySessionRes;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::NewSessionCreated] = &MTProtoDecompiler::decompile_NewSession;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::HttpWait] = &MTProtoDecompiler::decompile_HttpWait;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::reqPq] = &MTProtoDecompiler::decompile_reqPq;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::reqDHParams] = &MTProtoDecompiler::decompile_reqDHParams;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::setClientDHParams] = &MTProtoDecompiler::decompile_setClientDHParams;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::rpcDropAnswer] = &MTProtoDecompiler::decompile_rpcDropAnswer;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::getFutureSalts] = &MTProtoDecompiler::decompile_getFutureSalts;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::ping] = &MTProtoDecompiler::decompile_ping;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::pingDelayDisconnect] = &MTProtoDecompiler::decompile_pingDelayDisconnect;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::destroySession] = &MTProtoDecompiler::decompile_destroySession;
+}
+
+void MTProtoDecompiler::decompile_Error(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Error::ctorError));
+	
+	if(ctor == Error::ctorError)
+	{
+		result.append("Error#");
+		TLInt code = mtstream.readTLInt();
+		result.append("code:" + QString::number(code, 16));
+		result.append(", ");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+}
+
+void MTProtoDecompiler::decompile_Null(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Null::ctorNull));
+	
+	if(ctor == Null::ctorNull)
+		result.append("Null");
+}
+
+void MTProtoDecompiler::decompile_InputPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPeer::ctorInputPeerEmpty) ||
+		 (ctor == InputPeer::ctorInputPeerSelf) ||
+		 (ctor == InputPeer::ctorInputPeerChat) ||
+		 (ctor == InputPeer::ctorInputPeerUser) ||
+		 (ctor == InputPeer::ctorInputPeerChannel));
+	
+	if(ctor == InputPeer::ctorInputPeerEmpty)
+		result.append("InputPeerEmpty");
+	else if(ctor == InputPeer::ctorInputPeerSelf)
+		result.append("InputPeerSelf");
+	else if(ctor == InputPeer::ctorInputPeerChat)
+	{
+		result.append("InputPeerChat#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+	}
+	else if(ctor == InputPeer::ctorInputPeerUser)
+	{
+		result.append("InputPeerUser#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+	else if(ctor == InputPeer::ctorInputPeerChannel)
+	{
+		result.append("InputPeerChannel#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputUser(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputUser::ctorInputUserEmpty) ||
+		 (ctor == InputUser::ctorInputUserSelf) ||
+		 (ctor == InputUser::ctorInputUser));
+	
+	if(ctor == InputUser::ctorInputUserEmpty)
+		result.append("InputUserEmpty");
+	else if(ctor == InputUser::ctorInputUserSelf)
+		result.append("InputUserSelf");
+	else if(ctor == InputUser::ctorInputUser)
+	{
+		result.append("InputUser#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputContact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputContact::ctorInputPhoneContact));
+	
+	if(ctor == InputContact::ctorInputPhoneContact)
+	{
+		result.append("InputPhoneContact#");
+		TLLong client_id = mtstream.readTLLong();
+		result.append("client_id:" + QString::number(client_id, 16));
+		result.append(", ");
+		TLString phone = mtstream.readTLString();
+		result.append("phone:" + thethis->printableString(phone));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputFile::ctorInputFile) ||
+		 (ctor == InputFile::ctorInputFileBig));
+	
+	if(ctor == InputFile::ctorInputFile)
+	{
+		result.append("InputFile#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt parts = mtstream.readTLInt();
+		result.append("parts:" + QString::number(parts, 16));
+		result.append(", ");
+		TLString name = mtstream.readTLString();
+		result.append("name:" + thethis->printableString(name));
+		result.append(", ");
+		TLString md5_checksum = mtstream.readTLString();
+		result.append("md5_checksum:" + thethis->printableString(md5_checksum));
+	}
+	else if(ctor == InputFile::ctorInputFileBig)
+	{
+		result.append("InputFileBig#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt parts = mtstream.readTLInt();
+		result.append("parts:" + QString::number(parts, 16));
+		result.append(", ");
+		TLString name = mtstream.readTLString();
+		result.append("name:" + thethis->printableString(name));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputMedia::ctorInputMediaEmpty) ||
+		 (ctor == InputMedia::ctorInputMediaUploadedPhoto) ||
+		 (ctor == InputMedia::ctorInputMediaPhoto) ||
+		 (ctor == InputMedia::ctorInputMediaGeoPoint) ||
+		 (ctor == InputMedia::ctorInputMediaContact) ||
+		 (ctor == InputMedia::ctorInputMediaUploadedDocument) ||
+		 (ctor == InputMedia::ctorInputMediaUploadedThumbDocument) ||
+		 (ctor == InputMedia::ctorInputMediaDocument) ||
+		 (ctor == InputMedia::ctorInputMediaVenue) ||
+		 (ctor == InputMedia::ctorInputMediaGifExternal) ||
+		 (ctor == InputMedia::ctorInputMediaPhotoExternal) ||
+		 (ctor == InputMedia::ctorInputMediaDocumentExternal) ||
+		 (ctor == InputMedia::ctorInputMediaGame));
+	
+	if(ctor == InputMedia::ctorInputMediaEmpty)
+		result.append("InputMediaEmpty");
+	else if(ctor == InputMedia::ctorInputMediaUploadedPhoto)
+	{
+		result.append("InputMediaUploadedPhoto#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("file:");
+		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("stickers:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+	else if(ctor == InputMedia::ctorInputMediaPhoto)
+	{
+		result.append("InputMediaPhoto#");
+		result.append("id_inputmediaphoto:");
+		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == InputMedia::ctorInputMediaGeoPoint)
+	{
+		result.append("InputMediaGeoPoint#");
+		result.append("geo_point:");
+		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
+	}
+	else if(ctor == InputMedia::ctorInputMediaContact)
+	{
+		result.append("InputMediaContact#");
+		TLString phone_number = mtstream.readTLString();
+		result.append("phone_number:" + thethis->printableString(phone_number));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+	}
+	else if(ctor == InputMedia::ctorInputMediaUploadedDocument)
+	{
+		result.append("InputMediaUploadedDocument#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("file:");
+		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
+		TLString mime_type = mtstream.readTLString();
+		result.append("mime_type:" + thethis->printableString(mime_type));
+		result.append(", ");
+		result.append("attributes:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("stickers:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+	else if(ctor == InputMedia::ctorInputMediaUploadedThumbDocument)
+	{
+		result.append("InputMediaUploadedThumbDocument#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("file:");
+		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
+		result.append("thumb:");
+		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
+		TLString mime_type = mtstream.readTLString();
+		result.append("mime_type:" + thethis->printableString(mime_type));
+		result.append(", ");
+		result.append("attributes:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("stickers:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+	else if(ctor == InputMedia::ctorInputMediaDocument)
+	{
+		result.append("InputMediaDocument#");
+		result.append("id_inputmediadocument:");
+		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == InputMedia::ctorInputMediaVenue)
+	{
+		result.append("InputMediaVenue#");
+		result.append("geo_point:");
+		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString address = mtstream.readTLString();
+		result.append("address:" + thethis->printableString(address));
+		result.append(", ");
+		TLString provider = mtstream.readTLString();
+		result.append("provider:" + thethis->printableString(provider));
+		result.append(", ");
+		TLString venue_id = mtstream.readTLString();
+		result.append("venue_id:" + thethis->printableString(venue_id));
+	}
+	else if(ctor == InputMedia::ctorInputMediaGifExternal)
+	{
+		result.append("InputMediaGifExternal#");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString q = mtstream.readTLString();
+		result.append("q:" + thethis->printableString(q));
+	}
+	else if(ctor == InputMedia::ctorInputMediaPhotoExternal)
+	{
+		result.append("InputMediaPhotoExternal#");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == InputMedia::ctorInputMediaDocumentExternal)
+	{
+		result.append("InputMediaDocumentExternal#");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == InputMedia::ctorInputMediaGame)
+	{
+		result.append("InputMediaGame#");
+		result.append("id_inputmediagame:");
+		MTProtoDecompiler::decompile_InputGame(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputChatPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputChatPhoto::ctorInputChatPhotoEmpty) ||
+		 (ctor == InputChatPhoto::ctorInputChatUploadedPhoto) ||
+		 (ctor == InputChatPhoto::ctorInputChatPhoto));
+	
+	if(ctor == InputChatPhoto::ctorInputChatPhotoEmpty)
+		result.append("InputChatPhotoEmpty");
+	else if(ctor == InputChatPhoto::ctorInputChatUploadedPhoto)
+	{
+		result.append("InputChatUploadedPhoto#");
+		result.append("file:");
+		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
+	}
+	else if(ctor == InputChatPhoto::ctorInputChatPhoto)
+	{
+		result.append("InputChatPhoto#");
+		result.append("id:");
+		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputGeoPoint(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputGeoPoint::ctorInputGeoPointEmpty) ||
+		 (ctor == InputGeoPoint::ctorInputGeoPoint));
+	
+	if(ctor == InputGeoPoint::ctorInputGeoPointEmpty)
+		result.append("InputGeoPointEmpty");
+	else if(ctor == InputGeoPoint::ctorInputGeoPoint)
+	{
+		result.append("InputGeoPoint#");
+		TLDouble latitude = mtstream.readTLDouble();
+		result.append("latitude:" + QString::number(latitude));
+		result.append(", ");
+		TLDouble longitude = mtstream.readTLDouble();
+		result.append("longitude:" + QString::number(longitude));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPhoto::ctorInputPhotoEmpty) ||
+		 (ctor == InputPhoto::ctorInputPhoto));
+	
+	if(ctor == InputPhoto::ctorInputPhotoEmpty)
+		result.append("InputPhotoEmpty");
+	else if(ctor == InputPhoto::ctorInputPhoto)
+	{
+		result.append("InputPhoto#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputFileLocation(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputFileLocation::ctorInputFileLocation) ||
+		 (ctor == InputFileLocation::ctorInputEncryptedFileLocation) ||
+		 (ctor == InputFileLocation::ctorInputDocumentFileLocation));
+	
+	if(ctor == InputFileLocation::ctorInputFileLocation)
+	{
+		result.append("InputFileLocation#");
+		TLLong volume_id = mtstream.readTLLong();
+		result.append("volume_id:" + QString::number(volume_id, 16));
+		result.append(", ");
+		TLInt local_id = mtstream.readTLInt();
+		result.append("local_id:" + QString::number(local_id, 16));
+		result.append(", ");
+		TLLong secret = mtstream.readTLLong();
+		result.append("secret:" + QString::number(secret, 16));
+	}
+	else if(ctor == InputFileLocation::ctorInputEncryptedFileLocation)
+	{
+		result.append("InputEncryptedFileLocation#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+	else if(ctor == InputFileLocation::ctorInputDocumentFileLocation)
+	{
+		result.append("InputDocumentFileLocation#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputAppEvent(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputAppEvent::ctorInputAppEvent));
+	
+	if(ctor == InputAppEvent::ctorInputAppEvent)
+	{
+		result.append("InputAppEvent#");
+		TLDouble time = mtstream.readTLDouble();
+		result.append("time:" + QString::number(time));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		TLLong peer = mtstream.readTLLong();
+		result.append("peer:" + QString::number(peer, 16));
+		result.append(", ");
+		TLString data = mtstream.readTLString();
+		result.append("data:" + thethis->printableString(data));
+	}
+}
+
+void MTProtoDecompiler::decompile_Peer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Peer::ctorPeerUser) ||
+		 (ctor == Peer::ctorPeerChat) ||
+		 (ctor == Peer::ctorPeerChannel));
+	
+	if(ctor == Peer::ctorPeerUser)
+	{
+		result.append("PeerUser#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+	}
+	else if(ctor == Peer::ctorPeerChat)
+	{
+		result.append("PeerChat#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+	}
+	else if(ctor == Peer::ctorPeerChannel)
+	{
+		result.append("PeerChannel#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_StorageFileType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == StorageFileType::ctorStorageFileUnknown) ||
+		 (ctor == StorageFileType::ctorStorageFileJpeg) ||
+		 (ctor == StorageFileType::ctorStorageFileGif) ||
+		 (ctor == StorageFileType::ctorStorageFilePng) ||
+		 (ctor == StorageFileType::ctorStorageFilePdf) ||
+		 (ctor == StorageFileType::ctorStorageFileMp3) ||
+		 (ctor == StorageFileType::ctorStorageFileMov) ||
+		 (ctor == StorageFileType::ctorStorageFilePartial) ||
+		 (ctor == StorageFileType::ctorStorageFileMp4) ||
+		 (ctor == StorageFileType::ctorStorageFileWebp));
+	
+	if(ctor == StorageFileType::ctorStorageFileUnknown)
+		result.append("StorageFileUnknown");
+	else if(ctor == StorageFileType::ctorStorageFileJpeg)
+		result.append("StorageFileJpeg");
+	else if(ctor == StorageFileType::ctorStorageFileGif)
+		result.append("StorageFileGif");
+	else if(ctor == StorageFileType::ctorStorageFilePng)
+		result.append("StorageFilePng");
+	else if(ctor == StorageFileType::ctorStorageFilePdf)
+		result.append("StorageFilePdf");
+	else if(ctor == StorageFileType::ctorStorageFileMp3)
+		result.append("StorageFileMp3");
+	else if(ctor == StorageFileType::ctorStorageFileMov)
+		result.append("StorageFileMov");
+	else if(ctor == StorageFileType::ctorStorageFilePartial)
+		result.append("StorageFilePartial");
+	else if(ctor == StorageFileType::ctorStorageFileMp4)
+		result.append("StorageFileMp4");
+	else if(ctor == StorageFileType::ctorStorageFileWebp)
+		result.append("StorageFileWebp");
+}
+
+void MTProtoDecompiler::decompile_FileLocation(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == FileLocation::ctorFileLocationUnavailable) ||
+		 (ctor == FileLocation::ctorFileLocation));
+	
+	if(ctor == FileLocation::ctorFileLocationUnavailable)
+	{
+		result.append("FileLocationUnavailable#");
+		TLLong volume_id = mtstream.readTLLong();
+		result.append("volume_id:" + QString::number(volume_id, 16));
+		result.append(", ");
+		TLInt local_id = mtstream.readTLInt();
+		result.append("local_id:" + QString::number(local_id, 16));
+		result.append(", ");
+		TLLong secret = mtstream.readTLLong();
+		result.append("secret:" + QString::number(secret, 16));
+	}
+	else if(ctor == FileLocation::ctorFileLocation)
+	{
+		result.append("FileLocation#");
+		TLInt dc_id = mtstream.readTLInt();
+		result.append("dc_id:" + QString::number(dc_id, 16));
+		result.append(", ");
+		TLLong volume_id = mtstream.readTLLong();
+		result.append("volume_id:" + QString::number(volume_id, 16));
+		result.append(", ");
+		TLInt local_id = mtstream.readTLInt();
+		result.append("local_id:" + QString::number(local_id, 16));
+		result.append(", ");
+		TLLong secret = mtstream.readTLLong();
+		result.append("secret:" + QString::number(secret, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_User(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == User::ctorUserEmpty) ||
+		 (ctor == User::ctorUser));
+	
+	if(ctor == User::ctorUserEmpty)
+	{
+		result.append("UserEmpty#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == User::ctorUser)
+	{
+		result.append("User#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_self:" + BIT_FIELD_VALUE(flags, 10));
+		result.append(", ");
+		result.append("is_contact:" + BIT_FIELD_VALUE(flags, 11));
+		result.append(", ");
+		result.append("is_mutual_contact:" + BIT_FIELD_VALUE(flags, 12));
+		result.append(", ");
+		result.append("is_deleted:" + BIT_FIELD_VALUE(flags, 13));
+		result.append(", ");
+		result.append("is_bot:" + BIT_FIELD_VALUE(flags, 14));
+		result.append(", ");
+		result.append("is_bot_chat_history:" + BIT_FIELD_VALUE(flags, 15));
+		result.append(", ");
+		result.append("is_bot_nochats:" + BIT_FIELD_VALUE(flags, 16));
+		result.append(", ");
+		result.append("is_verified:" + BIT_FIELD_VALUE(flags, 17));
+		result.append(", ");
+		result.append("is_restricted:" + BIT_FIELD_VALUE(flags, 18));
+		result.append(", ");
+		result.append("is_min:" + BIT_FIELD_VALUE(flags, 20));
+		result.append(", ");
+		result.append("is_bot_inline_geo:" + BIT_FIELD_VALUE(flags, 21));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLLong access_hash = mtstream.readTLLong();
+			result.append("access_hash:" + QString::number(access_hash, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString first_name = mtstream.readTLString();
+			result.append("first_name:" + thethis->printableString(first_name));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString last_name = mtstream.readTLString();
+			result.append("last_name:" + thethis->printableString(last_name));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLString username = mtstream.readTLString();
+			result.append("username:" + thethis->printableString(username));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 4))
+		{
+			TLString phone = mtstream.readTLString();
+			result.append("phone:" + thethis->printableString(phone));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			result.append("photo:");
+			MTProtoDecompiler::decompile_UserProfilePhoto(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			result.append("status:");
+			MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 14))
+		{
+			TLInt bot_info_version = mtstream.readTLInt();
+			result.append("bot_info_version:" + QString::number(bot_info_version, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 18))
+		{
+			TLString restriction_reason = mtstream.readTLString();
+			result.append("restriction_reason:" + thethis->printableString(restriction_reason));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 19))
+		{
+			TLString bot_inline_placeholder = mtstream.readTLString();
+			result.append("bot_inline_placeholder:" + thethis->printableString(bot_inline_placeholder));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_UserProfilePhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UserProfilePhoto::ctorUserProfilePhotoEmpty) ||
+		 (ctor == UserProfilePhoto::ctorUserProfilePhoto));
+	
+	if(ctor == UserProfilePhoto::ctorUserProfilePhotoEmpty)
+		result.append("UserProfilePhotoEmpty");
+	else if(ctor == UserProfilePhoto::ctorUserProfilePhoto)
+	{
+		result.append("UserProfilePhoto#");
+		TLLong photo_id = mtstream.readTLLong();
+		result.append("photo_id:" + QString::number(photo_id, 16));
+		result.append(", ");
+		result.append("photo_small:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+		result.append("photo_big:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_UserStatus(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UserStatus::ctorUserStatusEmpty) ||
+		 (ctor == UserStatus::ctorUserStatusOnline) ||
+		 (ctor == UserStatus::ctorUserStatusOffline) ||
+		 (ctor == UserStatus::ctorUserStatusRecently) ||
+		 (ctor == UserStatus::ctorUserStatusLastWeek) ||
+		 (ctor == UserStatus::ctorUserStatusLastMonth));
+	
+	if(ctor == UserStatus::ctorUserStatusEmpty)
+		result.append("UserStatusEmpty");
+	else if(ctor == UserStatus::ctorUserStatusOnline)
+	{
+		result.append("UserStatusOnline#");
+		TLInt expires = mtstream.readTLInt();
+		result.append("expires:" + QString::number(expires, 16));
+	}
+	else if(ctor == UserStatus::ctorUserStatusOffline)
+	{
+		result.append("UserStatusOffline#");
+		TLInt was_online = mtstream.readTLInt();
+		result.append("was_online:" + QString::number(was_online, 16));
+	}
+	else if(ctor == UserStatus::ctorUserStatusRecently)
+		result.append("UserStatusRecently");
+	else if(ctor == UserStatus::ctorUserStatusLastWeek)
+		result.append("UserStatusLastWeek");
+	else if(ctor == UserStatus::ctorUserStatusLastMonth)
+		result.append("UserStatusLastMonth");
+}
+
+void MTProtoDecompiler::decompile_Chat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Chat::ctorChatEmpty) ||
+		 (ctor == Chat::ctorChat) ||
+		 (ctor == Chat::ctorChatForbidden) ||
+		 (ctor == Chat::ctorChannel) ||
+		 (ctor == Chat::ctorChannelForbidden));
+	
+	if(ctor == Chat::ctorChatEmpty)
+	{
+		result.append("ChatEmpty#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == Chat::ctorChat)
+	{
+		result.append("Chat#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_creator:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_kicked:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_left:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		result.append("is_admins_enabled:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		result.append("is_admin:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_deactivated:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
+		TLInt participants_count = mtstream.readTLInt();
+		result.append("participants_count:" + QString::number(participants_count, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 6))
+		{
+			result.append("migrated_to:");
+			MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == Chat::ctorChatForbidden)
+	{
+		result.append("ChatForbidden#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+	}
+	else if(ctor == Chat::ctorChannel)
+	{
+		result.append("Channel#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_creator:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_kicked:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_left:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		result.append("is_editor:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		result.append("is_moderator:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_verified:" + BIT_FIELD_VALUE(flags, 7));
+		result.append(", ");
+		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 8));
+		result.append(", ");
+		result.append("is_restricted:" + BIT_FIELD_VALUE(flags, 9));
+		result.append(", ");
+		result.append("is_democracy:" + BIT_FIELD_VALUE(flags, 10));
+		result.append(", ");
+		result.append("is_signatures:" + BIT_FIELD_VALUE(flags, 11));
+		result.append(", ");
+		result.append("is_min:" + BIT_FIELD_VALUE(flags, 12));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 13))
+		{
+			TLLong access_hash = mtstream.readTLLong();
+			result.append("access_hash:" + QString::number(access_hash, 16));
+			result.append(", ");
+		}
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLString username = mtstream.readTLString();
+			result.append("username:" + thethis->printableString(username));
+			result.append(", ");
+		}
+		result.append("photo:");
+		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 9))
+		{
+			TLString restriction_reason = mtstream.readTLString();
+			result.append("restriction_reason:" + thethis->printableString(restriction_reason));
+		}
+	}
+	else if(ctor == Chat::ctorChannelForbidden)
+	{
+		result.append("ChannelForbidden#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 8));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+	}
+}
+
+void MTProtoDecompiler::decompile_ChatFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChatFull::ctorChatFull) ||
+		 (ctor == ChatFull::ctorChannelFull));
+	
+	if(ctor == ChatFull::ctorChatFull)
+	{
+		result.append("ChatFull#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		result.append("participants:");
+		MTProtoDecompiler::decompile_ChatParticipants(thethis, result, mtstream);
+		result.append("chat_photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		result.append("notify_settings:");
+		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
+		result.append("exported_invite:");
+		MTProtoDecompiler::decompile_ExportedChatInvite(thethis, result, mtstream);
+		result.append("bot_info:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == ChatFull::ctorChannelFull)
+	{
+		result.append("ChannelFull#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_can_view_participants:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		result.append("is_can_set_username:" + BIT_FIELD_VALUE(flags, 6));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString about = mtstream.readTLString();
+		result.append("about:" + thethis->printableString(about));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt participants_count = mtstream.readTLInt();
+			result.append("participants_count:" + QString::number(participants_count, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLInt admins_count = mtstream.readTLInt();
+			result.append("admins_count:" + QString::number(admins_count, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLInt kicked_count = mtstream.readTLInt();
+			result.append("kicked_count:" + QString::number(kicked_count, 16));
+			result.append(", ");
+		}
+		TLInt read_inbox_max_id = mtstream.readTLInt();
+		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
+		result.append(", ");
+		TLInt read_outbox_max_id = mtstream.readTLInt();
+		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
+		result.append(", ");
+		TLInt unread_count = mtstream.readTLInt();
+		result.append("unread_count:" + QString::number(unread_count, 16));
+		result.append(", ");
+		result.append("chat_photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		result.append("notify_settings:");
+		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
+		result.append("exported_invite:");
+		MTProtoDecompiler::decompile_ExportedChatInvite(thethis, result, mtstream);
+		result.append("bot_info:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 4))
+		{
+			TLInt migrated_from_chat_id = mtstream.readTLInt();
+			result.append("migrated_from_chat_id:" + QString::number(migrated_from_chat_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 4))
+		{
+			TLInt migrated_from_max_id = mtstream.readTLInt();
+			result.append("migrated_from_max_id:" + QString::number(migrated_from_max_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLInt pinned_msg_id = mtstream.readTLInt();
+			result.append("pinned_msg_id:" + QString::number(pinned_msg_id, 16));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_ChatParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChatParticipant::ctorChatParticipant) ||
+		 (ctor == ChatParticipant::ctorChatParticipantCreator) ||
+		 (ctor == ChatParticipant::ctorChatParticipantAdmin));
+	
+	if(ctor == ChatParticipant::ctorChatParticipant)
+	{
+		result.append("ChatParticipant#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChatParticipant::ctorChatParticipantCreator)
+	{
+		result.append("ChatParticipantCreator#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+	}
+	else if(ctor == ChatParticipant::ctorChatParticipantAdmin)
+	{
+		result.append("ChatParticipantAdmin#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ChatParticipants(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChatParticipants::ctorChatParticipantsForbidden) ||
+		 (ctor == ChatParticipants::ctorChatParticipants));
+	
+	if(ctor == ChatParticipants::ctorChatParticipantsForbidden)
+	{
+		result.append("ChatParticipantsForbidden#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("self_participant:");
+			MTProtoDecompiler::decompile_ChatParticipant(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == ChatParticipants::ctorChatParticipants)
+	{
+		result.append("ChatParticipants#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		result.append("participants:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ChatPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChatPhoto::ctorChatPhotoEmpty) ||
+		 (ctor == ChatPhoto::ctorChatPhoto));
+	
+	if(ctor == ChatPhoto::ctorChatPhotoEmpty)
+		result.append("ChatPhotoEmpty");
+	else if(ctor == ChatPhoto::ctorChatPhoto)
+	{
+		result.append("ChatPhoto#");
+		result.append("photo_small:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+		result.append("photo_big:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_Message(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Message::ctorMessageEmpty) ||
+		 (ctor == Message::ctorMessage) ||
+		 (ctor == Message::ctorMessageService));
+	
+	if(ctor == Message::ctorMessageEmpty)
+	{
+		result.append("MessageEmpty#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == Message::ctorMessage)
+	{
+		result.append("Message#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
+		result.append(", ");
+		result.append("is_post:" + BIT_FIELD_VALUE(flags, 14));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 8))
+		{
+			TLInt from_id = mtstream.readTLInt();
+			result.append("from_id:" + QString::number(from_id, 16));
+			result.append(", ");
+		}
+		result.append("to_id:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("fwd_from:");
+			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 11))
+		{
+			TLInt via_bot_id = mtstream.readTLInt();
+			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLInt reply_to_msg_id = mtstream.readTLInt();
+			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+			result.append(", ");
+		}
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 9))
+		{
+			result.append("media:");
+			MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 10))
+		{
+			TLInt views = mtstream.readTLInt();
+			result.append("views:" + QString::number(views, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 15))
+		{
+			TLInt edit_date = mtstream.readTLInt();
+			result.append("edit_date:" + QString::number(edit_date, 16));
+		}
+	}
+	else if(ctor == Message::ctorMessageService)
+	{
+		result.append("MessageService#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
+		result.append(", ");
+		result.append("is_post:" + BIT_FIELD_VALUE(flags, 14));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 8))
+		{
+			TLInt from_id = mtstream.readTLInt();
+			result.append("from_id:" + QString::number(from_id, 16));
+			result.append(", ");
+		}
+		result.append("to_id:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLInt reply_to_msg_id = mtstream.readTLInt();
+			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+			result.append(", ");
+		}
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		result.append("action:");
+		MTProtoDecompiler::decompile_MessageAction(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessageMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessageMedia::ctorMessageMediaEmpty) ||
+		 (ctor == MessageMedia::ctorMessageMediaPhoto) ||
+		 (ctor == MessageMedia::ctorMessageMediaGeo) ||
+		 (ctor == MessageMedia::ctorMessageMediaContact) ||
+		 (ctor == MessageMedia::ctorMessageMediaUnsupported) ||
+		 (ctor == MessageMedia::ctorMessageMediaDocument) ||
+		 (ctor == MessageMedia::ctorMessageMediaWebPage) ||
+		 (ctor == MessageMedia::ctorMessageMediaVenue) ||
+		 (ctor == MessageMedia::ctorMessageMediaGame));
+	
+	if(ctor == MessageMedia::ctorMessageMediaEmpty)
+		result.append("MessageMediaEmpty");
+	else if(ctor == MessageMedia::ctorMessageMediaPhoto)
+	{
+		result.append("MessageMediaPhoto#");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaGeo)
+	{
+		result.append("MessageMediaGeo#");
+		result.append("geo:");
+		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaContact)
+	{
+		result.append("MessageMediaContact#");
+		TLString phone_number = mtstream.readTLString();
+		result.append("phone_number:" + thethis->printableString(phone_number));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaUnsupported)
+		result.append("MessageMediaUnsupported");
+	else if(ctor == MessageMedia::ctorMessageMediaDocument)
+	{
+		result.append("MessageMediaDocument#");
+		result.append("document:");
+		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaWebPage)
+	{
+		result.append("MessageMediaWebPage#");
+		result.append("webpage:");
+		MTProtoDecompiler::decompile_WebPage(thethis, result, mtstream);
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaVenue)
+	{
+		result.append("MessageMediaVenue#");
+		result.append("geo:");
+		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString address = mtstream.readTLString();
+		result.append("address:" + thethis->printableString(address));
+		result.append(", ");
+		TLString provider = mtstream.readTLString();
+		result.append("provider:" + thethis->printableString(provider));
+		result.append(", ");
+		TLString venue_id = mtstream.readTLString();
+		result.append("venue_id:" + thethis->printableString(venue_id));
+	}
+	else if(ctor == MessageMedia::ctorMessageMediaGame)
+	{
+		result.append("MessageMediaGame#");
+		result.append("game:");
+		MTProtoDecompiler::decompile_Game(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessageAction(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessageAction::ctorMessageActionEmpty) ||
+		 (ctor == MessageAction::ctorMessageActionChatCreate) ||
+		 (ctor == MessageAction::ctorMessageActionChatEditTitle) ||
+		 (ctor == MessageAction::ctorMessageActionChatEditPhoto) ||
+		 (ctor == MessageAction::ctorMessageActionChatDeletePhoto) ||
+		 (ctor == MessageAction::ctorMessageActionChatAddUser) ||
+		 (ctor == MessageAction::ctorMessageActionChatDeleteUser) ||
+		 (ctor == MessageAction::ctorMessageActionChatJoinedByLink) ||
+		 (ctor == MessageAction::ctorMessageActionChannelCreate) ||
+		 (ctor == MessageAction::ctorMessageActionChatMigrateTo) ||
+		 (ctor == MessageAction::ctorMessageActionChannelMigrateFrom) ||
+		 (ctor == MessageAction::ctorMessageActionPinMessage) ||
+		 (ctor == MessageAction::ctorMessageActionHistoryClear) ||
+		 (ctor == MessageAction::ctorMessageActionGameScore));
+	
+	if(ctor == MessageAction::ctorMessageActionEmpty)
+		result.append("MessageActionEmpty");
+	else if(ctor == MessageAction::ctorMessageActionChatCreate)
+	{
+		result.append("MessageActionChatCreate#");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatEditTitle)
+	{
+		result.append("MessageActionChatEditTitle#");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatEditPhoto)
+	{
+		result.append("MessageActionChatEditPhoto#");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatDeletePhoto)
+		result.append("MessageActionChatDeletePhoto");
+	else if(ctor == MessageAction::ctorMessageActionChatAddUser)
+	{
+		result.append("MessageActionChatAddUser#");
+		result.append("users:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatDeleteUser)
+	{
+		result.append("MessageActionChatDeleteUser#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatJoinedByLink)
+	{
+		result.append("MessageActionChatJoinedByLink#");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+	}
+	else if(ctor == MessageAction::ctorMessageActionChannelCreate)
+	{
+		result.append("MessageActionChannelCreate#");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+	}
+	else if(ctor == MessageAction::ctorMessageActionChatMigrateTo)
+	{
+		result.append("MessageActionChatMigrateTo#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+	}
+	else if(ctor == MessageAction::ctorMessageActionChannelMigrateFrom)
+	{
+		result.append("MessageActionChannelMigrateFrom#");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+	}
+	else if(ctor == MessageAction::ctorMessageActionPinMessage)
+		result.append("MessageActionPinMessage");
+	else if(ctor == MessageAction::ctorMessageActionHistoryClear)
+		result.append("MessageActionHistoryClear");
+	else if(ctor == MessageAction::ctorMessageActionGameScore)
+	{
+		result.append("MessageActionGameScore#");
+		TLLong game_id = mtstream.readTLLong();
+		result.append("game_id:" + QString::number(game_id, 16));
+		result.append(", ");
+		TLInt score = mtstream.readTLInt();
+		result.append("score:" + QString::number(score, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_Dialog(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Dialog::ctorDialog));
+	
+	if(ctor == Dialog::ctorDialog)
+	{
+		result.append("Dialog#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		TLInt top_message = mtstream.readTLInt();
+		result.append("top_message:" + QString::number(top_message, 16));
+		result.append(", ");
+		TLInt read_inbox_max_id = mtstream.readTLInt();
+		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
+		result.append(", ");
+		TLInt read_outbox_max_id = mtstream.readTLInt();
+		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
+		result.append(", ");
+		TLInt unread_count = mtstream.readTLInt();
+		result.append("unread_count:" + QString::number(unread_count, 16));
+		result.append(", ");
+		result.append("notify_settings:");
+		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt pts = mtstream.readTLInt();
+			result.append("pts:" + QString::number(pts, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("draft:");
+			MTProtoDecompiler::decompile_DraftMessage(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_Photo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Photo::ctorPhotoEmpty) ||
+		 (ctor == Photo::ctorPhoto));
+	
+	if(ctor == Photo::ctorPhotoEmpty)
+	{
+		result.append("PhotoEmpty#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == Photo::ctorPhoto)
+	{
+		result.append("Photo#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("has_stickers:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		result.append("sizes:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_PhotoSize(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PhotoSize::ctorPhotoSizeEmpty) ||
+		 (ctor == PhotoSize::ctorPhotoSize) ||
+		 (ctor == PhotoSize::ctorPhotoCachedSize));
+	
+	if(ctor == PhotoSize::ctorPhotoSizeEmpty)
+	{
+		result.append("PhotoSizeEmpty#");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+	}
+	else if(ctor == PhotoSize::ctorPhotoSize)
+	{
+		result.append("PhotoSize#");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		result.append("location:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+		TLInt w = mtstream.readTLInt();
+		result.append("w:" + QString::number(w, 16));
+		result.append(", ");
+		TLInt h = mtstream.readTLInt();
+		result.append("h:" + QString::number(h, 16));
+		result.append(", ");
+		TLInt size = mtstream.readTLInt();
+		result.append("size:" + QString::number(size, 16));
+	}
+	else if(ctor == PhotoSize::ctorPhotoCachedSize)
+	{
+		result.append("PhotoCachedSize#");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		result.append("location:");
+		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
+		TLInt w = mtstream.readTLInt();
+		result.append("w:" + QString::number(w, 16));
+		result.append(", ");
+		TLInt h = mtstream.readTLInt();
+		result.append("h:" + QString::number(h, 16));
+		result.append(", ");
+		TLBytes bytes = mtstream.readTLBytes();
+		result.append("bytes:" + thethis->printableString(bytes));
+	}
+}
+
+void MTProtoDecompiler::decompile_GeoPoint(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == GeoPoint::ctorGeoPointEmpty) ||
+		 (ctor == GeoPoint::ctorGeoPoint));
+	
+	if(ctor == GeoPoint::ctorGeoPointEmpty)
+		result.append("GeoPointEmpty");
+	else if(ctor == GeoPoint::ctorGeoPoint)
+	{
+		result.append("GeoPoint#");
+		TLDouble longitude = mtstream.readTLDouble();
+		result.append("longitude:" + QString::number(longitude));
+		result.append(", ");
+		TLDouble latitude = mtstream.readTLDouble();
+		result.append("latitude:" + QString::number(latitude));
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthCheckedPhone(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthCheckedPhone::ctorAuthCheckedPhone));
+	
+	if(ctor == AuthCheckedPhone::ctorAuthCheckedPhone)
+	{
+		result.append("AuthCheckedPhone#");
+		TLBool is_phone_registered = mtstream.readTLBool();
+		result.append("is_phone_registered:" + QString::number(is_phone_registered, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthSentCode(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthSentCode::ctorAuthSentCode));
+	
+	if(ctor == AuthSentCode::ctorAuthSentCode)
+	{
+		result.append("AuthSentCode#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_phone_registered:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("type:");
+		MTProtoDecompiler::decompile_AuthSentCodeType(thethis, result, mtstream);
+		TLString phone_code_hash = mtstream.readTLString();
+		result.append("phone_code_hash:" + thethis->printableString(phone_code_hash));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("next_type:");
+			MTProtoDecompiler::decompile_AuthCodeType(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLInt timeout = mtstream.readTLInt();
+			result.append("timeout:" + QString::number(timeout, 16));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthAuthorization::ctorAuthAuthorization));
+	
+	if(ctor == AuthAuthorization::ctorAuthAuthorization)
+	{
+		result.append("AuthAuthorization#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt tmp_sessions = mtstream.readTLInt();
+			result.append("tmp_sessions:" + QString::number(tmp_sessions, 16));
+			result.append(", ");
+		}
+		result.append("user:");
+		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthExportedAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthExportedAuthorization::ctorAuthExportedAuthorization));
+	
+	if(ctor == AuthExportedAuthorization::ctorAuthExportedAuthorization)
+	{
+		result.append("AuthExportedAuthorization#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLBytes bytes = mtstream.readTLBytes();
+		result.append("bytes:" + thethis->printableString(bytes));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputNotifyPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputNotifyPeer::ctorInputNotifyPeer) ||
+		 (ctor == InputNotifyPeer::ctorInputNotifyUsers) ||
+		 (ctor == InputNotifyPeer::ctorInputNotifyChats) ||
+		 (ctor == InputNotifyPeer::ctorInputNotifyAll));
+	
+	if(ctor == InputNotifyPeer::ctorInputNotifyPeer)
+	{
+		result.append("InputNotifyPeer#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	}
+	else if(ctor == InputNotifyPeer::ctorInputNotifyUsers)
+		result.append("InputNotifyUsers");
+	else if(ctor == InputNotifyPeer::ctorInputNotifyChats)
+		result.append("InputNotifyChats");
+	else if(ctor == InputNotifyPeer::ctorInputNotifyAll)
+		result.append("InputNotifyAll");
+}
+
+void MTProtoDecompiler::decompile_InputPeerNotifyEvents(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsEmpty) ||
+		 (ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsAll));
+	
+	if(ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsEmpty)
+		result.append("InputPeerNotifyEventsEmpty");
+	else if(ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsAll)
+		result.append("InputPeerNotifyEventsAll");
+}
+
+void MTProtoDecompiler::decompile_InputPeerNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPeerNotifySettings::ctorInputPeerNotifySettings));
+	
+	if(ctor == InputPeerNotifySettings::ctorInputPeerNotifySettings)
+	{
+		result.append("InputPeerNotifySettings#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_show_previews:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		TLInt mute_until = mtstream.readTLInt();
+		result.append("mute_until:" + QString::number(mute_until, 16));
+		result.append(", ");
+		TLString sound = mtstream.readTLString();
+		result.append("sound:" + thethis->printableString(sound));
+	}
+}
+
+void MTProtoDecompiler::decompile_PeerNotifyEvents(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PeerNotifyEvents::ctorPeerNotifyEventsEmpty) ||
+		 (ctor == PeerNotifyEvents::ctorPeerNotifyEventsAll));
+	
+	if(ctor == PeerNotifyEvents::ctorPeerNotifyEventsEmpty)
+		result.append("PeerNotifyEventsEmpty");
+	else if(ctor == PeerNotifyEvents::ctorPeerNotifyEventsAll)
+		result.append("PeerNotifyEventsAll");
+}
+
+void MTProtoDecompiler::decompile_PeerNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PeerNotifySettings::ctorPeerNotifySettingsEmpty) ||
+		 (ctor == PeerNotifySettings::ctorPeerNotifySettings));
+	
+	if(ctor == PeerNotifySettings::ctorPeerNotifySettingsEmpty)
+		result.append("PeerNotifySettingsEmpty");
+	else if(ctor == PeerNotifySettings::ctorPeerNotifySettings)
+	{
+		result.append("PeerNotifySettings#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_show_previews:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		TLInt mute_until = mtstream.readTLInt();
+		result.append("mute_until:" + QString::number(mute_until, 16));
+		result.append(", ");
+		TLString sound = mtstream.readTLString();
+		result.append("sound:" + thethis->printableString(sound));
+	}
+}
+
+void MTProtoDecompiler::decompile_PeerSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PeerSettings::ctorPeerSettings));
+	
+	if(ctor == PeerSettings::ctorPeerSettings)
+	{
+		result.append("PeerSettings#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_report_spam:" + BIT_FIELD_VALUE(flags, 0));
+	}
+}
+
+void MTProtoDecompiler::decompile_WallPaper(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == WallPaper::ctorWallPaper) ||
+		 (ctor == WallPaper::ctorWallPaperSolid));
+	
+	if(ctor == WallPaper::ctorWallPaper)
+	{
+		result.append("WallPaper#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		result.append("sizes:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLInt color = mtstream.readTLInt();
+		result.append("color:" + QString::number(color, 16));
+	}
+	else if(ctor == WallPaper::ctorWallPaperSolid)
+	{
+		result.append("WallPaperSolid#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLInt bg_color = mtstream.readTLInt();
+		result.append("bg_color:" + QString::number(bg_color, 16));
+		result.append(", ");
+		TLInt color = mtstream.readTLInt();
+		result.append("color:" + QString::number(color, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ReportReason(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ReportReason::ctorInputReportReasonSpam) ||
+		 (ctor == ReportReason::ctorInputReportReasonViolence) ||
+		 (ctor == ReportReason::ctorInputReportReasonPornography) ||
+		 (ctor == ReportReason::ctorInputReportReasonOther));
+	
+	if(ctor == ReportReason::ctorInputReportReasonSpam)
+		result.append("InputReportReasonSpam");
+	else if(ctor == ReportReason::ctorInputReportReasonViolence)
+		result.append("InputReportReasonViolence");
+	else if(ctor == ReportReason::ctorInputReportReasonPornography)
+		result.append("InputReportReasonPornography");
+	else if(ctor == ReportReason::ctorInputReportReasonOther)
+	{
+		result.append("InputReportReasonOther#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+}
+
+void MTProtoDecompiler::decompile_UserFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UserFull::ctorUserFull));
+	
+	if(ctor == UserFull::ctorUserFull)
+	{
+		result.append("UserFull#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_blocked:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("user:");
+		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString about = mtstream.readTLString();
+			result.append("about:" + thethis->printableString(about));
+			result.append(", ");
+		}
+		result.append("link:");
+		MTProtoDecompiler::decompile_ContactsLink(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("profile_photo:");
+			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		}
+		result.append("notify_settings:");
+		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 3))
+		{
+			result.append("bot_info:");
+			MTProtoDecompiler::decompile_BotInfo(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_Contact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Contact::ctorContact));
+	
+	if(ctor == Contact::ctorContact)
+	{
+		result.append("Contact#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLBool is_mutual = mtstream.readTLBool();
+		result.append("is_mutual:" + QString::number(is_mutual, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ImportedContact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ImportedContact::ctorImportedContact));
+	
+	if(ctor == ImportedContact::ctorImportedContact)
+	{
+		result.append("ImportedContact#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLLong client_id = mtstream.readTLLong();
+		result.append("client_id:" + QString::number(client_id, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactBlocked(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactBlocked::ctorContactBlocked));
+	
+	if(ctor == ContactBlocked::ctorContactBlocked)
+	{
+		result.append("ContactBlocked#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactStatus(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactStatus::ctorContactStatus));
+	
+	if(ctor == ContactStatus::ctorContactStatus)
+	{
+		result.append("ContactStatus#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("status:");
+		MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsLink::ctorContactsLink));
+	
+	if(ctor == ContactsLink::ctorContactsLink)
+	{
+		result.append("ContactsLink#");
+		result.append("my_link:");
+		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
+		result.append("foreign_link:");
+		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
+		result.append("user:");
+		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsContacts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsContacts::ctorContactsContactsNotModified) ||
+		 (ctor == ContactsContacts::ctorContactsContacts));
+	
+	if(ctor == ContactsContacts::ctorContactsContactsNotModified)
+		result.append("ContactsContactsNotModified");
+	else if(ctor == ContactsContacts::ctorContactsContacts)
+	{
+		result.append("ContactsContacts#");
+		result.append("contacts:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsImportedContacts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsImportedContacts::ctorContactsImportedContacts));
+	
+	if(ctor == ContactsImportedContacts::ctorContactsImportedContacts)
+	{
+		result.append("ContactsImportedContacts#");
+		result.append("imported:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("retry_contacts:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsBlocked(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsBlocked::ctorContactsBlocked) ||
+		 (ctor == ContactsBlocked::ctorContactsBlockedSlice));
+	
+	if(ctor == ContactsBlocked::ctorContactsBlocked)
+	{
+		result.append("ContactsBlocked#");
+		result.append("blocked:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == ContactsBlocked::ctorContactsBlockedSlice)
+	{
+		result.append("ContactsBlockedSlice#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("blocked:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesDialogs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesDialogs::ctorMessagesDialogs) ||
+		 (ctor == MessagesDialogs::ctorMessagesDialogsSlice));
+	
+	if(ctor == MessagesDialogs::ctorMessagesDialogs)
+	{
+		result.append("MessagesDialogs#");
+		result.append("dialogs:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == MessagesDialogs::ctorMessagesDialogsSlice)
+	{
+		result.append("MessagesDialogsSlice#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("dialogs:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesMessages(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesMessages::ctorMessagesMessages) ||
+		 (ctor == MessagesMessages::ctorMessagesMessagesSlice) ||
+		 (ctor == MessagesMessages::ctorMessagesChannelMessages));
+	
+	if(ctor == MessagesMessages::ctorMessagesMessages)
+	{
+		result.append("MessagesMessages#");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == MessagesMessages::ctorMessagesMessagesSlice)
+	{
+		result.append("MessagesMessagesSlice#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == MessagesMessages::ctorMessagesChannelMessages)
+	{
+		result.append("MessagesChannelMessages#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesChats(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesChats::ctorMessagesChats));
+	
+	if(ctor == MessagesChats::ctorMessagesChats)
+	{
+		result.append("MessagesChats#");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesChatFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesChatFull::ctorMessagesChatFull));
+	
+	if(ctor == MessagesChatFull::ctorMessagesChatFull)
+	{
+		result.append("MessagesChatFull#");
+		result.append("full_chat:");
+		MTProtoDecompiler::decompile_ChatFull(thethis, result, mtstream);
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesAffectedHistory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesAffectedHistory::ctorMessagesAffectedHistory));
+	
+	if(ctor == MessagesAffectedHistory::ctorMessagesAffectedHistory)
+	{
+		result.append("MessagesAffectedHistory#");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+		result.append(", ");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesFilter::ctorInputMessagesFilterEmpty) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotos) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterVideo) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideo) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterDocument) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterUrl) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterGif) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterVoice) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterMusic) ||
+		 (ctor == MessagesFilter::ctorInputMessagesFilterChatPhotos));
+	
+	if(ctor == MessagesFilter::ctorInputMessagesFilterEmpty)
+		result.append("InputMessagesFilterEmpty");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotos)
+		result.append("InputMessagesFilterPhotos");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterVideo)
+		result.append("InputMessagesFilterVideo");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideo)
+		result.append("InputMessagesFilterPhotoVideo");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments)
+		result.append("InputMessagesFilterPhotoVideoDocuments");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterDocument)
+		result.append("InputMessagesFilterDocument");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterUrl)
+		result.append("InputMessagesFilterUrl");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterGif)
+		result.append("InputMessagesFilterGif");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterVoice)
+		result.append("InputMessagesFilterVoice");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterMusic)
+		result.append("InputMessagesFilterMusic");
+	else if(ctor == MessagesFilter::ctorInputMessagesFilterChatPhotos)
+		result.append("InputMessagesFilterChatPhotos");
+}
+
+void MTProtoDecompiler::decompile_Update(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Update::ctorUpdateNewMessage) ||
+		 (ctor == Update::ctorUpdateMessageID) ||
+		 (ctor == Update::ctorUpdateDeleteMessages) ||
+		 (ctor == Update::ctorUpdateUserTyping) ||
+		 (ctor == Update::ctorUpdateChatUserTyping) ||
+		 (ctor == Update::ctorUpdateChatParticipants) ||
+		 (ctor == Update::ctorUpdateUserStatus) ||
+		 (ctor == Update::ctorUpdateUserName) ||
+		 (ctor == Update::ctorUpdateUserPhoto) ||
+		 (ctor == Update::ctorUpdateContactRegistered) ||
+		 (ctor == Update::ctorUpdateContactLink) ||
+		 (ctor == Update::ctorUpdateNewAuthorization) ||
+		 (ctor == Update::ctorUpdateNewEncryptedMessage) ||
+		 (ctor == Update::ctorUpdateEncryptedChatTyping) ||
+		 (ctor == Update::ctorUpdateEncryption) ||
+		 (ctor == Update::ctorUpdateEncryptedMessagesRead) ||
+		 (ctor == Update::ctorUpdateChatParticipantAdd) ||
+		 (ctor == Update::ctorUpdateChatParticipantDelete) ||
+		 (ctor == Update::ctorUpdateDcOptions) ||
+		 (ctor == Update::ctorUpdateUserBlocked) ||
+		 (ctor == Update::ctorUpdateNotifySettings) ||
+		 (ctor == Update::ctorUpdateServiceNotification) ||
+		 (ctor == Update::ctorUpdatePrivacy) ||
+		 (ctor == Update::ctorUpdateUserPhone) ||
+		 (ctor == Update::ctorUpdateReadHistoryInbox) ||
+		 (ctor == Update::ctorUpdateReadHistoryOutbox) ||
+		 (ctor == Update::ctorUpdateWebPage) ||
+		 (ctor == Update::ctorUpdateReadMessagesContents) ||
+		 (ctor == Update::ctorUpdateChannelTooLong) ||
+		 (ctor == Update::ctorUpdateChannel) ||
+		 (ctor == Update::ctorUpdateNewChannelMessage) ||
+		 (ctor == Update::ctorUpdateReadChannelInbox) ||
+		 (ctor == Update::ctorUpdateDeleteChannelMessages) ||
+		 (ctor == Update::ctorUpdateChannelMessageViews) ||
+		 (ctor == Update::ctorUpdateChatAdmins) ||
+		 (ctor == Update::ctorUpdateChatParticipantAdmin) ||
+		 (ctor == Update::ctorUpdateNewStickerSet) ||
+		 (ctor == Update::ctorUpdateStickerSetsOrder) ||
+		 (ctor == Update::ctorUpdateStickerSets) ||
+		 (ctor == Update::ctorUpdateSavedGifs) ||
+		 (ctor == Update::ctorUpdateBotInlineQuery) ||
+		 (ctor == Update::ctorUpdateBotInlineSend) ||
+		 (ctor == Update::ctorUpdateEditChannelMessage) ||
+		 (ctor == Update::ctorUpdateChannelPinnedMessage) ||
+		 (ctor == Update::ctorUpdateBotCallbackQuery) ||
+		 (ctor == Update::ctorUpdateEditMessage) ||
+		 (ctor == Update::ctorUpdateInlineBotCallbackQuery) ||
+		 (ctor == Update::ctorUpdateReadChannelOutbox) ||
+		 (ctor == Update::ctorUpdateDraftMessage) ||
+		 (ctor == Update::ctorUpdateReadFeaturedStickers) ||
+		 (ctor == Update::ctorUpdateRecentStickers) ||
+		 (ctor == Update::ctorUpdateConfig) ||
+		 (ctor == Update::ctorUpdatePtsChanged));
+	
+	if(ctor == Update::ctorUpdateNewMessage)
+	{
+		result.append("UpdateNewMessage#");
+		result.append("message_updatenewmessage:");
+		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateMessageID)
+	{
+		result.append("UpdateMessageID#");
+		TLInt id_updatemessageid = mtstream.readTLInt();
+		result.append("id_updatemessageid:" + QString::number(id_updatemessageid, 16));
+		result.append(", ");
+		TLLong random_id = mtstream.readTLLong();
+		result.append("random_id:" + QString::number(random_id, 16));
+	}
+	else if(ctor == Update::ctorUpdateDeleteMessages)
+	{
+		result.append("UpdateDeleteMessages#");
+		result.append("messages:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateUserTyping)
+	{
+		result.append("UpdateUserTyping#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("action:");
+		MTProtoDecompiler::decompile_SendMessageAction(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateChatUserTyping)
+	{
+		result.append("UpdateChatUserTyping#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("action:");
+		MTProtoDecompiler::decompile_SendMessageAction(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateChatParticipants)
+	{
+		result.append("UpdateChatParticipants#");
+		result.append("participants:");
+		MTProtoDecompiler::decompile_ChatParticipants(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateUserStatus)
+	{
+		result.append("UpdateUserStatus#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("status:");
+		MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateUserName)
+	{
+		result.append("UpdateUserName#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+		result.append(", ");
+		TLString username = mtstream.readTLString();
+		result.append("username:" + thethis->printableString(username));
+	}
+	else if(ctor == Update::ctorUpdateUserPhoto)
+	{
+		result.append("UpdateUserPhoto#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_UserProfilePhoto(thethis, result, mtstream);
+		TLBool is_previous = mtstream.readTLBool();
+		result.append("is_previous:" + QString::number(is_previous, 16));
+	}
+	else if(ctor == Update::ctorUpdateContactRegistered)
+	{
+		result.append("UpdateContactRegistered#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == Update::ctorUpdateContactLink)
+	{
+		result.append("UpdateContactLink#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("my_link:");
+		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
+		result.append("foreign_link:");
+		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateNewAuthorization)
+	{
+		result.append("UpdateNewAuthorization#");
+		TLLong auth_key_id = mtstream.readTLLong();
+		result.append("auth_key_id:" + QString::number(auth_key_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLString device = mtstream.readTLString();
+		result.append("device:" + thethis->printableString(device));
+		result.append(", ");
+		TLString location = mtstream.readTLString();
+		result.append("location:" + thethis->printableString(location));
+	}
+	else if(ctor == Update::ctorUpdateNewEncryptedMessage)
+	{
+		result.append("UpdateNewEncryptedMessage#");
+		result.append("message_updatenewencryptedmessage:");
+		MTProtoDecompiler::decompile_EncryptedMessage(thethis, result, mtstream);
+		TLInt qts = mtstream.readTLInt();
+		result.append("qts:" + QString::number(qts, 16));
+	}
+	else if(ctor == Update::ctorUpdateEncryptedChatTyping)
+	{
+		result.append("UpdateEncryptedChatTyping#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+	}
+	else if(ctor == Update::ctorUpdateEncryption)
+	{
+		result.append("UpdateEncryption#");
+		result.append("chat:");
+		MTProtoDecompiler::decompile_EncryptedChat(thethis, result, mtstream);
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == Update::ctorUpdateEncryptedMessagesRead)
+	{
+		result.append("UpdateEncryptedMessagesRead#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt max_date = mtstream.readTLInt();
+		result.append("max_date:" + QString::number(max_date, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == Update::ctorUpdateChatParticipantAdd)
+	{
+		result.append("UpdateChatParticipantAdd#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+	else if(ctor == Update::ctorUpdateChatParticipantDelete)
+	{
+		result.append("UpdateChatParticipantDelete#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+	else if(ctor == Update::ctorUpdateDcOptions)
+	{
+		result.append("UpdateDcOptions#");
+		result.append("dc_options:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == Update::ctorUpdateUserBlocked)
+	{
+		result.append("UpdateUserBlocked#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLBool is_blocked = mtstream.readTLBool();
+		result.append("is_blocked:" + QString::number(is_blocked, 16));
+	}
+	else if(ctor == Update::ctorUpdateNotifySettings)
+	{
+		result.append("UpdateNotifySettings#");
+		result.append("peer_updatenotifysettings:");
+		MTProtoDecompiler::decompile_NotifyPeer(thethis, result, mtstream);
+		result.append("notify_settings:");
+		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateServiceNotification)
+	{
+		result.append("UpdateServiceNotification#");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		TLString message_updateservicenotification = mtstream.readTLString();
+		result.append("message_updateservicenotification:" + thethis->printableString(message_updateservicenotification));
+		result.append(", ");
+		result.append("media:");
+		MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
+		TLBool is_popup = mtstream.readTLBool();
+		result.append("is_popup:" + QString::number(is_popup, 16));
+	}
+	else if(ctor == Update::ctorUpdatePrivacy)
+	{
+		result.append("UpdatePrivacy#");
+		result.append("key:");
+		MTProtoDecompiler::decompile_PrivacyKey(thethis, result, mtstream);
+		result.append("rules:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == Update::ctorUpdateUserPhone)
+	{
+		result.append("UpdateUserPhone#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString phone = mtstream.readTLString();
+		result.append("phone:" + thethis->printableString(phone));
+	}
+	else if(ctor == Update::ctorUpdateReadHistoryInbox)
+	{
+		result.append("UpdateReadHistoryInbox#");
+		result.append("peer_updatereadhistoryinbox:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		TLInt max_id = mtstream.readTLInt();
+		result.append("max_id:" + QString::number(max_id, 16));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateReadHistoryOutbox)
+	{
+		result.append("UpdateReadHistoryOutbox#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		TLInt max_id = mtstream.readTLInt();
+		result.append("max_id:" + QString::number(max_id, 16));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateWebPage)
+	{
+		result.append("UpdateWebPage#");
+		result.append("webpage:");
+		MTProtoDecompiler::decompile_WebPage(thethis, result, mtstream);
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateReadMessagesContents)
+	{
+		result.append("UpdateReadMessagesContents#");
+		result.append("messages:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateChannelTooLong)
+	{
+		result.append("UpdateChannelTooLong#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt pts = mtstream.readTLInt();
+			result.append("pts:" + QString::number(pts, 16));
+		}
+	}
+	else if(ctor == Update::ctorUpdateChannel)
+	{
+		result.append("UpdateChannel#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+	}
+	else if(ctor == Update::ctorUpdateNewChannelMessage)
+	{
+		result.append("UpdateNewChannelMessage#");
+		result.append("message_updatenewchannelmessage:");
+		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateReadChannelInbox)
+	{
+		result.append("UpdateReadChannelInbox#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLInt max_id = mtstream.readTLInt();
+		result.append("max_id:" + QString::number(max_id, 16));
+	}
+	else if(ctor == Update::ctorUpdateDeleteChannelMessages)
+	{
+		result.append("UpdateDeleteChannelMessages#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateChannelMessageViews)
+	{
+		result.append("UpdateChannelMessageViews#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt views = mtstream.readTLInt();
+		result.append("views:" + QString::number(views, 16));
+	}
+	else if(ctor == Update::ctorUpdateChatAdmins)
+	{
+		result.append("UpdateChatAdmins#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLBool is_enabled = mtstream.readTLBool();
+		result.append("is_enabled:" + QString::number(is_enabled, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+	else if(ctor == Update::ctorUpdateChatParticipantAdmin)
+	{
+		result.append("UpdateChatParticipantAdmin#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLBool is_admin = mtstream.readTLBool();
+		result.append("is_admin:" + QString::number(is_admin, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+	}
+	else if(ctor == Update::ctorUpdateNewStickerSet)
+	{
+		result.append("UpdateNewStickerSet#");
+		result.append("stickerset:");
+		MTProtoDecompiler::decompile_MessagesStickerSet(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateStickerSetsOrder)
+	{
+		result.append("UpdateStickerSetsOrder#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_masks:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("order:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	}
+	else if(ctor == Update::ctorUpdateStickerSets)
+		result.append("UpdateStickerSets");
+	else if(ctor == Update::ctorUpdateSavedGifs)
+		result.append("UpdateSavedGifs");
+	else if(ctor == Update::ctorUpdateBotInlineQuery)
+	{
+		result.append("UpdateBotInlineQuery#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLLong query_id = mtstream.readTLLong();
+		result.append("query_id:" + QString::number(query_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString query = mtstream.readTLString();
+		result.append("query:" + thethis->printableString(query));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("geo:");
+			MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+		}
+		TLString offset = mtstream.readTLString();
+		result.append("offset:" + thethis->printableString(offset));
+	}
+	else if(ctor == Update::ctorUpdateBotInlineSend)
+	{
+		result.append("UpdateBotInlineSend#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString query = mtstream.readTLString();
+		result.append("query:" + thethis->printableString(query));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("geo:");
+			MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+		}
+		TLString id_updatebotinlinesend = mtstream.readTLString();
+		result.append("id_updatebotinlinesend:" + thethis->printableString(id_updatebotinlinesend));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("msg_id_updatebotinlinesend:");
+			MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == Update::ctorUpdateEditChannelMessage)
+	{
+		result.append("UpdateEditChannelMessage#");
+		result.append("message:");
+		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateChannelPinnedMessage)
+	{
+		result.append("UpdateChannelPinnedMessage#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLInt id_updatechannelpinnedmessage = mtstream.readTLInt();
+		result.append("id_updatechannelpinnedmessage:" + QString::number(id_updatechannelpinnedmessage, 16));
+	}
+	else if(ctor == Update::ctorUpdateBotCallbackQuery)
+	{
+		result.append("UpdateBotCallbackQuery#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLLong query_id = mtstream.readTLLong();
+		result.append("query_id:" + QString::number(query_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		TLInt msg_id_updatebotcallbackquery = mtstream.readTLInt();
+		result.append("msg_id_updatebotcallbackquery:" + QString::number(msg_id_updatebotcallbackquery, 16));
+		result.append(", ");
+		TLLong chat_instance = mtstream.readTLLong();
+		result.append("chat_instance:" + QString::number(chat_instance, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLBytes data = mtstream.readTLBytes();
+			result.append("data:" + thethis->printableString(data));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString game_short_name = mtstream.readTLString();
+			result.append("game_short_name:" + thethis->printableString(game_short_name));
+		}
+	}
+	else if(ctor == Update::ctorUpdateEditMessage)
+	{
+		result.append("UpdateEditMessage#");
+		result.append("message:");
+		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+	else if(ctor == Update::ctorUpdateInlineBotCallbackQuery)
+	{
+		result.append("UpdateInlineBotCallbackQuery#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLLong query_id = mtstream.readTLLong();
+		result.append("query_id:" + QString::number(query_id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		result.append("msg_id_updateinlinebotcallbackquery:");
+		MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
+		TLLong chat_instance = mtstream.readTLLong();
+		result.append("chat_instance:" + QString::number(chat_instance, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLBytes data = mtstream.readTLBytes();
+			result.append("data:" + thethis->printableString(data));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString game_short_name = mtstream.readTLString();
+			result.append("game_short_name:" + thethis->printableString(game_short_name));
+		}
+	}
+	else if(ctor == Update::ctorUpdateReadChannelOutbox)
+	{
+		result.append("UpdateReadChannelOutbox#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLInt max_id = mtstream.readTLInt();
+		result.append("max_id:" + QString::number(max_id, 16));
+	}
+	else if(ctor == Update::ctorUpdateDraftMessage)
+	{
+		result.append("UpdateDraftMessage#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		result.append("draft:");
+		MTProtoDecompiler::decompile_DraftMessage(thethis, result, mtstream);
+	}
+	else if(ctor == Update::ctorUpdateReadFeaturedStickers)
+		result.append("UpdateReadFeaturedStickers");
+	else if(ctor == Update::ctorUpdateRecentStickers)
+		result.append("UpdateRecentStickers");
+	else if(ctor == Update::ctorUpdateConfig)
+		result.append("UpdateConfig");
+	else if(ctor == Update::ctorUpdatePtsChanged)
+		result.append("UpdatePtsChanged");
+}
+
+void MTProtoDecompiler::decompile_UpdatesState(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UpdatesState::ctorUpdatesState));
+	
+	if(ctor == UpdatesState::ctorUpdatesState)
+	{
+		result.append("UpdatesState#");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt qts = mtstream.readTLInt();
+		result.append("qts:" + QString::number(qts, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt seq = mtstream.readTLInt();
+		result.append("seq:" + QString::number(seq, 16));
+		result.append(", ");
+		TLInt unread_count = mtstream.readTLInt();
+		result.append("unread_count:" + QString::number(unread_count, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_UpdatesDifference(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UpdatesDifference::ctorUpdatesDifferenceEmpty) ||
+		 (ctor == UpdatesDifference::ctorUpdatesDifference) ||
+		 (ctor == UpdatesDifference::ctorUpdatesDifferenceSlice));
+	
+	if(ctor == UpdatesDifference::ctorUpdatesDifferenceEmpty)
+	{
+		result.append("UpdatesDifferenceEmpty#");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt seq = mtstream.readTLInt();
+		result.append("seq:" + QString::number(seq, 16));
+	}
+	else if(ctor == UpdatesDifference::ctorUpdatesDifference)
+	{
+		result.append("UpdatesDifference#");
+		result.append("new_messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("new_encrypted_messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("other_updates:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("state:");
+		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
+	}
+	else if(ctor == UpdatesDifference::ctorUpdatesDifferenceSlice)
+	{
+		result.append("UpdatesDifferenceSlice#");
+		result.append("new_messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("new_encrypted_messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("other_updates:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("intermediate_state:");
+		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_Updates(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Updates::ctorUpdatesTooLong) ||
+		 (ctor == Updates::ctorUpdateShortMessage) ||
+		 (ctor == Updates::ctorUpdateShortChatMessage) ||
+		 (ctor == Updates::ctorUpdateShort) ||
+		 (ctor == Updates::ctorUpdatesCombined) ||
+		 (ctor == Updates::ctorUpdates) ||
+		 (ctor == Updates::ctorUpdateShortSentMessage));
+	
+	if(ctor == Updates::ctorUpdatesTooLong)
+		result.append("UpdatesTooLong");
+	else if(ctor == Updates::ctorUpdateShortMessage)
+	{
+		result.append("UpdateShortMessage#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("fwd_from:");
+			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 11))
+		{
+			TLInt via_bot_id = mtstream.readTLInt();
+			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLInt reply_to_msg_id = mtstream.readTLInt();
+			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+	else if(ctor == Updates::ctorUpdateShortChatMessage)
+	{
+		result.append("UpdateShortChatMessage#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
+		result.append(", ");
+		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
+		result.append(", ");
+		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt from_id = mtstream.readTLInt();
+		result.append("from_id:" + QString::number(from_id, 16));
+		result.append(", ");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("fwd_from:");
+			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 11))
+		{
+			TLInt via_bot_id = mtstream.readTLInt();
+			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLInt reply_to_msg_id = mtstream.readTLInt();
+			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+	else if(ctor == Updates::ctorUpdateShort)
+	{
+		result.append("UpdateShort#");
+		result.append("update:");
+		MTProtoDecompiler::decompile_Update(thethis, result, mtstream);
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == Updates::ctorUpdatesCombined)
+	{
+		result.append("UpdatesCombined#");
+		result.append("updates:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt seq_start = mtstream.readTLInt();
+		result.append("seq_start:" + QString::number(seq_start, 16));
+		result.append(", ");
+		TLInt seq = mtstream.readTLInt();
+		result.append("seq:" + QString::number(seq, 16));
+	}
+	else if(ctor == Updates::ctorUpdates)
+	{
+		result.append("Updates#");
+		result.append("updates:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt seq = mtstream.readTLInt();
+		result.append("seq:" + QString::number(seq, 16));
+	}
+	else if(ctor == Updates::ctorUpdateShortSentMessage)
+	{
+		result.append("UpdateShortSentMessage#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 9))
+		{
+			result.append("media:");
+			MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_PhotosPhotos(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PhotosPhotos::ctorPhotosPhotos) ||
+		 (ctor == PhotosPhotos::ctorPhotosPhotosSlice));
+	
+	if(ctor == PhotosPhotos::ctorPhotosPhotos)
+	{
+		result.append("PhotosPhotos#");
+		result.append("photos:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == PhotosPhotos::ctorPhotosPhotosSlice)
+	{
+		result.append("PhotosPhotosSlice#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("photos:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_PhotosPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PhotosPhoto::ctorPhotosPhoto));
+	
+	if(ctor == PhotosPhoto::ctorPhotosPhoto)
+	{
+		result.append("PhotosPhoto#");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_UploadFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UploadFile::ctorUploadFile));
+	
+	if(ctor == UploadFile::ctorUploadFile)
+	{
+		result.append("UploadFile#");
+		result.append("type:");
+		MTProtoDecompiler::decompile_StorageFileType(thethis, result, mtstream);
+		TLInt mtime = mtstream.readTLInt();
+		result.append("mtime:" + QString::number(mtime, 16));
+		result.append(", ");
+		TLBytes bytes = mtstream.readTLBytes();
+		result.append("bytes:" + thethis->printableString(bytes));
+	}
+}
+
+void MTProtoDecompiler::decompile_DcOption(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == DcOption::ctorDcOption));
+	
+	if(ctor == DcOption::ctorDcOption)
+	{
+		result.append("DcOption#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_ipv6:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_media_only:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_tcpo_only:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString ip_address = mtstream.readTLString();
+		result.append("ip_address:" + thethis->printableString(ip_address));
+		result.append(", ");
+		TLInt port = mtstream.readTLInt();
+		result.append("port:" + QString::number(port, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_Config(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Config::ctorConfig));
+	
+	if(ctor == Config::ctorConfig)
+	{
+		result.append("Config#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt expires = mtstream.readTLInt();
+		result.append("expires:" + QString::number(expires, 16));
+		result.append(", ");
+		TLBool is_test_mode = mtstream.readTLBool();
+		result.append("is_test_mode:" + QString::number(is_test_mode, 16));
+		result.append(", ");
+		TLInt this_dc = mtstream.readTLInt();
+		result.append("this_dc:" + QString::number(this_dc, 16));
+		result.append(", ");
+		result.append("dc_options:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		TLInt chat_size_max = mtstream.readTLInt();
+		result.append("chat_size_max:" + QString::number(chat_size_max, 16));
+		result.append(", ");
+		TLInt megagroup_size_max = mtstream.readTLInt();
+		result.append("megagroup_size_max:" + QString::number(megagroup_size_max, 16));
+		result.append(", ");
+		TLInt forwarded_count_max = mtstream.readTLInt();
+		result.append("forwarded_count_max:" + QString::number(forwarded_count_max, 16));
+		result.append(", ");
+		TLInt online_update_period_ms = mtstream.readTLInt();
+		result.append("online_update_period_ms:" + QString::number(online_update_period_ms, 16));
+		result.append(", ");
+		TLInt offline_blur_timeout_ms = mtstream.readTLInt();
+		result.append("offline_blur_timeout_ms:" + QString::number(offline_blur_timeout_ms, 16));
+		result.append(", ");
+		TLInt offline_idle_timeout_ms = mtstream.readTLInt();
+		result.append("offline_idle_timeout_ms:" + QString::number(offline_idle_timeout_ms, 16));
+		result.append(", ");
+		TLInt online_cloud_timeout_ms = mtstream.readTLInt();
+		result.append("online_cloud_timeout_ms:" + QString::number(online_cloud_timeout_ms, 16));
+		result.append(", ");
+		TLInt notify_cloud_delay_ms = mtstream.readTLInt();
+		result.append("notify_cloud_delay_ms:" + QString::number(notify_cloud_delay_ms, 16));
+		result.append(", ");
+		TLInt notify_default_delay_ms = mtstream.readTLInt();
+		result.append("notify_default_delay_ms:" + QString::number(notify_default_delay_ms, 16));
+		result.append(", ");
+		TLInt chat_big_size = mtstream.readTLInt();
+		result.append("chat_big_size:" + QString::number(chat_big_size, 16));
+		result.append(", ");
+		TLInt push_chat_period_ms = mtstream.readTLInt();
+		result.append("push_chat_period_ms:" + QString::number(push_chat_period_ms, 16));
+		result.append(", ");
+		TLInt push_chat_limit = mtstream.readTLInt();
+		result.append("push_chat_limit:" + QString::number(push_chat_limit, 16));
+		result.append(", ");
+		TLInt saved_gifs_limit = mtstream.readTLInt();
+		result.append("saved_gifs_limit:" + QString::number(saved_gifs_limit, 16));
+		result.append(", ");
+		TLInt edit_time_limit = mtstream.readTLInt();
+		result.append("edit_time_limit:" + QString::number(edit_time_limit, 16));
+		result.append(", ");
+		TLInt rating_e_decay = mtstream.readTLInt();
+		result.append("rating_e_decay:" + QString::number(rating_e_decay, 16));
+		result.append(", ");
+		TLInt stickers_recent_limit = mtstream.readTLInt();
+		result.append("stickers_recent_limit:" + QString::number(stickers_recent_limit, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt tmp_sessions = mtstream.readTLInt();
+			result.append("tmp_sessions:" + QString::number(tmp_sessions, 16));
+			result.append(", ");
+		}
+		result.append("disabled_features:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_NearestDc(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == NearestDc::ctorNearestDc));
+	
+	if(ctor == NearestDc::ctorNearestDc)
+	{
+		result.append("NearestDc#");
+		TLString country = mtstream.readTLString();
+		result.append("country:" + thethis->printableString(country));
+		result.append(", ");
+		TLInt this_dc = mtstream.readTLInt();
+		result.append("this_dc:" + QString::number(this_dc, 16));
+		result.append(", ");
+		TLInt nearest_dc = mtstream.readTLInt();
+		result.append("nearest_dc:" + QString::number(nearest_dc, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_HelpAppUpdate(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HelpAppUpdate::ctorHelpAppUpdate) ||
+		 (ctor == HelpAppUpdate::ctorHelpNoAppUpdate));
+	
+	if(ctor == HelpAppUpdate::ctorHelpAppUpdate)
+	{
+		result.append("HelpAppUpdate#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLBool is_critical = mtstream.readTLBool();
+		result.append("is_critical:" + QString::number(is_critical, 16));
+		result.append(", ");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+	else if(ctor == HelpAppUpdate::ctorHelpNoAppUpdate)
+		result.append("HelpNoAppUpdate");
+}
+
+void MTProtoDecompiler::decompile_HelpInviteText(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HelpInviteText::ctorHelpInviteText));
+	
+	if(ctor == HelpInviteText::ctorHelpInviteText)
+	{
+		result.append("HelpInviteText#");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+	}
+}
+
+void MTProtoDecompiler::decompile_EncryptedChat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == EncryptedChat::ctorEncryptedChatEmpty) ||
+		 (ctor == EncryptedChat::ctorEncryptedChatWaiting) ||
+		 (ctor == EncryptedChat::ctorEncryptedChatRequested) ||
+		 (ctor == EncryptedChat::ctorEncryptedChat) ||
+		 (ctor == EncryptedChat::ctorEncryptedChatDiscarded));
+	
+	if(ctor == EncryptedChat::ctorEncryptedChatEmpty)
+	{
+		result.append("EncryptedChatEmpty#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == EncryptedChat::ctorEncryptedChatWaiting)
+	{
+		result.append("EncryptedChatWaiting#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt admin_id = mtstream.readTLInt();
+		result.append("admin_id:" + QString::number(admin_id, 16));
+		result.append(", ");
+		TLInt participant_id = mtstream.readTLInt();
+		result.append("participant_id:" + QString::number(participant_id, 16));
+	}
+	else if(ctor == EncryptedChat::ctorEncryptedChatRequested)
+	{
+		result.append("EncryptedChatRequested#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt admin_id = mtstream.readTLInt();
+		result.append("admin_id:" + QString::number(admin_id, 16));
+		result.append(", ");
+		TLInt participant_id = mtstream.readTLInt();
+		result.append("participant_id:" + QString::number(participant_id, 16));
+		result.append(", ");
+		TLBytes g_a = mtstream.readTLBytes();
+		result.append("g_a:" + thethis->printableString(g_a));
+	}
+	else if(ctor == EncryptedChat::ctorEncryptedChat)
+	{
+		result.append("EncryptedChat#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLInt admin_id = mtstream.readTLInt();
+		result.append("admin_id:" + QString::number(admin_id, 16));
+		result.append(", ");
+		TLInt participant_id = mtstream.readTLInt();
+		result.append("participant_id:" + QString::number(participant_id, 16));
+		result.append(", ");
+		TLBytes g_a_or_b = mtstream.readTLBytes();
+		result.append("g_a_or_b:" + thethis->printableString(g_a_or_b));
+		result.append(", ");
+		TLLong key_fingerprint = mtstream.readTLLong();
+		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
+	}
+	else if(ctor == EncryptedChat::ctorEncryptedChatDiscarded)
+	{
+		result.append("EncryptedChatDiscarded#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputEncryptedChat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputEncryptedChat::ctorInputEncryptedChat));
+	
+	if(ctor == InputEncryptedChat::ctorInputEncryptedChat)
+	{
+		result.append("InputEncryptedChat#");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_EncryptedFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == EncryptedFile::ctorEncryptedFileEmpty) ||
+		 (ctor == EncryptedFile::ctorEncryptedFile));
+	
+	if(ctor == EncryptedFile::ctorEncryptedFileEmpty)
+		result.append("EncryptedFileEmpty");
+	else if(ctor == EncryptedFile::ctorEncryptedFile)
+	{
+		result.append("EncryptedFile#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt size = mtstream.readTLInt();
+		result.append("size:" + QString::number(size, 16));
+		result.append(", ");
+		TLInt dc_id = mtstream.readTLInt();
+		result.append("dc_id:" + QString::number(dc_id, 16));
+		result.append(", ");
+		TLInt key_fingerprint = mtstream.readTLInt();
+		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputEncryptedFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputEncryptedFile::ctorInputEncryptedFileEmpty) ||
+		 (ctor == InputEncryptedFile::ctorInputEncryptedFileUploaded) ||
+		 (ctor == InputEncryptedFile::ctorInputEncryptedFile) ||
+		 (ctor == InputEncryptedFile::ctorInputEncryptedFileBigUploaded));
+	
+	if(ctor == InputEncryptedFile::ctorInputEncryptedFileEmpty)
+		result.append("InputEncryptedFileEmpty");
+	else if(ctor == InputEncryptedFile::ctorInputEncryptedFileUploaded)
+	{
+		result.append("InputEncryptedFileUploaded#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt parts = mtstream.readTLInt();
+		result.append("parts:" + QString::number(parts, 16));
+		result.append(", ");
+		TLString md5_checksum = mtstream.readTLString();
+		result.append("md5_checksum:" + thethis->printableString(md5_checksum));
+		result.append(", ");
+		TLInt key_fingerprint = mtstream.readTLInt();
+		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
+	}
+	else if(ctor == InputEncryptedFile::ctorInputEncryptedFile)
+	{
+		result.append("InputEncryptedFile#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+	else if(ctor == InputEncryptedFile::ctorInputEncryptedFileBigUploaded)
+	{
+		result.append("InputEncryptedFileBigUploaded#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt parts = mtstream.readTLInt();
+		result.append("parts:" + QString::number(parts, 16));
+		result.append(", ");
+		TLInt key_fingerprint = mtstream.readTLInt();
+		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_EncryptedMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == EncryptedMessage::ctorEncryptedMessage) ||
+		 (ctor == EncryptedMessage::ctorEncryptedMessageService));
+	
+	if(ctor == EncryptedMessage::ctorEncryptedMessage)
+	{
+		result.append("EncryptedMessage#");
+		TLLong random_id = mtstream.readTLLong();
+		result.append("random_id:" + QString::number(random_id, 16));
+		result.append(", ");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLBytes bytes = mtstream.readTLBytes();
+		result.append("bytes:" + thethis->printableString(bytes));
+		result.append(", ");
+		result.append("file:");
+		MTProtoDecompiler::decompile_EncryptedFile(thethis, result, mtstream);
+	}
+	else if(ctor == EncryptedMessage::ctorEncryptedMessageService)
+	{
+		result.append("EncryptedMessageService#");
+		TLLong random_id = mtstream.readTLLong();
+		result.append("random_id:" + QString::number(random_id, 16));
+		result.append(", ");
+		TLInt chat_id = mtstream.readTLInt();
+		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLBytes bytes = mtstream.readTLBytes();
+		result.append("bytes:" + thethis->printableString(bytes));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesDhConfig(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesDhConfig::ctorMessagesDhConfigNotModified) ||
+		 (ctor == MessagesDhConfig::ctorMessagesDhConfig));
+	
+	if(ctor == MessagesDhConfig::ctorMessagesDhConfigNotModified)
+	{
+		result.append("MessagesDhConfigNotModified#");
+		TLBytes random = mtstream.readTLBytes();
+		result.append("random:" + thethis->printableString(random));
+	}
+	else if(ctor == MessagesDhConfig::ctorMessagesDhConfig)
+	{
+		result.append("MessagesDhConfig#");
+		TLInt g = mtstream.readTLInt();
+		result.append("g:" + QString::number(g, 16));
+		result.append(", ");
+		TLBytes p = mtstream.readTLBytes();
+		result.append("p:" + thethis->printableString(p));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+		result.append(", ");
+		TLBytes random = mtstream.readTLBytes();
+		result.append("random:" + thethis->printableString(random));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesSentEncryptedMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage) ||
+		 (ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile));
+	
+	if(ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage)
+	{
+		result.append("MessagesSentEncryptedMessage#");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
+	{
+		result.append("MessagesSentEncryptedFile#");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		result.append("file:");
+		MTProtoDecompiler::decompile_EncryptedFile(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputDocument(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputDocument::ctorInputDocumentEmpty) ||
+		 (ctor == InputDocument::ctorInputDocument));
+	
+	if(ctor == InputDocument::ctorInputDocumentEmpty)
+		result.append("InputDocumentEmpty");
+	else if(ctor == InputDocument::ctorInputDocument)
+	{
+		result.append("InputDocument#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_Document(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Document::ctorDocumentEmpty) ||
+		 (ctor == Document::ctorDocument));
+	
+	if(ctor == Document::ctorDocumentEmpty)
+	{
+		result.append("DocumentEmpty#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == Document::ctorDocument)
+	{
+		result.append("Document#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		TLString mime_type = mtstream.readTLString();
+		result.append("mime_type:" + thethis->printableString(mime_type));
+		result.append(", ");
+		TLInt size = mtstream.readTLInt();
+		result.append("size:" + QString::number(size, 16));
+		result.append(", ");
+		result.append("thumb:");
+		MTProtoDecompiler::decompile_PhotoSize(thethis, result, mtstream);
+		TLInt dc_id = mtstream.readTLInt();
+		result.append("dc_id:" + QString::number(dc_id, 16));
+		result.append(", ");
+		TLInt version = mtstream.readTLInt();
+		result.append("version:" + QString::number(version, 16));
+		result.append(", ");
+		result.append("attributes:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_HelpSupport(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HelpSupport::ctorHelpSupport));
+	
+	if(ctor == HelpSupport::ctorHelpSupport)
+	{
+		result.append("HelpSupport#");
+		TLString phone_number = mtstream.readTLString();
+		result.append("phone_number:" + thethis->printableString(phone_number));
+		result.append(", ");
+		result.append("user:");
+		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_NotifyPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == NotifyPeer::ctorNotifyPeer) ||
+		 (ctor == NotifyPeer::ctorNotifyUsers) ||
+		 (ctor == NotifyPeer::ctorNotifyChats) ||
+		 (ctor == NotifyPeer::ctorNotifyAll));
+	
+	if(ctor == NotifyPeer::ctorNotifyPeer)
+	{
+		result.append("NotifyPeer#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+	}
+	else if(ctor == NotifyPeer::ctorNotifyUsers)
+		result.append("NotifyUsers");
+	else if(ctor == NotifyPeer::ctorNotifyChats)
+		result.append("NotifyChats");
+	else if(ctor == NotifyPeer::ctorNotifyAll)
+		result.append("NotifyAll");
+}
+
+void MTProtoDecompiler::decompile_SendMessageAction(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == SendMessageAction::ctorSendMessageTypingAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageCancelAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageRecordVideoAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageUploadVideoAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageRecordAudioAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageUploadAudioAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageUploadPhotoAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageUploadDocumentAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageGeoLocationAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageChooseContactAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageGamePlayAction) ||
+		 (ctor == SendMessageAction::ctorSendMessageGameStopAction));
+	
+	if(ctor == SendMessageAction::ctorSendMessageTypingAction)
+		result.append("SendMessageTypingAction");
+	else if(ctor == SendMessageAction::ctorSendMessageCancelAction)
+		result.append("SendMessageCancelAction");
+	else if(ctor == SendMessageAction::ctorSendMessageRecordVideoAction)
+		result.append("SendMessageRecordVideoAction");
+	else if(ctor == SendMessageAction::ctorSendMessageUploadVideoAction)
+	{
+		result.append("SendMessageUploadVideoAction#");
+		TLInt progress = mtstream.readTLInt();
+		result.append("progress:" + QString::number(progress, 16));
+	}
+	else if(ctor == SendMessageAction::ctorSendMessageRecordAudioAction)
+		result.append("SendMessageRecordAudioAction");
+	else if(ctor == SendMessageAction::ctorSendMessageUploadAudioAction)
+	{
+		result.append("SendMessageUploadAudioAction#");
+		TLInt progress = mtstream.readTLInt();
+		result.append("progress:" + QString::number(progress, 16));
+	}
+	else if(ctor == SendMessageAction::ctorSendMessageUploadPhotoAction)
+	{
+		result.append("SendMessageUploadPhotoAction#");
+		TLInt progress = mtstream.readTLInt();
+		result.append("progress:" + QString::number(progress, 16));
+	}
+	else if(ctor == SendMessageAction::ctorSendMessageUploadDocumentAction)
+	{
+		result.append("SendMessageUploadDocumentAction#");
+		TLInt progress = mtstream.readTLInt();
+		result.append("progress:" + QString::number(progress, 16));
+	}
+	else if(ctor == SendMessageAction::ctorSendMessageGeoLocationAction)
+		result.append("SendMessageGeoLocationAction");
+	else if(ctor == SendMessageAction::ctorSendMessageChooseContactAction)
+		result.append("SendMessageChooseContactAction");
+	else if(ctor == SendMessageAction::ctorSendMessageGamePlayAction)
+		result.append("SendMessageGamePlayAction");
+	else if(ctor == SendMessageAction::ctorSendMessageGameStopAction)
+		result.append("SendMessageGameStopAction");
+}
+
+void MTProtoDecompiler::decompile_ContactsFound(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsFound::ctorContactsFound));
+	
+	if(ctor == ContactsFound::ctorContactsFound)
+	{
+		result.append("ContactsFound#");
+		result.append("results:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputPrivacyKey(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp) ||
+		 (ctor == InputPrivacyKey::ctorInputPrivacyKeyChatInvite));
+	
+	if(ctor == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp)
+		result.append("InputPrivacyKeyStatusTimestamp");
+	else if(ctor == InputPrivacyKey::ctorInputPrivacyKeyChatInvite)
+		result.append("InputPrivacyKeyChatInvite");
+}
+
+void MTProtoDecompiler::decompile_PrivacyKey(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PrivacyKey::ctorPrivacyKeyStatusTimestamp) ||
+		 (ctor == PrivacyKey::ctorPrivacyKeyChatInvite));
+	
+	if(ctor == PrivacyKey::ctorPrivacyKeyStatusTimestamp)
+		result.append("PrivacyKeyStatusTimestamp");
+	else if(ctor == PrivacyKey::ctorPrivacyKeyChatInvite)
+		result.append("PrivacyKeyChatInvite");
+}
+
+void MTProtoDecompiler::decompile_InputPrivacyRule(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputPrivacyRule::ctorInputPrivacyValueAllowContacts) ||
+		 (ctor == InputPrivacyRule::ctorInputPrivacyValueAllowAll) ||
+		 (ctor == InputPrivacyRule::ctorInputPrivacyValueAllowUsers) ||
+		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts) ||
+		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowAll) ||
+		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers));
+	
+	if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowContacts)
+		result.append("InputPrivacyValueAllowContacts");
+	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowAll)
+		result.append("InputPrivacyValueAllowAll");
+	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowUsers)
+	{
+		result.append("InputPrivacyValueAllowUsers#");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts)
+		result.append("InputPrivacyValueDisallowContacts");
+	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowAll)
+		result.append("InputPrivacyValueDisallowAll");
+	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers)
+	{
+		result.append("InputPrivacyValueDisallowUsers#");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_PrivacyRule(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == PrivacyRule::ctorPrivacyValueAllowContacts) ||
+		 (ctor == PrivacyRule::ctorPrivacyValueAllowAll) ||
+		 (ctor == PrivacyRule::ctorPrivacyValueAllowUsers) ||
+		 (ctor == PrivacyRule::ctorPrivacyValueDisallowContacts) ||
+		 (ctor == PrivacyRule::ctorPrivacyValueDisallowAll) ||
+		 (ctor == PrivacyRule::ctorPrivacyValueDisallowUsers));
+	
+	if(ctor == PrivacyRule::ctorPrivacyValueAllowContacts)
+		result.append("PrivacyValueAllowContacts");
+	else if(ctor == PrivacyRule::ctorPrivacyValueAllowAll)
+		result.append("PrivacyValueAllowAll");
+	else if(ctor == PrivacyRule::ctorPrivacyValueAllowUsers)
+	{
+		result.append("PrivacyValueAllowUsers#");
+		result.append("users:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+	}
+	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowContacts)
+		result.append("PrivacyValueDisallowContacts");
+	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowAll)
+		result.append("PrivacyValueDisallowAll");
+	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowUsers)
+	{
+		result.append("PrivacyValueDisallowUsers#");
+		result.append("users:");
+		thethis->decompileTLVector<TLInt>(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountPrivacyRules(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountPrivacyRules::ctorAccountPrivacyRules));
+	
+	if(ctor == AccountPrivacyRules::ctorAccountPrivacyRules)
+	{
+		result.append("AccountPrivacyRules#");
+		result.append("rules:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountDaysTTL(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountDaysTTL::ctorAccountDaysTTL));
+	
+	if(ctor == AccountDaysTTL::ctorAccountDaysTTL)
+	{
+		result.append("AccountDaysTTL#");
+		TLInt days = mtstream.readTLInt();
+		result.append("days:" + QString::number(days, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_DocumentAttribute(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == DocumentAttribute::ctorDocumentAttributeImageSize) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeAnimated) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeSticker) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeVideo) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeAudio) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeFilename) ||
+		 (ctor == DocumentAttribute::ctorDocumentAttributeHasStickers));
+	
+	if(ctor == DocumentAttribute::ctorDocumentAttributeImageSize)
+	{
+		result.append("DocumentAttributeImageSize#");
+		TLInt w = mtstream.readTLInt();
+		result.append("w:" + QString::number(w, 16));
+		result.append(", ");
+		TLInt h = mtstream.readTLInt();
+		result.append("h:" + QString::number(h, 16));
+	}
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeAnimated)
+		result.append("DocumentAttributeAnimated");
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeSticker)
+	{
+		result.append("DocumentAttributeSticker#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_mask:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		TLString alt = mtstream.readTLString();
+		result.append("alt:" + thethis->printableString(alt));
+		result.append(", ");
+		result.append("stickerset:");
+		MTProtoDecompiler::decompile_InputStickerSet(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("mask_coords:");
+			MTProtoDecompiler::decompile_MaskCoords(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeVideo)
+	{
+		result.append("DocumentAttributeVideo#");
+		TLInt duration = mtstream.readTLInt();
+		result.append("duration:" + QString::number(duration, 16));
+		result.append(", ");
+		TLInt w = mtstream.readTLInt();
+		result.append("w:" + QString::number(w, 16));
+		result.append(", ");
+		TLInt h = mtstream.readTLInt();
+		result.append("h:" + QString::number(h, 16));
+	}
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeAudio)
+	{
+		result.append("DocumentAttributeAudio#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_voice:" + BIT_FIELD_VALUE(flags, 10));
+		result.append(", ");
+		TLInt duration = mtstream.readTLInt();
+		result.append("duration:" + QString::number(duration, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString performer = mtstream.readTLString();
+			result.append("performer:" + thethis->printableString(performer));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLBytes waveform = mtstream.readTLBytes();
+			result.append("waveform:" + thethis->printableString(waveform));
+		}
+	}
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeFilename)
+	{
+		result.append("DocumentAttributeFilename#");
+		TLString file_name = mtstream.readTLString();
+		result.append("file_name:" + thethis->printableString(file_name));
+	}
+	else if(ctor == DocumentAttribute::ctorDocumentAttributeHasStickers)
+		result.append("DocumentAttributeHasStickers");
+}
+
+void MTProtoDecompiler::decompile_MessagesStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesStickers::ctorMessagesStickersNotModified) ||
+		 (ctor == MessagesStickers::ctorMessagesStickers));
+	
+	if(ctor == MessagesStickers::ctorMessagesStickersNotModified)
+		result.append("MessagesStickersNotModified");
+	else if(ctor == MessagesStickers::ctorMessagesStickers)
+	{
+		result.append("MessagesStickers#");
+		TLString hash = mtstream.readTLString();
+		result.append("hash:" + thethis->printableString(hash));
+		result.append(", ");
+		result.append("stickers:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_StickerPack(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == StickerPack::ctorStickerPack));
+	
+	if(ctor == StickerPack::ctorStickerPack)
+	{
+		result.append("StickerPack#");
+		TLString emoticon = mtstream.readTLString();
+		result.append("emoticon:" + thethis->printableString(emoticon));
+		result.append(", ");
+		result.append("documents:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesAllStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesAllStickers::ctorMessagesAllStickersNotModified) ||
+		 (ctor == MessagesAllStickers::ctorMessagesAllStickers));
+	
+	if(ctor == MessagesAllStickers::ctorMessagesAllStickersNotModified)
+		result.append("MessagesAllStickersNotModified");
+	else if(ctor == MessagesAllStickers::ctorMessagesAllStickers)
+	{
+		result.append("MessagesAllStickers#");
+		TLInt hash = mtstream.readTLInt();
+		result.append("hash:" + QString::number(hash, 16));
+		result.append(", ");
+		result.append("sets:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_DisabledFeature(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == DisabledFeature::ctorDisabledFeature));
+	
+	if(ctor == DisabledFeature::ctorDisabledFeature)
+	{
+		result.append("DisabledFeature#");
+		TLString feature = mtstream.readTLString();
+		result.append("feature:" + thethis->printableString(feature));
+		result.append(", ");
+		TLString description = mtstream.readTLString();
+		result.append("description:" + thethis->printableString(description));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesAffectedMessages(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesAffectedMessages::ctorMessagesAffectedMessages));
+	
+	if(ctor == MessagesAffectedMessages::ctorMessagesAffectedMessages)
+	{
+		result.append("MessagesAffectedMessages#");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		TLInt pts_count = mtstream.readTLInt();
+		result.append("pts_count:" + QString::number(pts_count, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactLink::ctorContactLinkUnknown) ||
+		 (ctor == ContactLink::ctorContactLinkNone) ||
+		 (ctor == ContactLink::ctorContactLinkHasPhone) ||
+		 (ctor == ContactLink::ctorContactLinkContact));
+	
+	if(ctor == ContactLink::ctorContactLinkUnknown)
+		result.append("ContactLinkUnknown");
+	else if(ctor == ContactLink::ctorContactLinkNone)
+		result.append("ContactLinkNone");
+	else if(ctor == ContactLink::ctorContactLinkHasPhone)
+		result.append("ContactLinkHasPhone");
+	else if(ctor == ContactLink::ctorContactLinkContact)
+		result.append("ContactLinkContact");
+}
+
+void MTProtoDecompiler::decompile_WebPage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == WebPage::ctorWebPageEmpty) ||
+		 (ctor == WebPage::ctorWebPagePending) ||
+		 (ctor == WebPage::ctorWebPage));
+	
+	if(ctor == WebPage::ctorWebPageEmpty)
+	{
+		result.append("WebPageEmpty#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+	}
+	else if(ctor == WebPage::ctorWebPagePending)
+	{
+		result.append("WebPagePending#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == WebPage::ctorWebPage)
+	{
+		result.append("WebPage#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString display_url = mtstream.readTLString();
+		result.append("display_url:" + thethis->printableString(display_url));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLString type = mtstream.readTLString();
+			result.append("type:" + thethis->printableString(type));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString site_name = mtstream.readTLString();
+			result.append("site_name:" + thethis->printableString(site_name));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLString description = mtstream.readTLString();
+			result.append("description:" + thethis->printableString(description));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 4))
+		{
+			result.append("photo:");
+			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString embed_url = mtstream.readTLString();
+			result.append("embed_url:" + thethis->printableString(embed_url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString embed_type = mtstream.readTLString();
+			result.append("embed_type:" + thethis->printableString(embed_type));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt embed_width = mtstream.readTLInt();
+			result.append("embed_width:" + QString::number(embed_width, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt embed_height = mtstream.readTLInt();
+			result.append("embed_height:" + QString::number(embed_height, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			TLInt duration = mtstream.readTLInt();
+			result.append("duration:" + QString::number(duration, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 8))
+		{
+			TLString author = mtstream.readTLString();
+			result.append("author:" + thethis->printableString(author));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 9))
+		{
+			result.append("document:");
+			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_Authorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Authorization::ctorAuthorization));
+	
+	if(ctor == Authorization::ctorAuthorization)
+	{
+		result.append("Authorization#");
+		TLLong hash = mtstream.readTLLong();
+		result.append("hash:" + QString::number(hash, 16));
+		result.append(", ");
+		TLInt flags = mtstream.readTLInt();
+		result.append("flags:" + QString::number(flags, 16));
+		result.append(", ");
+		TLString device_model = mtstream.readTLString();
+		result.append("device_model:" + thethis->printableString(device_model));
+		result.append(", ");
+		TLString platform = mtstream.readTLString();
+		result.append("platform:" + thethis->printableString(platform));
+		result.append(", ");
+		TLString system_version = mtstream.readTLString();
+		result.append("system_version:" + thethis->printableString(system_version));
+		result.append(", ");
+		TLInt api_id = mtstream.readTLInt();
+		result.append("api_id:" + QString::number(api_id, 16));
+		result.append(", ");
+		TLString app_name = mtstream.readTLString();
+		result.append("app_name:" + thethis->printableString(app_name));
+		result.append(", ");
+		TLString app_version = mtstream.readTLString();
+		result.append("app_version:" + thethis->printableString(app_version));
+		result.append(", ");
+		TLInt date_created = mtstream.readTLInt();
+		result.append("date_created:" + QString::number(date_created, 16));
+		result.append(", ");
+		TLInt date_active = mtstream.readTLInt();
+		result.append("date_active:" + QString::number(date_active, 16));
+		result.append(", ");
+		TLString ip = mtstream.readTLString();
+		result.append("ip:" + thethis->printableString(ip));
+		result.append(", ");
+		TLString country = mtstream.readTLString();
+		result.append("country:" + thethis->printableString(country));
+		result.append(", ");
+		TLString region = mtstream.readTLString();
+		result.append("region:" + thethis->printableString(region));
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountAuthorizations(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountAuthorizations::ctorAccountAuthorizations));
+	
+	if(ctor == AccountAuthorizations::ctorAccountAuthorizations)
+	{
+		result.append("AccountAuthorizations#");
+		result.append("authorizations:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountPassword(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountPassword::ctorAccountNoPassword) ||
+		 (ctor == AccountPassword::ctorAccountPassword));
+	
+	if(ctor == AccountPassword::ctorAccountNoPassword)
+	{
+		result.append("AccountNoPassword#");
+		TLBytes new_salt = mtstream.readTLBytes();
+		result.append("new_salt:" + thethis->printableString(new_salt));
+		result.append(", ");
+		TLString email_unconfirmed_pattern = mtstream.readTLString();
+		result.append("email_unconfirmed_pattern:" + thethis->printableString(email_unconfirmed_pattern));
+	}
+	else if(ctor == AccountPassword::ctorAccountPassword)
+	{
+		result.append("AccountPassword#");
+		TLBytes current_salt = mtstream.readTLBytes();
+		result.append("current_salt:" + thethis->printableString(current_salt));
+		result.append(", ");
+		TLBytes new_salt = mtstream.readTLBytes();
+		result.append("new_salt:" + thethis->printableString(new_salt));
+		result.append(", ");
+		TLString hint = mtstream.readTLString();
+		result.append("hint:" + thethis->printableString(hint));
+		result.append(", ");
+		TLBool has_recovery = mtstream.readTLBool();
+		result.append("has_recovery:" + QString::number(has_recovery, 16));
+		result.append(", ");
+		TLString email_unconfirmed_pattern = mtstream.readTLString();
+		result.append("email_unconfirmed_pattern:" + thethis->printableString(email_unconfirmed_pattern));
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountPasswordSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountPasswordSettings::ctorAccountPasswordSettings));
+	
+	if(ctor == AccountPasswordSettings::ctorAccountPasswordSettings)
+	{
+		result.append("AccountPasswordSettings#");
+		TLString email = mtstream.readTLString();
+		result.append("email:" + thethis->printableString(email));
+	}
+}
+
+void MTProtoDecompiler::decompile_AccountPasswordInputSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AccountPasswordInputSettings::ctorAccountPasswordInputSettings));
+	
+	if(ctor == AccountPasswordInputSettings::ctorAccountPasswordInputSettings)
+	{
+		result.append("AccountPasswordInputSettings#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLBytes new_salt = mtstream.readTLBytes();
+			result.append("new_salt:" + thethis->printableString(new_salt));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLBytes new_password_hash = mtstream.readTLBytes();
+			result.append("new_password_hash:" + thethis->printableString(new_password_hash));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLString hint = mtstream.readTLString();
+			result.append("hint:" + thethis->printableString(hint));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString email = mtstream.readTLString();
+			result.append("email:" + thethis->printableString(email));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthPasswordRecovery(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthPasswordRecovery::ctorAuthPasswordRecovery));
+	
+	if(ctor == AuthPasswordRecovery::ctorAuthPasswordRecovery)
+	{
+		result.append("AuthPasswordRecovery#");
+		TLString email_pattern = mtstream.readTLString();
+		result.append("email_pattern:" + thethis->printableString(email_pattern));
+	}
+}
+
+void MTProtoDecompiler::decompile_ReceivedNotifyMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ReceivedNotifyMessage::ctorReceivedNotifyMessage));
+	
+	if(ctor == ReceivedNotifyMessage::ctorReceivedNotifyMessage)
+	{
+		result.append("ReceivedNotifyMessage#");
+		TLInt id = mtstream.readTLInt();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLInt flags = mtstream.readTLInt();
+		result.append("flags:" + QString::number(flags, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ExportedChatInvite(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ExportedChatInvite::ctorChatInviteEmpty) ||
+		 (ctor == ExportedChatInvite::ctorChatInviteExported));
+	
+	if(ctor == ExportedChatInvite::ctorChatInviteEmpty)
+		result.append("ChatInviteEmpty");
+	else if(ctor == ExportedChatInvite::ctorChatInviteExported)
+	{
+		result.append("ChatInviteExported#");
+		TLString link = mtstream.readTLString();
+		result.append("link:" + thethis->printableString(link));
+	}
+}
+
+void MTProtoDecompiler::decompile_ChatInvite(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChatInvite::ctorChatInviteAlready) ||
+		 (ctor == ChatInvite::ctorChatInvite));
+	
+	if(ctor == ChatInvite::ctorChatInviteAlready)
+	{
+		result.append("ChatInviteAlready#");
+		result.append("chat:");
+		MTProtoDecompiler::decompile_Chat(thethis, result, mtstream);
+	}
+	else if(ctor == ChatInvite::ctorChatInvite)
+	{
+		result.append("ChatInvite#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_channel:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_public:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
+		TLInt participants_count = mtstream.readTLInt();
+		result.append("participants_count:" + QString::number(participants_count, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 4))
+		{
+			result.append("participants:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_InputStickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputStickerSet::ctorInputStickerSetEmpty) ||
+		 (ctor == InputStickerSet::ctorInputStickerSetID) ||
+		 (ctor == InputStickerSet::ctorInputStickerSetShortName));
+	
+	if(ctor == InputStickerSet::ctorInputStickerSetEmpty)
+		result.append("InputStickerSetEmpty");
+	else if(ctor == InputStickerSet::ctorInputStickerSetID)
+	{
+		result.append("InputStickerSetID#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+	else if(ctor == InputStickerSet::ctorInputStickerSetShortName)
+	{
+		result.append("InputStickerSetShortName#");
+		TLString short_name = mtstream.readTLString();
+		result.append("short_name:" + thethis->printableString(short_name));
+	}
+}
+
+void MTProtoDecompiler::decompile_StickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == StickerSet::ctorStickerSet));
+	
+	if(ctor == StickerSet::ctorStickerSet)
+	{
+		result.append("StickerSet#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_installed:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_archived:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_official:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		result.append("is_masks:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString short_name = mtstream.readTLString();
+		result.append("short_name:" + thethis->printableString(short_name));
+		result.append(", ");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		TLInt hash = mtstream.readTLInt();
+		result.append("hash:" + QString::number(hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesStickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesStickerSet::ctorMessagesStickerSet));
+	
+	if(ctor == MessagesStickerSet::ctorMessagesStickerSet)
+	{
+		result.append("MessagesStickerSet#");
+		result.append("set:");
+		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
+		result.append("packs:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("documents:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_BotCommand(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == BotCommand::ctorBotCommand));
+	
+	if(ctor == BotCommand::ctorBotCommand)
+	{
+		result.append("BotCommand#");
+		TLString command = mtstream.readTLString();
+		result.append("command:" + thethis->printableString(command));
+		result.append(", ");
+		TLString description = mtstream.readTLString();
+		result.append("description:" + thethis->printableString(description));
+	}
+}
+
+void MTProtoDecompiler::decompile_BotInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == BotInfo::ctorBotInfo));
+	
+	if(ctor == BotInfo::ctorBotInfo)
+	{
+		result.append("BotInfo#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLString description = mtstream.readTLString();
+		result.append("description:" + thethis->printableString(description));
+		result.append(", ");
+		result.append("commands:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_KeyboardButton(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == KeyboardButton::ctorKeyboardButton) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonUrl) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonCallback) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonRequestPhone) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonRequestGeoLocation) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonSwitchInline) ||
+		 (ctor == KeyboardButton::ctorKeyboardButtonGame));
+	
+	if(ctor == KeyboardButton::ctorKeyboardButton)
+	{
+		result.append("KeyboardButton#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonUrl)
+	{
+		result.append("KeyboardButtonUrl#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+		result.append(", ");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonCallback)
+	{
+		result.append("KeyboardButtonCallback#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+		result.append(", ");
+		TLBytes data = mtstream.readTLBytes();
+		result.append("data:" + thethis->printableString(data));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonRequestPhone)
+	{
+		result.append("KeyboardButtonRequestPhone#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonRequestGeoLocation)
+	{
+		result.append("KeyboardButtonRequestGeoLocation#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonSwitchInline)
+	{
+		result.append("KeyboardButtonSwitchInline#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_same_peer:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+		result.append(", ");
+		TLString query = mtstream.readTLString();
+		result.append("query:" + thethis->printableString(query));
+	}
+	else if(ctor == KeyboardButton::ctorKeyboardButtonGame)
+	{
+		result.append("KeyboardButtonGame#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+}
+
+void MTProtoDecompiler::decompile_KeyboardButtonRow(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == KeyboardButtonRow::ctorKeyboardButtonRow));
+	
+	if(ctor == KeyboardButtonRow::ctorKeyboardButtonRow)
+	{
+		result.append("KeyboardButtonRow#");
+		result.append("buttons:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ReplyMarkup(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ReplyMarkup::ctorReplyKeyboardHide) ||
+		 (ctor == ReplyMarkup::ctorReplyKeyboardForceReply) ||
+		 (ctor == ReplyMarkup::ctorReplyKeyboardMarkup) ||
+		 (ctor == ReplyMarkup::ctorReplyInlineMarkup));
+	
+	if(ctor == ReplyMarkup::ctorReplyKeyboardHide)
+	{
+		result.append("ReplyKeyboardHide#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
+	}
+	else if(ctor == ReplyMarkup::ctorReplyKeyboardForceReply)
+	{
+		result.append("ReplyKeyboardForceReply#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_single_use:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
+	}
+	else if(ctor == ReplyMarkup::ctorReplyKeyboardMarkup)
+	{
+		result.append("ReplyKeyboardMarkup#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_resize:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		result.append("is_single_use:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
+		result.append(", ");
+		result.append("rows:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == ReplyMarkup::ctorReplyInlineMarkup)
+	{
+		result.append("ReplyInlineMarkup#");
+		result.append("rows:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_HelpAppChangelog(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HelpAppChangelog::ctorHelpAppChangelogEmpty) ||
+		 (ctor == HelpAppChangelog::ctorHelpAppChangelog));
+	
+	if(ctor == HelpAppChangelog::ctorHelpAppChangelogEmpty)
+		result.append("HelpAppChangelogEmpty");
+	else if(ctor == HelpAppChangelog::ctorHelpAppChangelog)
+	{
+		result.append("HelpAppChangelog#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessageEntity(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessageEntity::ctorMessageEntityUnknown) ||
+		 (ctor == MessageEntity::ctorMessageEntityMention) ||
+		 (ctor == MessageEntity::ctorMessageEntityHashtag) ||
+		 (ctor == MessageEntity::ctorMessageEntityBotCommand) ||
+		 (ctor == MessageEntity::ctorMessageEntityUrl) ||
+		 (ctor == MessageEntity::ctorMessageEntityEmail) ||
+		 (ctor == MessageEntity::ctorMessageEntityBold) ||
+		 (ctor == MessageEntity::ctorMessageEntityItalic) ||
+		 (ctor == MessageEntity::ctorMessageEntityCode) ||
+		 (ctor == MessageEntity::ctorMessageEntityPre) ||
+		 (ctor == MessageEntity::ctorMessageEntityTextUrl) ||
+		 (ctor == MessageEntity::ctorMessageEntityMentionName) ||
+		 (ctor == MessageEntity::ctorInputMessageEntityMentionName));
+	
+	if(ctor == MessageEntity::ctorMessageEntityUnknown)
+	{
+		result.append("MessageEntityUnknown#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityMention)
+	{
+		result.append("MessageEntityMention#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityHashtag)
+	{
+		result.append("MessageEntityHashtag#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityBotCommand)
+	{
+		result.append("MessageEntityBotCommand#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityUrl)
+	{
+		result.append("MessageEntityUrl#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityEmail)
+	{
+		result.append("MessageEntityEmail#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityBold)
+	{
+		result.append("MessageEntityBold#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityItalic)
+	{
+		result.append("MessageEntityItalic#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityCode)
+	{
+		result.append("MessageEntityCode#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityPre)
+	{
+		result.append("MessageEntityPre#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+		result.append(", ");
+		TLString language = mtstream.readTLString();
+		result.append("language:" + thethis->printableString(language));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityTextUrl)
+	{
+		result.append("MessageEntityTextUrl#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+		result.append(", ");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+	}
+	else if(ctor == MessageEntity::ctorMessageEntityMentionName)
+	{
+		result.append("MessageEntityMentionName#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+		result.append(", ");
+		TLInt user_id_messageentitymentionname = mtstream.readTLInt();
+		result.append("user_id_messageentitymentionname:" + QString::number(user_id_messageentitymentionname, 16));
+	}
+	else if(ctor == MessageEntity::ctorInputMessageEntityMentionName)
+	{
+		result.append("InputMessageEntityMentionName#");
+		TLInt offset = mtstream.readTLInt();
+		result.append("offset:" + QString::number(offset, 16));
+		result.append(", ");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+		result.append(", ");
+		result.append("user_id_inputmessageentitymentionname:");
+		MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputChannel(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputChannel::ctorInputChannelEmpty) ||
+		 (ctor == InputChannel::ctorInputChannel));
+	
+	if(ctor == InputChannel::ctorInputChannelEmpty)
+		result.append("InputChannelEmpty");
+	else if(ctor == InputChannel::ctorInputChannel)
+	{
+		result.append("InputChannel#");
+		TLInt channel_id = mtstream.readTLInt();
+		result.append("channel_id:" + QString::number(channel_id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsResolvedPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsResolvedPeer::ctorContactsResolvedPeer));
+	
+	if(ctor == ContactsResolvedPeer::ctorContactsResolvedPeer)
+	{
+		result.append("ContactsResolvedPeer#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessageRange(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessageRange::ctorMessageRange));
+	
+	if(ctor == MessageRange::ctorMessageRange)
+	{
+		result.append("MessageRange#");
+		TLInt min_id = mtstream.readTLInt();
+		result.append("min_id:" + QString::number(min_id, 16));
+		result.append(", ");
+		TLInt max_id = mtstream.readTLInt();
+		result.append("max_id:" + QString::number(max_id, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_UpdatesChannelDifference(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty) ||
+		 (ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong) ||
+		 (ctor == UpdatesChannelDifference::ctorUpdatesChannelDifference));
+	
+	if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty)
+	{
+		result.append("UpdatesChannelDifferenceEmpty#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLInt timeout = mtstream.readTLInt();
+			result.append("timeout:" + QString::number(timeout, 16));
+		}
+	}
+	else if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong)
+	{
+		result.append("UpdatesChannelDifferenceTooLong#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLInt timeout = mtstream.readTLInt();
+			result.append("timeout:" + QString::number(timeout, 16));
+			result.append(", ");
+		}
+		TLInt top_message = mtstream.readTLInt();
+		result.append("top_message:" + QString::number(top_message, 16));
+		result.append(", ");
+		TLInt read_inbox_max_id = mtstream.readTLInt();
+		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
+		result.append(", ");
+		TLInt read_outbox_max_id = mtstream.readTLInt();
+		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
+		result.append(", ");
+		TLInt unread_count = mtstream.readTLInt();
+		result.append("unread_count:" + QString::number(unread_count, 16));
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	else if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifference)
+	{
+		result.append("UpdatesChannelDifference#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLInt pts = mtstream.readTLInt();
+		result.append("pts:" + QString::number(pts, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLInt timeout = mtstream.readTLInt();
+			result.append("timeout:" + QString::number(timeout, 16));
+			result.append(", ");
+		}
+		result.append("new_messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("other_updates:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ChannelMessagesFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty) ||
+		 (ctor == ChannelMessagesFilter::ctorChannelMessagesFilter));
+	
+	if(ctor == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty)
+		result.append("ChannelMessagesFilterEmpty");
+	else if(ctor == ChannelMessagesFilter::ctorChannelMessagesFilter)
+	{
+		result.append("ChannelMessagesFilter#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_exclude_new_messages:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("ranges:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ChannelParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelParticipant::ctorChannelParticipant) ||
+		 (ctor == ChannelParticipant::ctorChannelParticipantSelf) ||
+		 (ctor == ChannelParticipant::ctorChannelParticipantModerator) ||
+		 (ctor == ChannelParticipant::ctorChannelParticipantEditor) ||
+		 (ctor == ChannelParticipant::ctorChannelParticipantKicked) ||
+		 (ctor == ChannelParticipant::ctorChannelParticipantCreator));
+	
+	if(ctor == ChannelParticipant::ctorChannelParticipant)
+	{
+		result.append("ChannelParticipant#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChannelParticipant::ctorChannelParticipantSelf)
+	{
+		result.append("ChannelParticipantSelf#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChannelParticipant::ctorChannelParticipantModerator)
+	{
+		result.append("ChannelParticipantModerator#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChannelParticipant::ctorChannelParticipantEditor)
+	{
+		result.append("ChannelParticipantEditor#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt inviter_id = mtstream.readTLInt();
+		result.append("inviter_id:" + QString::number(inviter_id, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChannelParticipant::ctorChannelParticipantKicked)
+	{
+		result.append("ChannelParticipantKicked#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt kicked_by = mtstream.readTLInt();
+		result.append("kicked_by:" + QString::number(kicked_by, 16));
+		result.append(", ");
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+	else if(ctor == ChannelParticipant::ctorChannelParticipantCreator)
+	{
+		result.append("ChannelParticipantCreator#");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_ChannelParticipantsFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelParticipantsFilter::ctorChannelParticipantsRecent) ||
+		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsAdmins) ||
+		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsKicked) ||
+		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsBots));
+	
+	if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsRecent)
+		result.append("ChannelParticipantsRecent");
+	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsAdmins)
+		result.append("ChannelParticipantsAdmins");
+	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsKicked)
+		result.append("ChannelParticipantsKicked");
+	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsBots)
+		result.append("ChannelParticipantsBots");
+}
+
+void MTProtoDecompiler::decompile_ChannelParticipantRole(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelParticipantRole::ctorChannelRoleEmpty) ||
+		 (ctor == ChannelParticipantRole::ctorChannelRoleModerator) ||
+		 (ctor == ChannelParticipantRole::ctorChannelRoleEditor));
+	
+	if(ctor == ChannelParticipantRole::ctorChannelRoleEmpty)
+		result.append("ChannelRoleEmpty");
+	else if(ctor == ChannelParticipantRole::ctorChannelRoleModerator)
+		result.append("ChannelRoleModerator");
+	else if(ctor == ChannelParticipantRole::ctorChannelRoleEditor)
+		result.append("ChannelRoleEditor");
+}
+
+void MTProtoDecompiler::decompile_ChannelsChannelParticipants(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelsChannelParticipants::ctorChannelsChannelParticipants));
+	
+	if(ctor == ChannelsChannelParticipants::ctorChannelsChannelParticipants)
+	{
+		result.append("ChannelsChannelParticipants#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("participants:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ChannelsChannelParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ChannelsChannelParticipant::ctorChannelsChannelParticipant));
+	
+	if(ctor == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
+	{
+		result.append("ChannelsChannelParticipant#");
+		result.append("participant:");
+		MTProtoDecompiler::decompile_ChannelParticipant(thethis, result, mtstream);
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_HelpTermsOfService(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HelpTermsOfService::ctorHelpTermsOfService));
+	
+	if(ctor == HelpTermsOfService::ctorHelpTermsOfService)
+	{
+		result.append("HelpTermsOfService#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+	}
+}
+
+void MTProtoDecompiler::decompile_FoundGif(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == FoundGif::ctorFoundGif) ||
+		 (ctor == FoundGif::ctorFoundGifCached));
+	
+	if(ctor == FoundGif::ctorFoundGif)
+	{
+		result.append("FoundGif#");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		TLString thumb_url = mtstream.readTLString();
+		result.append("thumb_url:" + thethis->printableString(thumb_url));
+		result.append(", ");
+		TLString content_url = mtstream.readTLString();
+		result.append("content_url:" + thethis->printableString(content_url));
+		result.append(", ");
+		TLString content_type = mtstream.readTLString();
+		result.append("content_type:" + thethis->printableString(content_type));
+		result.append(", ");
+		TLInt w = mtstream.readTLInt();
+		result.append("w:" + QString::number(w, 16));
+		result.append(", ");
+		TLInt h = mtstream.readTLInt();
+		result.append("h:" + QString::number(h, 16));
+	}
+	else if(ctor == FoundGif::ctorFoundGifCached)
+	{
+		result.append("FoundGifCached#");
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		result.append("document:");
+		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesFoundGifs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesFoundGifs::ctorMessagesFoundGifs));
+	
+	if(ctor == MessagesFoundGifs::ctorMessagesFoundGifs)
+	{
+		result.append("MessagesFoundGifs#");
+		TLInt next_offset = mtstream.readTLInt();
+		result.append("next_offset:" + QString::number(next_offset, 16));
+		result.append(", ");
+		result.append("results:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesSavedGifs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesSavedGifs::ctorMessagesSavedGifsNotModified) ||
+		 (ctor == MessagesSavedGifs::ctorMessagesSavedGifs));
+	
+	if(ctor == MessagesSavedGifs::ctorMessagesSavedGifsNotModified)
+		result.append("MessagesSavedGifsNotModified");
+	else if(ctor == MessagesSavedGifs::ctorMessagesSavedGifs)
+	{
+		result.append("MessagesSavedGifs#");
+		TLInt hash = mtstream.readTLInt();
+		result.append("hash:" + QString::number(hash, 16));
+		result.append(", ");
+		result.append("gifs:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_InputBotInlineMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaAuto) ||
+		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageText) ||
+		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaGeo) ||
+		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaVenue) ||
+		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaContact) ||
+		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageGame));
+	
+	if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaAuto)
+	{
+		result.append("InputBotInlineMessageMediaAuto#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageText)
+	{
+		result.append("InputBotInlineMessageText#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaGeo)
+	{
+		result.append("InputBotInlineMessageMediaGeo#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("geo_point:");
+		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaVenue)
+	{
+		result.append("InputBotInlineMessageMediaVenue#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("geo_point:");
+		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString address = mtstream.readTLString();
+		result.append("address:" + thethis->printableString(address));
+		result.append(", ");
+		TLString provider = mtstream.readTLString();
+		result.append("provider:" + thethis->printableString(provider));
+		result.append(", ");
+		TLString venue_id = mtstream.readTLString();
+		result.append("venue_id:" + thethis->printableString(venue_id));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaContact)
+	{
+		result.append("InputBotInlineMessageMediaContact#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString phone_number = mtstream.readTLString();
+		result.append("phone_number:" + thethis->printableString(phone_number));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageGame)
+	{
+		result.append("InputBotInlineMessageGame#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_InputBotInlineResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputBotInlineResult::ctorInputBotInlineResult) ||
+		 (ctor == InputBotInlineResult::ctorInputBotInlineResultPhoto) ||
+		 (ctor == InputBotInlineResult::ctorInputBotInlineResultDocument) ||
+		 (ctor == InputBotInlineResult::ctorInputBotInlineResultGame));
+	
+	if(ctor == InputBotInlineResult::ctorInputBotInlineResult)
+	{
+		result.append("InputBotInlineResult#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString description = mtstream.readTLString();
+			result.append("description:" + thethis->printableString(description));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLString url = mtstream.readTLString();
+			result.append("url:" + thethis->printableString(url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 4))
+		{
+			TLString thumb_url = mtstream.readTLString();
+			result.append("thumb_url:" + thethis->printableString(thumb_url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString content_url = mtstream.readTLString();
+			result.append("content_url:" + thethis->printableString(content_url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString content_type = mtstream.readTLString();
+			result.append("content_type:" + thethis->printableString(content_type));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt w = mtstream.readTLInt();
+			result.append("w:" + QString::number(w, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt h = mtstream.readTLInt();
+			result.append("h:" + QString::number(h, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			TLInt duration = mtstream.readTLInt();
+			result.append("duration:" + QString::number(duration, 16));
+			result.append(", ");
+		}
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
+	}
+	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultPhoto)
+	{
+		result.append("InputBotInlineResultPhoto#");
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
+	}
+	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultDocument)
+	{
+		result.append("InputBotInlineResultDocument#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString description = mtstream.readTLString();
+			result.append("description:" + thethis->printableString(description));
+			result.append(", ");
+		}
+		result.append("document:");
+		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
+	}
+	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultGame)
+	{
+		result.append("InputBotInlineResultGame#");
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString short_name = mtstream.readTLString();
+		result.append("short_name:" + thethis->printableString(short_name));
+		result.append(", ");
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_BotInlineMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == BotInlineMessage::ctorBotInlineMessageMediaAuto) ||
+		 (ctor == BotInlineMessage::ctorBotInlineMessageText) ||
+		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaGeo) ||
+		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaVenue) ||
+		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaContact));
+	
+	if(ctor == BotInlineMessage::ctorBotInlineMessageMediaAuto)
+	{
+		result.append("BotInlineMessageMediaAuto#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString caption = mtstream.readTLString();
+		result.append("caption:" + thethis->printableString(caption));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == BotInlineMessage::ctorBotInlineMessageText)
+	{
+		result.append("BotInlineMessageText#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaGeo)
+	{
+		result.append("BotInlineMessageMediaGeo#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("geo:");
+		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaVenue)
+	{
+		result.append("BotInlineMessageMediaVenue#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("geo:");
+		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString address = mtstream.readTLString();
+		result.append("address:" + thethis->printableString(address));
+		result.append(", ");
+		TLString provider = mtstream.readTLString();
+		result.append("provider:" + thethis->printableString(provider));
+		result.append(", ");
+		TLString venue_id = mtstream.readTLString();
+		result.append("venue_id:" + thethis->printableString(venue_id));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaContact)
+	{
+		result.append("BotInlineMessageMediaContact#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString phone_number = mtstream.readTLString();
+		result.append("phone_number:" + thethis->printableString(phone_number));
+		result.append(", ");
+		TLString first_name = mtstream.readTLString();
+		result.append("first_name:" + thethis->printableString(first_name));
+		result.append(", ");
+		TLString last_name = mtstream.readTLString();
+		result.append("last_name:" + thethis->printableString(last_name));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("reply_markup:");
+			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_BotInlineResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == BotInlineResult::ctorBotInlineResult) ||
+		 (ctor == BotInlineResult::ctorBotInlineMediaResult));
+	
+	if(ctor == BotInlineResult::ctorBotInlineResult)
+	{
+		result.append("BotInlineResult#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString description = mtstream.readTLString();
+			result.append("description:" + thethis->printableString(description));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLString url = mtstream.readTLString();
+			result.append("url:" + thethis->printableString(url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 4))
+		{
+			TLString thumb_url = mtstream.readTLString();
+			result.append("thumb_url:" + thethis->printableString(thumb_url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString content_url = mtstream.readTLString();
+			result.append("content_url:" + thethis->printableString(content_url));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 5))
+		{
+			TLString content_type = mtstream.readTLString();
+			result.append("content_type:" + thethis->printableString(content_type));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt w = mtstream.readTLInt();
+			result.append("w:" + QString::number(w, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 6))
+		{
+			TLInt h = mtstream.readTLInt();
+			result.append("h:" + QString::number(h, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 7))
+		{
+			TLInt duration = mtstream.readTLInt();
+			result.append("duration:" + QString::number(duration, 16));
+			result.append(", ");
+		}
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_BotInlineMessage(thethis, result, mtstream);
+	}
+	else if(ctor == BotInlineResult::ctorBotInlineMediaResult)
+	{
+		result.append("BotInlineMediaResult#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLString id = mtstream.readTLString();
+		result.append("id:" + thethis->printableString(id));
+		result.append(", ");
+		TLString type = mtstream.readTLString();
+		result.append("type:" + thethis->printableString(type));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("photo:");
+			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 1))
+		{
+			result.append("document:");
+			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString title = mtstream.readTLString();
+			result.append("title:" + thethis->printableString(title));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 3))
+		{
+			TLString description = mtstream.readTLString();
+			result.append("description:" + thethis->printableString(description));
+			result.append(", ");
+		}
+		result.append("send_message:");
+		MTProtoDecompiler::decompile_BotInlineMessage(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesBotResults(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesBotResults::ctorMessagesBotResults));
+	
+	if(ctor == MessagesBotResults::ctorMessagesBotResults)
+	{
+		result.append("MessagesBotResults#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_gallery:" + BIT_FIELD_VALUE(flags, 0));
+		result.append(", ");
+		TLLong query_id = mtstream.readTLLong();
+		result.append("query_id:" + QString::number(query_id, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLString next_offset = mtstream.readTLString();
+			result.append("next_offset:" + thethis->printableString(next_offset));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			result.append("switch_pm:");
+			MTProtoDecompiler::decompile_InlineBotSwitchPM(thethis, result, mtstream);
+		}
+		result.append("results:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ExportedMessageLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ExportedMessageLink::ctorExportedMessageLink));
+	
+	if(ctor == ExportedMessageLink::ctorExportedMessageLink)
+	{
+		result.append("ExportedMessageLink#");
+		TLString link = mtstream.readTLString();
+		result.append("link:" + thethis->printableString(link));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessageFwdHeader(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessageFwdHeader::ctorMessageFwdHeader));
+	
+	if(ctor == MessageFwdHeader::ctorMessageFwdHeader)
+	{
+		result.append("MessageFwdHeader#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt from_id = mtstream.readTLInt();
+			result.append("from_id:" + QString::number(from_id, 16));
+			result.append(", ");
+		}
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 1))
+		{
+			TLInt channel_id = mtstream.readTLInt();
+			result.append("channel_id:" + QString::number(channel_id, 16));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLInt channel_post = mtstream.readTLInt();
+			result.append("channel_post:" + QString::number(channel_post, 16));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_AuthCodeType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthCodeType::ctorAuthCodeTypeSms) ||
+		 (ctor == AuthCodeType::ctorAuthCodeTypeCall) ||
+		 (ctor == AuthCodeType::ctorAuthCodeTypeFlashCall));
+	
+	if(ctor == AuthCodeType::ctorAuthCodeTypeSms)
+		result.append("AuthCodeTypeSms");
+	else if(ctor == AuthCodeType::ctorAuthCodeTypeCall)
+		result.append("AuthCodeTypeCall");
+	else if(ctor == AuthCodeType::ctorAuthCodeTypeFlashCall)
+		result.append("AuthCodeTypeFlashCall");
+}
+
+void MTProtoDecompiler::decompile_AuthSentCodeType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == AuthSentCodeType::ctorAuthSentCodeTypeApp) ||
+		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeSms) ||
+		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeCall) ||
+		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall));
+	
+	if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeApp)
+	{
+		result.append("AuthSentCodeTypeApp#");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeSms)
+	{
+		result.append("AuthSentCodeTypeSms#");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeCall)
+	{
+		result.append("AuthSentCodeTypeCall#");
+		TLInt length = mtstream.readTLInt();
+		result.append("length:" + QString::number(length, 16));
+	}
+	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall)
+	{
+		result.append("AuthSentCodeTypeFlashCall#");
+		TLString pattern = mtstream.readTLString();
+		result.append("pattern:" + thethis->printableString(pattern));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesBotCallbackAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer));
+	
+	if(ctor == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer)
+	{
+		result.append("MessagesBotCallbackAnswer#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_alert:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		result.append("has_url:" + BIT_FIELD_VALUE(flags, 3));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLString message = mtstream.readTLString();
+			result.append("message:" + thethis->printableString(message));
+			result.append(", ");
+		}
+		if(IS_FLAG_SET(flags, 2))
+		{
+			TLString url = mtstream.readTLString();
+			result.append("url:" + thethis->printableString(url));
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesMessageEditData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesMessageEditData::ctorMessagesMessageEditData));
+	
+	if(ctor == MessagesMessageEditData::ctorMessagesMessageEditData)
+	{
+		result.append("MessagesMessageEditData#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_caption:" + BIT_FIELD_VALUE(flags, 0));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputBotInlineMessageID(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputBotInlineMessageID::ctorInputBotInlineMessageID));
+	
+	if(ctor == InputBotInlineMessageID::ctorInputBotInlineMessageID)
+	{
+		result.append("InputBotInlineMessageID#");
+		TLInt dc_id = mtstream.readTLInt();
+		result.append("dc_id:" + QString::number(dc_id, 16));
+		result.append(", ");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_InlineBotSwitchPM(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InlineBotSwitchPM::ctorInlineBotSwitchPM));
+	
+	if(ctor == InlineBotSwitchPM::ctorInlineBotSwitchPM)
+	{
+		result.append("InlineBotSwitchPM#");
+		TLString text = mtstream.readTLString();
+		result.append("text:" + thethis->printableString(text));
+		result.append(", ");
+		TLString start_param = mtstream.readTLString();
+		result.append("start_param:" + thethis->printableString(start_param));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesPeerDialogs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesPeerDialogs::ctorMessagesPeerDialogs));
+	
+	if(ctor == MessagesPeerDialogs::ctorMessagesPeerDialogs)
+	{
+		result.append("MessagesPeerDialogs#");
+		result.append("dialogs:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("messages:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("state:");
+		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_TopPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == TopPeer::ctorTopPeer));
+	
+	if(ctor == TopPeer::ctorTopPeer)
+	{
+		result.append("TopPeer#");
+		result.append("peer:");
+		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
+		TLDouble rating = mtstream.readTLDouble();
+		result.append("rating:" + QString::number(rating));
+	}
+}
+
+void MTProtoDecompiler::decompile_TopPeerCategory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == TopPeerCategory::ctorTopPeerCategoryBotsPM) ||
+		 (ctor == TopPeerCategory::ctorTopPeerCategoryBotsInline) ||
+		 (ctor == TopPeerCategory::ctorTopPeerCategoryCorrespondents) ||
+		 (ctor == TopPeerCategory::ctorTopPeerCategoryGroups) ||
+		 (ctor == TopPeerCategory::ctorTopPeerCategoryChannels));
+	
+	if(ctor == TopPeerCategory::ctorTopPeerCategoryBotsPM)
+		result.append("TopPeerCategoryBotsPM");
+	else if(ctor == TopPeerCategory::ctorTopPeerCategoryBotsInline)
+		result.append("TopPeerCategoryBotsInline");
+	else if(ctor == TopPeerCategory::ctorTopPeerCategoryCorrespondents)
+		result.append("TopPeerCategoryCorrespondents");
+	else if(ctor == TopPeerCategory::ctorTopPeerCategoryGroups)
+		result.append("TopPeerCategoryGroups");
+	else if(ctor == TopPeerCategory::ctorTopPeerCategoryChannels)
+		result.append("TopPeerCategoryChannels");
+}
+
+void MTProtoDecompiler::decompile_TopPeerCategoryPeers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == TopPeerCategoryPeers::ctorTopPeerCategoryPeers));
+	
+	if(ctor == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
+	{
+		result.append("TopPeerCategoryPeers#");
+		result.append("category:");
+		MTProtoDecompiler::decompile_TopPeerCategory(thethis, result, mtstream);
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("peers:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_ContactsTopPeers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ContactsTopPeers::ctorContactsTopPeersNotModified) ||
+		 (ctor == ContactsTopPeers::ctorContactsTopPeers));
+	
+	if(ctor == ContactsTopPeers::ctorContactsTopPeersNotModified)
+		result.append("ContactsTopPeersNotModified");
+	else if(ctor == ContactsTopPeers::ctorContactsTopPeers)
+	{
+		result.append("ContactsTopPeers#");
+		result.append("categories:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("chats:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_DraftMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == DraftMessage::ctorDraftMessageEmpty) ||
+		 (ctor == DraftMessage::ctorDraftMessage));
+	
+	if(ctor == DraftMessage::ctorDraftMessageEmpty)
+		result.append("DraftMessageEmpty");
+	else if(ctor == DraftMessage::ctorDraftMessage)
+	{
+		result.append("DraftMessage#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 1));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 0))
+		{
+			TLInt reply_to_msg_id = mtstream.readTLInt();
+			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+			result.append(", ");
+		}
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+		if(IS_FLAG_SET(flags, 3))
+		{
+			result.append("entities:");
+			thethis->decompileTLVectorEx(result, mtstream, false);
+			result.append(", ");
+		}
+		TLInt date = mtstream.readTLInt();
+		result.append("date:" + QString::number(date, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesFeaturedStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified) ||
+		 (ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickers));
+	
+	if(ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified)
+		result.append("MessagesFeaturedStickersNotModified");
+	else if(ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickers)
+	{
+		result.append("MessagesFeaturedStickers#");
+		TLInt hash = mtstream.readTLInt();
+		result.append("hash:" + QString::number(hash, 16));
+		result.append(", ");
+		result.append("sets:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("unread:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesRecentStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesRecentStickers::ctorMessagesRecentStickersNotModified) ||
+		 (ctor == MessagesRecentStickers::ctorMessagesRecentStickers));
+	
+	if(ctor == MessagesRecentStickers::ctorMessagesRecentStickersNotModified)
+		result.append("MessagesRecentStickersNotModified");
+	else if(ctor == MessagesRecentStickers::ctorMessagesRecentStickers)
+	{
+		result.append("MessagesRecentStickers#");
+		TLInt hash = mtstream.readTLInt();
+		result.append("hash:" + QString::number(hash, 16));
+		result.append(", ");
+		result.append("stickers:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesArchivedStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesArchivedStickers::ctorMessagesArchivedStickers));
+	
+	if(ctor == MessagesArchivedStickers::ctorMessagesArchivedStickers)
+	{
+		result.append("MessagesArchivedStickers#");
+		TLInt count = mtstream.readTLInt();
+		result.append("count:" + QString::number(count, 16));
+		result.append(", ");
+		result.append("sets:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesStickerSetInstallResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess) ||
+		 (ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive));
+	
+	if(ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess)
+		result.append("MessagesStickerSetInstallResultSuccess");
+	else if(ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive)
+	{
+		result.append("MessagesStickerSetInstallResultArchive#");
+		result.append("sets:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_StickerSetCovered(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == StickerSetCovered::ctorStickerSetCovered) ||
+		 (ctor == StickerSetCovered::ctorStickerSetMultiCovered));
+	
+	if(ctor == StickerSetCovered::ctorStickerSetCovered)
+	{
+		result.append("StickerSetCovered#");
+		result.append("set:");
+		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
+		result.append("cover:");
+		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+	}
+	else if(ctor == StickerSetCovered::ctorStickerSetMultiCovered)
+	{
+		result.append("StickerSetMultiCovered#");
+		result.append("set:");
+		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
+		result.append("covers:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_MaskCoords(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MaskCoords::ctorMaskCoords));
+	
+	if(ctor == MaskCoords::ctorMaskCoords)
+	{
+		result.append("MaskCoords#");
+		TLInt n = mtstream.readTLInt();
+		result.append("n:" + QString::number(n, 16));
+		result.append(", ");
+		TLDouble x = mtstream.readTLDouble();
+		result.append("x:" + QString::number(x));
+		result.append(", ");
+		TLDouble y = mtstream.readTLDouble();
+		result.append("y:" + QString::number(y));
+		result.append(", ");
+		TLDouble zoom = mtstream.readTLDouble();
+		result.append("zoom:" + QString::number(zoom));
+	}
+}
+
+void MTProtoDecompiler::decompile_InputStickeredMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputStickeredMedia::ctorInputStickeredMediaPhoto) ||
+		 (ctor == InputStickeredMedia::ctorInputStickeredMediaDocument));
+	
+	if(ctor == InputStickeredMedia::ctorInputStickeredMediaPhoto)
+	{
+		result.append("InputStickeredMediaPhoto#");
+		result.append("id_inputstickeredmediaphoto:");
+		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
+	}
+	else if(ctor == InputStickeredMedia::ctorInputStickeredMediaDocument)
+	{
+		result.append("InputStickeredMediaDocument#");
+		result.append("id_inputstickeredmediadocument:");
+		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
+	}
+}
+
+void MTProtoDecompiler::decompile_Game(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Game::ctorGame));
+	
+	if(ctor == Game::ctorGame)
+	{
+		result.append("Game#");
+		
+		TLInt flags = mtstream.readTLInt();
+		Q_UNUSED(flags);
+		
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+		result.append(", ");
+		TLString short_name = mtstream.readTLString();
+		result.append("short_name:" + thethis->printableString(short_name));
+		result.append(", ");
+		TLString title = mtstream.readTLString();
+		result.append("title:" + thethis->printableString(title));
+		result.append(", ");
+		TLString description = mtstream.readTLString();
+		result.append("description:" + thethis->printableString(description));
+		result.append(", ");
+		result.append("photo:");
+		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
+		if(IS_FLAG_SET(flags, 0))
+		{
+			result.append("document:");
+			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+		}
+	}
+}
+
+void MTProtoDecompiler::decompile_InputGame(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == InputGame::ctorInputGameID) ||
+		 (ctor == InputGame::ctorInputGameShortName));
+	
+	if(ctor == InputGame::ctorInputGameID)
+	{
+		result.append("InputGameID#");
+		TLLong id = mtstream.readTLLong();
+		result.append("id:" + QString::number(id, 16));
+		result.append(", ");
+		TLLong access_hash = mtstream.readTLLong();
+		result.append("access_hash:" + QString::number(access_hash, 16));
+	}
+	else if(ctor == InputGame::ctorInputGameShortName)
+	{
+		result.append("InputGameShortName#");
+		result.append("bot_id:");
+		MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+		TLString short_name = mtstream.readTLString();
+		result.append("short_name:" + thethis->printableString(short_name));
+	}
+}
+
+void MTProtoDecompiler::decompile_HighScore(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == HighScore::ctorHighScore));
+	
+	if(ctor == HighScore::ctorHighScore)
+	{
+		result.append("HighScore#");
+		TLInt pos = mtstream.readTLInt();
+		result.append("pos:" + QString::number(pos, 16));
+		result.append(", ");
+		TLInt user_id = mtstream.readTLInt();
+		result.append("user_id:" + QString::number(user_id, 16));
+		result.append(", ");
+		TLInt score = mtstream.readTLInt();
+		result.append("score:" + QString::number(score, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_MessagesHighScores(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MessagesHighScores::ctorMessagesHighScores));
+	
+	if(ctor == MessagesHighScores::ctorMessagesHighScores)
+	{
+		result.append("MessagesHighScores#");
+		result.append("scores:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append(", ");
+		result.append("users:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
 }
 
 void MTProtoDecompiler::decompile_authCheckPhone(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -3657,6636 +11403,663 @@ void MTProtoDecompiler::decompile_channelsGetAdminedPublicChannels(MTProtoDecomp
 	result.append("channelsGetAdminedPublicChannels()");
 }
 
-void MTProtoDecompiler::decompile_Error(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_ResPQ(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == Error::ctorError));
-	
-	if(ctor == Error::ctorError)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("Error#");
-		TLInt code = mtstream.readTLInt();
-		result.append("code:" + QString::number(code, 16));
-		result.append(", ");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-}
-
-void MTProtoDecompiler::decompile_Null(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Null::ctorNull));
-	
-	if(ctor == Null::ctorNull)
 		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == ResPQ::ctorResPQ));
+	
+	if(ctor == ResPQ::ctorResPQ)
+	{
+		result.append("ResPQ#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLString pq = mtstream.readTLString();
+		result.append("pq:" + thethis->printableString(pq));
+		result.append(", ");
+		result.append("server_public_key_fingerprints:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	}
 }
 
-void MTProtoDecompiler::decompile_InputPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_PQInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == InputPeer::ctorInputPeerEmpty) ||
-		 (ctor == InputPeer::ctorInputPeerSelf) ||
-		 (ctor == InputPeer::ctorInputPeerChat) ||
-		 (ctor == InputPeer::ctorInputPeerUser) ||
-		 (ctor == InputPeer::ctorInputPeerChannel));
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
 	
-	if(ctor == InputPeer::ctorInputPeerEmpty)
-		result.append("InputPeerEmpty");
-	else if(ctor == InputPeer::ctorInputPeerSelf)
-		result.append("InputPeerSelf");
-	else if(ctor == InputPeer::ctorInputPeerChat)
-	{
-		result.append("InputPeerChat#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-	}
-	else if(ctor == InputPeer::ctorInputPeerUser)
-	{
-		result.append("InputPeerUser#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-	else if(ctor == InputPeer::ctorInputPeerChannel)
-	{
-		result.append("InputPeerChannel#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputUser(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == InputUser::ctorInputUserEmpty) ||
-		 (ctor == InputUser::ctorInputUserSelf) ||
-		 (ctor == InputUser::ctorInputUser));
+	Q_ASSERT((ctor == PQInnerData::ctorPQInnerData));
 	
-	if(ctor == InputUser::ctorInputUserEmpty)
-		result.append("InputUserEmpty");
-	else if(ctor == InputUser::ctorInputUserSelf)
-		result.append("InputUserSelf");
-	else if(ctor == InputUser::ctorInputUser)
+	if(ctor == PQInnerData::ctorPQInnerData)
 	{
-		result.append("InputUser#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
+		result.append("PQInnerData#");
+		TLString pq = mtstream.readTLString();
+		result.append("pq:" + thethis->printableString(pq));
 		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputContact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputContact::ctorInputPhoneContact));
-	
-	if(ctor == InputContact::ctorInputPhoneContact)
-	{
-		result.append("InputPhoneContact#");
-		TLLong client_id = mtstream.readTLLong();
-		result.append("client_id:" + QString::number(client_id, 16));
-		result.append(", ");
-		TLString phone = mtstream.readTLString();
-		result.append("phone:" + thethis->printableString(phone));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputFile::ctorInputFile) ||
-		 (ctor == InputFile::ctorInputFileBig));
-	
-	if(ctor == InputFile::ctorInputFile)
-	{
-		result.append("InputFile#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt parts = mtstream.readTLInt();
-		result.append("parts:" + QString::number(parts, 16));
-		result.append(", ");
-		TLString name = mtstream.readTLString();
-		result.append("name:" + thethis->printableString(name));
-		result.append(", ");
-		TLString md5_checksum = mtstream.readTLString();
-		result.append("md5_checksum:" + thethis->printableString(md5_checksum));
-	}
-	else if(ctor == InputFile::ctorInputFileBig)
-	{
-		result.append("InputFileBig#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt parts = mtstream.readTLInt();
-		result.append("parts:" + QString::number(parts, 16));
-		result.append(", ");
-		TLString name = mtstream.readTLString();
-		result.append("name:" + thethis->printableString(name));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputMedia::ctorInputMediaEmpty) ||
-		 (ctor == InputMedia::ctorInputMediaUploadedPhoto) ||
-		 (ctor == InputMedia::ctorInputMediaPhoto) ||
-		 (ctor == InputMedia::ctorInputMediaGeoPoint) ||
-		 (ctor == InputMedia::ctorInputMediaContact) ||
-		 (ctor == InputMedia::ctorInputMediaUploadedDocument) ||
-		 (ctor == InputMedia::ctorInputMediaUploadedThumbDocument) ||
-		 (ctor == InputMedia::ctorInputMediaDocument) ||
-		 (ctor == InputMedia::ctorInputMediaVenue) ||
-		 (ctor == InputMedia::ctorInputMediaGifExternal) ||
-		 (ctor == InputMedia::ctorInputMediaPhotoExternal) ||
-		 (ctor == InputMedia::ctorInputMediaDocumentExternal) ||
-		 (ctor == InputMedia::ctorInputMediaGame));
-	
-	if(ctor == InputMedia::ctorInputMediaEmpty)
-		result.append("InputMediaEmpty");
-	else if(ctor == InputMedia::ctorInputMediaUploadedPhoto)
-	{
-		result.append("InputMediaUploadedPhoto#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("file:");
-		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("stickers:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-	else if(ctor == InputMedia::ctorInputMediaPhoto)
-	{
-		result.append("InputMediaPhoto#");
-		result.append("id_inputmediaphoto:");
-		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == InputMedia::ctorInputMediaGeoPoint)
-	{
-		result.append("InputMediaGeoPoint#");
-		result.append("geo_point:");
-		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
-	}
-	else if(ctor == InputMedia::ctorInputMediaContact)
-	{
-		result.append("InputMediaContact#");
-		TLString phone_number = mtstream.readTLString();
-		result.append("phone_number:" + thethis->printableString(phone_number));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-	}
-	else if(ctor == InputMedia::ctorInputMediaUploadedDocument)
-	{
-		result.append("InputMediaUploadedDocument#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("file:");
-		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
-		TLString mime_type = mtstream.readTLString();
-		result.append("mime_type:" + thethis->printableString(mime_type));
-		result.append(", ");
-		result.append("attributes:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("stickers:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-	else if(ctor == InputMedia::ctorInputMediaUploadedThumbDocument)
-	{
-		result.append("InputMediaUploadedThumbDocument#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("file:");
-		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
-		result.append("thumb:");
-		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
-		TLString mime_type = mtstream.readTLString();
-		result.append("mime_type:" + thethis->printableString(mime_type));
-		result.append(", ");
-		result.append("attributes:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("stickers:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-	else if(ctor == InputMedia::ctorInputMediaDocument)
-	{
-		result.append("InputMediaDocument#");
-		result.append("id_inputmediadocument:");
-		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == InputMedia::ctorInputMediaVenue)
-	{
-		result.append("InputMediaVenue#");
-		result.append("geo_point:");
-		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString address = mtstream.readTLString();
-		result.append("address:" + thethis->printableString(address));
-		result.append(", ");
-		TLString provider = mtstream.readTLString();
-		result.append("provider:" + thethis->printableString(provider));
-		result.append(", ");
-		TLString venue_id = mtstream.readTLString();
-		result.append("venue_id:" + thethis->printableString(venue_id));
-	}
-	else if(ctor == InputMedia::ctorInputMediaGifExternal)
-	{
-		result.append("InputMediaGifExternal#");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
+		TLString p = mtstream.readTLString();
+		result.append("p:" + thethis->printableString(p));
 		result.append(", ");
 		TLString q = mtstream.readTLString();
 		result.append("q:" + thethis->printableString(q));
-	}
-	else if(ctor == InputMedia::ctorInputMediaPhotoExternal)
-	{
-		result.append("InputMediaPhotoExternal#");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == InputMedia::ctorInputMediaDocumentExternal)
-	{
-		result.append("InputMediaDocumentExternal#");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == InputMedia::ctorInputMediaGame)
-	{
-		result.append("InputMediaGame#");
-		result.append("id_inputmediagame:");
-		MTProtoDecompiler::decompile_InputGame(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_InputChatPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputChatPhoto::ctorInputChatPhotoEmpty) ||
-		 (ctor == InputChatPhoto::ctorInputChatUploadedPhoto) ||
-		 (ctor == InputChatPhoto::ctorInputChatPhoto));
-	
-	if(ctor == InputChatPhoto::ctorInputChatPhotoEmpty)
-		result.append("InputChatPhotoEmpty");
-	else if(ctor == InputChatPhoto::ctorInputChatUploadedPhoto)
-	{
-		result.append("InputChatUploadedPhoto#");
-		result.append("file:");
-		MTProtoDecompiler::decompile_InputFile(thethis, result, mtstream);
-	}
-	else if(ctor == InputChatPhoto::ctorInputChatPhoto)
-	{
-		result.append("InputChatPhoto#");
-		result.append("id:");
-		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_InputGeoPoint(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputGeoPoint::ctorInputGeoPointEmpty) ||
-		 (ctor == InputGeoPoint::ctorInputGeoPoint));
-	
-	if(ctor == InputGeoPoint::ctorInputGeoPointEmpty)
-		result.append("InputGeoPointEmpty");
-	else if(ctor == InputGeoPoint::ctorInputGeoPoint)
-	{
-		result.append("InputGeoPoint#");
-		TLDouble latitude = mtstream.readTLDouble();
-		result.append("latitude:" + QString::number(latitude));
-		result.append(", ");
-		TLDouble longitude = mtstream.readTLDouble();
-		result.append("longitude:" + QString::number(longitude));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputPhoto::ctorInputPhotoEmpty) ||
-		 (ctor == InputPhoto::ctorInputPhoto));
-	
-	if(ctor == InputPhoto::ctorInputPhotoEmpty)
-		result.append("InputPhotoEmpty");
-	else if(ctor == InputPhoto::ctorInputPhoto)
-	{
-		result.append("InputPhoto#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputFileLocation(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputFileLocation::ctorInputFileLocation) ||
-		 (ctor == InputFileLocation::ctorInputEncryptedFileLocation) ||
-		 (ctor == InputFileLocation::ctorInputDocumentFileLocation));
-	
-	if(ctor == InputFileLocation::ctorInputFileLocation)
-	{
-		result.append("InputFileLocation#");
-		TLLong volume_id = mtstream.readTLLong();
-		result.append("volume_id:" + QString::number(volume_id, 16));
-		result.append(", ");
-		TLInt local_id = mtstream.readTLInt();
-		result.append("local_id:" + QString::number(local_id, 16));
-		result.append(", ");
-		TLLong secret = mtstream.readTLLong();
-		result.append("secret:" + QString::number(secret, 16));
-	}
-	else if(ctor == InputFileLocation::ctorInputEncryptedFileLocation)
-	{
-		result.append("InputEncryptedFileLocation#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-	else if(ctor == InputFileLocation::ctorInputDocumentFileLocation)
-	{
-		result.append("InputDocumentFileLocation#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputAppEvent(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputAppEvent::ctorInputAppEvent));
-	
-	if(ctor == InputAppEvent::ctorInputAppEvent)
-	{
-		result.append("InputAppEvent#");
-		TLDouble time = mtstream.readTLDouble();
-		result.append("time:" + QString::number(time));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		TLLong peer = mtstream.readTLLong();
-		result.append("peer:" + QString::number(peer, 16));
-		result.append(", ");
-		TLString data = mtstream.readTLString();
-		result.append("data:" + thethis->printableString(data));
-	}
-}
-
-void MTProtoDecompiler::decompile_Peer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Peer::ctorPeerUser) ||
-		 (ctor == Peer::ctorPeerChat) ||
-		 (ctor == Peer::ctorPeerChannel));
-	
-	if(ctor == Peer::ctorPeerUser)
-	{
-		result.append("PeerUser#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-	}
-	else if(ctor == Peer::ctorPeerChat)
-	{
-		result.append("PeerChat#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-	}
-	else if(ctor == Peer::ctorPeerChannel)
-	{
-		result.append("PeerChannel#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_StorageFileType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == StorageFileType::ctorStorageFileUnknown) ||
-		 (ctor == StorageFileType::ctorStorageFileJpeg) ||
-		 (ctor == StorageFileType::ctorStorageFileGif) ||
-		 (ctor == StorageFileType::ctorStorageFilePng) ||
-		 (ctor == StorageFileType::ctorStorageFilePdf) ||
-		 (ctor == StorageFileType::ctorStorageFileMp3) ||
-		 (ctor == StorageFileType::ctorStorageFileMov) ||
-		 (ctor == StorageFileType::ctorStorageFilePartial) ||
-		 (ctor == StorageFileType::ctorStorageFileMp4) ||
-		 (ctor == StorageFileType::ctorStorageFileWebp));
-	
-	if(ctor == StorageFileType::ctorStorageFileUnknown)
-		result.append("StorageFileUnknown");
-	else if(ctor == StorageFileType::ctorStorageFileJpeg)
-		result.append("StorageFileJpeg");
-	else if(ctor == StorageFileType::ctorStorageFileGif)
-		result.append("StorageFileGif");
-	else if(ctor == StorageFileType::ctorStorageFilePng)
-		result.append("StorageFilePng");
-	else if(ctor == StorageFileType::ctorStorageFilePdf)
-		result.append("StorageFilePdf");
-	else if(ctor == StorageFileType::ctorStorageFileMp3)
-		result.append("StorageFileMp3");
-	else if(ctor == StorageFileType::ctorStorageFileMov)
-		result.append("StorageFileMov");
-	else if(ctor == StorageFileType::ctorStorageFilePartial)
-		result.append("StorageFilePartial");
-	else if(ctor == StorageFileType::ctorStorageFileMp4)
-		result.append("StorageFileMp4");
-	else if(ctor == StorageFileType::ctorStorageFileWebp)
-		result.append("StorageFileWebp");
-}
-
-void MTProtoDecompiler::decompile_FileLocation(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == FileLocation::ctorFileLocationUnavailable) ||
-		 (ctor == FileLocation::ctorFileLocation));
-	
-	if(ctor == FileLocation::ctorFileLocationUnavailable)
-	{
-		result.append("FileLocationUnavailable#");
-		TLLong volume_id = mtstream.readTLLong();
-		result.append("volume_id:" + QString::number(volume_id, 16));
-		result.append(", ");
-		TLInt local_id = mtstream.readTLInt();
-		result.append("local_id:" + QString::number(local_id, 16));
-		result.append(", ");
-		TLLong secret = mtstream.readTLLong();
-		result.append("secret:" + QString::number(secret, 16));
-	}
-	else if(ctor == FileLocation::ctorFileLocation)
-	{
-		result.append("FileLocation#");
-		TLInt dc_id = mtstream.readTLInt();
-		result.append("dc_id:" + QString::number(dc_id, 16));
-		result.append(", ");
-		TLLong volume_id = mtstream.readTLLong();
-		result.append("volume_id:" + QString::number(volume_id, 16));
-		result.append(", ");
-		TLInt local_id = mtstream.readTLInt();
-		result.append("local_id:" + QString::number(local_id, 16));
-		result.append(", ");
-		TLLong secret = mtstream.readTLLong();
-		result.append("secret:" + QString::number(secret, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_User(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == User::ctorUserEmpty) ||
-		 (ctor == User::ctorUser));
-	
-	if(ctor == User::ctorUserEmpty)
-	{
-		result.append("UserEmpty#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == User::ctorUser)
-	{
-		result.append("User#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_self:" + BIT_FIELD_VALUE(flags, 10));
-		result.append(", ");
-		result.append("is_contact:" + BIT_FIELD_VALUE(flags, 11));
-		result.append(", ");
-		result.append("is_mutual_contact:" + BIT_FIELD_VALUE(flags, 12));
-		result.append(", ");
-		result.append("is_deleted:" + BIT_FIELD_VALUE(flags, 13));
-		result.append(", ");
-		result.append("is_bot:" + BIT_FIELD_VALUE(flags, 14));
-		result.append(", ");
-		result.append("is_bot_chat_history:" + BIT_FIELD_VALUE(flags, 15));
-		result.append(", ");
-		result.append("is_bot_nochats:" + BIT_FIELD_VALUE(flags, 16));
-		result.append(", ");
-		result.append("is_verified:" + BIT_FIELD_VALUE(flags, 17));
-		result.append(", ");
-		result.append("is_restricted:" + BIT_FIELD_VALUE(flags, 18));
-		result.append(", ");
-		result.append("is_min:" + BIT_FIELD_VALUE(flags, 20));
-		result.append(", ");
-		result.append("is_bot_inline_geo:" + BIT_FIELD_VALUE(flags, 21));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLLong access_hash = mtstream.readTLLong();
-			result.append("access_hash:" + QString::number(access_hash, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString first_name = mtstream.readTLString();
-			result.append("first_name:" + thethis->printableString(first_name));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString last_name = mtstream.readTLString();
-			result.append("last_name:" + thethis->printableString(last_name));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLString username = mtstream.readTLString();
-			result.append("username:" + thethis->printableString(username));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 4))
-		{
-			TLString phone = mtstream.readTLString();
-			result.append("phone:" + thethis->printableString(phone));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			result.append("photo:");
-			MTProtoDecompiler::decompile_UserProfilePhoto(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			result.append("status:");
-			MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 14))
-		{
-			TLInt bot_info_version = mtstream.readTLInt();
-			result.append("bot_info_version:" + QString::number(bot_info_version, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 18))
-		{
-			TLString restriction_reason = mtstream.readTLString();
-			result.append("restriction_reason:" + thethis->printableString(restriction_reason));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 19))
-		{
-			TLString bot_inline_placeholder = mtstream.readTLString();
-			result.append("bot_inline_placeholder:" + thethis->printableString(bot_inline_placeholder));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_UserProfilePhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UserProfilePhoto::ctorUserProfilePhotoEmpty) ||
-		 (ctor == UserProfilePhoto::ctorUserProfilePhoto));
-	
-	if(ctor == UserProfilePhoto::ctorUserProfilePhotoEmpty)
-		result.append("UserProfilePhotoEmpty");
-	else if(ctor == UserProfilePhoto::ctorUserProfilePhoto)
-	{
-		result.append("UserProfilePhoto#");
-		TLLong photo_id = mtstream.readTLLong();
-		result.append("photo_id:" + QString::number(photo_id, 16));
-		result.append(", ");
-		result.append("photo_small:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-		result.append("photo_big:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_UserStatus(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UserStatus::ctorUserStatusEmpty) ||
-		 (ctor == UserStatus::ctorUserStatusOnline) ||
-		 (ctor == UserStatus::ctorUserStatusOffline) ||
-		 (ctor == UserStatus::ctorUserStatusRecently) ||
-		 (ctor == UserStatus::ctorUserStatusLastWeek) ||
-		 (ctor == UserStatus::ctorUserStatusLastMonth));
-	
-	if(ctor == UserStatus::ctorUserStatusEmpty)
-		result.append("UserStatusEmpty");
-	else if(ctor == UserStatus::ctorUserStatusOnline)
-	{
-		result.append("UserStatusOnline#");
-		TLInt expires = mtstream.readTLInt();
-		result.append("expires:" + QString::number(expires, 16));
-	}
-	else if(ctor == UserStatus::ctorUserStatusOffline)
-	{
-		result.append("UserStatusOffline#");
-		TLInt was_online = mtstream.readTLInt();
-		result.append("was_online:" + QString::number(was_online, 16));
-	}
-	else if(ctor == UserStatus::ctorUserStatusRecently)
-		result.append("UserStatusRecently");
-	else if(ctor == UserStatus::ctorUserStatusLastWeek)
-		result.append("UserStatusLastWeek");
-	else if(ctor == UserStatus::ctorUserStatusLastMonth)
-		result.append("UserStatusLastMonth");
-}
-
-void MTProtoDecompiler::decompile_Chat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Chat::ctorChatEmpty) ||
-		 (ctor == Chat::ctorChat) ||
-		 (ctor == Chat::ctorChatForbidden) ||
-		 (ctor == Chat::ctorChannel) ||
-		 (ctor == Chat::ctorChannelForbidden));
-	
-	if(ctor == Chat::ctorChatEmpty)
-	{
-		result.append("ChatEmpty#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == Chat::ctorChat)
-	{
-		result.append("Chat#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_creator:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_kicked:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_left:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		result.append("is_admins_enabled:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		result.append("is_admin:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_deactivated:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
-		TLInt participants_count = mtstream.readTLInt();
-		result.append("participants_count:" + QString::number(participants_count, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 6))
-		{
-			result.append("migrated_to:");
-			MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == Chat::ctorChatForbidden)
-	{
-		result.append("ChatForbidden#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-	}
-	else if(ctor == Chat::ctorChannel)
-	{
-		result.append("Channel#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_creator:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_kicked:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_left:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		result.append("is_editor:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		result.append("is_moderator:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_verified:" + BIT_FIELD_VALUE(flags, 7));
-		result.append(", ");
-		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 8));
-		result.append(", ");
-		result.append("is_restricted:" + BIT_FIELD_VALUE(flags, 9));
-		result.append(", ");
-		result.append("is_democracy:" + BIT_FIELD_VALUE(flags, 10));
-		result.append(", ");
-		result.append("is_signatures:" + BIT_FIELD_VALUE(flags, 11));
-		result.append(", ");
-		result.append("is_min:" + BIT_FIELD_VALUE(flags, 12));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 13))
-		{
-			TLLong access_hash = mtstream.readTLLong();
-			result.append("access_hash:" + QString::number(access_hash, 16));
-			result.append(", ");
-		}
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLString username = mtstream.readTLString();
-			result.append("username:" + thethis->printableString(username));
-			result.append(", ");
-		}
-		result.append("photo:");
-		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 9))
-		{
-			TLString restriction_reason = mtstream.readTLString();
-			result.append("restriction_reason:" + thethis->printableString(restriction_reason));
-		}
-	}
-	else if(ctor == Chat::ctorChannelForbidden)
-	{
-		result.append("ChannelForbidden#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 8));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-	}
-}
-
-void MTProtoDecompiler::decompile_ChatFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChatFull::ctorChatFull) ||
-		 (ctor == ChatFull::ctorChannelFull));
-	
-	if(ctor == ChatFull::ctorChatFull)
-	{
-		result.append("ChatFull#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		result.append("participants:");
-		MTProtoDecompiler::decompile_ChatParticipants(thethis, result, mtstream);
-		result.append("chat_photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		result.append("notify_settings:");
-		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
-		result.append("exported_invite:");
-		MTProtoDecompiler::decompile_ExportedChatInvite(thethis, result, mtstream);
-		result.append("bot_info:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == ChatFull::ctorChannelFull)
-	{
-		result.append("ChannelFull#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_can_view_participants:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		result.append("is_can_set_username:" + BIT_FIELD_VALUE(flags, 6));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString about = mtstream.readTLString();
-		result.append("about:" + thethis->printableString(about));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt participants_count = mtstream.readTLInt();
-			result.append("participants_count:" + QString::number(participants_count, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLInt admins_count = mtstream.readTLInt();
-			result.append("admins_count:" + QString::number(admins_count, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLInt kicked_count = mtstream.readTLInt();
-			result.append("kicked_count:" + QString::number(kicked_count, 16));
-			result.append(", ");
-		}
-		TLInt read_inbox_max_id = mtstream.readTLInt();
-		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
-		result.append(", ");
-		TLInt read_outbox_max_id = mtstream.readTLInt();
-		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
-		result.append(", ");
-		TLInt unread_count = mtstream.readTLInt();
-		result.append("unread_count:" + QString::number(unread_count, 16));
-		result.append(", ");
-		result.append("chat_photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		result.append("notify_settings:");
-		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
-		result.append("exported_invite:");
-		MTProtoDecompiler::decompile_ExportedChatInvite(thethis, result, mtstream);
-		result.append("bot_info:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 4))
-		{
-			TLInt migrated_from_chat_id = mtstream.readTLInt();
-			result.append("migrated_from_chat_id:" + QString::number(migrated_from_chat_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 4))
-		{
-			TLInt migrated_from_max_id = mtstream.readTLInt();
-			result.append("migrated_from_max_id:" + QString::number(migrated_from_max_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLInt pinned_msg_id = mtstream.readTLInt();
-			result.append("pinned_msg_id:" + QString::number(pinned_msg_id, 16));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_ChatParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChatParticipant::ctorChatParticipant) ||
-		 (ctor == ChatParticipant::ctorChatParticipantCreator) ||
-		 (ctor == ChatParticipant::ctorChatParticipantAdmin));
-	
-	if(ctor == ChatParticipant::ctorChatParticipant)
-	{
-		result.append("ChatParticipant#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChatParticipant::ctorChatParticipantCreator)
-	{
-		result.append("ChatParticipantCreator#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-	}
-	else if(ctor == ChatParticipant::ctorChatParticipantAdmin)
-	{
-		result.append("ChatParticipantAdmin#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ChatParticipants(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChatParticipants::ctorChatParticipantsForbidden) ||
-		 (ctor == ChatParticipants::ctorChatParticipants));
-	
-	if(ctor == ChatParticipants::ctorChatParticipantsForbidden)
-	{
-		result.append("ChatParticipantsForbidden#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("self_participant:");
-			MTProtoDecompiler::decompile_ChatParticipant(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == ChatParticipants::ctorChatParticipants)
-	{
-		result.append("ChatParticipants#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		result.append("participants:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ChatPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChatPhoto::ctorChatPhotoEmpty) ||
-		 (ctor == ChatPhoto::ctorChatPhoto));
-	
-	if(ctor == ChatPhoto::ctorChatPhotoEmpty)
-		result.append("ChatPhotoEmpty");
-	else if(ctor == ChatPhoto::ctorChatPhoto)
-	{
-		result.append("ChatPhoto#");
-		result.append("photo_small:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-		result.append("photo_big:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_Message(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Message::ctorMessageEmpty) ||
-		 (ctor == Message::ctorMessage) ||
-		 (ctor == Message::ctorMessageService));
-	
-	if(ctor == Message::ctorMessageEmpty)
-	{
-		result.append("MessageEmpty#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == Message::ctorMessage)
-	{
-		result.append("Message#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
-		result.append(", ");
-		result.append("is_post:" + BIT_FIELD_VALUE(flags, 14));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 8))
-		{
-			TLInt from_id = mtstream.readTLInt();
-			result.append("from_id:" + QString::number(from_id, 16));
-			result.append(", ");
-		}
-		result.append("to_id:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("fwd_from:");
-			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 11))
-		{
-			TLInt via_bot_id = mtstream.readTLInt();
-			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLInt reply_to_msg_id = mtstream.readTLInt();
-			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
-			result.append(", ");
-		}
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 9))
-		{
-			result.append("media:");
-			MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 10))
-		{
-			TLInt views = mtstream.readTLInt();
-			result.append("views:" + QString::number(views, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 15))
-		{
-			TLInt edit_date = mtstream.readTLInt();
-			result.append("edit_date:" + QString::number(edit_date, 16));
-		}
-	}
-	else if(ctor == Message::ctorMessageService)
-	{
-		result.append("MessageService#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
-		result.append(", ");
-		result.append("is_post:" + BIT_FIELD_VALUE(flags, 14));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 8))
-		{
-			TLInt from_id = mtstream.readTLInt();
-			result.append("from_id:" + QString::number(from_id, 16));
-			result.append(", ");
-		}
-		result.append("to_id:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLInt reply_to_msg_id = mtstream.readTLInt();
-			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
-			result.append(", ");
-		}
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		result.append("action:");
-		MTProtoDecompiler::decompile_MessageAction(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessageMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessageMedia::ctorMessageMediaEmpty) ||
-		 (ctor == MessageMedia::ctorMessageMediaPhoto) ||
-		 (ctor == MessageMedia::ctorMessageMediaGeo) ||
-		 (ctor == MessageMedia::ctorMessageMediaContact) ||
-		 (ctor == MessageMedia::ctorMessageMediaUnsupported) ||
-		 (ctor == MessageMedia::ctorMessageMediaDocument) ||
-		 (ctor == MessageMedia::ctorMessageMediaWebPage) ||
-		 (ctor == MessageMedia::ctorMessageMediaVenue) ||
-		 (ctor == MessageMedia::ctorMessageMediaGame));
-	
-	if(ctor == MessageMedia::ctorMessageMediaEmpty)
-		result.append("MessageMediaEmpty");
-	else if(ctor == MessageMedia::ctorMessageMediaPhoto)
-	{
-		result.append("MessageMediaPhoto#");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaGeo)
-	{
-		result.append("MessageMediaGeo#");
-		result.append("geo:");
-		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaContact)
-	{
-		result.append("MessageMediaContact#");
-		TLString phone_number = mtstream.readTLString();
-		result.append("phone_number:" + thethis->printableString(phone_number));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaUnsupported)
-		result.append("MessageMediaUnsupported");
-	else if(ctor == MessageMedia::ctorMessageMediaDocument)
-	{
-		result.append("MessageMediaDocument#");
-		result.append("document:");
-		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaWebPage)
-	{
-		result.append("MessageMediaWebPage#");
-		result.append("webpage:");
-		MTProtoDecompiler::decompile_WebPage(thethis, result, mtstream);
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaVenue)
-	{
-		result.append("MessageMediaVenue#");
-		result.append("geo:");
-		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString address = mtstream.readTLString();
-		result.append("address:" + thethis->printableString(address));
-		result.append(", ");
-		TLString provider = mtstream.readTLString();
-		result.append("provider:" + thethis->printableString(provider));
-		result.append(", ");
-		TLString venue_id = mtstream.readTLString();
-		result.append("venue_id:" + thethis->printableString(venue_id));
-	}
-	else if(ctor == MessageMedia::ctorMessageMediaGame)
-	{
-		result.append("MessageMediaGame#");
-		result.append("game:");
-		MTProtoDecompiler::decompile_Game(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessageAction(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessageAction::ctorMessageActionEmpty) ||
-		 (ctor == MessageAction::ctorMessageActionChatCreate) ||
-		 (ctor == MessageAction::ctorMessageActionChatEditTitle) ||
-		 (ctor == MessageAction::ctorMessageActionChatEditPhoto) ||
-		 (ctor == MessageAction::ctorMessageActionChatDeletePhoto) ||
-		 (ctor == MessageAction::ctorMessageActionChatAddUser) ||
-		 (ctor == MessageAction::ctorMessageActionChatDeleteUser) ||
-		 (ctor == MessageAction::ctorMessageActionChatJoinedByLink) ||
-		 (ctor == MessageAction::ctorMessageActionChannelCreate) ||
-		 (ctor == MessageAction::ctorMessageActionChatMigrateTo) ||
-		 (ctor == MessageAction::ctorMessageActionChannelMigrateFrom) ||
-		 (ctor == MessageAction::ctorMessageActionPinMessage) ||
-		 (ctor == MessageAction::ctorMessageActionHistoryClear) ||
-		 (ctor == MessageAction::ctorMessageActionGameScore));
-	
-	if(ctor == MessageAction::ctorMessageActionEmpty)
-		result.append("MessageActionEmpty");
-	else if(ctor == MessageAction::ctorMessageActionChatCreate)
-	{
-		result.append("MessageActionChatCreate#");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatEditTitle)
-	{
-		result.append("MessageActionChatEditTitle#");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatEditPhoto)
-	{
-		result.append("MessageActionChatEditPhoto#");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatDeletePhoto)
-		result.append("MessageActionChatDeletePhoto");
-	else if(ctor == MessageAction::ctorMessageActionChatAddUser)
-	{
-		result.append("MessageActionChatAddUser#");
-		result.append("users:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatDeleteUser)
-	{
-		result.append("MessageActionChatDeleteUser#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatJoinedByLink)
-	{
-		result.append("MessageActionChatJoinedByLink#");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-	}
-	else if(ctor == MessageAction::ctorMessageActionChannelCreate)
-	{
-		result.append("MessageActionChannelCreate#");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-	}
-	else if(ctor == MessageAction::ctorMessageActionChatMigrateTo)
-	{
-		result.append("MessageActionChatMigrateTo#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-	}
-	else if(ctor == MessageAction::ctorMessageActionChannelMigrateFrom)
-	{
-		result.append("MessageActionChannelMigrateFrom#");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-	}
-	else if(ctor == MessageAction::ctorMessageActionPinMessage)
-		result.append("MessageActionPinMessage");
-	else if(ctor == MessageAction::ctorMessageActionHistoryClear)
-		result.append("MessageActionHistoryClear");
-	else if(ctor == MessageAction::ctorMessageActionGameScore)
-	{
-		result.append("MessageActionGameScore#");
-		TLLong game_id = mtstream.readTLLong();
-		result.append("game_id:" + QString::number(game_id, 16));
-		result.append(", ");
-		TLInt score = mtstream.readTLInt();
-		result.append("score:" + QString::number(score, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_Dialog(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Dialog::ctorDialog));
-	
-	if(ctor == Dialog::ctorDialog)
-	{
-		result.append("Dialog#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		TLInt top_message = mtstream.readTLInt();
-		result.append("top_message:" + QString::number(top_message, 16));
-		result.append(", ");
-		TLInt read_inbox_max_id = mtstream.readTLInt();
-		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
-		result.append(", ");
-		TLInt read_outbox_max_id = mtstream.readTLInt();
-		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
-		result.append(", ");
-		TLInt unread_count = mtstream.readTLInt();
-		result.append("unread_count:" + QString::number(unread_count, 16));
-		result.append(", ");
-		result.append("notify_settings:");
-		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt pts = mtstream.readTLInt();
-			result.append("pts:" + QString::number(pts, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("draft:");
-			MTProtoDecompiler::decompile_DraftMessage(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_Photo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Photo::ctorPhotoEmpty) ||
-		 (ctor == Photo::ctorPhoto));
-	
-	if(ctor == Photo::ctorPhotoEmpty)
-	{
-		result.append("PhotoEmpty#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == Photo::ctorPhoto)
-	{
-		result.append("Photo#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("has_stickers:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		result.append("sizes:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_PhotoSize(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PhotoSize::ctorPhotoSizeEmpty) ||
-		 (ctor == PhotoSize::ctorPhotoSize) ||
-		 (ctor == PhotoSize::ctorPhotoCachedSize));
-	
-	if(ctor == PhotoSize::ctorPhotoSizeEmpty)
-	{
-		result.append("PhotoSizeEmpty#");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-	}
-	else if(ctor == PhotoSize::ctorPhotoSize)
-	{
-		result.append("PhotoSize#");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		result.append("location:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-		TLInt w = mtstream.readTLInt();
-		result.append("w:" + QString::number(w, 16));
-		result.append(", ");
-		TLInt h = mtstream.readTLInt();
-		result.append("h:" + QString::number(h, 16));
-		result.append(", ");
-		TLInt size = mtstream.readTLInt();
-		result.append("size:" + QString::number(size, 16));
-	}
-	else if(ctor == PhotoSize::ctorPhotoCachedSize)
-	{
-		result.append("PhotoCachedSize#");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		result.append("location:");
-		MTProtoDecompiler::decompile_FileLocation(thethis, result, mtstream);
-		TLInt w = mtstream.readTLInt();
-		result.append("w:" + QString::number(w, 16));
-		result.append(", ");
-		TLInt h = mtstream.readTLInt();
-		result.append("h:" + QString::number(h, 16));
-		result.append(", ");
-		TLBytes bytes = mtstream.readTLBytes();
-		result.append("bytes:" + thethis->printableString(bytes));
-	}
-}
-
-void MTProtoDecompiler::decompile_GeoPoint(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == GeoPoint::ctorGeoPointEmpty) ||
-		 (ctor == GeoPoint::ctorGeoPoint));
-	
-	if(ctor == GeoPoint::ctorGeoPointEmpty)
-		result.append("GeoPointEmpty");
-	else if(ctor == GeoPoint::ctorGeoPoint)
-	{
-		result.append("GeoPoint#");
-		TLDouble longitude = mtstream.readTLDouble();
-		result.append("longitude:" + QString::number(longitude));
-		result.append(", ");
-		TLDouble latitude = mtstream.readTLDouble();
-		result.append("latitude:" + QString::number(latitude));
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthCheckedPhone(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthCheckedPhone::ctorAuthCheckedPhone));
-	
-	if(ctor == AuthCheckedPhone::ctorAuthCheckedPhone)
-	{
-		result.append("AuthCheckedPhone#");
-		TLBool is_phone_registered = mtstream.readTLBool();
-		result.append("is_phone_registered:" + QString::number(is_phone_registered, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthSentCode(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthSentCode::ctorAuthSentCode));
-	
-	if(ctor == AuthSentCode::ctorAuthSentCode)
-	{
-		result.append("AuthSentCode#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_phone_registered:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("type:");
-		MTProtoDecompiler::decompile_AuthSentCodeType(thethis, result, mtstream);
-		TLString phone_code_hash = mtstream.readTLString();
-		result.append("phone_code_hash:" + thethis->printableString(phone_code_hash));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("next_type:");
-			MTProtoDecompiler::decompile_AuthCodeType(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLInt timeout = mtstream.readTLInt();
-			result.append("timeout:" + QString::number(timeout, 16));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthAuthorization::ctorAuthAuthorization));
-	
-	if(ctor == AuthAuthorization::ctorAuthAuthorization)
-	{
-		result.append("AuthAuthorization#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt tmp_sessions = mtstream.readTLInt();
-			result.append("tmp_sessions:" + QString::number(tmp_sessions, 16));
-			result.append(", ");
-		}
-		result.append("user:");
-		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthExportedAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthExportedAuthorization::ctorAuthExportedAuthorization));
-	
-	if(ctor == AuthExportedAuthorization::ctorAuthExportedAuthorization)
-	{
-		result.append("AuthExportedAuthorization#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLBytes bytes = mtstream.readTLBytes();
-		result.append("bytes:" + thethis->printableString(bytes));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputNotifyPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputNotifyPeer::ctorInputNotifyPeer) ||
-		 (ctor == InputNotifyPeer::ctorInputNotifyUsers) ||
-		 (ctor == InputNotifyPeer::ctorInputNotifyChats) ||
-		 (ctor == InputNotifyPeer::ctorInputNotifyAll));
-	
-	if(ctor == InputNotifyPeer::ctorInputNotifyPeer)
-	{
-		result.append("InputNotifyPeer#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
-	}
-	else if(ctor == InputNotifyPeer::ctorInputNotifyUsers)
-		result.append("InputNotifyUsers");
-	else if(ctor == InputNotifyPeer::ctorInputNotifyChats)
-		result.append("InputNotifyChats");
-	else if(ctor == InputNotifyPeer::ctorInputNotifyAll)
-		result.append("InputNotifyAll");
-}
-
-void MTProtoDecompiler::decompile_InputPeerNotifyEvents(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsEmpty) ||
-		 (ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsAll));
-	
-	if(ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsEmpty)
-		result.append("InputPeerNotifyEventsEmpty");
-	else if(ctor == InputPeerNotifyEvents::ctorInputPeerNotifyEventsAll)
-		result.append("InputPeerNotifyEventsAll");
-}
-
-void MTProtoDecompiler::decompile_InputPeerNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputPeerNotifySettings::ctorInputPeerNotifySettings));
-	
-	if(ctor == InputPeerNotifySettings::ctorInputPeerNotifySettings)
-	{
-		result.append("InputPeerNotifySettings#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_show_previews:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		TLInt mute_until = mtstream.readTLInt();
-		result.append("mute_until:" + QString::number(mute_until, 16));
-		result.append(", ");
-		TLString sound = mtstream.readTLString();
-		result.append("sound:" + thethis->printableString(sound));
-	}
-}
-
-void MTProtoDecompiler::decompile_PeerNotifyEvents(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PeerNotifyEvents::ctorPeerNotifyEventsEmpty) ||
-		 (ctor == PeerNotifyEvents::ctorPeerNotifyEventsAll));
-	
-	if(ctor == PeerNotifyEvents::ctorPeerNotifyEventsEmpty)
-		result.append("PeerNotifyEventsEmpty");
-	else if(ctor == PeerNotifyEvents::ctorPeerNotifyEventsAll)
-		result.append("PeerNotifyEventsAll");
-}
-
-void MTProtoDecompiler::decompile_PeerNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PeerNotifySettings::ctorPeerNotifySettingsEmpty) ||
-		 (ctor == PeerNotifySettings::ctorPeerNotifySettings));
-	
-	if(ctor == PeerNotifySettings::ctorPeerNotifySettingsEmpty)
-		result.append("PeerNotifySettingsEmpty");
-	else if(ctor == PeerNotifySettings::ctorPeerNotifySettings)
-	{
-		result.append("PeerNotifySettings#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_show_previews:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		TLInt mute_until = mtstream.readTLInt();
-		result.append("mute_until:" + QString::number(mute_until, 16));
-		result.append(", ");
-		TLString sound = mtstream.readTLString();
-		result.append("sound:" + thethis->printableString(sound));
-	}
-}
-
-void MTProtoDecompiler::decompile_PeerSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PeerSettings::ctorPeerSettings));
-	
-	if(ctor == PeerSettings::ctorPeerSettings)
-	{
-		result.append("PeerSettings#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_report_spam:" + BIT_FIELD_VALUE(flags, 0));
-	}
-}
-
-void MTProtoDecompiler::decompile_WallPaper(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == WallPaper::ctorWallPaper) ||
-		 (ctor == WallPaper::ctorWallPaperSolid));
-	
-	if(ctor == WallPaper::ctorWallPaper)
-	{
-		result.append("WallPaper#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		result.append("sizes:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLInt color = mtstream.readTLInt();
-		result.append("color:" + QString::number(color, 16));
-	}
-	else if(ctor == WallPaper::ctorWallPaperSolid)
-	{
-		result.append("WallPaperSolid#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLInt bg_color = mtstream.readTLInt();
-		result.append("bg_color:" + QString::number(bg_color, 16));
-		result.append(", ");
-		TLInt color = mtstream.readTLInt();
-		result.append("color:" + QString::number(color, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ReportReason(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ReportReason::ctorInputReportReasonSpam) ||
-		 (ctor == ReportReason::ctorInputReportReasonViolence) ||
-		 (ctor == ReportReason::ctorInputReportReasonPornography) ||
-		 (ctor == ReportReason::ctorInputReportReasonOther));
-	
-	if(ctor == ReportReason::ctorInputReportReasonSpam)
-		result.append("InputReportReasonSpam");
-	else if(ctor == ReportReason::ctorInputReportReasonViolence)
-		result.append("InputReportReasonViolence");
-	else if(ctor == ReportReason::ctorInputReportReasonPornography)
-		result.append("InputReportReasonPornography");
-	else if(ctor == ReportReason::ctorInputReportReasonOther)
-	{
-		result.append("InputReportReasonOther#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-}
-
-void MTProtoDecompiler::decompile_UserFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UserFull::ctorUserFull));
-	
-	if(ctor == UserFull::ctorUserFull)
-	{
-		result.append("UserFull#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_blocked:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("user:");
-		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString about = mtstream.readTLString();
-			result.append("about:" + thethis->printableString(about));
-			result.append(", ");
-		}
-		result.append("link:");
-		MTProtoDecompiler::decompile_ContactsLink(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("profile_photo:");
-			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		}
-		result.append("notify_settings:");
-		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 3))
-		{
-			result.append("bot_info:");
-			MTProtoDecompiler::decompile_BotInfo(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_Contact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Contact::ctorContact));
-	
-	if(ctor == Contact::ctorContact)
-	{
-		result.append("Contact#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLBool is_mutual = mtstream.readTLBool();
-		result.append("is_mutual:" + QString::number(is_mutual, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ImportedContact(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ImportedContact::ctorImportedContact));
-	
-	if(ctor == ImportedContact::ctorImportedContact)
-	{
-		result.append("ImportedContact#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLLong client_id = mtstream.readTLLong();
-		result.append("client_id:" + QString::number(client_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactBlocked(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactBlocked::ctorContactBlocked));
-	
-	if(ctor == ContactBlocked::ctorContactBlocked)
-	{
-		result.append("ContactBlocked#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactStatus(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactStatus::ctorContactStatus));
-	
-	if(ctor == ContactStatus::ctorContactStatus)
-	{
-		result.append("ContactStatus#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("status:");
-		MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsLink::ctorContactsLink));
-	
-	if(ctor == ContactsLink::ctorContactsLink)
-	{
-		result.append("ContactsLink#");
-		result.append("my_link:");
-		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
-		result.append("foreign_link:");
-		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
-		result.append("user:");
-		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsContacts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsContacts::ctorContactsContactsNotModified) ||
-		 (ctor == ContactsContacts::ctorContactsContacts));
-	
-	if(ctor == ContactsContacts::ctorContactsContactsNotModified)
-		result.append("ContactsContactsNotModified");
-	else if(ctor == ContactsContacts::ctorContactsContacts)
-	{
-		result.append("ContactsContacts#");
-		result.append("contacts:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsImportedContacts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsImportedContacts::ctorContactsImportedContacts));
-	
-	if(ctor == ContactsImportedContacts::ctorContactsImportedContacts)
-	{
-		result.append("ContactsImportedContacts#");
-		result.append("imported:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("retry_contacts:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsBlocked(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsBlocked::ctorContactsBlocked) ||
-		 (ctor == ContactsBlocked::ctorContactsBlockedSlice));
-	
-	if(ctor == ContactsBlocked::ctorContactsBlocked)
-	{
-		result.append("ContactsBlocked#");
-		result.append("blocked:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == ContactsBlocked::ctorContactsBlockedSlice)
-	{
-		result.append("ContactsBlockedSlice#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("blocked:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesDialogs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesDialogs::ctorMessagesDialogs) ||
-		 (ctor == MessagesDialogs::ctorMessagesDialogsSlice));
-	
-	if(ctor == MessagesDialogs::ctorMessagesDialogs)
-	{
-		result.append("MessagesDialogs#");
-		result.append("dialogs:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == MessagesDialogs::ctorMessagesDialogsSlice)
-	{
-		result.append("MessagesDialogsSlice#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("dialogs:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesMessages(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesMessages::ctorMessagesMessages) ||
-		 (ctor == MessagesMessages::ctorMessagesMessagesSlice) ||
-		 (ctor == MessagesMessages::ctorMessagesChannelMessages));
-	
-	if(ctor == MessagesMessages::ctorMessagesMessages)
-	{
-		result.append("MessagesMessages#");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == MessagesMessages::ctorMessagesMessagesSlice)
-	{
-		result.append("MessagesMessagesSlice#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == MessagesMessages::ctorMessagesChannelMessages)
-	{
-		result.append("MessagesChannelMessages#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesChats(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesChats::ctorMessagesChats));
-	
-	if(ctor == MessagesChats::ctorMessagesChats)
-	{
-		result.append("MessagesChats#");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesChatFull(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesChatFull::ctorMessagesChatFull));
-	
-	if(ctor == MessagesChatFull::ctorMessagesChatFull)
-	{
-		result.append("MessagesChatFull#");
-		result.append("full_chat:");
-		MTProtoDecompiler::decompile_ChatFull(thethis, result, mtstream);
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesAffectedHistory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesAffectedHistory::ctorMessagesAffectedHistory));
-	
-	if(ctor == MessagesAffectedHistory::ctorMessagesAffectedHistory)
-	{
-		result.append("MessagesAffectedHistory#");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-		result.append(", ");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesFilter::ctorInputMessagesFilterEmpty) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotos) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterVideo) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideo) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterDocument) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterUrl) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterGif) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterVoice) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterMusic) ||
-		 (ctor == MessagesFilter::ctorInputMessagesFilterChatPhotos));
-	
-	if(ctor == MessagesFilter::ctorInputMessagesFilterEmpty)
-		result.append("InputMessagesFilterEmpty");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotos)
-		result.append("InputMessagesFilterPhotos");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterVideo)
-		result.append("InputMessagesFilterVideo");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideo)
-		result.append("InputMessagesFilterPhotoVideo");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments)
-		result.append("InputMessagesFilterPhotoVideoDocuments");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterDocument)
-		result.append("InputMessagesFilterDocument");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterUrl)
-		result.append("InputMessagesFilterUrl");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterGif)
-		result.append("InputMessagesFilterGif");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterVoice)
-		result.append("InputMessagesFilterVoice");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterMusic)
-		result.append("InputMessagesFilterMusic");
-	else if(ctor == MessagesFilter::ctorInputMessagesFilterChatPhotos)
-		result.append("InputMessagesFilterChatPhotos");
-}
-
-void MTProtoDecompiler::decompile_Update(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Update::ctorUpdateNewMessage) ||
-		 (ctor == Update::ctorUpdateMessageID) ||
-		 (ctor == Update::ctorUpdateDeleteMessages) ||
-		 (ctor == Update::ctorUpdateUserTyping) ||
-		 (ctor == Update::ctorUpdateChatUserTyping) ||
-		 (ctor == Update::ctorUpdateChatParticipants) ||
-		 (ctor == Update::ctorUpdateUserStatus) ||
-		 (ctor == Update::ctorUpdateUserName) ||
-		 (ctor == Update::ctorUpdateUserPhoto) ||
-		 (ctor == Update::ctorUpdateContactRegistered) ||
-		 (ctor == Update::ctorUpdateContactLink) ||
-		 (ctor == Update::ctorUpdateNewAuthorization) ||
-		 (ctor == Update::ctorUpdateNewEncryptedMessage) ||
-		 (ctor == Update::ctorUpdateEncryptedChatTyping) ||
-		 (ctor == Update::ctorUpdateEncryption) ||
-		 (ctor == Update::ctorUpdateEncryptedMessagesRead) ||
-		 (ctor == Update::ctorUpdateChatParticipantAdd) ||
-		 (ctor == Update::ctorUpdateChatParticipantDelete) ||
-		 (ctor == Update::ctorUpdateDcOptions) ||
-		 (ctor == Update::ctorUpdateUserBlocked) ||
-		 (ctor == Update::ctorUpdateNotifySettings) ||
-		 (ctor == Update::ctorUpdateServiceNotification) ||
-		 (ctor == Update::ctorUpdatePrivacy) ||
-		 (ctor == Update::ctorUpdateUserPhone) ||
-		 (ctor == Update::ctorUpdateReadHistoryInbox) ||
-		 (ctor == Update::ctorUpdateReadHistoryOutbox) ||
-		 (ctor == Update::ctorUpdateWebPage) ||
-		 (ctor == Update::ctorUpdateReadMessagesContents) ||
-		 (ctor == Update::ctorUpdateChannelTooLong) ||
-		 (ctor == Update::ctorUpdateChannel) ||
-		 (ctor == Update::ctorUpdateNewChannelMessage) ||
-		 (ctor == Update::ctorUpdateReadChannelInbox) ||
-		 (ctor == Update::ctorUpdateDeleteChannelMessages) ||
-		 (ctor == Update::ctorUpdateChannelMessageViews) ||
-		 (ctor == Update::ctorUpdateChatAdmins) ||
-		 (ctor == Update::ctorUpdateChatParticipantAdmin) ||
-		 (ctor == Update::ctorUpdateNewStickerSet) ||
-		 (ctor == Update::ctorUpdateStickerSetsOrder) ||
-		 (ctor == Update::ctorUpdateStickerSets) ||
-		 (ctor == Update::ctorUpdateSavedGifs) ||
-		 (ctor == Update::ctorUpdateBotInlineQuery) ||
-		 (ctor == Update::ctorUpdateBotInlineSend) ||
-		 (ctor == Update::ctorUpdateEditChannelMessage) ||
-		 (ctor == Update::ctorUpdateChannelPinnedMessage) ||
-		 (ctor == Update::ctorUpdateBotCallbackQuery) ||
-		 (ctor == Update::ctorUpdateEditMessage) ||
-		 (ctor == Update::ctorUpdateInlineBotCallbackQuery) ||
-		 (ctor == Update::ctorUpdateReadChannelOutbox) ||
-		 (ctor == Update::ctorUpdateDraftMessage) ||
-		 (ctor == Update::ctorUpdateReadFeaturedStickers) ||
-		 (ctor == Update::ctorUpdateRecentStickers) ||
-		 (ctor == Update::ctorUpdateConfig) ||
-		 (ctor == Update::ctorUpdatePtsChanged));
-	
-	if(ctor == Update::ctorUpdateNewMessage)
-	{
-		result.append("UpdateNewMessage#");
-		result.append("message_updatenewmessage:");
-		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateMessageID)
-	{
-		result.append("UpdateMessageID#");
-		TLInt id_updatemessageid = mtstream.readTLInt();
-		result.append("id_updatemessageid:" + QString::number(id_updatemessageid, 16));
-		result.append(", ");
-		TLLong random_id = mtstream.readTLLong();
-		result.append("random_id:" + QString::number(random_id, 16));
-	}
-	else if(ctor == Update::ctorUpdateDeleteMessages)
-	{
-		result.append("UpdateDeleteMessages#");
-		result.append("messages:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateUserTyping)
-	{
-		result.append("UpdateUserTyping#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("action:");
-		MTProtoDecompiler::decompile_SendMessageAction(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateChatUserTyping)
-	{
-		result.append("UpdateChatUserTyping#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("action:");
-		MTProtoDecompiler::decompile_SendMessageAction(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateChatParticipants)
-	{
-		result.append("UpdateChatParticipants#");
-		result.append("participants:");
-		MTProtoDecompiler::decompile_ChatParticipants(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateUserStatus)
-	{
-		result.append("UpdateUserStatus#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("status:");
-		MTProtoDecompiler::decompile_UserStatus(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateUserName)
-	{
-		result.append("UpdateUserName#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-		result.append(", ");
-		TLString username = mtstream.readTLString();
-		result.append("username:" + thethis->printableString(username));
-	}
-	else if(ctor == Update::ctorUpdateUserPhoto)
-	{
-		result.append("UpdateUserPhoto#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_UserProfilePhoto(thethis, result, mtstream);
-		TLBool is_previous = mtstream.readTLBool();
-		result.append("is_previous:" + QString::number(is_previous, 16));
-	}
-	else if(ctor == Update::ctorUpdateContactRegistered)
-	{
-		result.append("UpdateContactRegistered#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == Update::ctorUpdateContactLink)
-	{
-		result.append("UpdateContactLink#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("my_link:");
-		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
-		result.append("foreign_link:");
-		MTProtoDecompiler::decompile_ContactLink(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateNewAuthorization)
-	{
-		result.append("UpdateNewAuthorization#");
-		TLLong auth_key_id = mtstream.readTLLong();
-		result.append("auth_key_id:" + QString::number(auth_key_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLString device = mtstream.readTLString();
-		result.append("device:" + thethis->printableString(device));
-		result.append(", ");
-		TLString location = mtstream.readTLString();
-		result.append("location:" + thethis->printableString(location));
-	}
-	else if(ctor == Update::ctorUpdateNewEncryptedMessage)
-	{
-		result.append("UpdateNewEncryptedMessage#");
-		result.append("message_updatenewencryptedmessage:");
-		MTProtoDecompiler::decompile_EncryptedMessage(thethis, result, mtstream);
-		TLInt qts = mtstream.readTLInt();
-		result.append("qts:" + QString::number(qts, 16));
-	}
-	else if(ctor == Update::ctorUpdateEncryptedChatTyping)
-	{
-		result.append("UpdateEncryptedChatTyping#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-	}
-	else if(ctor == Update::ctorUpdateEncryption)
-	{
-		result.append("UpdateEncryption#");
-		result.append("chat:");
-		MTProtoDecompiler::decompile_EncryptedChat(thethis, result, mtstream);
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == Update::ctorUpdateEncryptedMessagesRead)
-	{
-		result.append("UpdateEncryptedMessagesRead#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt max_date = mtstream.readTLInt();
-		result.append("max_date:" + QString::number(max_date, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == Update::ctorUpdateChatParticipantAdd)
-	{
-		result.append("UpdateChatParticipantAdd#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-	else if(ctor == Update::ctorUpdateChatParticipantDelete)
-	{
-		result.append("UpdateChatParticipantDelete#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-	else if(ctor == Update::ctorUpdateDcOptions)
-	{
-		result.append("UpdateDcOptions#");
-		result.append("dc_options:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == Update::ctorUpdateUserBlocked)
-	{
-		result.append("UpdateUserBlocked#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLBool is_blocked = mtstream.readTLBool();
-		result.append("is_blocked:" + QString::number(is_blocked, 16));
-	}
-	else if(ctor == Update::ctorUpdateNotifySettings)
-	{
-		result.append("UpdateNotifySettings#");
-		result.append("peer_updatenotifysettings:");
-		MTProtoDecompiler::decompile_NotifyPeer(thethis, result, mtstream);
-		result.append("notify_settings:");
-		MTProtoDecompiler::decompile_PeerNotifySettings(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateServiceNotification)
-	{
-		result.append("UpdateServiceNotification#");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		TLString message_updateservicenotification = mtstream.readTLString();
-		result.append("message_updateservicenotification:" + thethis->printableString(message_updateservicenotification));
-		result.append(", ");
-		result.append("media:");
-		MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
-		TLBool is_popup = mtstream.readTLBool();
-		result.append("is_popup:" + QString::number(is_popup, 16));
-	}
-	else if(ctor == Update::ctorUpdatePrivacy)
-	{
-		result.append("UpdatePrivacy#");
-		result.append("key:");
-		MTProtoDecompiler::decompile_PrivacyKey(thethis, result, mtstream);
-		result.append("rules:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == Update::ctorUpdateUserPhone)
-	{
-		result.append("UpdateUserPhone#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString phone = mtstream.readTLString();
-		result.append("phone:" + thethis->printableString(phone));
-	}
-	else if(ctor == Update::ctorUpdateReadHistoryInbox)
-	{
-		result.append("UpdateReadHistoryInbox#");
-		result.append("peer_updatereadhistoryinbox:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		TLInt max_id = mtstream.readTLInt();
-		result.append("max_id:" + QString::number(max_id, 16));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateReadHistoryOutbox)
-	{
-		result.append("UpdateReadHistoryOutbox#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		TLInt max_id = mtstream.readTLInt();
-		result.append("max_id:" + QString::number(max_id, 16));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateWebPage)
-	{
-		result.append("UpdateWebPage#");
-		result.append("webpage:");
-		MTProtoDecompiler::decompile_WebPage(thethis, result, mtstream);
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateReadMessagesContents)
-	{
-		result.append("UpdateReadMessagesContents#");
-		result.append("messages:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateChannelTooLong)
-	{
-		result.append("UpdateChannelTooLong#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt pts = mtstream.readTLInt();
-			result.append("pts:" + QString::number(pts, 16));
-		}
-	}
-	else if(ctor == Update::ctorUpdateChannel)
-	{
-		result.append("UpdateChannel#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-	}
-	else if(ctor == Update::ctorUpdateNewChannelMessage)
-	{
-		result.append("UpdateNewChannelMessage#");
-		result.append("message_updatenewchannelmessage:");
-		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateReadChannelInbox)
-	{
-		result.append("UpdateReadChannelInbox#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLInt max_id = mtstream.readTLInt();
-		result.append("max_id:" + QString::number(max_id, 16));
-	}
-	else if(ctor == Update::ctorUpdateDeleteChannelMessages)
-	{
-		result.append("UpdateDeleteChannelMessages#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateChannelMessageViews)
-	{
-		result.append("UpdateChannelMessageViews#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt views = mtstream.readTLInt();
-		result.append("views:" + QString::number(views, 16));
-	}
-	else if(ctor == Update::ctorUpdateChatAdmins)
-	{
-		result.append("UpdateChatAdmins#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLBool is_enabled = mtstream.readTLBool();
-		result.append("is_enabled:" + QString::number(is_enabled, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-	else if(ctor == Update::ctorUpdateChatParticipantAdmin)
-	{
-		result.append("UpdateChatParticipantAdmin#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLBool is_admin = mtstream.readTLBool();
-		result.append("is_admin:" + QString::number(is_admin, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-	}
-	else if(ctor == Update::ctorUpdateNewStickerSet)
-	{
-		result.append("UpdateNewStickerSet#");
-		result.append("stickerset:");
-		MTProtoDecompiler::decompile_MessagesStickerSet(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateStickerSetsOrder)
-	{
-		result.append("UpdateStickerSetsOrder#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_masks:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("order:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-	}
-	else if(ctor == Update::ctorUpdateStickerSets)
-		result.append("UpdateStickerSets");
-	else if(ctor == Update::ctorUpdateSavedGifs)
-		result.append("UpdateSavedGifs");
-	else if(ctor == Update::ctorUpdateBotInlineQuery)
-	{
-		result.append("UpdateBotInlineQuery#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLLong query_id = mtstream.readTLLong();
-		result.append("query_id:" + QString::number(query_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString query = mtstream.readTLString();
-		result.append("query:" + thethis->printableString(query));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("geo:");
-			MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-		}
-		TLString offset = mtstream.readTLString();
-		result.append("offset:" + thethis->printableString(offset));
-	}
-	else if(ctor == Update::ctorUpdateBotInlineSend)
-	{
-		result.append("UpdateBotInlineSend#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString query = mtstream.readTLString();
-		result.append("query:" + thethis->printableString(query));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("geo:");
-			MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-		}
-		TLString id_updatebotinlinesend = mtstream.readTLString();
-		result.append("id_updatebotinlinesend:" + thethis->printableString(id_updatebotinlinesend));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("msg_id_updatebotinlinesend:");
-			MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == Update::ctorUpdateEditChannelMessage)
-	{
-		result.append("UpdateEditChannelMessage#");
-		result.append("message:");
-		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateChannelPinnedMessage)
-	{
-		result.append("UpdateChannelPinnedMessage#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLInt id_updatechannelpinnedmessage = mtstream.readTLInt();
-		result.append("id_updatechannelpinnedmessage:" + QString::number(id_updatechannelpinnedmessage, 16));
-	}
-	else if(ctor == Update::ctorUpdateBotCallbackQuery)
-	{
-		result.append("UpdateBotCallbackQuery#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLLong query_id = mtstream.readTLLong();
-		result.append("query_id:" + QString::number(query_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		TLInt msg_id_updatebotcallbackquery = mtstream.readTLInt();
-		result.append("msg_id_updatebotcallbackquery:" + QString::number(msg_id_updatebotcallbackquery, 16));
-		result.append(", ");
-		TLLong chat_instance = mtstream.readTLLong();
-		result.append("chat_instance:" + QString::number(chat_instance, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLBytes data = mtstream.readTLBytes();
-			result.append("data:" + thethis->printableString(data));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString game_short_name = mtstream.readTLString();
-			result.append("game_short_name:" + thethis->printableString(game_short_name));
-		}
-	}
-	else if(ctor == Update::ctorUpdateEditMessage)
-	{
-		result.append("UpdateEditMessage#");
-		result.append("message:");
-		MTProtoDecompiler::decompile_Message(thethis, result, mtstream);
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-	else if(ctor == Update::ctorUpdateInlineBotCallbackQuery)
-	{
-		result.append("UpdateInlineBotCallbackQuery#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLLong query_id = mtstream.readTLLong();
-		result.append("query_id:" + QString::number(query_id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		result.append("msg_id_updateinlinebotcallbackquery:");
-		MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
-		TLLong chat_instance = mtstream.readTLLong();
-		result.append("chat_instance:" + QString::number(chat_instance, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLBytes data = mtstream.readTLBytes();
-			result.append("data:" + thethis->printableString(data));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString game_short_name = mtstream.readTLString();
-			result.append("game_short_name:" + thethis->printableString(game_short_name));
-		}
-	}
-	else if(ctor == Update::ctorUpdateReadChannelOutbox)
-	{
-		result.append("UpdateReadChannelOutbox#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLInt max_id = mtstream.readTLInt();
-		result.append("max_id:" + QString::number(max_id, 16));
-	}
-	else if(ctor == Update::ctorUpdateDraftMessage)
-	{
-		result.append("UpdateDraftMessage#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		result.append("draft:");
-		MTProtoDecompiler::decompile_DraftMessage(thethis, result, mtstream);
-	}
-	else if(ctor == Update::ctorUpdateReadFeaturedStickers)
-		result.append("UpdateReadFeaturedStickers");
-	else if(ctor == Update::ctorUpdateRecentStickers)
-		result.append("UpdateRecentStickers");
-	else if(ctor == Update::ctorUpdateConfig)
-		result.append("UpdateConfig");
-	else if(ctor == Update::ctorUpdatePtsChanged)
-		result.append("UpdatePtsChanged");
-}
-
-void MTProtoDecompiler::decompile_UpdatesState(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UpdatesState::ctorUpdatesState));
-	
-	if(ctor == UpdatesState::ctorUpdatesState)
-	{
-		result.append("UpdatesState#");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
 		result.append(", ");
-		TLInt qts = mtstream.readTLInt();
-		result.append("qts:" + QString::number(qts, 16));
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLInt seq = mtstream.readTLInt();
-		result.append("seq:" + QString::number(seq, 16));
-		result.append(", ");
-		TLInt unread_count = mtstream.readTLInt();
-		result.append("unread_count:" + QString::number(unread_count, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_UpdatesDifference(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UpdatesDifference::ctorUpdatesDifferenceEmpty) ||
-		 (ctor == UpdatesDifference::ctorUpdatesDifference) ||
-		 (ctor == UpdatesDifference::ctorUpdatesDifferenceSlice));
-	
-	if(ctor == UpdatesDifference::ctorUpdatesDifferenceEmpty)
-	{
-		result.append("UpdatesDifferenceEmpty#");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt seq = mtstream.readTLInt();
-		result.append("seq:" + QString::number(seq, 16));
-	}
-	else if(ctor == UpdatesDifference::ctorUpdatesDifference)
-	{
-		result.append("UpdatesDifference#");
-		result.append("new_messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("new_encrypted_messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("other_updates:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("state:");
-		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
-	}
-	else if(ctor == UpdatesDifference::ctorUpdatesDifferenceSlice)
-	{
-		result.append("UpdatesDifferenceSlice#");
-		result.append("new_messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("new_encrypted_messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("other_updates:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("intermediate_state:");
-		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_Updates(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Updates::ctorUpdatesTooLong) ||
-		 (ctor == Updates::ctorUpdateShortMessage) ||
-		 (ctor == Updates::ctorUpdateShortChatMessage) ||
-		 (ctor == Updates::ctorUpdateShort) ||
-		 (ctor == Updates::ctorUpdatesCombined) ||
-		 (ctor == Updates::ctorUpdates) ||
-		 (ctor == Updates::ctorUpdateShortSentMessage));
-	
-	if(ctor == Updates::ctorUpdatesTooLong)
-		result.append("UpdatesTooLong");
-	else if(ctor == Updates::ctorUpdateShortMessage)
-	{
-		result.append("UpdateShortMessage#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("fwd_from:");
-			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 11))
-		{
-			TLInt via_bot_id = mtstream.readTLInt();
-			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLInt reply_to_msg_id = mtstream.readTLInt();
-			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-	else if(ctor == Updates::ctorUpdateShortChatMessage)
-	{
-		result.append("UpdateShortChatMessage#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_mentioned:" + BIT_FIELD_VALUE(flags, 4));
-		result.append(", ");
-		result.append("is_media_unread:" + BIT_FIELD_VALUE(flags, 5));
-		result.append(", ");
-		result.append("is_silent:" + BIT_FIELD_VALUE(flags, 13));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt from_id = mtstream.readTLInt();
-		result.append("from_id:" + QString::number(from_id, 16));
-		result.append(", ");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("fwd_from:");
-			MTProtoDecompiler::decompile_MessageFwdHeader(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 11))
-		{
-			TLInt via_bot_id = mtstream.readTLInt();
-			result.append("via_bot_id:" + QString::number(via_bot_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLInt reply_to_msg_id = mtstream.readTLInt();
-			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-	else if(ctor == Updates::ctorUpdateShort)
-	{
-		result.append("UpdateShort#");
-		result.append("update:");
-		MTProtoDecompiler::decompile_Update(thethis, result, mtstream);
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == Updates::ctorUpdatesCombined)
-	{
-		result.append("UpdatesCombined#");
-		result.append("updates:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt seq_start = mtstream.readTLInt();
-		result.append("seq_start:" + QString::number(seq_start, 16));
-		result.append(", ");
-		TLInt seq = mtstream.readTLInt();
-		result.append("seq:" + QString::number(seq, 16));
-	}
-	else if(ctor == Updates::ctorUpdates)
-	{
-		result.append("Updates#");
-		result.append("updates:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt seq = mtstream.readTLInt();
-		result.append("seq:" + QString::number(seq, 16));
-	}
-	else if(ctor == Updates::ctorUpdateShortSentMessage)
-	{
-		result.append("UpdateShortSentMessage#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_out:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 9))
-		{
-			result.append("media:");
-			MTProtoDecompiler::decompile_MessageMedia(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_PhotosPhotos(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PhotosPhotos::ctorPhotosPhotos) ||
-		 (ctor == PhotosPhotos::ctorPhotosPhotosSlice));
-	
-	if(ctor == PhotosPhotos::ctorPhotosPhotos)
-	{
-		result.append("PhotosPhotos#");
-		result.append("photos:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == PhotosPhotos::ctorPhotosPhotosSlice)
-	{
-		result.append("PhotosPhotosSlice#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("photos:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_PhotosPhoto(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PhotosPhoto::ctorPhotosPhoto));
-	
-	if(ctor == PhotosPhoto::ctorPhotosPhoto)
-	{
-		result.append("PhotosPhoto#");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_UploadFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UploadFile::ctorUploadFile));
-	
-	if(ctor == UploadFile::ctorUploadFile)
-	{
-		result.append("UploadFile#");
-		result.append("type:");
-		MTProtoDecompiler::decompile_StorageFileType(thethis, result, mtstream);
-		TLInt mtime = mtstream.readTLInt();
-		result.append("mtime:" + QString::number(mtime, 16));
-		result.append(", ");
-		TLBytes bytes = mtstream.readTLBytes();
-		result.append("bytes:" + thethis->printableString(bytes));
-	}
-}
-
-void MTProtoDecompiler::decompile_DcOption(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == DcOption::ctorDcOption));
-	
-	if(ctor == DcOption::ctorDcOption)
-	{
-		result.append("DcOption#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_ipv6:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_media_only:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_tcpo_only:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString ip_address = mtstream.readTLString();
-		result.append("ip_address:" + thethis->printableString(ip_address));
-		result.append(", ");
-		TLInt port = mtstream.readTLInt();
-		result.append("port:" + QString::number(port, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_Config(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Config::ctorConfig));
-	
-	if(ctor == Config::ctorConfig)
-	{
-		result.append("Config#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt expires = mtstream.readTLInt();
-		result.append("expires:" + QString::number(expires, 16));
-		result.append(", ");
-		TLBool is_test_mode = mtstream.readTLBool();
-		result.append("is_test_mode:" + QString::number(is_test_mode, 16));
-		result.append(", ");
-		TLInt this_dc = mtstream.readTLInt();
-		result.append("this_dc:" + QString::number(this_dc, 16));
-		result.append(", ");
-		result.append("dc_options:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		TLInt chat_size_max = mtstream.readTLInt();
-		result.append("chat_size_max:" + QString::number(chat_size_max, 16));
-		result.append(", ");
-		TLInt megagroup_size_max = mtstream.readTLInt();
-		result.append("megagroup_size_max:" + QString::number(megagroup_size_max, 16));
-		result.append(", ");
-		TLInt forwarded_count_max = mtstream.readTLInt();
-		result.append("forwarded_count_max:" + QString::number(forwarded_count_max, 16));
-		result.append(", ");
-		TLInt online_update_period_ms = mtstream.readTLInt();
-		result.append("online_update_period_ms:" + QString::number(online_update_period_ms, 16));
-		result.append(", ");
-		TLInt offline_blur_timeout_ms = mtstream.readTLInt();
-		result.append("offline_blur_timeout_ms:" + QString::number(offline_blur_timeout_ms, 16));
-		result.append(", ");
-		TLInt offline_idle_timeout_ms = mtstream.readTLInt();
-		result.append("offline_idle_timeout_ms:" + QString::number(offline_idle_timeout_ms, 16));
-		result.append(", ");
-		TLInt online_cloud_timeout_ms = mtstream.readTLInt();
-		result.append("online_cloud_timeout_ms:" + QString::number(online_cloud_timeout_ms, 16));
-		result.append(", ");
-		TLInt notify_cloud_delay_ms = mtstream.readTLInt();
-		result.append("notify_cloud_delay_ms:" + QString::number(notify_cloud_delay_ms, 16));
-		result.append(", ");
-		TLInt notify_default_delay_ms = mtstream.readTLInt();
-		result.append("notify_default_delay_ms:" + QString::number(notify_default_delay_ms, 16));
-		result.append(", ");
-		TLInt chat_big_size = mtstream.readTLInt();
-		result.append("chat_big_size:" + QString::number(chat_big_size, 16));
-		result.append(", ");
-		TLInt push_chat_period_ms = mtstream.readTLInt();
-		result.append("push_chat_period_ms:" + QString::number(push_chat_period_ms, 16));
-		result.append(", ");
-		TLInt push_chat_limit = mtstream.readTLInt();
-		result.append("push_chat_limit:" + QString::number(push_chat_limit, 16));
-		result.append(", ");
-		TLInt saved_gifs_limit = mtstream.readTLInt();
-		result.append("saved_gifs_limit:" + QString::number(saved_gifs_limit, 16));
-		result.append(", ");
-		TLInt edit_time_limit = mtstream.readTLInt();
-		result.append("edit_time_limit:" + QString::number(edit_time_limit, 16));
-		result.append(", ");
-		TLInt rating_e_decay = mtstream.readTLInt();
-		result.append("rating_e_decay:" + QString::number(rating_e_decay, 16));
-		result.append(", ");
-		TLInt stickers_recent_limit = mtstream.readTLInt();
-		result.append("stickers_recent_limit:" + QString::number(stickers_recent_limit, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt tmp_sessions = mtstream.readTLInt();
-			result.append("tmp_sessions:" + QString::number(tmp_sessions, 16));
-			result.append(", ");
-		}
-		result.append("disabled_features:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_NearestDc(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == NearestDc::ctorNearestDc));
-	
-	if(ctor == NearestDc::ctorNearestDc)
-	{
-		result.append("NearestDc#");
-		TLString country = mtstream.readTLString();
-		result.append("country:" + thethis->printableString(country));
-		result.append(", ");
-		TLInt this_dc = mtstream.readTLInt();
-		result.append("this_dc:" + QString::number(this_dc, 16));
-		result.append(", ");
-		TLInt nearest_dc = mtstream.readTLInt();
-		result.append("nearest_dc:" + QString::number(nearest_dc, 16));
+		TLInt256 new_nonce = mtstream.readTLInt256();
+		result.append("new_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce), sizeof(TLInt256)).toHex()));
 	}
 }
 
-void MTProtoDecompiler::decompile_HelpAppUpdate(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_ServerDHParams(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HelpAppUpdate::ctorHelpAppUpdate) ||
-		 (ctor == HelpAppUpdate::ctorHelpNoAppUpdate));
 	
-	if(ctor == HelpAppUpdate::ctorHelpAppUpdate)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("HelpAppUpdate#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLBool is_critical = mtstream.readTLBool();
-		result.append("is_critical:" + QString::number(is_critical, 16));
-		result.append(", ");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
+		result.append("Null");
+		return;
 	}
-	else if(ctor == HelpAppUpdate::ctorHelpNoAppUpdate)
-		result.append("HelpNoAppUpdate");
-}
-
-void MTProtoDecompiler::decompile_HelpInviteText(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == HelpInviteText::ctorHelpInviteText));
 	
-	if(ctor == HelpInviteText::ctorHelpInviteText)
-	{
-		result.append("HelpInviteText#");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-	}
-}
-
-void MTProtoDecompiler::decompile_EncryptedChat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == EncryptedChat::ctorEncryptedChatEmpty) ||
-		 (ctor == EncryptedChat::ctorEncryptedChatWaiting) ||
-		 (ctor == EncryptedChat::ctorEncryptedChatRequested) ||
-		 (ctor == EncryptedChat::ctorEncryptedChat) ||
-		 (ctor == EncryptedChat::ctorEncryptedChatDiscarded));
+	Q_ASSERT((ctor == ServerDHParams::ctorServerDHParamsFail) ||
+		 (ctor == ServerDHParams::ctorServerDHParamsOk));
 	
-	if(ctor == EncryptedChat::ctorEncryptedChatEmpty)
-	{
-		result.append("EncryptedChatEmpty#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == EncryptedChat::ctorEncryptedChatWaiting)
-	{
-		result.append("EncryptedChatWaiting#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt admin_id = mtstream.readTLInt();
-		result.append("admin_id:" + QString::number(admin_id, 16));
-		result.append(", ");
-		TLInt participant_id = mtstream.readTLInt();
-		result.append("participant_id:" + QString::number(participant_id, 16));
-	}
-	else if(ctor == EncryptedChat::ctorEncryptedChatRequested)
+	if(ctor == ServerDHParams::ctorServerDHParamsFail)
 	{
-		result.append("EncryptedChatRequested#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
+		result.append("ServerDHParamsFail#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt admin_id = mtstream.readTLInt();
-		result.append("admin_id:" + QString::number(admin_id, 16));
-		result.append(", ");
-		TLInt participant_id = mtstream.readTLInt();
-		result.append("participant_id:" + QString::number(participant_id, 16));
-		result.append(", ");
-		TLBytes g_a = mtstream.readTLBytes();
-		result.append("g_a:" + thethis->printableString(g_a));
+		TLInt128 new_nonce_hash = mtstream.readTLInt128();
+		result.append("new_nonce_hash:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash), sizeof(TLInt128)).toHex()));
 	}
-	else if(ctor == EncryptedChat::ctorEncryptedChat)
+	else if(ctor == ServerDHParams::ctorServerDHParamsOk)
 	{
-		result.append("EncryptedChat#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLInt admin_id = mtstream.readTLInt();
-		result.append("admin_id:" + QString::number(admin_id, 16));
-		result.append(", ");
-		TLInt participant_id = mtstream.readTLInt();
-		result.append("participant_id:" + QString::number(participant_id, 16));
-		result.append(", ");
-		TLBytes g_a_or_b = mtstream.readTLBytes();
-		result.append("g_a_or_b:" + thethis->printableString(g_a_or_b));
+		result.append("ServerDHParamsOk#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLLong key_fingerprint = mtstream.readTLLong();
-		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
-	}
-	else if(ctor == EncryptedChat::ctorEncryptedChatDiscarded)
-	{
-		result.append("EncryptedChatDiscarded#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputEncryptedChat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputEncryptedChat::ctorInputEncryptedChat));
-	
-	if(ctor == InputEncryptedChat::ctorInputEncryptedChat)
-	{
-		result.append("InputEncryptedChat#");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
+		TLString encrypted_answer = mtstream.readTLString();
+		result.append("encrypted_answer:" + thethis->printableString(encrypted_answer));
 	}
 }
 
-void MTProtoDecompiler::decompile_EncryptedFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_ServerDHInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == EncryptedFile::ctorEncryptedFileEmpty) ||
-		 (ctor == EncryptedFile::ctorEncryptedFile));
 	
-	if(ctor == EncryptedFile::ctorEncryptedFileEmpty)
-		result.append("EncryptedFileEmpty");
-	else if(ctor == EncryptedFile::ctorEncryptedFile)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("EncryptedFile#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt size = mtstream.readTLInt();
-		result.append("size:" + QString::number(size, 16));
-		result.append(", ");
-		TLInt dc_id = mtstream.readTLInt();
-		result.append("dc_id:" + QString::number(dc_id, 16));
-		result.append(", ");
-		TLInt key_fingerprint = mtstream.readTLInt();
-		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
+		result.append("Null");
+		return;
 	}
-}
-
-void MTProtoDecompiler::decompile_InputEncryptedFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputEncryptedFile::ctorInputEncryptedFileEmpty) ||
-		 (ctor == InputEncryptedFile::ctorInputEncryptedFileUploaded) ||
-		 (ctor == InputEncryptedFile::ctorInputEncryptedFile) ||
-		 (ctor == InputEncryptedFile::ctorInputEncryptedFileBigUploaded));
 	
-	if(ctor == InputEncryptedFile::ctorInputEncryptedFileEmpty)
-		result.append("InputEncryptedFileEmpty");
-	else if(ctor == InputEncryptedFile::ctorInputEncryptedFileUploaded)
-	{
-		result.append("InputEncryptedFileUploaded#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt parts = mtstream.readTLInt();
-		result.append("parts:" + QString::number(parts, 16));
-		result.append(", ");
-		TLString md5_checksum = mtstream.readTLString();
-		result.append("md5_checksum:" + thethis->printableString(md5_checksum));
-		result.append(", ");
-		TLInt key_fingerprint = mtstream.readTLInt();
-		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
-	}
-	else if(ctor == InputEncryptedFile::ctorInputEncryptedFile)
-	{
-		result.append("InputEncryptedFile#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-	else if(ctor == InputEncryptedFile::ctorInputEncryptedFileBigUploaded)
-	{
-		result.append("InputEncryptedFileBigUploaded#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt parts = mtstream.readTLInt();
-		result.append("parts:" + QString::number(parts, 16));
-		result.append(", ");
-		TLInt key_fingerprint = mtstream.readTLInt();
-		result.append("key_fingerprint:" + QString::number(key_fingerprint, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_EncryptedMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == EncryptedMessage::ctorEncryptedMessage) ||
-		 (ctor == EncryptedMessage::ctorEncryptedMessageService));
+	Q_ASSERT((ctor == ServerDHInnerData::ctorServerDHInnerData));
 	
-	if(ctor == EncryptedMessage::ctorEncryptedMessage)
-	{
-		result.append("EncryptedMessage#");
-		TLLong random_id = mtstream.readTLLong();
-		result.append("random_id:" + QString::number(random_id, 16));
-		result.append(", ");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLBytes bytes = mtstream.readTLBytes();
-		result.append("bytes:" + thethis->printableString(bytes));
-		result.append(", ");
-		result.append("file:");
-		MTProtoDecompiler::decompile_EncryptedFile(thethis, result, mtstream);
-	}
-	else if(ctor == EncryptedMessage::ctorEncryptedMessageService)
+	if(ctor == ServerDHInnerData::ctorServerDHInnerData)
 	{
-		result.append("EncryptedMessageService#");
-		TLLong random_id = mtstream.readTLLong();
-		result.append("random_id:" + QString::number(random_id, 16));
-		result.append(", ");
-		TLInt chat_id = mtstream.readTLInt();
-		result.append("chat_id:" + QString::number(chat_id, 16));
+		result.append("ServerDHInnerData#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLBytes bytes = mtstream.readTLBytes();
-		result.append("bytes:" + thethis->printableString(bytes));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesDhConfig(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesDhConfig::ctorMessagesDhConfigNotModified) ||
-		 (ctor == MessagesDhConfig::ctorMessagesDhConfig));
-	
-	if(ctor == MessagesDhConfig::ctorMessagesDhConfigNotModified)
-	{
-		result.append("MessagesDhConfigNotModified#");
-		TLBytes random = mtstream.readTLBytes();
-		result.append("random:" + thethis->printableString(random));
-	}
-	else if(ctor == MessagesDhConfig::ctorMessagesDhConfig)
-	{
-		result.append("MessagesDhConfig#");
 		TLInt g = mtstream.readTLInt();
 		result.append("g:" + QString::number(g, 16));
 		result.append(", ");
-		TLBytes p = mtstream.readTLBytes();
-		result.append("p:" + thethis->printableString(p));
+		TLString dh_prime = mtstream.readTLString();
+		result.append("dh_prime:" + thethis->printableString(dh_prime));
 		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
+		TLString g_a = mtstream.readTLString();
+		result.append("g_a:" + thethis->printableString(g_a));
 		result.append(", ");
-		TLBytes random = mtstream.readTLBytes();
-		result.append("random:" + thethis->printableString(random));
+		TLInt server_time = mtstream.readTLInt();
+		result.append("server_time:" + QString::number(server_time, 16));
 	}
 }
 
-void MTProtoDecompiler::decompile_MessagesSentEncryptedMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_ClientDHInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage) ||
-		 (ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile));
-	
-	if(ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MessagesSentEncryptedMessage#");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
+		result.append("Null");
+		return;
 	}
-	else if(ctor == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
+	
+	
+	Q_ASSERT((ctor == ClientDHInnerData::ctorClientDHInnerData));
+	
+	if(ctor == ClientDHInnerData::ctorClientDHInnerData)
 	{
-		result.append("MessagesSentEncryptedFile#");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
+		result.append("ClientDHInnerData#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		result.append("file:");
-		MTProtoDecompiler::decompile_EncryptedFile(thethis, result, mtstream);
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLLong retry_id = mtstream.readTLLong();
+		result.append("retry_id:" + QString::number(retry_id, 16));
+		result.append(", ");
+		TLString g_b = mtstream.readTLString();
+		result.append("g_b:" + thethis->printableString(g_b));
 	}
 }
 
-void MTProtoDecompiler::decompile_InputDocument(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_SetClientDHParamsAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == InputDocument::ctorInputDocumentEmpty) ||
-		 (ctor == InputDocument::ctorInputDocument));
-	
-	if(ctor == InputDocument::ctorInputDocumentEmpty)
-		result.append("InputDocumentEmpty");
-	else if(ctor == InputDocument::ctorInputDocument)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("InputDocument#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == SetClientDHParamsAnswer::ctorDhGenOk) ||
+		 (ctor == SetClientDHParamsAnswer::ctorDhGenRetry) ||
+		 (ctor == SetClientDHParamsAnswer::ctorDhGenFail));
+	
+	if(ctor == SetClientDHParamsAnswer::ctorDhGenOk)
+	{
+		result.append("DhGenOk#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
 		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 new_nonce_hash1 = mtstream.readTLInt128();
+		result.append("new_nonce_hash1:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash1), sizeof(TLInt128)).toHex()));
+	}
+	else if(ctor == SetClientDHParamsAnswer::ctorDhGenRetry)
+	{
+		result.append("DhGenRetry#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 new_nonce_hash2 = mtstream.readTLInt128();
+		result.append("new_nonce_hash2:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash2), sizeof(TLInt128)).toHex()));
+	}
+	else if(ctor == SetClientDHParamsAnswer::ctorDhGenFail)
+	{
+		result.append("DhGenFail#");
+		TLInt128 nonce = mtstream.readTLInt128();
+		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 server_nonce = mtstream.readTLInt128();
+		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
+		result.append(", ");
+		TLInt128 new_nonce_hash3 = mtstream.readTLInt128();
+		result.append("new_nonce_hash3:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash3), sizeof(TLInt128)).toHex()));
 	}
 }
 
-void MTProtoDecompiler::decompile_Document(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_MsgsAck(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == Document::ctorDocumentEmpty) ||
-		 (ctor == Document::ctorDocument));
-	
-	if(ctor == Document::ctorDocumentEmpty)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("DocumentEmpty#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
+		result.append("Null");
+		return;
 	}
-	else if(ctor == Document::ctorDocument)
+	
+	
+	Q_ASSERT((ctor == MsgsAck::ctorMsgsAck));
+	
+	if(ctor == MsgsAck::ctorMsgsAck)
 	{
-		result.append("Document#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		TLString mime_type = mtstream.readTLString();
-		result.append("mime_type:" + thethis->printableString(mime_type));
-		result.append(", ");
-		TLInt size = mtstream.readTLInt();
-		result.append("size:" + QString::number(size, 16));
-		result.append(", ");
-		result.append("thumb:");
-		MTProtoDecompiler::decompile_PhotoSize(thethis, result, mtstream);
-		TLInt dc_id = mtstream.readTLInt();
-		result.append("dc_id:" + QString::number(dc_id, 16));
-		result.append(", ");
-		TLInt version = mtstream.readTLInt();
-		result.append("version:" + QString::number(version, 16));
-		result.append(", ");
-		result.append("attributes:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_HelpSupport(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HelpSupport::ctorHelpSupport));
-	
-	if(ctor == HelpSupport::ctorHelpSupport)
-	{
-		result.append("HelpSupport#");
-		TLString phone_number = mtstream.readTLString();
-		result.append("phone_number:" + thethis->printableString(phone_number));
-		result.append(", ");
-		result.append("user:");
-		MTProtoDecompiler::decompile_User(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_NotifyPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == NotifyPeer::ctorNotifyPeer) ||
-		 (ctor == NotifyPeer::ctorNotifyUsers) ||
-		 (ctor == NotifyPeer::ctorNotifyChats) ||
-		 (ctor == NotifyPeer::ctorNotifyAll));
-	
-	if(ctor == NotifyPeer::ctorNotifyPeer)
-	{
-		result.append("NotifyPeer#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-	}
-	else if(ctor == NotifyPeer::ctorNotifyUsers)
-		result.append("NotifyUsers");
-	else if(ctor == NotifyPeer::ctorNotifyChats)
-		result.append("NotifyChats");
-	else if(ctor == NotifyPeer::ctorNotifyAll)
-		result.append("NotifyAll");
-}
-
-void MTProtoDecompiler::decompile_SendMessageAction(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == SendMessageAction::ctorSendMessageTypingAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageCancelAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageRecordVideoAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageUploadVideoAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageRecordAudioAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageUploadAudioAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageUploadPhotoAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageUploadDocumentAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageGeoLocationAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageChooseContactAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageGamePlayAction) ||
-		 (ctor == SendMessageAction::ctorSendMessageGameStopAction));
-	
-	if(ctor == SendMessageAction::ctorSendMessageTypingAction)
-		result.append("SendMessageTypingAction");
-	else if(ctor == SendMessageAction::ctorSendMessageCancelAction)
-		result.append("SendMessageCancelAction");
-	else if(ctor == SendMessageAction::ctorSendMessageRecordVideoAction)
-		result.append("SendMessageRecordVideoAction");
-	else if(ctor == SendMessageAction::ctorSendMessageUploadVideoAction)
-	{
-		result.append("SendMessageUploadVideoAction#");
-		TLInt progress = mtstream.readTLInt();
-		result.append("progress:" + QString::number(progress, 16));
-	}
-	else if(ctor == SendMessageAction::ctorSendMessageRecordAudioAction)
-		result.append("SendMessageRecordAudioAction");
-	else if(ctor == SendMessageAction::ctorSendMessageUploadAudioAction)
-	{
-		result.append("SendMessageUploadAudioAction#");
-		TLInt progress = mtstream.readTLInt();
-		result.append("progress:" + QString::number(progress, 16));
-	}
-	else if(ctor == SendMessageAction::ctorSendMessageUploadPhotoAction)
-	{
-		result.append("SendMessageUploadPhotoAction#");
-		TLInt progress = mtstream.readTLInt();
-		result.append("progress:" + QString::number(progress, 16));
-	}
-	else if(ctor == SendMessageAction::ctorSendMessageUploadDocumentAction)
-	{
-		result.append("SendMessageUploadDocumentAction#");
-		TLInt progress = mtstream.readTLInt();
-		result.append("progress:" + QString::number(progress, 16));
-	}
-	else if(ctor == SendMessageAction::ctorSendMessageGeoLocationAction)
-		result.append("SendMessageGeoLocationAction");
-	else if(ctor == SendMessageAction::ctorSendMessageChooseContactAction)
-		result.append("SendMessageChooseContactAction");
-	else if(ctor == SendMessageAction::ctorSendMessageGamePlayAction)
-		result.append("SendMessageGamePlayAction");
-	else if(ctor == SendMessageAction::ctorSendMessageGameStopAction)
-		result.append("SendMessageGameStopAction");
-}
-
-void MTProtoDecompiler::decompile_ContactsFound(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsFound::ctorContactsFound));
-	
-	if(ctor == ContactsFound::ctorContactsFound)
-	{
-		result.append("ContactsFound#");
-		result.append("results:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_InputPrivacyKey(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp) ||
-		 (ctor == InputPrivacyKey::ctorInputPrivacyKeyChatInvite));
-	
-	if(ctor == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp)
-		result.append("InputPrivacyKeyStatusTimestamp");
-	else if(ctor == InputPrivacyKey::ctorInputPrivacyKeyChatInvite)
-		result.append("InputPrivacyKeyChatInvite");
-}
-
-void MTProtoDecompiler::decompile_PrivacyKey(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PrivacyKey::ctorPrivacyKeyStatusTimestamp) ||
-		 (ctor == PrivacyKey::ctorPrivacyKeyChatInvite));
-	
-	if(ctor == PrivacyKey::ctorPrivacyKeyStatusTimestamp)
-		result.append("PrivacyKeyStatusTimestamp");
-	else if(ctor == PrivacyKey::ctorPrivacyKeyChatInvite)
-		result.append("PrivacyKeyChatInvite");
-}
-
-void MTProtoDecompiler::decompile_InputPrivacyRule(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputPrivacyRule::ctorInputPrivacyValueAllowContacts) ||
-		 (ctor == InputPrivacyRule::ctorInputPrivacyValueAllowAll) ||
-		 (ctor == InputPrivacyRule::ctorInputPrivacyValueAllowUsers) ||
-		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts) ||
-		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowAll) ||
-		 (ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers));
-	
-	if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowContacts)
-		result.append("InputPrivacyValueAllowContacts");
-	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowAll)
-		result.append("InputPrivacyValueAllowAll");
-	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueAllowUsers)
-	{
-		result.append("InputPrivacyValueAllowUsers#");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts)
-		result.append("InputPrivacyValueDisallowContacts");
-	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowAll)
-		result.append("InputPrivacyValueDisallowAll");
-	else if(ctor == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers)
-	{
-		result.append("InputPrivacyValueDisallowUsers#");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_PrivacyRule(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PrivacyRule::ctorPrivacyValueAllowContacts) ||
-		 (ctor == PrivacyRule::ctorPrivacyValueAllowAll) ||
-		 (ctor == PrivacyRule::ctorPrivacyValueAllowUsers) ||
-		 (ctor == PrivacyRule::ctorPrivacyValueDisallowContacts) ||
-		 (ctor == PrivacyRule::ctorPrivacyValueDisallowAll) ||
-		 (ctor == PrivacyRule::ctorPrivacyValueDisallowUsers));
-	
-	if(ctor == PrivacyRule::ctorPrivacyValueAllowContacts)
-		result.append("PrivacyValueAllowContacts");
-	else if(ctor == PrivacyRule::ctorPrivacyValueAllowAll)
-		result.append("PrivacyValueAllowAll");
-	else if(ctor == PrivacyRule::ctorPrivacyValueAllowUsers)
-	{
-		result.append("PrivacyValueAllowUsers#");
-		result.append("users:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-	}
-	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowContacts)
-		result.append("PrivacyValueDisallowContacts");
-	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowAll)
-		result.append("PrivacyValueDisallowAll");
-	else if(ctor == PrivacyRule::ctorPrivacyValueDisallowUsers)
-	{
-		result.append("PrivacyValueDisallowUsers#");
-		result.append("users:");
-		thethis->decompileTLVector<TLInt>(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountPrivacyRules(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountPrivacyRules::ctorAccountPrivacyRules));
-	
-	if(ctor == AccountPrivacyRules::ctorAccountPrivacyRules)
-	{
-		result.append("AccountPrivacyRules#");
-		result.append("rules:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountDaysTTL(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountDaysTTL::ctorAccountDaysTTL));
-	
-	if(ctor == AccountDaysTTL::ctorAccountDaysTTL)
-	{
-		result.append("AccountDaysTTL#");
-		TLInt days = mtstream.readTLInt();
-		result.append("days:" + QString::number(days, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_DocumentAttribute(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == DocumentAttribute::ctorDocumentAttributeImageSize) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeAnimated) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeSticker) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeVideo) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeAudio) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeFilename) ||
-		 (ctor == DocumentAttribute::ctorDocumentAttributeHasStickers));
-	
-	if(ctor == DocumentAttribute::ctorDocumentAttributeImageSize)
-	{
-		result.append("DocumentAttributeImageSize#");
-		TLInt w = mtstream.readTLInt();
-		result.append("w:" + QString::number(w, 16));
-		result.append(", ");
-		TLInt h = mtstream.readTLInt();
-		result.append("h:" + QString::number(h, 16));
-	}
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeAnimated)
-		result.append("DocumentAttributeAnimated");
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeSticker)
-	{
-		result.append("DocumentAttributeSticker#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_mask:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		TLString alt = mtstream.readTLString();
-		result.append("alt:" + thethis->printableString(alt));
-		result.append(", ");
-		result.append("stickerset:");
-		MTProtoDecompiler::decompile_InputStickerSet(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("mask_coords:");
-			MTProtoDecompiler::decompile_MaskCoords(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeVideo)
-	{
-		result.append("DocumentAttributeVideo#");
-		TLInt duration = mtstream.readTLInt();
-		result.append("duration:" + QString::number(duration, 16));
-		result.append(", ");
-		TLInt w = mtstream.readTLInt();
-		result.append("w:" + QString::number(w, 16));
-		result.append(", ");
-		TLInt h = mtstream.readTLInt();
-		result.append("h:" + QString::number(h, 16));
-	}
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeAudio)
-	{
-		result.append("DocumentAttributeAudio#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_voice:" + BIT_FIELD_VALUE(flags, 10));
-		result.append(", ");
-		TLInt duration = mtstream.readTLInt();
-		result.append("duration:" + QString::number(duration, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString performer = mtstream.readTLString();
-			result.append("performer:" + thethis->printableString(performer));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLBytes waveform = mtstream.readTLBytes();
-			result.append("waveform:" + thethis->printableString(waveform));
-		}
-	}
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeFilename)
-	{
-		result.append("DocumentAttributeFilename#");
-		TLString file_name = mtstream.readTLString();
-		result.append("file_name:" + thethis->printableString(file_name));
-	}
-	else if(ctor == DocumentAttribute::ctorDocumentAttributeHasStickers)
-		result.append("DocumentAttributeHasStickers");
-}
-
-void MTProtoDecompiler::decompile_MessagesStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesStickers::ctorMessagesStickersNotModified) ||
-		 (ctor == MessagesStickers::ctorMessagesStickers));
-	
-	if(ctor == MessagesStickers::ctorMessagesStickersNotModified)
-		result.append("MessagesStickersNotModified");
-	else if(ctor == MessagesStickers::ctorMessagesStickers)
-	{
-		result.append("MessagesStickers#");
-		TLString hash = mtstream.readTLString();
-		result.append("hash:" + thethis->printableString(hash));
-		result.append(", ");
-		result.append("stickers:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_StickerPack(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == StickerPack::ctorStickerPack));
-	
-	if(ctor == StickerPack::ctorStickerPack)
-	{
-		result.append("StickerPack#");
-		TLString emoticon = mtstream.readTLString();
-		result.append("emoticon:" + thethis->printableString(emoticon));
-		result.append(", ");
-		result.append("documents:");
+		result.append("MsgsAck#");
+		result.append("msg_ids:");
 		thethis->decompileTLVector<TLLong>(result, mtstream, false);
 	}
 }
 
-void MTProtoDecompiler::decompile_MessagesAllStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_BadMsgNotification(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesAllStickers::ctorMessagesAllStickersNotModified) ||
-		 (ctor == MessagesAllStickers::ctorMessagesAllStickers));
-	
-	if(ctor == MessagesAllStickers::ctorMessagesAllStickersNotModified)
-		result.append("MessagesAllStickersNotModified");
-	else if(ctor == MessagesAllStickers::ctorMessagesAllStickers)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MessagesAllStickers#");
-		TLInt hash = mtstream.readTLInt();
-		result.append("hash:" + QString::number(hash, 16));
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == BadMsgNotification::ctorBadMsgNotification) ||
+		 (ctor == BadMsgNotification::ctorBadServerSalt));
+	
+	if(ctor == BadMsgNotification::ctorBadMsgNotification)
+	{
+		result.append("BadMsgNotification#");
+		TLLong bad_msg_id = mtstream.readTLLong();
+		result.append("bad_msg_id:" + QString::number(bad_msg_id, 16));
 		result.append(", ");
-		result.append("sets:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
+		TLInt bad_msg_seqno = mtstream.readTLInt();
+		result.append("bad_msg_seqno:" + QString::number(bad_msg_seqno, 16));
+		result.append(", ");
+		TLInt error_code = mtstream.readTLInt();
+		result.append("error_code:" + QString::number(error_code, 16));
+	}
+	else if(ctor == BadMsgNotification::ctorBadServerSalt)
+	{
+		result.append("BadServerSalt#");
+		TLLong bad_msg_id = mtstream.readTLLong();
+		result.append("bad_msg_id:" + QString::number(bad_msg_id, 16));
+		result.append(", ");
+		TLInt bad_msg_seqno = mtstream.readTLInt();
+		result.append("bad_msg_seqno:" + QString::number(bad_msg_seqno, 16));
+		result.append(", ");
+		TLInt error_code = mtstream.readTLInt();
+		result.append("error_code:" + QString::number(error_code, 16));
+		result.append(", ");
+		TLLong new_server_salt = mtstream.readTLLong();
+		result.append("new_server_salt:" + QString::number(new_server_salt, 16));
 	}
 }
 
-void MTProtoDecompiler::decompile_DisabledFeature(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_MsgsStateReq(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == DisabledFeature::ctorDisabledFeature));
-	
-	if(ctor == DisabledFeature::ctorDisabledFeature)
-	{
-		result.append("DisabledFeature#");
-		TLString feature = mtstream.readTLString();
-		result.append("feature:" + thethis->printableString(feature));
-		result.append(", ");
-		TLString description = mtstream.readTLString();
-		result.append("description:" + thethis->printableString(description));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesAffectedMessages(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesAffectedMessages::ctorMessagesAffectedMessages));
-	
-	if(ctor == MessagesAffectedMessages::ctorMessagesAffectedMessages)
-	{
-		result.append("MessagesAffectedMessages#");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		TLInt pts_count = mtstream.readTLInt();
-		result.append("pts_count:" + QString::number(pts_count, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactLink::ctorContactLinkUnknown) ||
-		 (ctor == ContactLink::ctorContactLinkNone) ||
-		 (ctor == ContactLink::ctorContactLinkHasPhone) ||
-		 (ctor == ContactLink::ctorContactLinkContact));
-	
-	if(ctor == ContactLink::ctorContactLinkUnknown)
-		result.append("ContactLinkUnknown");
-	else if(ctor == ContactLink::ctorContactLinkNone)
-		result.append("ContactLinkNone");
-	else if(ctor == ContactLink::ctorContactLinkHasPhone)
-		result.append("ContactLinkHasPhone");
-	else if(ctor == ContactLink::ctorContactLinkContact)
-		result.append("ContactLinkContact");
-}
-
-void MTProtoDecompiler::decompile_WebPage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == WebPage::ctorWebPageEmpty) ||
-		 (ctor == WebPage::ctorWebPagePending) ||
-		 (ctor == WebPage::ctorWebPage));
-	
-	if(ctor == WebPage::ctorWebPageEmpty)
-	{
-		result.append("WebPageEmpty#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-	}
-	else if(ctor == WebPage::ctorWebPagePending)
-	{
-		result.append("WebPagePending#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == WebPage::ctorWebPage)
-	{
-		result.append("WebPage#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		TLString display_url = mtstream.readTLString();
-		result.append("display_url:" + thethis->printableString(display_url));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLString type = mtstream.readTLString();
-			result.append("type:" + thethis->printableString(type));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString site_name = mtstream.readTLString();
-			result.append("site_name:" + thethis->printableString(site_name));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLString description = mtstream.readTLString();
-			result.append("description:" + thethis->printableString(description));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 4))
-		{
-			result.append("photo:");
-			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString embed_url = mtstream.readTLString();
-			result.append("embed_url:" + thethis->printableString(embed_url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString embed_type = mtstream.readTLString();
-			result.append("embed_type:" + thethis->printableString(embed_type));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt embed_width = mtstream.readTLInt();
-			result.append("embed_width:" + QString::number(embed_width, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt embed_height = mtstream.readTLInt();
-			result.append("embed_height:" + QString::number(embed_height, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			TLInt duration = mtstream.readTLInt();
-			result.append("duration:" + QString::number(duration, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 8))
-		{
-			TLString author = mtstream.readTLString();
-			result.append("author:" + thethis->printableString(author));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 9))
-		{
-			result.append("document:");
-			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_Authorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Authorization::ctorAuthorization));
-	
-	if(ctor == Authorization::ctorAuthorization)
-	{
-		result.append("Authorization#");
-		TLLong hash = mtstream.readTLLong();
-		result.append("hash:" + QString::number(hash, 16));
-		result.append(", ");
-		TLInt flags = mtstream.readTLInt();
-		result.append("flags:" + QString::number(flags, 16));
-		result.append(", ");
-		TLString device_model = mtstream.readTLString();
-		result.append("device_model:" + thethis->printableString(device_model));
-		result.append(", ");
-		TLString platform = mtstream.readTLString();
-		result.append("platform:" + thethis->printableString(platform));
-		result.append(", ");
-		TLString system_version = mtstream.readTLString();
-		result.append("system_version:" + thethis->printableString(system_version));
-		result.append(", ");
-		TLInt api_id = mtstream.readTLInt();
-		result.append("api_id:" + QString::number(api_id, 16));
-		result.append(", ");
-		TLString app_name = mtstream.readTLString();
-		result.append("app_name:" + thethis->printableString(app_name));
-		result.append(", ");
-		TLString app_version = mtstream.readTLString();
-		result.append("app_version:" + thethis->printableString(app_version));
-		result.append(", ");
-		TLInt date_created = mtstream.readTLInt();
-		result.append("date_created:" + QString::number(date_created, 16));
-		result.append(", ");
-		TLInt date_active = mtstream.readTLInt();
-		result.append("date_active:" + QString::number(date_active, 16));
-		result.append(", ");
-		TLString ip = mtstream.readTLString();
-		result.append("ip:" + thethis->printableString(ip));
-		result.append(", ");
-		TLString country = mtstream.readTLString();
-		result.append("country:" + thethis->printableString(country));
-		result.append(", ");
-		TLString region = mtstream.readTLString();
-		result.append("region:" + thethis->printableString(region));
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountAuthorizations(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountAuthorizations::ctorAccountAuthorizations));
-	
-	if(ctor == AccountAuthorizations::ctorAccountAuthorizations)
-	{
-		result.append("AccountAuthorizations#");
-		result.append("authorizations:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountPassword(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountPassword::ctorAccountNoPassword) ||
-		 (ctor == AccountPassword::ctorAccountPassword));
-	
-	if(ctor == AccountPassword::ctorAccountNoPassword)
-	{
-		result.append("AccountNoPassword#");
-		TLBytes new_salt = mtstream.readTLBytes();
-		result.append("new_salt:" + thethis->printableString(new_salt));
-		result.append(", ");
-		TLString email_unconfirmed_pattern = mtstream.readTLString();
-		result.append("email_unconfirmed_pattern:" + thethis->printableString(email_unconfirmed_pattern));
-	}
-	else if(ctor == AccountPassword::ctorAccountPassword)
-	{
-		result.append("AccountPassword#");
-		TLBytes current_salt = mtstream.readTLBytes();
-		result.append("current_salt:" + thethis->printableString(current_salt));
-		result.append(", ");
-		TLBytes new_salt = mtstream.readTLBytes();
-		result.append("new_salt:" + thethis->printableString(new_salt));
-		result.append(", ");
-		TLString hint = mtstream.readTLString();
-		result.append("hint:" + thethis->printableString(hint));
-		result.append(", ");
-		TLBool has_recovery = mtstream.readTLBool();
-		result.append("has_recovery:" + QString::number(has_recovery, 16));
-		result.append(", ");
-		TLString email_unconfirmed_pattern = mtstream.readTLString();
-		result.append("email_unconfirmed_pattern:" + thethis->printableString(email_unconfirmed_pattern));
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountPasswordSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountPasswordSettings::ctorAccountPasswordSettings));
-	
-	if(ctor == AccountPasswordSettings::ctorAccountPasswordSettings)
-	{
-		result.append("AccountPasswordSettings#");
-		TLString email = mtstream.readTLString();
-		result.append("email:" + thethis->printableString(email));
-	}
-}
-
-void MTProtoDecompiler::decompile_AccountPasswordInputSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AccountPasswordInputSettings::ctorAccountPasswordInputSettings));
-	
-	if(ctor == AccountPasswordInputSettings::ctorAccountPasswordInputSettings)
-	{
-		result.append("AccountPasswordInputSettings#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLBytes new_salt = mtstream.readTLBytes();
-			result.append("new_salt:" + thethis->printableString(new_salt));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLBytes new_password_hash = mtstream.readTLBytes();
-			result.append("new_password_hash:" + thethis->printableString(new_password_hash));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLString hint = mtstream.readTLString();
-			result.append("hint:" + thethis->printableString(hint));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString email = mtstream.readTLString();
-			result.append("email:" + thethis->printableString(email));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthPasswordRecovery(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthPasswordRecovery::ctorAuthPasswordRecovery));
-	
-	if(ctor == AuthPasswordRecovery::ctorAuthPasswordRecovery)
-	{
-		result.append("AuthPasswordRecovery#");
-		TLString email_pattern = mtstream.readTLString();
-		result.append("email_pattern:" + thethis->printableString(email_pattern));
-	}
-}
-
-void MTProtoDecompiler::decompile_ReceivedNotifyMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ReceivedNotifyMessage::ctorReceivedNotifyMessage));
-	
-	if(ctor == ReceivedNotifyMessage::ctorReceivedNotifyMessage)
-	{
-		result.append("ReceivedNotifyMessage#");
-		TLInt id = mtstream.readTLInt();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLInt flags = mtstream.readTLInt();
-		result.append("flags:" + QString::number(flags, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ExportedChatInvite(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ExportedChatInvite::ctorChatInviteEmpty) ||
-		 (ctor == ExportedChatInvite::ctorChatInviteExported));
-	
-	if(ctor == ExportedChatInvite::ctorChatInviteEmpty)
-		result.append("ChatInviteEmpty");
-	else if(ctor == ExportedChatInvite::ctorChatInviteExported)
-	{
-		result.append("ChatInviteExported#");
-		TLString link = mtstream.readTLString();
-		result.append("link:" + thethis->printableString(link));
-	}
-}
-
-void MTProtoDecompiler::decompile_ChatInvite(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChatInvite::ctorChatInviteAlready) ||
-		 (ctor == ChatInvite::ctorChatInvite));
-	
-	if(ctor == ChatInvite::ctorChatInviteAlready)
-	{
-		result.append("ChatInviteAlready#");
-		result.append("chat:");
-		MTProtoDecompiler::decompile_Chat(thethis, result, mtstream);
-	}
-	else if(ctor == ChatInvite::ctorChatInvite)
-	{
-		result.append("ChatInvite#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_channel:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_broadcast:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_public:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		result.append("is_megagroup:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_ChatPhoto(thethis, result, mtstream);
-		TLInt participants_count = mtstream.readTLInt();
-		result.append("participants_count:" + QString::number(participants_count, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 4))
-		{
-			result.append("participants:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_InputStickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputStickerSet::ctorInputStickerSetEmpty) ||
-		 (ctor == InputStickerSet::ctorInputStickerSetID) ||
-		 (ctor == InputStickerSet::ctorInputStickerSetShortName));
-	
-	if(ctor == InputStickerSet::ctorInputStickerSetEmpty)
-		result.append("InputStickerSetEmpty");
-	else if(ctor == InputStickerSet::ctorInputStickerSetID)
-	{
-		result.append("InputStickerSetID#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-	else if(ctor == InputStickerSet::ctorInputStickerSetShortName)
-	{
-		result.append("InputStickerSetShortName#");
-		TLString short_name = mtstream.readTLString();
-		result.append("short_name:" + thethis->printableString(short_name));
-	}
-}
-
-void MTProtoDecompiler::decompile_StickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == StickerSet::ctorStickerSet));
-	
-	if(ctor == StickerSet::ctorStickerSet)
-	{
-		result.append("StickerSet#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_installed:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_archived:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_official:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		result.append("is_masks:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString short_name = mtstream.readTLString();
-		result.append("short_name:" + thethis->printableString(short_name));
-		result.append(", ");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		TLInt hash = mtstream.readTLInt();
-		result.append("hash:" + QString::number(hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesStickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesStickerSet::ctorMessagesStickerSet));
-	
-	if(ctor == MessagesStickerSet::ctorMessagesStickerSet)
-	{
-		result.append("MessagesStickerSet#");
-		result.append("set:");
-		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
-		result.append("packs:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("documents:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_BotCommand(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == BotCommand::ctorBotCommand));
-	
-	if(ctor == BotCommand::ctorBotCommand)
-	{
-		result.append("BotCommand#");
-		TLString command = mtstream.readTLString();
-		result.append("command:" + thethis->printableString(command));
-		result.append(", ");
-		TLString description = mtstream.readTLString();
-		result.append("description:" + thethis->printableString(description));
-	}
-}
-
-void MTProtoDecompiler::decompile_BotInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == BotInfo::ctorBotInfo));
-	
-	if(ctor == BotInfo::ctorBotInfo)
-	{
-		result.append("BotInfo#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLString description = mtstream.readTLString();
-		result.append("description:" + thethis->printableString(description));
-		result.append(", ");
-		result.append("commands:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_KeyboardButton(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == KeyboardButton::ctorKeyboardButton) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonUrl) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonCallback) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonRequestPhone) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonRequestGeoLocation) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonSwitchInline) ||
-		 (ctor == KeyboardButton::ctorKeyboardButtonGame));
-	
-	if(ctor == KeyboardButton::ctorKeyboardButton)
-	{
-		result.append("KeyboardButton#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonUrl)
-	{
-		result.append("KeyboardButtonUrl#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-		result.append(", ");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonCallback)
-	{
-		result.append("KeyboardButtonCallback#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-		result.append(", ");
-		TLBytes data = mtstream.readTLBytes();
-		result.append("data:" + thethis->printableString(data));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonRequestPhone)
-	{
-		result.append("KeyboardButtonRequestPhone#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonRequestGeoLocation)
-	{
-		result.append("KeyboardButtonRequestGeoLocation#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonSwitchInline)
-	{
-		result.append("KeyboardButtonSwitchInline#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_same_peer:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-		result.append(", ");
-		TLString query = mtstream.readTLString();
-		result.append("query:" + thethis->printableString(query));
-	}
-	else if(ctor == KeyboardButton::ctorKeyboardButtonGame)
-	{
-		result.append("KeyboardButtonGame#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-}
-
-void MTProtoDecompiler::decompile_KeyboardButtonRow(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == KeyboardButtonRow::ctorKeyboardButtonRow));
-	
-	if(ctor == KeyboardButtonRow::ctorKeyboardButtonRow)
-	{
-		result.append("KeyboardButtonRow#");
-		result.append("buttons:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ReplyMarkup(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ReplyMarkup::ctorReplyKeyboardHide) ||
-		 (ctor == ReplyMarkup::ctorReplyKeyboardForceReply) ||
-		 (ctor == ReplyMarkup::ctorReplyKeyboardMarkup) ||
-		 (ctor == ReplyMarkup::ctorReplyInlineMarkup));
-	
-	if(ctor == ReplyMarkup::ctorReplyKeyboardHide)
-	{
-		result.append("ReplyKeyboardHide#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
-	}
-	else if(ctor == ReplyMarkup::ctorReplyKeyboardForceReply)
-	{
-		result.append("ReplyKeyboardForceReply#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_single_use:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
-	}
-	else if(ctor == ReplyMarkup::ctorReplyKeyboardMarkup)
-	{
-		result.append("ReplyKeyboardMarkup#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_resize:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		result.append("is_single_use:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("is_selective:" + BIT_FIELD_VALUE(flags, 2));
-		result.append(", ");
-		result.append("rows:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == ReplyMarkup::ctorReplyInlineMarkup)
-	{
-		result.append("ReplyInlineMarkup#");
-		result.append("rows:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_HelpAppChangelog(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HelpAppChangelog::ctorHelpAppChangelogEmpty) ||
-		 (ctor == HelpAppChangelog::ctorHelpAppChangelog));
-	
-	if(ctor == HelpAppChangelog::ctorHelpAppChangelogEmpty)
-		result.append("HelpAppChangelogEmpty");
-	else if(ctor == HelpAppChangelog::ctorHelpAppChangelog)
-	{
-		result.append("HelpAppChangelog#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessageEntity(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessageEntity::ctorMessageEntityUnknown) ||
-		 (ctor == MessageEntity::ctorMessageEntityMention) ||
-		 (ctor == MessageEntity::ctorMessageEntityHashtag) ||
-		 (ctor == MessageEntity::ctorMessageEntityBotCommand) ||
-		 (ctor == MessageEntity::ctorMessageEntityUrl) ||
-		 (ctor == MessageEntity::ctorMessageEntityEmail) ||
-		 (ctor == MessageEntity::ctorMessageEntityBold) ||
-		 (ctor == MessageEntity::ctorMessageEntityItalic) ||
-		 (ctor == MessageEntity::ctorMessageEntityCode) ||
-		 (ctor == MessageEntity::ctorMessageEntityPre) ||
-		 (ctor == MessageEntity::ctorMessageEntityTextUrl) ||
-		 (ctor == MessageEntity::ctorMessageEntityMentionName) ||
-		 (ctor == MessageEntity::ctorInputMessageEntityMentionName));
-	
-	if(ctor == MessageEntity::ctorMessageEntityUnknown)
-	{
-		result.append("MessageEntityUnknown#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityMention)
-	{
-		result.append("MessageEntityMention#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityHashtag)
-	{
-		result.append("MessageEntityHashtag#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityBotCommand)
-	{
-		result.append("MessageEntityBotCommand#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityUrl)
-	{
-		result.append("MessageEntityUrl#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityEmail)
-	{
-		result.append("MessageEntityEmail#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityBold)
-	{
-		result.append("MessageEntityBold#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityItalic)
-	{
-		result.append("MessageEntityItalic#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityCode)
-	{
-		result.append("MessageEntityCode#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityPre)
-	{
-		result.append("MessageEntityPre#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-		result.append(", ");
-		TLString language = mtstream.readTLString();
-		result.append("language:" + thethis->printableString(language));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityTextUrl)
-	{
-		result.append("MessageEntityTextUrl#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-		result.append(", ");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-	}
-	else if(ctor == MessageEntity::ctorMessageEntityMentionName)
-	{
-		result.append("MessageEntityMentionName#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-		result.append(", ");
-		TLInt user_id_messageentitymentionname = mtstream.readTLInt();
-		result.append("user_id_messageentitymentionname:" + QString::number(user_id_messageentitymentionname, 16));
-	}
-	else if(ctor == MessageEntity::ctorInputMessageEntityMentionName)
-	{
-		result.append("InputMessageEntityMentionName#");
-		TLInt offset = mtstream.readTLInt();
-		result.append("offset:" + QString::number(offset, 16));
-		result.append(", ");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-		result.append(", ");
-		result.append("user_id_inputmessageentitymentionname:");
-		MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_InputChannel(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputChannel::ctorInputChannelEmpty) ||
-		 (ctor == InputChannel::ctorInputChannel));
-	
-	if(ctor == InputChannel::ctorInputChannelEmpty)
-		result.append("InputChannelEmpty");
-	else if(ctor == InputChannel::ctorInputChannel)
-	{
-		result.append("InputChannel#");
-		TLInt channel_id = mtstream.readTLInt();
-		result.append("channel_id:" + QString::number(channel_id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsResolvedPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsResolvedPeer::ctorContactsResolvedPeer));
-	
-	if(ctor == ContactsResolvedPeer::ctorContactsResolvedPeer)
-	{
-		result.append("ContactsResolvedPeer#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessageRange(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessageRange::ctorMessageRange));
-	
-	if(ctor == MessageRange::ctorMessageRange)
-	{
-		result.append("MessageRange#");
-		TLInt min_id = mtstream.readTLInt();
-		result.append("min_id:" + QString::number(min_id, 16));
-		result.append(", ");
-		TLInt max_id = mtstream.readTLInt();
-		result.append("max_id:" + QString::number(max_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_UpdatesChannelDifference(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty) ||
-		 (ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong) ||
-		 (ctor == UpdatesChannelDifference::ctorUpdatesChannelDifference));
-	
-	if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("UpdatesChannelDifferenceEmpty#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLInt timeout = mtstream.readTLInt();
-			result.append("timeout:" + QString::number(timeout, 16));
-		}
+		result.append("Null");
+		return;
 	}
-	else if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong)
-	{
-		result.append("UpdatesChannelDifferenceTooLong#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLInt timeout = mtstream.readTLInt();
-			result.append("timeout:" + QString::number(timeout, 16));
-			result.append(", ");
-		}
-		TLInt top_message = mtstream.readTLInt();
-		result.append("top_message:" + QString::number(top_message, 16));
-		result.append(", ");
-		TLInt read_inbox_max_id = mtstream.readTLInt();
-		result.append("read_inbox_max_id:" + QString::number(read_inbox_max_id, 16));
-		result.append(", ");
-		TLInt read_outbox_max_id = mtstream.readTLInt();
-		result.append("read_outbox_max_id:" + QString::number(read_outbox_max_id, 16));
-		result.append(", ");
-		TLInt unread_count = mtstream.readTLInt();
-		result.append("unread_count:" + QString::number(unread_count, 16));
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-	else if(ctor == UpdatesChannelDifference::ctorUpdatesChannelDifference)
-	{
-		result.append("UpdatesChannelDifference#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_final:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLInt pts = mtstream.readTLInt();
-		result.append("pts:" + QString::number(pts, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLInt timeout = mtstream.readTLInt();
-			result.append("timeout:" + QString::number(timeout, 16));
-			result.append(", ");
-		}
-		result.append("new_messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("other_updates:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ChannelMessagesFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty) ||
-		 (ctor == ChannelMessagesFilter::ctorChannelMessagesFilter));
-	
-	if(ctor == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty)
-		result.append("ChannelMessagesFilterEmpty");
-	else if(ctor == ChannelMessagesFilter::ctorChannelMessagesFilter)
-	{
-		result.append("ChannelMessagesFilter#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_exclude_new_messages:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("ranges:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ChannelParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelParticipant::ctorChannelParticipant) ||
-		 (ctor == ChannelParticipant::ctorChannelParticipantSelf) ||
-		 (ctor == ChannelParticipant::ctorChannelParticipantModerator) ||
-		 (ctor == ChannelParticipant::ctorChannelParticipantEditor) ||
-		 (ctor == ChannelParticipant::ctorChannelParticipantKicked) ||
-		 (ctor == ChannelParticipant::ctorChannelParticipantCreator));
-	
-	if(ctor == ChannelParticipant::ctorChannelParticipant)
-	{
-		result.append("ChannelParticipant#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChannelParticipant::ctorChannelParticipantSelf)
-	{
-		result.append("ChannelParticipantSelf#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChannelParticipant::ctorChannelParticipantModerator)
-	{
-		result.append("ChannelParticipantModerator#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChannelParticipant::ctorChannelParticipantEditor)
-	{
-		result.append("ChannelParticipantEditor#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt inviter_id = mtstream.readTLInt();
-		result.append("inviter_id:" + QString::number(inviter_id, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChannelParticipant::ctorChannelParticipantKicked)
-	{
-		result.append("ChannelParticipantKicked#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt kicked_by = mtstream.readTLInt();
-		result.append("kicked_by:" + QString::number(kicked_by, 16));
-		result.append(", ");
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-	else if(ctor == ChannelParticipant::ctorChannelParticipantCreator)
-	{
-		result.append("ChannelParticipantCreator#");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ChannelParticipantsFilter(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelParticipantsFilter::ctorChannelParticipantsRecent) ||
-		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsAdmins) ||
-		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsKicked) ||
-		 (ctor == ChannelParticipantsFilter::ctorChannelParticipantsBots));
-	
-	if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsRecent)
-		result.append("ChannelParticipantsRecent");
-	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsAdmins)
-		result.append("ChannelParticipantsAdmins");
-	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsKicked)
-		result.append("ChannelParticipantsKicked");
-	else if(ctor == ChannelParticipantsFilter::ctorChannelParticipantsBots)
-		result.append("ChannelParticipantsBots");
-}
-
-void MTProtoDecompiler::decompile_ChannelParticipantRole(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelParticipantRole::ctorChannelRoleEmpty) ||
-		 (ctor == ChannelParticipantRole::ctorChannelRoleModerator) ||
-		 (ctor == ChannelParticipantRole::ctorChannelRoleEditor));
-	
-	if(ctor == ChannelParticipantRole::ctorChannelRoleEmpty)
-		result.append("ChannelRoleEmpty");
-	else if(ctor == ChannelParticipantRole::ctorChannelRoleModerator)
-		result.append("ChannelRoleModerator");
-	else if(ctor == ChannelParticipantRole::ctorChannelRoleEditor)
-		result.append("ChannelRoleEditor");
-}
-
-void MTProtoDecompiler::decompile_ChannelsChannelParticipants(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelsChannelParticipants::ctorChannelsChannelParticipants));
-	
-	if(ctor == ChannelsChannelParticipants::ctorChannelsChannelParticipants)
-	{
-		result.append("ChannelsChannelParticipants#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("participants:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ChannelsChannelParticipant(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ChannelsChannelParticipant::ctorChannelsChannelParticipant));
-	
-	if(ctor == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
-	{
-		result.append("ChannelsChannelParticipant#");
-		result.append("participant:");
-		MTProtoDecompiler::decompile_ChannelParticipant(thethis, result, mtstream);
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_HelpTermsOfService(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HelpTermsOfService::ctorHelpTermsOfService));
-	
-	if(ctor == HelpTermsOfService::ctorHelpTermsOfService)
-	{
-		result.append("HelpTermsOfService#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-	}
-}
-
-void MTProtoDecompiler::decompile_FoundGif(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == FoundGif::ctorFoundGif) ||
-		 (ctor == FoundGif::ctorFoundGifCached));
-	
-	if(ctor == FoundGif::ctorFoundGif)
-	{
-		result.append("FoundGif#");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		TLString thumb_url = mtstream.readTLString();
-		result.append("thumb_url:" + thethis->printableString(thumb_url));
-		result.append(", ");
-		TLString content_url = mtstream.readTLString();
-		result.append("content_url:" + thethis->printableString(content_url));
-		result.append(", ");
-		TLString content_type = mtstream.readTLString();
-		result.append("content_type:" + thethis->printableString(content_type));
-		result.append(", ");
-		TLInt w = mtstream.readTLInt();
-		result.append("w:" + QString::number(w, 16));
-		result.append(", ");
-		TLInt h = mtstream.readTLInt();
-		result.append("h:" + QString::number(h, 16));
-	}
-	else if(ctor == FoundGif::ctorFoundGifCached)
-	{
-		result.append("FoundGifCached#");
-		TLString url = mtstream.readTLString();
-		result.append("url:" + thethis->printableString(url));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		result.append("document:");
-		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesFoundGifs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesFoundGifs::ctorMessagesFoundGifs));
-	
-	if(ctor == MessagesFoundGifs::ctorMessagesFoundGifs)
-	{
-		result.append("MessagesFoundGifs#");
-		TLInt next_offset = mtstream.readTLInt();
-		result.append("next_offset:" + QString::number(next_offset, 16));
-		result.append(", ");
-		result.append("results:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesSavedGifs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesSavedGifs::ctorMessagesSavedGifsNotModified) ||
-		 (ctor == MessagesSavedGifs::ctorMessagesSavedGifs));
-	
-	if(ctor == MessagesSavedGifs::ctorMessagesSavedGifsNotModified)
-		result.append("MessagesSavedGifsNotModified");
-	else if(ctor == MessagesSavedGifs::ctorMessagesSavedGifs)
-	{
-		result.append("MessagesSavedGifs#");
-		TLInt hash = mtstream.readTLInt();
-		result.append("hash:" + QString::number(hash, 16));
-		result.append(", ");
-		result.append("gifs:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_InputBotInlineMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaAuto) ||
-		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageText) ||
-		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaGeo) ||
-		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaVenue) ||
-		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaContact) ||
-		 (ctor == InputBotInlineMessage::ctorInputBotInlineMessageGame));
-	
-	if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaAuto)
-	{
-		result.append("InputBotInlineMessageMediaAuto#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageText)
-	{
-		result.append("InputBotInlineMessageText#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaGeo)
-	{
-		result.append("InputBotInlineMessageMediaGeo#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("geo_point:");
-		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaVenue)
-	{
-		result.append("InputBotInlineMessageMediaVenue#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("geo_point:");
-		MTProtoDecompiler::decompile_InputGeoPoint(thethis, result, mtstream);
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString address = mtstream.readTLString();
-		result.append("address:" + thethis->printableString(address));
-		result.append(", ");
-		TLString provider = mtstream.readTLString();
-		result.append("provider:" + thethis->printableString(provider));
-		result.append(", ");
-		TLString venue_id = mtstream.readTLString();
-		result.append("venue_id:" + thethis->printableString(venue_id));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageMediaContact)
-	{
-		result.append("InputBotInlineMessageMediaContact#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString phone_number = mtstream.readTLString();
-		result.append("phone_number:" + thethis->printableString(phone_number));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == InputBotInlineMessage::ctorInputBotInlineMessageGame)
-	{
-		result.append("InputBotInlineMessageGame#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_InputBotInlineResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputBotInlineResult::ctorInputBotInlineResult) ||
-		 (ctor == InputBotInlineResult::ctorInputBotInlineResultPhoto) ||
-		 (ctor == InputBotInlineResult::ctorInputBotInlineResultDocument) ||
-		 (ctor == InputBotInlineResult::ctorInputBotInlineResultGame));
-	
-	if(ctor == InputBotInlineResult::ctorInputBotInlineResult)
-	{
-		result.append("InputBotInlineResult#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString description = mtstream.readTLString();
-			result.append("description:" + thethis->printableString(description));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLString url = mtstream.readTLString();
-			result.append("url:" + thethis->printableString(url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 4))
-		{
-			TLString thumb_url = mtstream.readTLString();
-			result.append("thumb_url:" + thethis->printableString(thumb_url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString content_url = mtstream.readTLString();
-			result.append("content_url:" + thethis->printableString(content_url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString content_type = mtstream.readTLString();
-			result.append("content_type:" + thethis->printableString(content_type));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt w = mtstream.readTLInt();
-			result.append("w:" + QString::number(w, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt h = mtstream.readTLInt();
-			result.append("h:" + QString::number(h, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			TLInt duration = mtstream.readTLInt();
-			result.append("duration:" + QString::number(duration, 16));
-			result.append(", ");
-		}
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
-	}
-	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultPhoto)
-	{
-		result.append("InputBotInlineResultPhoto#");
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
-	}
-	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultDocument)
-	{
-		result.append("InputBotInlineResultDocument#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString description = mtstream.readTLString();
-			result.append("description:" + thethis->printableString(description));
-			result.append(", ");
-		}
-		result.append("document:");
-		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
-	}
-	else if(ctor == InputBotInlineResult::ctorInputBotInlineResultGame)
-	{
-		result.append("InputBotInlineResultGame#");
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString short_name = mtstream.readTLString();
-		result.append("short_name:" + thethis->printableString(short_name));
-		result.append(", ");
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_InputBotInlineMessage(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_BotInlineMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == BotInlineMessage::ctorBotInlineMessageMediaAuto) ||
-		 (ctor == BotInlineMessage::ctorBotInlineMessageText) ||
-		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaGeo) ||
-		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaVenue) ||
-		 (ctor == BotInlineMessage::ctorBotInlineMessageMediaContact));
 	
-	if(ctor == BotInlineMessage::ctorBotInlineMessageMediaAuto)
-	{
-		result.append("BotInlineMessageMediaAuto#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString caption = mtstream.readTLString();
-		result.append("caption:" + thethis->printableString(caption));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == BotInlineMessage::ctorBotInlineMessageText)
-	{
-		result.append("BotInlineMessageText#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaGeo)
-	{
-		result.append("BotInlineMessageMediaGeo#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("geo:");
-		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaVenue)
-	{
-		result.append("BotInlineMessageMediaVenue#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("geo:");
-		MTProtoDecompiler::decompile_GeoPoint(thethis, result, mtstream);
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString address = mtstream.readTLString();
-		result.append("address:" + thethis->printableString(address));
-		result.append(", ");
-		TLString provider = mtstream.readTLString();
-		result.append("provider:" + thethis->printableString(provider));
-		result.append(", ");
-		TLString venue_id = mtstream.readTLString();
-		result.append("venue_id:" + thethis->printableString(venue_id));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-	else if(ctor == BotInlineMessage::ctorBotInlineMessageMediaContact)
-	{
-		result.append("BotInlineMessageMediaContact#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString phone_number = mtstream.readTLString();
-		result.append("phone_number:" + thethis->printableString(phone_number));
-		result.append(", ");
-		TLString first_name = mtstream.readTLString();
-		result.append("first_name:" + thethis->printableString(first_name));
-		result.append(", ");
-		TLString last_name = mtstream.readTLString();
-		result.append("last_name:" + thethis->printableString(last_name));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("reply_markup:");
-			MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_BotInlineResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == BotInlineResult::ctorBotInlineResult) ||
-		 (ctor == BotInlineResult::ctorBotInlineMediaResult));
-	
-	if(ctor == BotInlineResult::ctorBotInlineResult)
-	{
-		result.append("BotInlineResult#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString description = mtstream.readTLString();
-			result.append("description:" + thethis->printableString(description));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLString url = mtstream.readTLString();
-			result.append("url:" + thethis->printableString(url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 4))
-		{
-			TLString thumb_url = mtstream.readTLString();
-			result.append("thumb_url:" + thethis->printableString(thumb_url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString content_url = mtstream.readTLString();
-			result.append("content_url:" + thethis->printableString(content_url));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 5))
-		{
-			TLString content_type = mtstream.readTLString();
-			result.append("content_type:" + thethis->printableString(content_type));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt w = mtstream.readTLInt();
-			result.append("w:" + QString::number(w, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 6))
-		{
-			TLInt h = mtstream.readTLInt();
-			result.append("h:" + QString::number(h, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 7))
-		{
-			TLInt duration = mtstream.readTLInt();
-			result.append("duration:" + QString::number(duration, 16));
-			result.append(", ");
-		}
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_BotInlineMessage(thethis, result, mtstream);
-	}
-	else if(ctor == BotInlineResult::ctorBotInlineMediaResult)
-	{
-		result.append("BotInlineMediaResult#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLString id = mtstream.readTLString();
-		result.append("id:" + thethis->printableString(id));
-		result.append(", ");
-		TLString type = mtstream.readTLString();
-		result.append("type:" + thethis->printableString(type));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("photo:");
-			MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 1))
-		{
-			result.append("document:");
-			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString title = mtstream.readTLString();
-			result.append("title:" + thethis->printableString(title));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 3))
-		{
-			TLString description = mtstream.readTLString();
-			result.append("description:" + thethis->printableString(description));
-			result.append(", ");
-		}
-		result.append("send_message:");
-		MTProtoDecompiler::decompile_BotInlineMessage(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesBotResults(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesBotResults::ctorMessagesBotResults));
-	
-	if(ctor == MessagesBotResults::ctorMessagesBotResults)
-	{
-		result.append("MessagesBotResults#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_gallery:" + BIT_FIELD_VALUE(flags, 0));
-		result.append(", ");
-		TLLong query_id = mtstream.readTLLong();
-		result.append("query_id:" + QString::number(query_id, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLString next_offset = mtstream.readTLString();
-			result.append("next_offset:" + thethis->printableString(next_offset));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			result.append("switch_pm:");
-			MTProtoDecompiler::decompile_InlineBotSwitchPM(thethis, result, mtstream);
-		}
-		result.append("results:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ExportedMessageLink(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ExportedMessageLink::ctorExportedMessageLink));
-	
-	if(ctor == ExportedMessageLink::ctorExportedMessageLink)
-	{
-		result.append("ExportedMessageLink#");
-		TLString link = mtstream.readTLString();
-		result.append("link:" + thethis->printableString(link));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessageFwdHeader(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessageFwdHeader::ctorMessageFwdHeader));
-	
-	if(ctor == MessageFwdHeader::ctorMessageFwdHeader)
-	{
-		result.append("MessageFwdHeader#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt from_id = mtstream.readTLInt();
-			result.append("from_id:" + QString::number(from_id, 16));
-			result.append(", ");
-		}
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 1))
-		{
-			TLInt channel_id = mtstream.readTLInt();
-			result.append("channel_id:" + QString::number(channel_id, 16));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLInt channel_post = mtstream.readTLInt();
-			result.append("channel_post:" + QString::number(channel_post, 16));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_AuthCodeType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthCodeType::ctorAuthCodeTypeSms) ||
-		 (ctor == AuthCodeType::ctorAuthCodeTypeCall) ||
-		 (ctor == AuthCodeType::ctorAuthCodeTypeFlashCall));
-	
-	if(ctor == AuthCodeType::ctorAuthCodeTypeSms)
-		result.append("AuthCodeTypeSms");
-	else if(ctor == AuthCodeType::ctorAuthCodeTypeCall)
-		result.append("AuthCodeTypeCall");
-	else if(ctor == AuthCodeType::ctorAuthCodeTypeFlashCall)
-		result.append("AuthCodeTypeFlashCall");
-}
-
-void MTProtoDecompiler::decompile_AuthSentCodeType(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == AuthSentCodeType::ctorAuthSentCodeTypeApp) ||
-		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeSms) ||
-		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeCall) ||
-		 (ctor == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall));
-	
-	if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeApp)
-	{
-		result.append("AuthSentCodeTypeApp#");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeSms)
-	{
-		result.append("AuthSentCodeTypeSms#");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeCall)
-	{
-		result.append("AuthSentCodeTypeCall#");
-		TLInt length = mtstream.readTLInt();
-		result.append("length:" + QString::number(length, 16));
-	}
-	else if(ctor == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall)
-	{
-		result.append("AuthSentCodeTypeFlashCall#");
-		TLString pattern = mtstream.readTLString();
-		result.append("pattern:" + thethis->printableString(pattern));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesBotCallbackAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer));
-	
-	if(ctor == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer)
-	{
-		result.append("MessagesBotCallbackAnswer#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_alert:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		result.append("has_url:" + BIT_FIELD_VALUE(flags, 3));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLString message = mtstream.readTLString();
-			result.append("message:" + thethis->printableString(message));
-			result.append(", ");
-		}
-		if(IS_FLAG_SET(flags, 2))
-		{
-			TLString url = mtstream.readTLString();
-			result.append("url:" + thethis->printableString(url));
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesMessageEditData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesMessageEditData::ctorMessagesMessageEditData));
-	
-	if(ctor == MessagesMessageEditData::ctorMessagesMessageEditData)
-	{
-		result.append("MessagesMessageEditData#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_caption:" + BIT_FIELD_VALUE(flags, 0));
-	}
-}
-
-void MTProtoDecompiler::decompile_InputBotInlineMessageID(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputBotInlineMessageID::ctorInputBotInlineMessageID));
-	
-	if(ctor == InputBotInlineMessageID::ctorInputBotInlineMessageID)
-	{
-		result.append("InputBotInlineMessageID#");
-		TLInt dc_id = mtstream.readTLInt();
-		result.append("dc_id:" + QString::number(dc_id, 16));
-		result.append(", ");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_InlineBotSwitchPM(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InlineBotSwitchPM::ctorInlineBotSwitchPM));
-	
-	if(ctor == InlineBotSwitchPM::ctorInlineBotSwitchPM)
-	{
-		result.append("InlineBotSwitchPM#");
-		TLString text = mtstream.readTLString();
-		result.append("text:" + thethis->printableString(text));
-		result.append(", ");
-		TLString start_param = mtstream.readTLString();
-		result.append("start_param:" + thethis->printableString(start_param));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesPeerDialogs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesPeerDialogs::ctorMessagesPeerDialogs));
-	
-	if(ctor == MessagesPeerDialogs::ctorMessagesPeerDialogs)
-	{
-		result.append("MessagesPeerDialogs#");
-		result.append("dialogs:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("messages:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("state:");
-		MTProtoDecompiler::decompile_UpdatesState(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_TopPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == TopPeer::ctorTopPeer));
-	
-	if(ctor == TopPeer::ctorTopPeer)
-	{
-		result.append("TopPeer#");
-		result.append("peer:");
-		MTProtoDecompiler::decompile_Peer(thethis, result, mtstream);
-		TLDouble rating = mtstream.readTLDouble();
-		result.append("rating:" + QString::number(rating));
-	}
-}
-
-void MTProtoDecompiler::decompile_TopPeerCategory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == TopPeerCategory::ctorTopPeerCategoryBotsPM) ||
-		 (ctor == TopPeerCategory::ctorTopPeerCategoryBotsInline) ||
-		 (ctor == TopPeerCategory::ctorTopPeerCategoryCorrespondents) ||
-		 (ctor == TopPeerCategory::ctorTopPeerCategoryGroups) ||
-		 (ctor == TopPeerCategory::ctorTopPeerCategoryChannels));
-	
-	if(ctor == TopPeerCategory::ctorTopPeerCategoryBotsPM)
-		result.append("TopPeerCategoryBotsPM");
-	else if(ctor == TopPeerCategory::ctorTopPeerCategoryBotsInline)
-		result.append("TopPeerCategoryBotsInline");
-	else if(ctor == TopPeerCategory::ctorTopPeerCategoryCorrespondents)
-		result.append("TopPeerCategoryCorrespondents");
-	else if(ctor == TopPeerCategory::ctorTopPeerCategoryGroups)
-		result.append("TopPeerCategoryGroups");
-	else if(ctor == TopPeerCategory::ctorTopPeerCategoryChannels)
-		result.append("TopPeerCategoryChannels");
-}
-
-void MTProtoDecompiler::decompile_TopPeerCategoryPeers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == TopPeerCategoryPeers::ctorTopPeerCategoryPeers));
-	
-	if(ctor == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
-	{
-		result.append("TopPeerCategoryPeers#");
-		result.append("category:");
-		MTProtoDecompiler::decompile_TopPeerCategory(thethis, result, mtstream);
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
-		result.append(", ");
-		result.append("peers:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_ContactsTopPeers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ContactsTopPeers::ctorContactsTopPeersNotModified) ||
-		 (ctor == ContactsTopPeers::ctorContactsTopPeers));
-	
-	if(ctor == ContactsTopPeers::ctorContactsTopPeersNotModified)
-		result.append("ContactsTopPeersNotModified");
-	else if(ctor == ContactsTopPeers::ctorContactsTopPeers)
-	{
-		result.append("ContactsTopPeers#");
-		result.append("categories:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("chats:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_DraftMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == DraftMessage::ctorDraftMessageEmpty) ||
-		 (ctor == DraftMessage::ctorDraftMessage));
-	
-	if(ctor == DraftMessage::ctorDraftMessageEmpty)
-		result.append("DraftMessageEmpty");
-	else if(ctor == DraftMessage::ctorDraftMessage)
-	{
-		result.append("DraftMessage#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 1));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 0))
-		{
-			TLInt reply_to_msg_id = mtstream.readTLInt();
-			result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
-			result.append(", ");
-		}
-		TLString message = mtstream.readTLString();
-		result.append("message:" + thethis->printableString(message));
-		result.append(", ");
-		if(IS_FLAG_SET(flags, 3))
-		{
-			result.append("entities:");
-			thethis->decompileTLVectorEx(result, mtstream, false);
-			result.append(", ");
-		}
-		TLInt date = mtstream.readTLInt();
-		result.append("date:" + QString::number(date, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesFeaturedStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified) ||
-		 (ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickers));
+	Q_ASSERT((ctor == MsgsStateReq::ctorMsgsStateReq));
 	
-	if(ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified)
-		result.append("MessagesFeaturedStickersNotModified");
-	else if(ctor == MessagesFeaturedStickers::ctorMessagesFeaturedStickers)
+	if(ctor == MsgsStateReq::ctorMsgsStateReq)
 	{
-		result.append("MessagesFeaturedStickers#");
-		TLInt hash = mtstream.readTLInt();
-		result.append("hash:" + QString::number(hash, 16));
-		result.append(", ");
-		result.append("sets:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("unread:");
+		result.append("MsgsStateReq#");
+		result.append("msg_ids:");
 		thethis->decompileTLVector<TLLong>(result, mtstream, false);
 	}
 }
 
-void MTProtoDecompiler::decompile_MessagesRecentStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_MsgsStateInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesRecentStickers::ctorMessagesRecentStickersNotModified) ||
-		 (ctor == MessagesRecentStickers::ctorMessagesRecentStickers));
-	
-	if(ctor == MessagesRecentStickers::ctorMessagesRecentStickersNotModified)
-		result.append("MessagesRecentStickersNotModified");
-	else if(ctor == MessagesRecentStickers::ctorMessagesRecentStickers)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MessagesRecentStickers#");
-		TLInt hash = mtstream.readTLInt();
-		result.append("hash:" + QString::number(hash, 16));
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MsgsStateInfo::ctorMsgsStateInfo));
+	
+	if(ctor == MsgsStateInfo::ctorMsgsStateInfo)
+	{
+		result.append("MsgsStateInfo#");
+		TLLong req_msg_id = mtstream.readTLLong();
+		result.append("req_msg_id:" + QString::number(req_msg_id, 16));
 		result.append(", ");
-		result.append("stickers:");
+		TLString info = mtstream.readTLString();
+		result.append("info:" + thethis->printableString(info));
+	}
+}
+
+void MTProtoDecompiler::decompile_MsgsAllInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MsgsAllInfo::ctorMsgsAllInfo));
+	
+	if(ctor == MsgsAllInfo::ctorMsgsAllInfo)
+	{
+		result.append("MsgsAllInfo#");
+		result.append("msg_ids:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+		result.append(", ");
+		TLString info = mtstream.readTLString();
+		result.append("info:" + thethis->printableString(info));
+	}
+}
+
+void MTProtoDecompiler::decompile_MsgDetailedInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MsgDetailedInfo::ctorMsgDetailedInfo) ||
+		 (ctor == MsgDetailedInfo::ctorMsgNewDetailedInfo));
+	
+	if(ctor == MsgDetailedInfo::ctorMsgDetailedInfo)
+	{
+		result.append("MsgDetailedInfo#");
+		TLLong msg_id = mtstream.readTLLong();
+		result.append("msg_id:" + QString::number(msg_id, 16));
+		result.append(", ");
+		TLLong answer_msg_id = mtstream.readTLLong();
+		result.append("answer_msg_id:" + QString::number(answer_msg_id, 16));
+		result.append(", ");
+		TLInt bytes = mtstream.readTLInt();
+		result.append("bytes:" + QString::number(bytes, 16));
+		result.append(", ");
+		TLInt status = mtstream.readTLInt();
+		result.append("status:" + QString::number(status, 16));
+	}
+	else if(ctor == MsgDetailedInfo::ctorMsgNewDetailedInfo)
+	{
+		result.append("MsgNewDetailedInfo#");
+		TLLong answer_msg_id = mtstream.readTLLong();
+		result.append("answer_msg_id:" + QString::number(answer_msg_id, 16));
+		result.append(", ");
+		TLInt bytes = mtstream.readTLInt();
+		result.append("bytes:" + QString::number(bytes, 16));
+		result.append(", ");
+		TLInt status = mtstream.readTLInt();
+		result.append("status:" + QString::number(status, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_MsgResendReq(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == MsgResendReq::ctorMsgResendReq));
+	
+	if(ctor == MsgResendReq::ctorMsgResendReq)
+	{
+		result.append("MsgResendReq#");
+		result.append("msg_ids:");
+		thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	}
+}
+
+void MTProtoDecompiler::decompile_RpcError(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == RpcError::ctorRpcError));
+	
+	if(ctor == RpcError::ctorRpcError)
+	{
+		result.append("RpcError#");
+		TLInt error_code = mtstream.readTLInt();
+		result.append("error_code:" + QString::number(error_code, 16));
+		result.append(", ");
+		TLString error_message = mtstream.readTLString();
+		result.append("error_message:" + thethis->printableString(error_message));
+	}
+}
+
+void MTProtoDecompiler::decompile_RpcDropAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == RpcDropAnswer::ctorRpcAnswerUnknown) ||
+		 (ctor == RpcDropAnswer::ctorRpcAnswerDroppedRunning) ||
+		 (ctor == RpcDropAnswer::ctorRpcAnswerDropped));
+	
+	if(ctor == RpcDropAnswer::ctorRpcAnswerUnknown)
+		result.append("RpcAnswerUnknown");
+	else if(ctor == RpcDropAnswer::ctorRpcAnswerDroppedRunning)
+		result.append("RpcAnswerDroppedRunning");
+	else if(ctor == RpcDropAnswer::ctorRpcAnswerDropped)
+	{
+		result.append("RpcAnswerDropped#");
+		TLLong msg_id = mtstream.readTLLong();
+		result.append("msg_id:" + QString::number(msg_id, 16));
+		result.append(", ");
+		TLInt seq_no = mtstream.readTLInt();
+		result.append("seq_no:" + QString::number(seq_no, 16));
+		result.append(", ");
+		TLInt bytes = mtstream.readTLInt();
+		result.append("bytes:" + QString::number(bytes, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_FutureSalt(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == FutureSalt::ctorFutureSalt));
+	
+	if(ctor == FutureSalt::ctorFutureSalt)
+	{
+		result.append("FutureSalt#");
+		TLInt valid_since = mtstream.readTLInt();
+		result.append("valid_since:" + QString::number(valid_since, 16));
+		result.append(", ");
+		TLInt valid_until = mtstream.readTLInt();
+		result.append("valid_until:" + QString::number(valid_until, 16));
+		result.append(", ");
+		TLLong salt = mtstream.readTLLong();
+		result.append("salt:" + QString::number(salt, 16));
+	}
+}
+
+void MTProtoDecompiler::decompile_FutureSalts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	if(ctor == TLTypes::Null)
+	{
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == FutureSalts::ctorFutureSalts));
+	
+	if(ctor == FutureSalts::ctorFutureSalts)
+	{
+		result.append("FutureSalts#");
+		TLLong req_msg_id = mtstream.readTLLong();
+		result.append("req_msg_id:" + QString::number(req_msg_id, 16));
+		result.append(", ");
+		TLInt now = mtstream.readTLInt();
+		result.append("now:" + QString::number(now, 16));
+		result.append(", ");
+		result.append("salts:");
 		thethis->decompileTLVectorEx(result, mtstream, false);
 	}
 }
 
-void MTProtoDecompiler::decompile_MessagesArchivedStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_Pong(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesArchivedStickers::ctorMessagesArchivedStickers));
-	
-	if(ctor == MessagesArchivedStickers::ctorMessagesArchivedStickers)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MessagesArchivedStickers#");
-		TLInt count = mtstream.readTLInt();
-		result.append("count:" + QString::number(count, 16));
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == Pong::ctorPong));
+	
+	if(ctor == Pong::ctorPong)
+	{
+		result.append("Pong#");
+		TLLong msg_id = mtstream.readTLLong();
+		result.append("msg_id:" + QString::number(msg_id, 16));
 		result.append(", ");
-		result.append("sets:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
+		TLLong ping_id = mtstream.readTLLong();
+		result.append("ping_id:" + QString::number(ping_id, 16));
 	}
 }
 
-void MTProtoDecompiler::decompile_MessagesStickerSetInstallResult(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_DestroySessionRes(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess) ||
-		 (ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive));
-	
-	if(ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess)
-		result.append("MessagesStickerSetInstallResultSuccess");
-	else if(ctor == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MessagesStickerSetInstallResultArchive#");
-		result.append("sets:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append("Null");
+		return;
+	}
+	
+	
+	Q_ASSERT((ctor == DestroySessionRes::ctorDestroySessionOk) ||
+		 (ctor == DestroySessionRes::ctorDestroySessionNone));
+	
+	if(ctor == DestroySessionRes::ctorDestroySessionOk)
+	{
+		result.append("DestroySessionOk#");
+		TLLong session_id = mtstream.readTLLong();
+		result.append("session_id:" + QString::number(session_id, 16));
+	}
+	else if(ctor == DestroySessionRes::ctorDestroySessionNone)
+	{
+		result.append("DestroySessionNone#");
+		TLLong session_id = mtstream.readTLLong();
+		result.append("session_id:" + QString::number(session_id, 16));
 	}
 }
 
-void MTProtoDecompiler::decompile_StickerSetCovered(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_NewSession(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == StickerSetCovered::ctorStickerSetCovered) ||
-		 (ctor == StickerSetCovered::ctorStickerSetMultiCovered));
-	
-	if(ctor == StickerSetCovered::ctorStickerSetCovered)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("StickerSetCovered#");
-		result.append("set:");
-		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
-		result.append("cover:");
-		MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
+		result.append("Null");
+		return;
 	}
-	else if(ctor == StickerSetCovered::ctorStickerSetMultiCovered)
+	
+	
+	Q_ASSERT((ctor == NewSession::ctorNewSessionCreated));
+	
+	if(ctor == NewSession::ctorNewSessionCreated)
 	{
-		result.append("StickerSetMultiCovered#");
-		result.append("set:");
-		MTProtoDecompiler::decompile_StickerSet(thethis, result, mtstream);
-		result.append("covers:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
+		result.append("NewSessionCreated#");
+		TLLong first_msg_id = mtstream.readTLLong();
+		result.append("first_msg_id:" + QString::number(first_msg_id, 16));
+		result.append(", ");
+		TLLong unique_id = mtstream.readTLLong();
+		result.append("unique_id:" + QString::number(unique_id, 16));
+		result.append(", ");
+		TLLong server_salt = mtstream.readTLLong();
+		result.append("server_salt:" + QString::number(server_salt, 16));
 	}
 }
 
-void MTProtoDecompiler::decompile_MaskCoords(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+void MTProtoDecompiler::decompile_HttpWait(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
 	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == MaskCoords::ctorMaskCoords));
-	
-	if(ctor == MaskCoords::ctorMaskCoords)
+	if(ctor == TLTypes::Null)
 	{
-		result.append("MaskCoords#");
-		TLInt n = mtstream.readTLInt();
-		result.append("n:" + QString::number(n, 16));
-		result.append(", ");
-		TLDouble x = mtstream.readTLDouble();
-		result.append("x:" + QString::number(x));
-		result.append(", ");
-		TLDouble y = mtstream.readTLDouble();
-		result.append("y:" + QString::number(y));
-		result.append(", ");
-		TLDouble zoom = mtstream.readTLDouble();
-		result.append("zoom:" + QString::number(zoom));
+		result.append("Null");
+		return;
 	}
-}
-
-void MTProtoDecompiler::decompile_InputStickeredMedia(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
 	
-	Q_ASSERT((ctor == InputStickeredMedia::ctorInputStickeredMediaPhoto) ||
-		 (ctor == InputStickeredMedia::ctorInputStickeredMediaDocument));
 	
-	if(ctor == InputStickeredMedia::ctorInputStickeredMediaPhoto)
+	Q_ASSERT((ctor == HttpWait::ctorHttpWait));
+	
+	if(ctor == HttpWait::ctorHttpWait)
 	{
-		result.append("InputStickeredMediaPhoto#");
-		result.append("id_inputstickeredmediaphoto:");
-		MTProtoDecompiler::decompile_InputPhoto(thethis, result, mtstream);
-	}
-	else if(ctor == InputStickeredMedia::ctorInputStickeredMediaDocument)
-	{
-		result.append("InputStickeredMediaDocument#");
-		result.append("id_inputstickeredmediadocument:");
-		MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
-	}
-}
-
-void MTProtoDecompiler::decompile_Game(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Game::ctorGame));
-	
-	if(ctor == Game::ctorGame)
-	{
-		result.append("Game#");
-		
-		TLInt flags = mtstream.readTLInt();
-		Q_UNUSED(flags);
-		
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
+		result.append("HttpWait#");
+		TLInt max_delay = mtstream.readTLInt();
+		result.append("max_delay:" + QString::number(max_delay, 16));
 		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
+		TLInt wait_after = mtstream.readTLInt();
+		result.append("wait_after:" + QString::number(wait_after, 16));
 		result.append(", ");
-		TLString short_name = mtstream.readTLString();
-		result.append("short_name:" + thethis->printableString(short_name));
-		result.append(", ");
-		TLString title = mtstream.readTLString();
-		result.append("title:" + thethis->printableString(title));
-		result.append(", ");
-		TLString description = mtstream.readTLString();
-		result.append("description:" + thethis->printableString(description));
-		result.append(", ");
-		result.append("photo:");
-		MTProtoDecompiler::decompile_Photo(thethis, result, mtstream);
-		if(IS_FLAG_SET(flags, 0))
-		{
-			result.append("document:");
-			MTProtoDecompiler::decompile_Document(thethis, result, mtstream);
-		}
-	}
-}
-
-void MTProtoDecompiler::decompile_InputGame(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == InputGame::ctorInputGameID) ||
-		 (ctor == InputGame::ctorInputGameShortName));
-	
-	if(ctor == InputGame::ctorInputGameID)
-	{
-		result.append("InputGameID#");
-		TLLong id = mtstream.readTLLong();
-		result.append("id:" + QString::number(id, 16));
-		result.append(", ");
-		TLLong access_hash = mtstream.readTLLong();
-		result.append("access_hash:" + QString::number(access_hash, 16));
-	}
-	else if(ctor == InputGame::ctorInputGameShortName)
-	{
-		result.append("InputGameShortName#");
-		result.append("bot_id:");
-		MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
-		TLString short_name = mtstream.readTLString();
-		result.append("short_name:" + thethis->printableString(short_name));
-	}
-}
-
-void MTProtoDecompiler::decompile_HighScore(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HighScore::ctorHighScore));
-	
-	if(ctor == HighScore::ctorHighScore)
-	{
-		result.append("HighScore#");
-		TLInt pos = mtstream.readTLInt();
-		result.append("pos:" + QString::number(pos, 16));
-		result.append(", ");
-		TLInt user_id = mtstream.readTLInt();
-		result.append("user_id:" + QString::number(user_id, 16));
-		result.append(", ");
-		TLInt score = mtstream.readTLInt();
-		result.append("score:" + QString::number(score, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MessagesHighScores(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MessagesHighScores::ctorMessagesHighScores));
-	
-	if(ctor == MessagesHighScores::ctorMessagesHighScores)
-	{
-		result.append("MessagesHighScores#");
-		result.append("scores:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-		result.append(", ");
-		result.append("users:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
+		TLInt max_wait = mtstream.readTLInt();
+		result.append("max_wait:" + QString::number(max_wait, 16));
 	}
 }
 
@@ -10408,518 +12181,5 @@ void MTProtoDecompiler::decompile_destroySession(MTProtoDecompiler* thethis, QSt
 	TLLong session_id = mtstream.readTLLong();
 	result.append("session_id:" + QString::number(session_id, 16));
 	result.append(")");
-}
-
-void MTProtoDecompiler::decompile_ResPQ(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ResPQ::ctorResPQ));
-	
-	if(ctor == ResPQ::ctorResPQ)
-	{
-		result.append("ResPQ#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLString pq = mtstream.readTLString();
-		result.append("pq:" + thethis->printableString(pq));
-		result.append(", ");
-		result.append("server_public_key_fingerprints:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_PQInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == PQInnerData::ctorPQInnerData));
-	
-	if(ctor == PQInnerData::ctorPQInnerData)
-	{
-		result.append("PQInnerData#");
-		TLString pq = mtstream.readTLString();
-		result.append("pq:" + thethis->printableString(pq));
-		result.append(", ");
-		TLString p = mtstream.readTLString();
-		result.append("p:" + thethis->printableString(p));
-		result.append(", ");
-		TLString q = mtstream.readTLString();
-		result.append("q:" + thethis->printableString(q));
-		result.append(", ");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt256 new_nonce = mtstream.readTLInt256();
-		result.append("new_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce), sizeof(TLInt256)).toHex()));
-	}
-}
-
-void MTProtoDecompiler::decompile_ServerDHParams(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ServerDHParams::ctorServerDHParamsFail) ||
-		 (ctor == ServerDHParams::ctorServerDHParamsOk));
-	
-	if(ctor == ServerDHParams::ctorServerDHParamsFail)
-	{
-		result.append("ServerDHParamsFail#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 new_nonce_hash = mtstream.readTLInt128();
-		result.append("new_nonce_hash:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash), sizeof(TLInt128)).toHex()));
-	}
-	else if(ctor == ServerDHParams::ctorServerDHParamsOk)
-	{
-		result.append("ServerDHParamsOk#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLString encrypted_answer = mtstream.readTLString();
-		result.append("encrypted_answer:" + thethis->printableString(encrypted_answer));
-	}
-}
-
-void MTProtoDecompiler::decompile_ServerDHInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ServerDHInnerData::ctorServerDHInnerData));
-	
-	if(ctor == ServerDHInnerData::ctorServerDHInnerData)
-	{
-		result.append("ServerDHInnerData#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt g = mtstream.readTLInt();
-		result.append("g:" + QString::number(g, 16));
-		result.append(", ");
-		TLString dh_prime = mtstream.readTLString();
-		result.append("dh_prime:" + thethis->printableString(dh_prime));
-		result.append(", ");
-		TLString g_a = mtstream.readTLString();
-		result.append("g_a:" + thethis->printableString(g_a));
-		result.append(", ");
-		TLInt server_time = mtstream.readTLInt();
-		result.append("server_time:" + QString::number(server_time, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_ClientDHInnerData(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == ClientDHInnerData::ctorClientDHInnerData));
-	
-	if(ctor == ClientDHInnerData::ctorClientDHInnerData)
-	{
-		result.append("ClientDHInnerData#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLLong retry_id = mtstream.readTLLong();
-		result.append("retry_id:" + QString::number(retry_id, 16));
-		result.append(", ");
-		TLString g_b = mtstream.readTLString();
-		result.append("g_b:" + thethis->printableString(g_b));
-	}
-}
-
-void MTProtoDecompiler::decompile_SetClientDHParamsAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == SetClientDHParamsAnswer::ctorDhGenOk) ||
-		 (ctor == SetClientDHParamsAnswer::ctorDhGenRetry) ||
-		 (ctor == SetClientDHParamsAnswer::ctorDhGenFail));
-	
-	if(ctor == SetClientDHParamsAnswer::ctorDhGenOk)
-	{
-		result.append("DhGenOk#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 new_nonce_hash1 = mtstream.readTLInt128();
-		result.append("new_nonce_hash1:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash1), sizeof(TLInt128)).toHex()));
-	}
-	else if(ctor == SetClientDHParamsAnswer::ctorDhGenRetry)
-	{
-		result.append("DhGenRetry#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 new_nonce_hash2 = mtstream.readTLInt128();
-		result.append("new_nonce_hash2:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash2), sizeof(TLInt128)).toHex()));
-	}
-	else if(ctor == SetClientDHParamsAnswer::ctorDhGenFail)
-	{
-		result.append("DhGenFail#");
-		TLInt128 nonce = mtstream.readTLInt128();
-		result.append("nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 server_nonce = mtstream.readTLInt128();
-		result.append("server_nonce:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&server_nonce), sizeof(TLInt128)).toHex()));
-		result.append(", ");
-		TLInt128 new_nonce_hash3 = mtstream.readTLInt128();
-		result.append("new_nonce_hash3:" + QString::fromUtf8(QByteArray::fromRawData(reinterpret_cast<const char*>(&new_nonce_hash3), sizeof(TLInt128)).toHex()));
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgsAck(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgsAck::ctorMsgsAck));
-	
-	if(ctor == MsgsAck::ctorMsgsAck)
-	{
-		result.append("MsgsAck#");
-		result.append("msg_ids:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_BadMsgNotification(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == BadMsgNotification::ctorBadMsgNotification) ||
-		 (ctor == BadMsgNotification::ctorBadServerSalt));
-	
-	if(ctor == BadMsgNotification::ctorBadMsgNotification)
-	{
-		result.append("BadMsgNotification#");
-		TLLong bad_msg_id = mtstream.readTLLong();
-		result.append("bad_msg_id:" + QString::number(bad_msg_id, 16));
-		result.append(", ");
-		TLInt bad_msg_seqno = mtstream.readTLInt();
-		result.append("bad_msg_seqno:" + QString::number(bad_msg_seqno, 16));
-		result.append(", ");
-		TLInt error_code = mtstream.readTLInt();
-		result.append("error_code:" + QString::number(error_code, 16));
-	}
-	else if(ctor == BadMsgNotification::ctorBadServerSalt)
-	{
-		result.append("BadServerSalt#");
-		TLLong bad_msg_id = mtstream.readTLLong();
-		result.append("bad_msg_id:" + QString::number(bad_msg_id, 16));
-		result.append(", ");
-		TLInt bad_msg_seqno = mtstream.readTLInt();
-		result.append("bad_msg_seqno:" + QString::number(bad_msg_seqno, 16));
-		result.append(", ");
-		TLInt error_code = mtstream.readTLInt();
-		result.append("error_code:" + QString::number(error_code, 16));
-		result.append(", ");
-		TLLong new_server_salt = mtstream.readTLLong();
-		result.append("new_server_salt:" + QString::number(new_server_salt, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgsStateReq(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgsStateReq::ctorMsgsStateReq));
-	
-	if(ctor == MsgsStateReq::ctorMsgsStateReq)
-	{
-		result.append("MsgsStateReq#");
-		result.append("msg_ids:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgsStateInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgsStateInfo::ctorMsgsStateInfo));
-	
-	if(ctor == MsgsStateInfo::ctorMsgsStateInfo)
-	{
-		result.append("MsgsStateInfo#");
-		TLLong req_msg_id = mtstream.readTLLong();
-		result.append("req_msg_id:" + QString::number(req_msg_id, 16));
-		result.append(", ");
-		TLString info = mtstream.readTLString();
-		result.append("info:" + thethis->printableString(info));
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgsAllInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgsAllInfo::ctorMsgsAllInfo));
-	
-	if(ctor == MsgsAllInfo::ctorMsgsAllInfo)
-	{
-		result.append("MsgsAllInfo#");
-		result.append("msg_ids:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-		result.append(", ");
-		TLString info = mtstream.readTLString();
-		result.append("info:" + thethis->printableString(info));
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgDetailedInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgDetailedInfo::ctorMsgDetailedInfo) ||
-		 (ctor == MsgDetailedInfo::ctorMsgNewDetailedInfo));
-	
-	if(ctor == MsgDetailedInfo::ctorMsgDetailedInfo)
-	{
-		result.append("MsgDetailedInfo#");
-		TLLong msg_id = mtstream.readTLLong();
-		result.append("msg_id:" + QString::number(msg_id, 16));
-		result.append(", ");
-		TLLong answer_msg_id = mtstream.readTLLong();
-		result.append("answer_msg_id:" + QString::number(answer_msg_id, 16));
-		result.append(", ");
-		TLInt bytes = mtstream.readTLInt();
-		result.append("bytes:" + QString::number(bytes, 16));
-		result.append(", ");
-		TLInt status = mtstream.readTLInt();
-		result.append("status:" + QString::number(status, 16));
-	}
-	else if(ctor == MsgDetailedInfo::ctorMsgNewDetailedInfo)
-	{
-		result.append("MsgNewDetailedInfo#");
-		TLLong answer_msg_id = mtstream.readTLLong();
-		result.append("answer_msg_id:" + QString::number(answer_msg_id, 16));
-		result.append(", ");
-		TLInt bytes = mtstream.readTLInt();
-		result.append("bytes:" + QString::number(bytes, 16));
-		result.append(", ");
-		TLInt status = mtstream.readTLInt();
-		result.append("status:" + QString::number(status, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_MsgResendReq(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == MsgResendReq::ctorMsgResendReq));
-	
-	if(ctor == MsgResendReq::ctorMsgResendReq)
-	{
-		result.append("MsgResendReq#");
-		result.append("msg_ids:");
-		thethis->decompileTLVector<TLLong>(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_RpcError(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == RpcError::ctorRpcError));
-	
-	if(ctor == RpcError::ctorRpcError)
-	{
-		result.append("RpcError#");
-		TLInt error_code = mtstream.readTLInt();
-		result.append("error_code:" + QString::number(error_code, 16));
-		result.append(", ");
-		TLString error_message = mtstream.readTLString();
-		result.append("error_message:" + thethis->printableString(error_message));
-	}
-}
-
-void MTProtoDecompiler::decompile_RpcDropAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == RpcDropAnswer::ctorRpcAnswerUnknown) ||
-		 (ctor == RpcDropAnswer::ctorRpcAnswerDroppedRunning) ||
-		 (ctor == RpcDropAnswer::ctorRpcAnswerDropped));
-	
-	if(ctor == RpcDropAnswer::ctorRpcAnswerUnknown)
-		result.append("RpcAnswerUnknown");
-	else if(ctor == RpcDropAnswer::ctorRpcAnswerDroppedRunning)
-		result.append("RpcAnswerDroppedRunning");
-	else if(ctor == RpcDropAnswer::ctorRpcAnswerDropped)
-	{
-		result.append("RpcAnswerDropped#");
-		TLLong msg_id = mtstream.readTLLong();
-		result.append("msg_id:" + QString::number(msg_id, 16));
-		result.append(", ");
-		TLInt seq_no = mtstream.readTLInt();
-		result.append("seq_no:" + QString::number(seq_no, 16));
-		result.append(", ");
-		TLInt bytes = mtstream.readTLInt();
-		result.append("bytes:" + QString::number(bytes, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_FutureSalt(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == FutureSalt::ctorFutureSalt));
-	
-	if(ctor == FutureSalt::ctorFutureSalt)
-	{
-		result.append("FutureSalt#");
-		TLInt valid_since = mtstream.readTLInt();
-		result.append("valid_since:" + QString::number(valid_since, 16));
-		result.append(", ");
-		TLInt valid_until = mtstream.readTLInt();
-		result.append("valid_until:" + QString::number(valid_until, 16));
-		result.append(", ");
-		TLLong salt = mtstream.readTLLong();
-		result.append("salt:" + QString::number(salt, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_FutureSalts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == FutureSalts::ctorFutureSalts));
-	
-	if(ctor == FutureSalts::ctorFutureSalts)
-	{
-		result.append("FutureSalts#");
-		TLLong req_msg_id = mtstream.readTLLong();
-		result.append("req_msg_id:" + QString::number(req_msg_id, 16));
-		result.append(", ");
-		TLInt now = mtstream.readTLInt();
-		result.append("now:" + QString::number(now, 16));
-		result.append(", ");
-		result.append("salts:");
-		thethis->decompileTLVectorEx(result, mtstream, false);
-	}
-}
-
-void MTProtoDecompiler::decompile_Pong(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == Pong::ctorPong));
-	
-	if(ctor == Pong::ctorPong)
-	{
-		result.append("Pong#");
-		TLLong msg_id = mtstream.readTLLong();
-		result.append("msg_id:" + QString::number(msg_id, 16));
-		result.append(", ");
-		TLLong ping_id = mtstream.readTLLong();
-		result.append("ping_id:" + QString::number(ping_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_DestroySessionRes(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == DestroySessionRes::ctorDestroySessionOk) ||
-		 (ctor == DestroySessionRes::ctorDestroySessionNone));
-	
-	if(ctor == DestroySessionRes::ctorDestroySessionOk)
-	{
-		result.append("DestroySessionOk#");
-		TLLong session_id = mtstream.readTLLong();
-		result.append("session_id:" + QString::number(session_id, 16));
-	}
-	else if(ctor == DestroySessionRes::ctorDestroySessionNone)
-	{
-		result.append("DestroySessionNone#");
-		TLLong session_id = mtstream.readTLLong();
-		result.append("session_id:" + QString::number(session_id, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_NewSession(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == NewSession::ctorNewSessionCreated));
-	
-	if(ctor == NewSession::ctorNewSessionCreated)
-	{
-		result.append("NewSessionCreated#");
-		TLLong first_msg_id = mtstream.readTLLong();
-		result.append("first_msg_id:" + QString::number(first_msg_id, 16));
-		result.append(", ");
-		TLLong unique_id = mtstream.readTLLong();
-		result.append("unique_id:" + QString::number(unique_id, 16));
-		result.append(", ");
-		TLLong server_salt = mtstream.readTLLong();
-		result.append("server_salt:" + QString::number(server_salt, 16));
-	}
-}
-
-void MTProtoDecompiler::decompile_HttpWait(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
-{
-	Q_UNUSED(thethis);
-	TLConstructor ctor = mtstream.readTLConstructor();
-	
-	Q_ASSERT((ctor == HttpWait::ctorHttpWait));
-	
-	if(ctor == HttpWait::ctorHttpWait)
-	{
-		result.append("HttpWait#");
-		TLInt max_delay = mtstream.readTLInt();
-		result.append("max_delay:" + QString::number(max_delay, 16));
-		result.append(", ");
-		TLInt wait_after = mtstream.readTLInt();
-		result.append("wait_after:" + QString::number(wait_after, 16));
-		result.append(", ");
-		TLInt max_wait = mtstream.readTLInt();
-		result.append("max_wait:" + QString::number(max_wait, 16));
-	}
 }
 

@@ -30,14 +30,35 @@ void MessageMedia::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessageMedia::ctorMessageMediaPhoto)
 	{
-		RESET_TLTYPE(Photo, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_caption = mtstream->readTLString();
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaGeo)
 	{
-		RESET_TLTYPE(GeoPoint, this->_geo);
-		this->_geo->read(mtstream);
+		TLInt geo_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->_geo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaContact)
 	{
@@ -48,19 +69,51 @@ void MessageMedia::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaDocument)
 	{
-		RESET_TLTYPE(Document, this->_document);
-		this->_document->read(mtstream);
+		TLInt document_ctor = mtstream->peekTLConstructor();
+		
+		if(document_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Document, this->_document);
+			this->_document->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_document);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_caption = mtstream->readTLString();
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaWebPage)
 	{
-		RESET_TLTYPE(WebPage, this->_webpage);
-		this->_webpage->read(mtstream);
+		TLInt webpage_ctor = mtstream->peekTLConstructor();
+		
+		if(webpage_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(WebPage, this->_webpage);
+			this->_webpage->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_webpage);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaVenue)
 	{
-		RESET_TLTYPE(GeoPoint, this->_geo);
-		this->_geo->read(mtstream);
+		TLInt geo_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->_geo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_title = mtstream->readTLString();
 		this->_address = mtstream->readTLString();
 		this->_provider = mtstream->readTLString();
@@ -68,8 +121,18 @@ void MessageMedia::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaGame)
 	{
-		RESET_TLTYPE(Game, this->_game);
-		this->_game->read(mtstream);
+		TLInt game_ctor = mtstream->peekTLConstructor();
+		
+		if(game_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Game, this->_game);
+			this->_game->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_game);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -90,14 +153,19 @@ void MessageMedia::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessageMedia::ctorMessageMediaPhoto)
 	{
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_caption);
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaGeo)
 	{
-		Q_ASSERT(this->_geo != NULL);
-		this->_geo->write(mtstream);
+		if(this->_geo != NULL)
+			this->_geo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaContact)
 	{
@@ -108,19 +176,27 @@ void MessageMedia::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaDocument)
 	{
-		Q_ASSERT(this->_document != NULL);
-		this->_document->write(mtstream);
+		if(this->_document != NULL)
+			this->_document->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_caption);
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaWebPage)
 	{
-		Q_ASSERT(this->_webpage != NULL);
-		this->_webpage->write(mtstream);
+		if(this->_webpage != NULL)
+			this->_webpage->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaVenue)
 	{
-		Q_ASSERT(this->_geo != NULL);
-		this->_geo->write(mtstream);
+		if(this->_geo != NULL)
+			this->_geo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLString(this->_address);
 		mtstream->writeTLString(this->_provider);
@@ -128,8 +204,10 @@ void MessageMedia::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == MessageMedia::ctorMessageMediaGame)
 	{
-		Q_ASSERT(this->_game != NULL);
-		this->_game->write(mtstream);
+		if(this->_game != NULL)
+			this->_game->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

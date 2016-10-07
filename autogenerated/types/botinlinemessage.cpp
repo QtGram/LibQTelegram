@@ -28,8 +28,18 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 		this->_caption = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageText)
@@ -42,34 +52,86 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(GeoPoint, this->_geo);
-		this->_geo->read(mtstream);
+		TLInt geo_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->_geo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(GeoPoint, this->_geo);
-		this->_geo->read(mtstream);
+		TLInt geo_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->_geo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_title = mtstream->readTLString();
 		this->_address = mtstream->readTLString();
 		this->_provider = mtstream->readTLString();
 		this->_venue_id = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact)
@@ -80,8 +142,18 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 		this->_last_name = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
-			this->_reply_markup->read(mtstream);
+			TLInt reply_markup_ctor = mtstream->peekTLConstructor();
+			
+			if(reply_markup_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->_reply_markup->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_reply_markup);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 }
@@ -103,8 +175,10 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_caption);
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageText)
@@ -116,34 +190,46 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_geo != NULL);
-		this->_geo->write(mtstream);
+		if(this->_geo != NULL)
+			this->_geo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_geo != NULL);
-		this->_geo->write(mtstream);
+		if(this->_geo != NULL)
+			this->_geo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLString(this->_address);
 		mtstream->writeTLString(this->_provider);
 		mtstream->writeTLString(this->_venue_id);
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact)
@@ -154,8 +240,10 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_last_name);
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_reply_markup != NULL);
-			this->_reply_markup->write(mtstream);
+			if(this->_reply_markup != NULL)
+				this->_reply_markup->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 }

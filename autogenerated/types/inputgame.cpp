@@ -25,8 +25,19 @@ void InputGame::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputGame::ctorInputGameShortName)
 	{
-		RESET_TLTYPE(InputUser, this->_bot_id);
-		this->_bot_id->read(mtstream);
+		TLInt bot_id_ctor = mtstream->peekTLConstructor();
+		
+		if(bot_id_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputUser, this->_bot_id);
+			this->_bot_id->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_bot_id);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_short_name = mtstream->readTLString();
 	}
 }
@@ -46,8 +57,11 @@ void InputGame::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputGame::ctorInputGameShortName)
 	{
-		Q_ASSERT(this->_bot_id != NULL);
-		this->_bot_id->write(mtstream);
+		if(this->_bot_id != NULL)
+			this->_bot_id->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_short_name);
 	}
 }

@@ -25,8 +25,18 @@ void ChatInvite::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ChatInvite::ctorChatInviteAlready)
 	{
-		RESET_TLTYPE(Chat, this->_chat);
-		this->_chat->read(mtstream);
+		TLInt chat_ctor = mtstream->peekTLConstructor();
+		
+		if(chat_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Chat, this->_chat);
+			this->_chat->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_chat);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == ChatInvite::ctorChatInvite)
 	{
@@ -36,8 +46,19 @@ void ChatInvite::read(MTProtoStream* mtstream)
 		this->_is_public = IS_FLAG_SET(this->_flags, 2);
 		this->_is_megagroup = IS_FLAG_SET(this->_flags, 3);
 		this->_title = mtstream->readTLString();
-		RESET_TLTYPE(ChatPhoto, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_participants_count = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 4))
 			mtstream->readTLVector<User>(this->_participants, false);
@@ -54,15 +75,20 @@ void ChatInvite::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ChatInvite::ctorChatInviteAlready)
 	{
-		Q_ASSERT(this->_chat != NULL);
-		this->_chat->write(mtstream);
+		if(this->_chat != NULL)
+			this->_chat->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == ChatInvite::ctorChatInvite)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_title);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_participants_count);
 		if(IS_FLAG_SET(this->_flags, 4))
 			mtstream->writeTLVector(this->_participants, false);

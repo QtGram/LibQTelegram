@@ -118,8 +118,19 @@ void Update::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == Update::ctorUpdateNewMessage)
 	{
-		RESET_TLTYPE(Message, this->_message_updatenewmessage);
-		this->_message_updatenewmessage->read(mtstream);
+		TLInt message_updatenewmessage_ctor = mtstream->peekTLConstructor();
+		
+		if(message_updatenewmessage_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Message, this->_message_updatenewmessage);
+			this->_message_updatenewmessage->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_message_updatenewmessage);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
@@ -137,26 +148,66 @@ void Update::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == Update::ctorUpdateUserTyping)
 	{
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(SendMessageAction, this->_action);
-		this->_action->read(mtstream);
+		TLInt action_ctor = mtstream->peekTLConstructor();
+		
+		if(action_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(SendMessageAction, this->_action);
+			this->_action->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_action);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateChatUserTyping)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(SendMessageAction, this->_action);
-		this->_action->read(mtstream);
+		TLInt action_ctor = mtstream->peekTLConstructor();
+		
+		if(action_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(SendMessageAction, this->_action);
+			this->_action->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_action);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateChatParticipants)
 	{
-		RESET_TLTYPE(ChatParticipants, this->_participants);
-		this->_participants->read(mtstream);
+		TLInt participants_ctor = mtstream->peekTLConstructor();
+		
+		if(participants_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatParticipants, this->_participants);
+			this->_participants->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_participants);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserStatus)
 	{
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(UserStatus, this->_status);
-		this->_status->read(mtstream);
+		TLInt status_ctor = mtstream->peekTLConstructor();
+		
+		if(status_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UserStatus, this->_status);
+			this->_status->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_status);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserName)
 	{
@@ -169,8 +220,19 @@ void Update::read(MTProtoStream* mtstream)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
-		RESET_TLTYPE(UserProfilePhoto, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UserProfilePhoto, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_is_previous = mtstream->readTLBool();
 	}
 	else if(this->_constructorid == Update::ctorUpdateContactRegistered)
@@ -181,10 +243,31 @@ void Update::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == Update::ctorUpdateContactLink)
 	{
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(ContactLink, this->_my_link);
-		this->_my_link->read(mtstream);
-		RESET_TLTYPE(ContactLink, this->_foreign_link);
-		this->_foreign_link->read(mtstream);
+		TLInt my_link_ctor = mtstream->peekTLConstructor();
+		
+		if(my_link_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ContactLink, this->_my_link);
+			this->_my_link->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_my_link);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt foreign_link_ctor = mtstream->peekTLConstructor();
+		
+		if(foreign_link_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ContactLink, this->_foreign_link);
+			this->_foreign_link->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_foreign_link);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewAuthorization)
 	{
@@ -195,16 +278,38 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewEncryptedMessage)
 	{
-		RESET_TLTYPE(EncryptedMessage, this->_message_updatenewencryptedmessage);
-		this->_message_updatenewencryptedmessage->read(mtstream);
+		TLInt message_updatenewencryptedmessage_ctor = mtstream->peekTLConstructor();
+		
+		if(message_updatenewencryptedmessage_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(EncryptedMessage, this->_message_updatenewencryptedmessage);
+			this->_message_updatenewencryptedmessage->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_message_updatenewencryptedmessage);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_qts = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Update::ctorUpdateEncryptedChatTyping)
 		this->_chat_id = mtstream->readTLInt();
 	else if(this->_constructorid == Update::ctorUpdateEncryption)
 	{
-		RESET_TLTYPE(EncryptedChat, this->_chat);
-		this->_chat->read(mtstream);
+		TLInt chat_ctor = mtstream->peekTLConstructor();
+		
+		if(chat_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(EncryptedChat, this->_chat);
+			this->_chat->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_chat);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_date = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Update::ctorUpdateEncryptedMessagesRead)
@@ -236,23 +341,66 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNotifySettings)
 	{
-		RESET_TLTYPE(NotifyPeer, this->_peer_updatenotifysettings);
-		this->_peer_updatenotifysettings->read(mtstream);
-		RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
-		this->_notify_settings->read(mtstream);
+		TLInt peer_updatenotifysettings_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_updatenotifysettings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(NotifyPeer, this->_peer_updatenotifysettings);
+			this->_peer_updatenotifysettings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer_updatenotifysettings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt notify_settings_ctor = mtstream->peekTLConstructor();
+		
+		if(notify_settings_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->_notify_settings->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_notify_settings);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateServiceNotification)
 	{
 		this->_type = mtstream->readTLString();
 		this->_message_updateservicenotification = mtstream->readTLString();
-		RESET_TLTYPE(MessageMedia, this->_media);
-		this->_media->read(mtstream);
+		TLInt media_ctor = mtstream->peekTLConstructor();
+		
+		if(media_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(MessageMedia, this->_media);
+			this->_media->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_media);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_is_popup = mtstream->readTLBool();
 	}
 	else if(this->_constructorid == Update::ctorUpdatePrivacy)
 	{
-		RESET_TLTYPE(PrivacyKey, this->_key);
-		this->_key->read(mtstream);
+		TLInt key_ctor = mtstream->peekTLConstructor();
+		
+		if(key_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PrivacyKey, this->_key);
+			this->_key->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_key);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<PrivacyRule>(this->_rules, false);
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserPhone)
@@ -262,24 +410,57 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateReadHistoryInbox)
 	{
-		RESET_TLTYPE(Peer, this->_peer_updatereadhistoryinbox);
-		this->_peer_updatereadhistoryinbox->read(mtstream);
+		TLInt peer_updatereadhistoryinbox_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_updatereadhistoryinbox_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer_updatereadhistoryinbox);
+			this->_peer_updatereadhistoryinbox->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer_updatereadhistoryinbox);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_max_id = mtstream->readTLInt();
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Update::ctorUpdateReadHistoryOutbox)
 	{
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_max_id = mtstream->readTLInt();
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Update::ctorUpdateWebPage)
 	{
-		RESET_TLTYPE(WebPage, this->_webpage);
-		this->_webpage->read(mtstream);
+		TLInt webpage_ctor = mtstream->peekTLConstructor();
+		
+		if(webpage_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(WebPage, this->_webpage);
+			this->_webpage->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_webpage);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
@@ -300,8 +481,19 @@ void Update::read(MTProtoStream* mtstream)
 		this->_channel_id = mtstream->readTLInt();
 	else if(this->_constructorid == Update::ctorUpdateNewChannelMessage)
 	{
-		RESET_TLTYPE(Message, this->_message_updatenewchannelmessage);
-		this->_message_updatenewchannelmessage->read(mtstream);
+		TLInt message_updatenewchannelmessage_ctor = mtstream->peekTLConstructor();
+		
+		if(message_updatenewchannelmessage_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Message, this->_message_updatenewchannelmessage);
+			this->_message_updatenewchannelmessage->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_message_updatenewchannelmessage);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
@@ -338,8 +530,18 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewStickerSet)
 	{
-		RESET_TLTYPE(MessagesStickerSet, this->_stickerset);
-		this->_stickerset->read(mtstream);
+		TLInt stickerset_ctor = mtstream->peekTLConstructor();
+		
+		if(stickerset_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(MessagesStickerSet, this->_stickerset);
+			this->_stickerset->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_stickerset);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateStickerSetsOrder)
 	{
@@ -355,8 +557,18 @@ void Update::read(MTProtoStream* mtstream)
 		this->_query = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			RESET_TLTYPE(GeoPoint, this->_geo);
-			this->_geo->read(mtstream);
+			TLInt geo_ctor = mtstream->peekTLConstructor();
+			
+			if(geo_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(GeoPoint, this->_geo);
+				this->_geo->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_geo);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		this->_offset = mtstream->readTLString();
@@ -368,21 +580,52 @@ void Update::read(MTProtoStream* mtstream)
 		this->_query = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			RESET_TLTYPE(GeoPoint, this->_geo);
-			this->_geo->read(mtstream);
+			TLInt geo_ctor = mtstream->peekTLConstructor();
+			
+			if(geo_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(GeoPoint, this->_geo);
+				this->_geo->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_geo);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		this->_id_updatebotinlinesend = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updatebotinlinesend);
-			this->_msg_id_updatebotinlinesend->read(mtstream);
+			TLInt msg_id_updatebotinlinesend_ctor = mtstream->peekTLConstructor();
+			
+			if(msg_id_updatebotinlinesend_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updatebotinlinesend);
+				this->_msg_id_updatebotinlinesend->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_msg_id_updatebotinlinesend);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateEditChannelMessage)
 	{
-		RESET_TLTYPE(Message, this->_message);
-		this->_message->read(mtstream);
+		TLInt message_ctor = mtstream->peekTLConstructor();
+		
+		if(message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Message, this->_message);
+			this->_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
@@ -396,8 +639,19 @@ void Update::read(MTProtoStream* mtstream)
 		this->_flags = mtstream->readTLInt();
 		this->_query_id = mtstream->readTLLong();
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_msg_id_updatebotcallbackquery = mtstream->readTLInt();
 		this->_chat_instance = mtstream->readTLLong();
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -408,8 +662,19 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateEditMessage)
 	{
-		RESET_TLTYPE(Message, this->_message);
-		this->_message->read(mtstream);
+		TLInt message_ctor = mtstream->peekTLConstructor();
+		
+		if(message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Message, this->_message);
+			this->_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
@@ -418,8 +683,19 @@ void Update::read(MTProtoStream* mtstream)
 		this->_flags = mtstream->readTLInt();
 		this->_query_id = mtstream->readTLLong();
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updateinlinebotcallbackquery);
-		this->_msg_id_updateinlinebotcallbackquery->read(mtstream);
+		TLInt msg_id_updateinlinebotcallbackquery_ctor = mtstream->peekTLConstructor();
+		
+		if(msg_id_updateinlinebotcallbackquery_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updateinlinebotcallbackquery);
+			this->_msg_id_updateinlinebotcallbackquery->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_msg_id_updateinlinebotcallbackquery);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_chat_instance = mtstream->readTLLong();
 		if(IS_FLAG_SET(this->_flags, 0))
 			this->_data = mtstream->readTLBytes();
@@ -434,10 +710,31 @@ void Update::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateDraftMessage)
 	{
-		RESET_TLTYPE(Peer, this->_peer);
-		this->_peer->read(mtstream);
-		RESET_TLTYPE(DraftMessage, this->_draft);
-		this->_draft->read(mtstream);
+		TLInt peer_ctor = mtstream->peekTLConstructor();
+		
+		if(peer_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Peer, this->_peer);
+			this->_peer->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_peer);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt draft_ctor = mtstream->peekTLConstructor();
+		
+		if(draft_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(DraftMessage, this->_draft);
+			this->_draft->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_draft);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -502,8 +799,11 @@ void Update::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == Update::ctorUpdateNewMessage)
 	{
-		Q_ASSERT(this->_message_updatenewmessage != NULL);
-		this->_message_updatenewmessage->write(mtstream);
+		if(this->_message_updatenewmessage != NULL)
+			this->_message_updatenewmessage->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
@@ -521,26 +821,34 @@ void Update::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == Update::ctorUpdateUserTyping)
 	{
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_action != NULL);
-		this->_action->write(mtstream);
+		if(this->_action != NULL)
+			this->_action->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateChatUserTyping)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_action != NULL);
-		this->_action->write(mtstream);
+		if(this->_action != NULL)
+			this->_action->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateChatParticipants)
 	{
-		Q_ASSERT(this->_participants != NULL);
-		this->_participants->write(mtstream);
+		if(this->_participants != NULL)
+			this->_participants->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserStatus)
 	{
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_status != NULL);
-		this->_status->write(mtstream);
+		if(this->_status != NULL)
+			this->_status->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserName)
 	{
@@ -553,8 +861,11 @@ void Update::write(MTProtoStream* mtstream)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_date);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLBool(this->_is_previous);
 	}
 	else if(this->_constructorid == Update::ctorUpdateContactRegistered)
@@ -565,10 +876,15 @@ void Update::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == Update::ctorUpdateContactLink)
 	{
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_my_link != NULL);
-		this->_my_link->write(mtstream);
-		Q_ASSERT(this->_foreign_link != NULL);
-		this->_foreign_link->write(mtstream);
+		if(this->_my_link != NULL)
+			this->_my_link->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_foreign_link != NULL)
+			this->_foreign_link->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewAuthorization)
 	{
@@ -579,16 +895,22 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewEncryptedMessage)
 	{
-		Q_ASSERT(this->_message_updatenewencryptedmessage != NULL);
-		this->_message_updatenewencryptedmessage->write(mtstream);
+		if(this->_message_updatenewencryptedmessage != NULL)
+			this->_message_updatenewencryptedmessage->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_qts);
 	}
 	else if(this->_constructorid == Update::ctorUpdateEncryptedChatTyping)
 		mtstream->writeTLInt(this->_chat_id);
 	else if(this->_constructorid == Update::ctorUpdateEncryption)
 	{
-		Q_ASSERT(this->_chat != NULL);
-		this->_chat->write(mtstream);
+		if(this->_chat != NULL)
+			this->_chat->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_date);
 	}
 	else if(this->_constructorid == Update::ctorUpdateEncryptedMessagesRead)
@@ -620,23 +942,34 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNotifySettings)
 	{
-		Q_ASSERT(this->_peer_updatenotifysettings != NULL);
-		this->_peer_updatenotifysettings->write(mtstream);
-		Q_ASSERT(this->_notify_settings != NULL);
-		this->_notify_settings->write(mtstream);
+		if(this->_peer_updatenotifysettings != NULL)
+			this->_peer_updatenotifysettings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_notify_settings != NULL)
+			this->_notify_settings->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateServiceNotification)
 	{
 		mtstream->writeTLString(this->_type);
 		mtstream->writeTLString(this->_message_updateservicenotification);
-		Q_ASSERT(this->_media != NULL);
-		this->_media->write(mtstream);
+		if(this->_media != NULL)
+			this->_media->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLBool(this->_is_popup);
 	}
 	else if(this->_constructorid == Update::ctorUpdatePrivacy)
 	{
-		Q_ASSERT(this->_key != NULL);
-		this->_key->write(mtstream);
+		if(this->_key != NULL)
+			this->_key->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_rules, false);
 	}
 	else if(this->_constructorid == Update::ctorUpdateUserPhone)
@@ -646,24 +979,33 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateReadHistoryInbox)
 	{
-		Q_ASSERT(this->_peer_updatereadhistoryinbox != NULL);
-		this->_peer_updatereadhistoryinbox->write(mtstream);
+		if(this->_peer_updatereadhistoryinbox != NULL)
+			this->_peer_updatereadhistoryinbox->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_max_id);
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
 	else if(this->_constructorid == Update::ctorUpdateReadHistoryOutbox)
 	{
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_max_id);
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
 	else if(this->_constructorid == Update::ctorUpdateWebPage)
 	{
-		Q_ASSERT(this->_webpage != NULL);
-		this->_webpage->write(mtstream);
+		if(this->_webpage != NULL)
+			this->_webpage->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
@@ -684,8 +1026,11 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_channel_id);
 	else if(this->_constructorid == Update::ctorUpdateNewChannelMessage)
 	{
-		Q_ASSERT(this->_message_updatenewchannelmessage != NULL);
-		this->_message_updatenewchannelmessage->write(mtstream);
+		if(this->_message_updatenewchannelmessage != NULL)
+			this->_message_updatenewchannelmessage->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
@@ -722,8 +1067,10 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateNewStickerSet)
 	{
-		Q_ASSERT(this->_stickerset != NULL);
-		this->_stickerset->write(mtstream);
+		if(this->_stickerset != NULL)
+			this->_stickerset->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == Update::ctorUpdateStickerSetsOrder)
 	{
@@ -738,8 +1085,10 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_query);
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			Q_ASSERT(this->_geo != NULL);
-			this->_geo->write(mtstream);
+			if(this->_geo != NULL)
+				this->_geo->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		mtstream->writeTLString(this->_offset);
@@ -751,21 +1100,28 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_query);
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			Q_ASSERT(this->_geo != NULL);
-			this->_geo->write(mtstream);
+			if(this->_geo != NULL)
+				this->_geo->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		mtstream->writeTLString(this->_id_updatebotinlinesend);
 		if(IS_FLAG_SET(this->_flags, 1))
 		{
-			Q_ASSERT(this->_msg_id_updatebotinlinesend != NULL);
-			this->_msg_id_updatebotinlinesend->write(mtstream);
+			if(this->_msg_id_updatebotinlinesend != NULL)
+				this->_msg_id_updatebotinlinesend->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == Update::ctorUpdateEditChannelMessage)
 	{
-		Q_ASSERT(this->_message != NULL);
-		this->_message->write(mtstream);
+		if(this->_message != NULL)
+			this->_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
@@ -779,8 +1135,11 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_msg_id_updatebotcallbackquery);
 		mtstream->writeTLLong(this->_chat_instance);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -791,8 +1150,11 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateEditMessage)
 	{
-		Q_ASSERT(this->_message != NULL);
-		this->_message->write(mtstream);
+		if(this->_message != NULL)
+			this->_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
@@ -801,8 +1163,11 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_msg_id_updateinlinebotcallbackquery != NULL);
-		this->_msg_id_updateinlinebotcallbackquery->write(mtstream);
+		if(this->_msg_id_updateinlinebotcallbackquery != NULL)
+			this->_msg_id_updateinlinebotcallbackquery->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLLong(this->_chat_instance);
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLBytes(this->_data);
@@ -817,10 +1182,15 @@ void Update::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Update::ctorUpdateDraftMessage)
 	{
-		Q_ASSERT(this->_peer != NULL);
-		this->_peer->write(mtstream);
-		Q_ASSERT(this->_draft != NULL);
-		this->_draft->write(mtstream);
+		if(this->_peer != NULL)
+			this->_peer->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_draft != NULL)
+			this->_draft->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

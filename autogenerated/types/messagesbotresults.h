@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "inlinebotswitchpm.h"
-#include "../../types/telegramobject.h"
 #include "botinlineresult.h"
+#include "../../types/telegramobject.h"
+#include "inlinebotswitchpm.h"
 
 class MessagesBotResults: public TelegramObject
 {

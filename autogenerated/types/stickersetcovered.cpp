@@ -19,15 +19,47 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == StickerSetCovered::ctorStickerSetCovered)
 	{
-		RESET_TLTYPE(StickerSet, this->_set);
-		this->_set->read(mtstream);
-		RESET_TLTYPE(Document, this->_cover);
-		this->_cover->read(mtstream);
+		TLInt set_ctor = mtstream->peekTLConstructor();
+		
+		if(set_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(StickerSet, this->_set);
+			this->_set->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_set);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt cover_ctor = mtstream->peekTLConstructor();
+		
+		if(cover_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Document, this->_cover);
+			this->_cover->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_cover);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered)
 	{
-		RESET_TLTYPE(StickerSet, this->_set);
-		this->_set->read(mtstream);
+		TLInt set_ctor = mtstream->peekTLConstructor();
+		
+		if(set_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(StickerSet, this->_set);
+			this->_set->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_set);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<Document>(this->_covers, false);
 	}
 }
@@ -42,15 +74,23 @@ void StickerSetCovered::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == StickerSetCovered::ctorStickerSetCovered)
 	{
-		Q_ASSERT(this->_set != NULL);
-		this->_set->write(mtstream);
-		Q_ASSERT(this->_cover != NULL);
-		this->_cover->write(mtstream);
+		if(this->_set != NULL)
+			this->_set->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_cover != NULL)
+			this->_cover->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered)
 	{
-		Q_ASSERT(this->_set != NULL);
-		this->_set->write(mtstream);
+		if(this->_set != NULL)
+			this->_set->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_covers, false);
 	}
 }

@@ -19,8 +19,19 @@ void UploadFile::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == UploadFile::ctorUploadFile)
 	{
-		RESET_TLTYPE(StorageFileType, this->_type);
-		this->_type->read(mtstream);
+		TLInt type_ctor = mtstream->peekTLConstructor();
+		
+		if(type_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(StorageFileType, this->_type);
+			this->_type->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_type);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_mtime = mtstream->readTLInt();
 		this->_bytes = mtstream->readTLBytes();
 	}
@@ -35,8 +46,11 @@ void UploadFile::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == UploadFile::ctorUploadFile)
 	{
-		Q_ASSERT(this->_type != NULL);
-		this->_type->write(mtstream);
+		if(this->_type != NULL)
+			this->_type->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_mtime);
 		mtstream->writeTLBytes(this->_bytes);
 	}

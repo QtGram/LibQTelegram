@@ -18,8 +18,19 @@ void MessagesStickerSet::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet)
 	{
-		RESET_TLTYPE(StickerSet, this->_set);
-		this->_set->read(mtstream);
+		TLInt set_ctor = mtstream->peekTLConstructor();
+		
+		if(set_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(StickerSet, this->_set);
+			this->_set->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_set);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<StickerPack>(this->_packs, false);
 		mtstream->readTLVector<Document>(this->_documents, false);
 	}
@@ -34,8 +45,11 @@ void MessagesStickerSet::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet)
 	{
-		Q_ASSERT(this->_set != NULL);
-		this->_set->write(mtstream);
+		if(this->_set != NULL)
+			this->_set->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_packs, false);
 		mtstream->writeTLVector(this->_documents, false);
 	}

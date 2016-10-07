@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
-#include "documentattribute.h"
 #include "photosize.h"
+#include "documentattribute.h"
+#include "../../types/telegramobject.h"
 
 class Document: public TelegramObject
 {

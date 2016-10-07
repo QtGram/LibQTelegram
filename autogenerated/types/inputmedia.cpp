@@ -36,22 +36,54 @@ void InputMedia::read(MTProtoStream* mtstream)
 	if(this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(InputFile, this->_file);
-		this->_file->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_caption = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->readTLVector<InputDocument>(this->_stickers, false);
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaPhoto)
 	{
-		RESET_TLTYPE(InputPhoto, this->_id_inputmediaphoto);
-		this->_id_inputmediaphoto->read(mtstream);
+		TLInt id_inputmediaphoto_ctor = mtstream->peekTLConstructor();
+		
+		if(id_inputmediaphoto_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputPhoto, this->_id_inputmediaphoto);
+			this->_id_inputmediaphoto->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id_inputmediaphoto);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_caption = mtstream->readTLString();
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaGeoPoint)
 	{
-		RESET_TLTYPE(InputGeoPoint, this->_geo_point);
-		this->_geo_point->read(mtstream);
+		TLInt geo_point_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_point_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->_geo_point->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo_point);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaContact)
 	{
@@ -62,8 +94,19 @@ void InputMedia::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedDocument)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(InputFile, this->_file);
-		this->_file->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_mime_type = mtstream->readTLString();
 		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
 		this->_caption = mtstream->readTLString();
@@ -73,10 +116,32 @@ void InputMedia::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument)
 	{
 		this->_flags = mtstream->readTLInt();
-		RESET_TLTYPE(InputFile, this->_file);
-		this->_file->read(mtstream);
-		RESET_TLTYPE(InputFile, this->_thumb);
-		this->_thumb->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt thumb_ctor = mtstream->peekTLConstructor();
+		
+		if(thumb_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputFile, this->_thumb);
+			this->_thumb->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_thumb);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_mime_type = mtstream->readTLString();
 		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
 		this->_caption = mtstream->readTLString();
@@ -85,14 +150,36 @@ void InputMedia::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaDocument)
 	{
-		RESET_TLTYPE(InputDocument, this->_id_inputmediadocument);
-		this->_id_inputmediadocument->read(mtstream);
+		TLInt id_inputmediadocument_ctor = mtstream->peekTLConstructor();
+		
+		if(id_inputmediadocument_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputDocument, this->_id_inputmediadocument);
+			this->_id_inputmediadocument->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id_inputmediadocument);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_caption = mtstream->readTLString();
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaVenue)
 	{
-		RESET_TLTYPE(InputGeoPoint, this->_geo_point);
-		this->_geo_point->read(mtstream);
+		TLInt geo_point_ctor = mtstream->peekTLConstructor();
+		
+		if(geo_point_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->_geo_point->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_geo_point);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_title = mtstream->readTLString();
 		this->_address = mtstream->readTLString();
 		this->_provider = mtstream->readTLString();
@@ -115,8 +202,18 @@ void InputMedia::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaGame)
 	{
-		RESET_TLTYPE(InputGame, this->_id_inputmediagame);
-		this->_id_inputmediagame->read(mtstream);
+		TLInt id_inputmediagame_ctor = mtstream->peekTLConstructor();
+		
+		if(id_inputmediagame_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputGame, this->_id_inputmediagame);
+			this->_id_inputmediagame->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id_inputmediagame);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -142,22 +239,30 @@ void InputMedia::write(MTProtoStream* mtstream)
 	if(this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_caption);
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLVector(this->_stickers, false);
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaPhoto)
 	{
-		Q_ASSERT(this->_id_inputmediaphoto != NULL);
-		this->_id_inputmediaphoto->write(mtstream);
+		if(this->_id_inputmediaphoto != NULL)
+			this->_id_inputmediaphoto->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_caption);
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaGeoPoint)
 	{
-		Q_ASSERT(this->_geo_point != NULL);
-		this->_geo_point->write(mtstream);
+		if(this->_geo_point != NULL)
+			this->_geo_point->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaContact)
 	{
@@ -168,8 +273,11 @@ void InputMedia::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedDocument)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_mime_type);
 		mtstream->writeTLVector(this->_attributes, false);
 		mtstream->writeTLString(this->_caption);
@@ -179,10 +287,16 @@ void InputMedia::write(MTProtoStream* mtstream)
 	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument)
 	{
 		mtstream->writeTLInt(this->_flags);
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
-		Q_ASSERT(this->_thumb != NULL);
-		this->_thumb->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_thumb != NULL)
+			this->_thumb->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_mime_type);
 		mtstream->writeTLVector(this->_attributes, false);
 		mtstream->writeTLString(this->_caption);
@@ -191,14 +305,20 @@ void InputMedia::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaDocument)
 	{
-		Q_ASSERT(this->_id_inputmediadocument != NULL);
-		this->_id_inputmediadocument->write(mtstream);
+		if(this->_id_inputmediadocument != NULL)
+			this->_id_inputmediadocument->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_caption);
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaVenue)
 	{
-		Q_ASSERT(this->_geo_point != NULL);
-		this->_geo_point->write(mtstream);
+		if(this->_geo_point != NULL)
+			this->_geo_point->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLString(this->_address);
 		mtstream->writeTLString(this->_provider);
@@ -221,8 +341,10 @@ void InputMedia::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == InputMedia::ctorInputMediaGame)
 	{
-		Q_ASSERT(this->_id_inputmediagame != NULL);
-		this->_id_inputmediagame->write(mtstream);
+		if(this->_id_inputmediagame != NULL)
+			this->_id_inputmediagame->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

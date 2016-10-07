@@ -25,8 +25,18 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 		this->_chat_id = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			RESET_TLTYPE(ChatParticipant, this->_self_participant);
-			this->_self_participant->read(mtstream);
+			TLInt self_participant_ctor = mtstream->peekTLConstructor();
+			
+			if(self_participant_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(ChatParticipant, this->_self_participant);
+				this->_self_participant->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_self_participant);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == ChatParticipants::ctorChatParticipants)
@@ -51,8 +61,10 @@ void ChatParticipants::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_chat_id);
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			Q_ASSERT(this->_self_participant != NULL);
-			this->_self_participant->write(mtstream);
+			if(this->_self_participant != NULL)
+				this->_self_participant->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == ChatParticipants::ctorChatParticipants)

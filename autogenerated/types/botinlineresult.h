@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "photo.h"
 #include "botinlinemessage.h"
-#include "../../types/telegramobject.h"
+#include "photo.h"
 #include "document.h"
+#include "../../types/telegramobject.h"
 
 class BotInlineResult: public TelegramObject
 {

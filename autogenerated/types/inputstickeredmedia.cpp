@@ -19,13 +19,33 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto)
 	{
-		RESET_TLTYPE(InputPhoto, this->_id_inputstickeredmediaphoto);
-		this->_id_inputstickeredmediaphoto->read(mtstream);
+		TLInt id_inputstickeredmediaphoto_ctor = mtstream->peekTLConstructor();
+		
+		if(id_inputstickeredmediaphoto_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputPhoto, this->_id_inputstickeredmediaphoto);
+			this->_id_inputstickeredmediaphoto->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id_inputstickeredmediaphoto);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument)
 	{
-		RESET_TLTYPE(InputDocument, this->_id_inputstickeredmediadocument);
-		this->_id_inputstickeredmediadocument->read(mtstream);
+		TLInt id_inputstickeredmediadocument_ctor = mtstream->peekTLConstructor();
+		
+		if(id_inputstickeredmediadocument_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputDocument, this->_id_inputstickeredmediadocument);
+			this->_id_inputstickeredmediadocument->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id_inputstickeredmediadocument);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -39,13 +59,17 @@ void InputStickeredMedia::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto)
 	{
-		Q_ASSERT(this->_id_inputstickeredmediaphoto != NULL);
-		this->_id_inputstickeredmediaphoto->write(mtstream);
+		if(this->_id_inputstickeredmediaphoto != NULL)
+			this->_id_inputstickeredmediaphoto->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument)
 	{
-		Q_ASSERT(this->_id_inputstickeredmediadocument != NULL);
-		this->_id_inputstickeredmediadocument->write(mtstream);
+		if(this->_id_inputstickeredmediadocument != NULL)
+			this->_id_inputstickeredmediadocument->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

@@ -19,8 +19,18 @@ void HelpSupport::read(MTProtoStream* mtstream)
 	if(this->_constructorid == HelpSupport::ctorHelpSupport)
 	{
 		this->_phone_number = mtstream->readTLString();
-		RESET_TLTYPE(User, this->_user);
-		this->_user->read(mtstream);
+		TLInt user_ctor = mtstream->peekTLConstructor();
+		
+		if(user_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(User, this->_user);
+			this->_user->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_user);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -34,8 +44,10 @@ void HelpSupport::write(MTProtoStream* mtstream)
 	if(this->_constructorid == HelpSupport::ctorHelpSupport)
 	{
 		mtstream->writeTLString(this->_phone_number);
-		Q_ASSERT(this->_user != NULL);
-		this->_user->write(mtstream);
+		if(this->_user != NULL)
+			this->_user->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

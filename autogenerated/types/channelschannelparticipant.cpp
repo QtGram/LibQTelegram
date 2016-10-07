@@ -18,8 +18,19 @@ void ChannelsChannelParticipant::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
 	{
-		RESET_TLTYPE(ChannelParticipant, this->_participant);
-		this->_participant->read(mtstream);
+		TLInt participant_ctor = mtstream->peekTLConstructor();
+		
+		if(participant_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChannelParticipant, this->_participant);
+			this->_participant->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_participant);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<User>(this->_users, false);
 	}
 }
@@ -33,8 +44,11 @@ void ChannelsChannelParticipant::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
 	{
-		Q_ASSERT(this->_participant != NULL);
-		this->_participant->write(mtstream);
+		if(this->_participant != NULL)
+			this->_participant->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_users, false);
 	}
 }

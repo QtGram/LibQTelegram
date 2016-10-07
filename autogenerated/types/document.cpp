@@ -31,8 +31,19 @@ void Document::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		this->_mime_type = mtstream->readTLString();
 		this->_size = mtstream->readTLInt();
-		RESET_TLTYPE(PhotoSize, this->_thumb);
-		this->_thumb->read(mtstream);
+		TLInt thumb_ctor = mtstream->peekTLConstructor();
+		
+		if(thumb_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(PhotoSize, this->_thumb);
+			this->_thumb->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_thumb);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_dc_id = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
 		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
@@ -56,8 +67,11 @@ void Document::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLString(this->_mime_type);
 		mtstream->writeTLInt(this->_size);
-		Q_ASSERT(this->_thumb != NULL);
-		this->_thumb->write(mtstream);
+		if(this->_thumb != NULL)
+			this->_thumb->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_dc_id);
 		mtstream->writeTLInt(this->_version);
 		mtstream->writeTLVector(this->_attributes, false);

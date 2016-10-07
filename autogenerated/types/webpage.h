@@ -6,8 +6,8 @@
 
 #include "../../types/basic.h"
 #include "photo.h"
-#include "../../types/telegramobject.h"
 #include "document.h"
+#include "../../types/telegramobject.h"
 
 class WebPage: public TelegramObject
 {

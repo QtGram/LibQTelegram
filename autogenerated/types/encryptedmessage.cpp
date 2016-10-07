@@ -25,8 +25,18 @@ void EncryptedMessage::read(MTProtoStream* mtstream)
 		this->_chat_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 		this->_bytes = mtstream->readTLBytes();
-		RESET_TLTYPE(EncryptedFile, this->_file);
-		this->_file->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(EncryptedFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == EncryptedMessage::ctorEncryptedMessageService)
 	{
@@ -51,8 +61,10 @@ void EncryptedMessage::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLBytes(this->_bytes);
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == EncryptedMessage::ctorEncryptedMessageService)
 	{

@@ -20,13 +20,33 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto)
 	{
-		RESET_TLTYPE(InputFile, this->_file);
-		this->_file->read(mtstream);
+		TLInt file_ctor = mtstream->peekTLConstructor();
+		
+		if(file_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputFile, this->_file);
+			this->_file->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_file);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputChatPhoto::ctorInputChatPhoto)
 	{
-		RESET_TLTYPE(InputPhoto, this->_id);
-		this->_id->read(mtstream);
+		TLInt id_ctor = mtstream->peekTLConstructor();
+		
+		if(id_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputPhoto, this->_id);
+			this->_id->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_id);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -41,13 +61,17 @@ void InputChatPhoto::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto)
 	{
-		Q_ASSERT(this->_file != NULL);
-		this->_file->write(mtstream);
+		if(this->_file != NULL)
+			this->_file->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputChatPhoto::ctorInputChatPhoto)
 	{
-		Q_ASSERT(this->_id != NULL);
-		this->_id->write(mtstream);
+		if(this->_id != NULL)
+			this->_id->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

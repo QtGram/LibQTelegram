@@ -32,8 +32,18 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 		mtstream->readTLVector<Update>(this->_other_updates, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
-		RESET_TLTYPE(UpdatesState, this->_state);
-		this->_state->read(mtstream);
+		TLInt state_ctor = mtstream->peekTLConstructor();
+		
+		if(state_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UpdatesState, this->_state);
+			this->_state->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_state);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice)
 	{
@@ -42,8 +52,18 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 		mtstream->readTLVector<Update>(this->_other_updates, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
-		RESET_TLTYPE(UpdatesState, this->_intermediate_state);
-		this->_intermediate_state->read(mtstream);
+		TLInt intermediate_state_ctor = mtstream->peekTLConstructor();
+		
+		if(intermediate_state_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UpdatesState, this->_intermediate_state);
+			this->_intermediate_state->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_intermediate_state);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -68,8 +88,10 @@ void UpdatesDifference::write(MTProtoStream* mtstream)
 		mtstream->writeTLVector(this->_other_updates, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
-		Q_ASSERT(this->_state != NULL);
-		this->_state->write(mtstream);
+		if(this->_state != NULL)
+			this->_state->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice)
 	{
@@ -78,8 +100,10 @@ void UpdatesDifference::write(MTProtoStream* mtstream)
 		mtstream->writeTLVector(this->_other_updates, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
-		Q_ASSERT(this->_intermediate_state != NULL);
-		this->_intermediate_state->write(mtstream);
+		if(this->_intermediate_state != NULL)
+			this->_intermediate_state->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

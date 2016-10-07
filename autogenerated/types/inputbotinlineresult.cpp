@@ -56,17 +56,48 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			this->_duration = mtstream->readTLInt();
 		
-		RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
-		this->_send_message->read(mtstream);
+		TLInt send_message_ctor = mtstream->peekTLConstructor();
+		
+		if(send_message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->_send_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_send_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto)
 	{
 		this->_id = mtstream->readTLString();
 		this->_type = mtstream->readTLString();
-		RESET_TLTYPE(InputPhoto, this->_photo);
-		this->_photo->read(mtstream);
-		RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
-		this->_send_message->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputPhoto, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt send_message_ctor = mtstream->peekTLConstructor();
+		
+		if(send_message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->_send_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_send_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument)
 	{
@@ -79,17 +110,48 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 2))
 			this->_description = mtstream->readTLString();
 		
-		RESET_TLTYPE(InputDocument, this->_document);
-		this->_document->read(mtstream);
-		RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
-		this->_send_message->read(mtstream);
+		TLInt document_ctor = mtstream->peekTLConstructor();
+		
+		if(document_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputDocument, this->_document);
+			this->_document->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_document);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt send_message_ctor = mtstream->peekTLConstructor();
+		
+		if(send_message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->_send_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_send_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame)
 	{
 		this->_id = mtstream->readTLString();
 		this->_short_name = mtstream->readTLString();
-		RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
-		this->_send_message->read(mtstream);
+		TLInt send_message_ctor = mtstream->peekTLConstructor();
+		
+		if(send_message_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->_send_message->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_send_message);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -135,17 +197,24 @@ void InputBotInlineResult::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			mtstream->writeTLInt(this->_duration);
 		
-		Q_ASSERT(this->_send_message != NULL);
-		this->_send_message->write(mtstream);
+		if(this->_send_message != NULL)
+			this->_send_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto)
 	{
 		mtstream->writeTLString(this->_id);
 		mtstream->writeTLString(this->_type);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
-		Q_ASSERT(this->_send_message != NULL);
-		this->_send_message->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_send_message != NULL)
+			this->_send_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument)
 	{
@@ -158,17 +227,24 @@ void InputBotInlineResult::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 2))
 			mtstream->writeTLString(this->_description);
 		
-		Q_ASSERT(this->_document != NULL);
-		this->_document->write(mtstream);
-		Q_ASSERT(this->_send_message != NULL);
-		this->_send_message->write(mtstream);
+		if(this->_document != NULL)
+			this->_document->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_send_message != NULL)
+			this->_send_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame)
 	{
 		mtstream->writeTLString(this->_id);
 		mtstream->writeTLString(this->_short_name);
-		Q_ASSERT(this->_send_message != NULL);
-		this->_send_message->write(mtstream);
+		if(this->_send_message != NULL)
+			this->_send_message->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

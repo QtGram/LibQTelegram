@@ -6,9 +6,9 @@
 
 #include "../../types/basic.h"
 #include "stickerpack.h"
-#include "../../types/telegramobject.h"
 #include "stickerset.h"
 #include "document.h"
+#include "../../types/telegramobject.h"
 
 class MessagesStickerSet: public TelegramObject
 {

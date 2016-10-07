@@ -67,6 +67,7 @@ class MTProtoStream : public QObject
     public:
         template<typename T> void readTLVector(TLVector<T*>& val, bool isbaretype = false);
         template<typename T> void readTLVector(TLVector<T>& val, bool isbaretype = false);
+        template<typename T> void writeTLVector(const TLVector<T*>& val, bool isbaretype = false);
         template<typename T> void writeTLVector(const TLVector<T>& val, bool isbaretype = false);
 
     private:
@@ -99,6 +100,21 @@ template<typename T> void MTProtoStream::readTLVector(TLVector<T*> &val, bool is
         t->read(this);
 
         val << t;
+    }
+}
+
+
+template<typename T> void MTProtoStream::writeTLVector(const TLVector<T*> &val, bool isbaretype)
+{
+    if(!isbaretype)
+        this->writeTLConstructor(TLTypes::Vector);
+
+    this->writeTLInt(val.length());
+
+    for(TLInt i = 0; i < val.length(); i++)
+    {
+        T* t = val[i];
+        t->write(this);
     }
 }
 

@@ -20,12 +20,44 @@ void ContactsLink::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsLink::ctorContactsLink)
 	{
-		RESET_TLTYPE(ContactLink, this->_my_link);
-		this->_my_link->read(mtstream);
-		RESET_TLTYPE(ContactLink, this->_foreign_link);
-		this->_foreign_link->read(mtstream);
-		RESET_TLTYPE(User, this->_user);
-		this->_user->read(mtstream);
+		TLInt my_link_ctor = mtstream->peekTLConstructor();
+		
+		if(my_link_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ContactLink, this->_my_link);
+			this->_my_link->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_my_link);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt foreign_link_ctor = mtstream->peekTLConstructor();
+		
+		if(foreign_link_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ContactLink, this->_foreign_link);
+			this->_foreign_link->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_foreign_link);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
+		TLInt user_ctor = mtstream->peekTLConstructor();
+		
+		if(user_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(User, this->_user);
+			this->_user->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_user);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -38,12 +70,20 @@ void ContactsLink::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsLink::ctorContactsLink)
 	{
-		Q_ASSERT(this->_my_link != NULL);
-		this->_my_link->write(mtstream);
-		Q_ASSERT(this->_foreign_link != NULL);
-		this->_foreign_link->write(mtstream);
-		Q_ASSERT(this->_user != NULL);
-		this->_user->write(mtstream);
+		if(this->_my_link != NULL)
+			this->_my_link->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_foreign_link != NULL)
+			this->_foreign_link->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
+		if(this->_user != NULL)
+			this->_user->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

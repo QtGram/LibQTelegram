@@ -54,8 +54,18 @@ void Updates::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
-			this->_fwd_from->read(mtstream);
+			TLInt fwd_from_ctor = mtstream->peekTLConstructor();
+			
+			if(fwd_from_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->_fwd_from->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_fwd_from);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -83,8 +93,18 @@ void Updates::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
-			this->_fwd_from->read(mtstream);
+			TLInt fwd_from_ctor = mtstream->peekTLConstructor();
+			
+			if(fwd_from_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->_fwd_from->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_fwd_from);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -98,8 +118,19 @@ void Updates::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Updates::ctorUpdateShort)
 	{
-		RESET_TLTYPE(Update, this->_update);
-		this->_update->read(mtstream);
+		TLInt update_ctor = mtstream->peekTLConstructor();
+		
+		if(update_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Update, this->_update);
+			this->_update->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_update);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_date = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Updates::ctorUpdatesCombined)
@@ -129,8 +160,18 @@ void Updates::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 9))
 		{
-			RESET_TLTYPE(MessageMedia, this->_media);
-			this->_media->read(mtstream);
+			TLInt media_ctor = mtstream->peekTLConstructor();
+			
+			if(media_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(MessageMedia, this->_media);
+				this->_media->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_media);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))
@@ -162,8 +203,10 @@ void Updates::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_fwd_from != NULL);
-			this->_fwd_from->write(mtstream);
+			if(this->_fwd_from != NULL)
+				this->_fwd_from->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -187,8 +230,10 @@ void Updates::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_fwd_from != NULL);
-			this->_fwd_from->write(mtstream);
+			if(this->_fwd_from != NULL)
+				this->_fwd_from->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 11))
@@ -202,8 +247,11 @@ void Updates::write(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Updates::ctorUpdateShort)
 	{
-		Q_ASSERT(this->_update != NULL);
-		this->_update->write(mtstream);
+		if(this->_update != NULL)
+			this->_update->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_date);
 	}
 	else if(this->_constructorid == Updates::ctorUpdatesCombined)
@@ -232,8 +280,10 @@ void Updates::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		if(IS_FLAG_SET(this->_flags, 9))
 		{
-			Q_ASSERT(this->_media != NULL);
-			this->_media->write(mtstream);
+			if(this->_media != NULL)
+				this->_media->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))

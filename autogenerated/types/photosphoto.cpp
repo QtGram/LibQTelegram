@@ -18,8 +18,19 @@ void PhotosPhoto::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == PhotosPhoto::ctorPhotosPhoto)
 	{
-		RESET_TLTYPE(Photo, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		mtstream->readTLVector<User>(this->_users, false);
 	}
 }
@@ -33,8 +44,11 @@ void PhotosPhoto::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == PhotosPhoto::ctorPhotosPhoto)
 	{
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLVector(this->_users, false);
 	}
 }

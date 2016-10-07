@@ -20,8 +20,18 @@ void ContactStatus::read(MTProtoStream* mtstream)
 	if(this->_constructorid == ContactStatus::ctorContactStatus)
 	{
 		this->_user_id = mtstream->readTLInt();
-		RESET_TLTYPE(UserStatus, this->_status);
-		this->_status->read(mtstream);
+		TLInt status_ctor = mtstream->peekTLConstructor();
+		
+		if(status_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(UserStatus, this->_status);
+			this->_status->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_status);
+			mtstream->readTLConstructor(); // Skip Null
+		}
 	}
 }
 
@@ -35,8 +45,10 @@ void ContactStatus::write(MTProtoStream* mtstream)
 	if(this->_constructorid == ContactStatus::ctorContactStatus)
 	{
 		mtstream->writeTLInt(this->_user_id);
-		Q_ASSERT(this->_status != NULL);
-		this->_status->write(mtstream);
+		if(this->_status != NULL)
+			this->_status->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
 	}
 }
 

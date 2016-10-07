@@ -28,12 +28,33 @@ void Game::read(MTProtoStream* mtstream)
 		this->_short_name = mtstream->readTLString();
 		this->_title = mtstream->readTLString();
 		this->_description = mtstream->readTLString();
-		RESET_TLTYPE(Photo, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(Photo, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			RESET_TLTYPE(Document, this->_document);
-			this->_document->read(mtstream);
+			TLInt document_ctor = mtstream->peekTLConstructor();
+			
+			if(document_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(Document, this->_document);
+				this->_document->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_document);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 }
@@ -53,12 +74,17 @@ void Game::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_short_name);
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLString(this->_description);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		if(IS_FLAG_SET(this->_flags, 0))
 		{
-			Q_ASSERT(this->_document != NULL);
-			this->_document->write(mtstream);
+			if(this->_document != NULL)
+				this->_document->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 }

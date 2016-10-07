@@ -29,8 +29,18 @@ void MessagesBotResults::read(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			RESET_TLTYPE(InlineBotSwitchPM, this->_switch_pm);
-			this->_switch_pm->read(mtstream);
+			TLInt switch_pm_ctor = mtstream->peekTLConstructor();
+			
+			if(switch_pm_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(InlineBotSwitchPM, this->_switch_pm);
+				this->_switch_pm->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_switch_pm);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 		
 		mtstream->readTLVector<BotInlineResult>(this->_results, false);
@@ -53,8 +63,10 @@ void MessagesBotResults::write(MTProtoStream* mtstream)
 		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
-			Q_ASSERT(this->_switch_pm != NULL);
-			this->_switch_pm->write(mtstream);
+			if(this->_switch_pm != NULL)
+				this->_switch_pm->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 		
 		mtstream->writeTLVector(this->_results, false);

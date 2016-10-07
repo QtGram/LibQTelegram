@@ -54,15 +54,36 @@ void Chat::read(MTProtoStream* mtstream)
 		this->_is_deactivated = IS_FLAG_SET(this->_flags, 5);
 		this->_id = mtstream->readTLInt();
 		this->_title = mtstream->readTLString();
-		RESET_TLTYPE(ChatPhoto, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_participants_count = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			RESET_TLTYPE(InputChannel, this->_migrated_to);
-			this->_migrated_to->read(mtstream);
+			TLInt migrated_to_ctor = mtstream->peekTLConstructor();
+			
+			if(migrated_to_ctor != TLTypes::Null)
+			{
+				RESET_TLTYPE(InputChannel, this->_migrated_to);
+				this->_migrated_to->read(mtstream);
+			}
+			else
+			{
+				NULL_TLTYPE(this->_migrated_to);
+				mtstream->readTLConstructor(); // Skip Null
+			}
 		}
 	}
 	else if(this->_constructorid == Chat::ctorChatForbidden)
@@ -93,8 +114,19 @@ void Chat::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 6))
 			this->_username = mtstream->readTLString();
 		
-		RESET_TLTYPE(ChatPhoto, this->_photo);
-		this->_photo->read(mtstream);
+		TLInt photo_ctor = mtstream->peekTLConstructor();
+		
+		if(photo_ctor != TLTypes::Null)
+		{
+			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->_photo->read(mtstream);
+		}
+		else
+		{
+			NULL_TLTYPE(this->_photo);
+			mtstream->readTLConstructor(); // Skip Null
+		}
+		
 		this->_date = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 9))
@@ -129,15 +161,20 @@ void Chat::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLString(this->_title);
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_participants_count);
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLInt(this->_version);
 		if(IS_FLAG_SET(this->_flags, 6))
 		{
-			Q_ASSERT(this->_migrated_to != NULL);
-			this->_migrated_to->write(mtstream);
+			if(this->_migrated_to != NULL)
+				this->_migrated_to->write(mtstream);
+			else
+				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
 	else if(this->_constructorid == Chat::ctorChatForbidden)
@@ -156,8 +193,11 @@ void Chat::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 6))
 			mtstream->writeTLString(this->_username);
 		
-		Q_ASSERT(this->_photo != NULL);
-		this->_photo->write(mtstream);
+		if(this->_photo != NULL)
+			this->_photo->write(mtstream);
+		else
+			mtstream->writeTLConstructor(TLTypes::Null);
+		
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLInt(this->_version);
 		if(IS_FLAG_SET(this->_flags, 9))
