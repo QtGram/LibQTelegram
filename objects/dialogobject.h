@@ -22,7 +22,7 @@ class DialogObject : public QObject
         MessageObject* topMessage() const;
         void setUser(User* user);
         void setChat(Chat* chat);
-        void setTopMessage(MessageObject* messageobj);
+        void setTopMessage(MessageObject *messageobj);
 
     signals:
         void userChanged();
@@ -33,7 +33,7 @@ class DialogObject : public QObject
     private:
         User* _user;
         Chat* _chat;
-        MessageObject* _messageobj;
+        MessageObject* _message;
 };
 
 #endif // DIALOGOBJECT_H

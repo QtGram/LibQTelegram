@@ -24,14 +24,13 @@ class TelegramRuntime : public QObject
     private:
         void updateDialogs();
         DialogObject* updateDialog(Dialog* dialog);
-        MessageObject *updateMessage(Message* message);
+        MessageObject* messageObject(Message* message);
 
     private:
         template<typename TG, typename RT> RT* runtimeObject(QHash<TLInt, RT*>& container, TG* tg);
 
     signals:
         void dialogsChanged();
-        void messagesChanged();
 
     private:
         QHash<TLInt, DialogObject*> _dialogs;

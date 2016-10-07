@@ -30,9 +30,12 @@ void TelegramRuntime::updateDialogs()
 DialogObject *TelegramRuntime::updateDialog(Dialog *dialog)
 {
     DialogObject* dialogobj = this->runtimeObject(this->_dialogs, dialog);
+    MessageObject* topmessageobj = this->messageObject(TELEGRAM_CACHE->message(dialog->topMessage()));
+
+    dialogobj->setTopMessage(topmessageobj);
 
     if(TelegramHelper::isChannel(dialog))
-        qWarning() << "Channels not handled"; // TODO: Channels not handled
+        dialogobj->setChat(TELEGRAM_CACHE->chat(dialog->peer()->channelId()));
     else if(TelegramHelper::isChat(dialog))
         dialogobj->setChat(TELEGRAM_CACHE->chat(dialog->peer()->chatId()));
     else
@@ -41,11 +44,15 @@ DialogObject *TelegramRuntime::updateDialog(Dialog *dialog)
     return dialogobj;
 }
 
-MessageObject* TelegramRuntime::updateMessage(Message *message)
+MessageObject *TelegramRuntime::messageObject(Message *message)
 {
-    //MessageObject* messageobj = this->runtimeObject(this->_messages, message);
+    MessageObject* messageobj = this->runtimeObject(this->_messages, message);
+    messageobj->setMessage(message);
 
-    return NULL;
+    if(message->fromId())
+        messageobj->setFromUser(TELEGRAM_CACHE->user(message->fromId()));
+
+    return messageobj;
 }
 
 TelegramRuntime *TelegramRuntime::runtime()

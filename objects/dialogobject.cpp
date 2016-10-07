@@ -5,7 +5,7 @@ DialogObject::DialogObject(QObject *parent) : QObject(parent)
 {
     this->_user = NULL;
     this->_chat = NULL;
-    this->_messageobj = NULL;
+    this->_message = NULL;
 }
 
 User *DialogObject::user() const
@@ -20,18 +20,15 @@ Chat *DialogObject::chat() const
 
 QString DialogObject::title() const
 {
-    if(this->_user)
-        return TelegramHelper::fullName(this->_user);
-
     if(this->_chat)
         return this->_chat->title();
 
-    return "Channel"; //NOTE: Handle channels
+    return TelegramHelper::fullName(this->_user);
 }
 
 MessageObject *DialogObject::topMessage() const
 {
-    return this->_messageobj;
+    return this->_message;
 }
 
 void DialogObject::setUser(User* user)
@@ -52,11 +49,11 @@ void DialogObject::setChat(Chat* chat)
     emit userChanged();
 }
 
-void DialogObject::setTopMessage(MessageObject *messageobj)
+void DialogObject::setTopMessage(MessageObject *message)
 {
-    if(this->_messageobj == messageobj)
+    if(this->_message == message)
         return;
 
-    this->_messageobj = messageobj;
+    this->_message = message;
     emit userChanged();
 }
