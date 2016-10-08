@@ -23,9 +23,19 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     return this->initRoles();
 }
 
+void DialogsModel::sortDialogs()
+{
+    std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](DialogObject* dlg1, DialogObject* dlg2) {
+        return dlg1->topMessage()->message()->date() > dlg2->topMessage()->message()->date();
+    });
+}
+
 void DialogsModel::telegramReady()
 {
     this->beginResetModel();
+
     this->_dialogs = TELEGRAM_RUNTIME->dialogList();
+    this->sortDialogs();
+
     this->endResetModel();
 }

@@ -10,13 +10,12 @@ class DialogsModel : public TelegramModel
 
     public:
         explicit DialogsModel(QObject *parent = 0);
-
-    public:
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
-
-    public:
         virtual QHash<int, QByteArray> roleNames() const;
+
+    private:
+        void sortDialogs();
 
     protected:
         virtual void telegramReady();
