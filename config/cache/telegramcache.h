@@ -4,7 +4,7 @@
 #define TELEGRAM_CACHE TelegramCache::cache()
 #define TELEGRAM_CACHE_SAVE TelegramCache::cache()->save();
 #define TELEGRAM_CACHE_LOAD TelegramCache::cache()->load();
-#define TELEGRAM_CACHE_OBJECTS(objs) TelegramCache::cache()->cache(objs);
+#define TELEGRAM_CACHE_OBJECT(objs) TelegramCache::cache()->cache(objs);
 
 #include <QObject>
 #include <QDir>
@@ -22,11 +22,16 @@ class TelegramCache: public QObject
         template<typename T> void loadFromFile(QHash<TLInt, T *> &container, const QString& name);
         template<typename T> void saveToFile(const QHash<TLInt, T*>& container, const QString& name) const;
         template<typename T> void cache(const TLVector<T*>& src, QHash<TLInt, T*>& dest);
+        template<typename T> void cache(T* src, QHash<TLInt, T*>& dest);
 
     public:
         static TelegramCache* cache();
         void save() const;
         void load();
+        void cache(Dialog* dialog);
+        void cache(User* user);
+        void cache(Chat* chat);
+        void cache(Message* message);
         void cache(const TLVector<Dialog *> &dialogs);
         void cache(const TLVector<User *> &users);
         void cache(const TLVector<Chat *> &chats);
@@ -53,17 +58,20 @@ class TelegramCache: public QObject
         static TelegramCache* _instance;
 };
 
+template<typename T> void TelegramCache::cache(T *t, QHash<TLInt, T*> &dest)
+{
+    TLInt id = TelegramHelper::identifier(t);
+
+    if(dest.contains(id))
+        return;
+
+    dest[id] = t;
+}
+
 template<typename T> void TelegramCache::cache(const TLVector<T*>& src, QHash<TLInt, T*>& dest)
 {
     foreach(T* t, src)
-    {
-        TLInt id = TelegramHelper::identifier(t);
-
-        if(dest.contains(id))
-            continue;
-
-        dest[id] = t;
-    }
+        this->cache(t, dest);
 }
 
 template<typename T> void TelegramCache::loadFromFile(QHash<TLInt, T*> &container, const QString &name)

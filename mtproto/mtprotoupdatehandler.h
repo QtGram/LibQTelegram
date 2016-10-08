@@ -20,17 +20,22 @@ class MTProtoUpdateHandler : public QObject
         bool handle(MTProtoReply* mtreply);
         void sync();
 
-    private: // MTProto Raw Replies
-        bool handleUpdates(MTProtoReply* mtreply);
-        bool handleUpdatesState(MTProtoReply* mtreply);
+    private:
+        void handleUpdates(MTProtoReply* mtreply);
+        void handleUpdatesState(MTProtoReply* mtreply);
+        void handleUpdatesDifference(MTProtoReply* mtreply);
 
     private:
-        bool handleUpdate(Update* update);
-        bool handleUpdateShort(Update* update);
-        bool handleUpdateNewAuthorization(Update* update);
+        void syncState(UpdatesState* serverstate);
+        void getDifferences();
+        void handleUpdates(TLVector<Update*> updatelist);
+        void handleUpdate(Update* update);
 
-    private:
-        bool _syncmode;
+    signals:
+        void newMessage(Message* message);
+        void newUser(User* user);
+        void newChat(Chat* chat);
+        void newUpdate(Update* update);
 
     private:
         static MTProtoUpdateHandler* _instance;

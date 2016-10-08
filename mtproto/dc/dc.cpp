@@ -3,7 +3,7 @@
 #include "../mtprotoupdatehandler.h"
 #include "../mtprotoreply.h"
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(0), _lastmsgid(0), _dcid(dcid)
+DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _dcid(dcid)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
@@ -17,7 +17,7 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
 
 TLInt DC::generateContentMsgNo()
 {
-    this->_contentmsgno = this->_contentmsgno * 2 + 1;
+    this->_contentmsgno = this->_contentmsgno + 2;
     return this->_contentmsgno;
 }
 

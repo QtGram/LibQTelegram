@@ -11,9 +11,10 @@
 
 const QString TelegramConfig::DCCONFIG_FILE = "dcconfig.json";
 const QString TelegramConfig::STATE_FILE = "state.mtproto";
+const QString TelegramConfig::ME_FILE = "me.user";
 TelegramConfig* TelegramConfig::_config = NULL;
 
-TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0)
+TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0), _me(NULL)
 {
     this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
     this->_updatesstate = new UpdatesState();
@@ -106,14 +107,21 @@ UpdatesState *TelegramConfig::updateState()
     return this->_updatesstate;
 }
 
+User *TelegramConfig::me()
+{
+    return this->_me;
+}
+
 void TelegramConfig::save()
 {
     this->saveDCConfig();
     this->saveState();
+    this->saveMe();
 }
 
 void TelegramConfig::load()
 {
+    this->loadMe();
     this->loadState();
     this->loadDCConfig();
 }
@@ -206,6 +214,14 @@ void TelegramConfig::setPhoneNumber(const QString &phonenumber)
     this->updateStoragePath(this->_storagepath, phonenumber);
 }
 
+void TelegramConfig::setMe(User *me)
+{
+    if(this->_me == me)
+        return;
+
+    this->_me = me;
+}
+
 void TelegramConfig::saveDCConfig()
 {
     QJsonArray dcconfig;
@@ -267,6 +283,31 @@ void TelegramConfig::loadState()
     QByteArray data = this->read(TelegramConfig::STATE_FILE);
     MTProtoStream mtstream(data);
     this->_updatesstate->read(&mtstream);
+}
+
+void TelegramConfig::saveMe()
+{
+    if(!this->_me)
+        return;
+
+    MTProtoStream mtstream;
+    this->_me->write(&mtstream);
+
+    this->write(TelegramConfig::ME_FILE, mtstream.data());
+}
+
+void TelegramConfig::loadMe()
+{
+    if(!this->configExists(TelegramConfig::ME_FILE))
+        return;
+
+    QByteArray data = this->read(TelegramConfig::ME_FILE);
+    MTProtoStream mtstream(data);
+
+    if(!this->_me)
+        this->_me = new User();
+
+    this->_me->read(&mtstream);
 }
 
 void TelegramConfig::updateStoragePath(const QString &storagepath, const QString &phonenumber)

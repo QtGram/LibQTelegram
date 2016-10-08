@@ -39,7 +39,7 @@ void CacheInitializer::onRequestContactsReplied(MTProtoReply *mtreply)
     ContactsContacts contacts;
     contacts.read(mtreply);
 
-    TELEGRAM_CACHE_OBJECTS(contacts.users());
+    TELEGRAM_CACHE_OBJECT(contacts.users());
 
     this->_state++;
     this->initialize();
@@ -50,10 +50,10 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     MessagesDialogs messagesdialogs;
     messagesdialogs.read(mtreply);
 
-    TELEGRAM_CACHE_OBJECTS(messagesdialogs.dialogs());
-    TELEGRAM_CACHE_OBJECTS(messagesdialogs.users());
-    TELEGRAM_CACHE_OBJECTS(messagesdialogs.chats());
-    TELEGRAM_CACHE_OBJECTS(messagesdialogs.messages());
+    TELEGRAM_CACHE_OBJECT(messagesdialogs.dialogs());
+    TELEGRAM_CACHE_OBJECT(messagesdialogs.users());
+    TELEGRAM_CACHE_OBJECT(messagesdialogs.chats());
+    TELEGRAM_CACHE_OBJECT(messagesdialogs.messages());
 
     this->_state++;
     this->initialize();

@@ -14,7 +14,7 @@ class DialogsModel : public TelegramModel
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
 
-    private:
+    private slots:
         void sortDialogs();
 
     protected:

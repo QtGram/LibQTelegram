@@ -21,10 +21,14 @@ class TelegramRuntime : public QObject
         static TelegramRuntime* runtime();
         QList<DialogObject *> dialogList() const;
 
+    private slots:
+        void onNewMessage(Message *message);
+        void onUpdate(Update* update);
+
     private:
         void updateDialogs();
         DialogObject* updateDialog(Dialog* dialog);
-        MessageObject* messageObject(Message* message);
+        MessageObject* createMessageObject(Message* message);
 
     private:
         template<typename TG, typename RT> RT* runtimeObject(QHash<TLInt, RT*>& container, TG* tg);

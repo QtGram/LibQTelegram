@@ -209,6 +209,9 @@ void Telegram::onLoginCompleted(MTProtoReply *mtreply)
     authorization.read(mtreply);
 
     dcconfig.setAuthorization(DCConfig::Signed);
+
+    TELEGRAM_CACHE_OBJECT(authorization.user()); // Cache "me"
+    TELEGRAM_CONFIG->setMe(authorization.user());
     TELEGRAM_CONFIG_SAVE;
 
     CacheInitializer* cacheinitializer = new CacheInitializer(this);

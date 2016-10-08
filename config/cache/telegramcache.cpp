@@ -6,7 +6,6 @@ TelegramCache* TelegramCache::_instance = NULL;
 
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
-
 }
 
 const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
@@ -115,4 +114,24 @@ void TelegramCache::load()
     this->loadFromFile<Chat>(this->_chats, "chats");
     this->loadFromFile<User>(this->_users, "users");
     this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
+}
+
+void TelegramCache::cache(Dialog *dialog)
+{
+    this->cache(dialog, this->_dialogs);
+}
+
+void TelegramCache::cache(User *user)
+{
+    this->cache(user, this->_users);
+}
+
+void TelegramCache::cache(Chat *chat)
+{
+    this->cache(chat, this->_chats);
+}
+
+void TelegramCache::cache(Message *message)
+{
+    this->cache(message, this->_messages);
 }

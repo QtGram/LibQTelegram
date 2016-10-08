@@ -1,7 +1,7 @@
 #ifndef TELEGRAMCONFIG_H
 #define TELEGRAMCONFIG_H
 
-#define DC_CONFIG_UPDATES_STATE TelegramConfig::config()->updateState()
+#define CONFIG_CLIENT_STATE TelegramConfig::config()->updateState()
 #define DC_CONFIG_SIGNED_DCID (TelegramConfig::config() ? TelegramConfig::config()->signedDcId() : -1)
 
 #define TELEGRAM_CONFIG TelegramConfig::config()
@@ -32,6 +32,7 @@ class TelegramConfig
         DCConfig& dcConfig(int dcid);
         DCConfig& setDcConfig(int dcid, bool ipv6);
         UpdatesState* updateState();
+        User* me();
         void save();
         void load();
         bool hasDC(int id);
@@ -51,12 +52,15 @@ class TelegramConfig
         void setDeviceModel(const QString& devicemodel);
         void setApplicationVersion(const QString& appversion);
         void setPhoneNumber(const QString& phonenumber);
+        void setMe(User* me);
 
     private:
         void saveDCConfig();
         void loadDCConfig();
         void saveState();
         void loadState();
+        void saveMe();
+        void loadMe();
         void updateStoragePath(const QString& storagepath, const QString& phonenumber);
         void write(const QString& filename, const QByteArray &content);
         bool configExists(const QString& filename);
@@ -78,10 +82,12 @@ class TelegramConfig
         QHash<int, DCConfig> _dcconfig;
         QHash<int, DCConfig> _dcconfigipv6;
         UpdatesState* _updatesstate;
+        User* _me;
 
     private:
         static const QString DCCONFIG_FILE;
         static const QString STATE_FILE;
+        static const QString ME_FILE;
         static TelegramConfig* _config;
 };
 
