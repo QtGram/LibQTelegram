@@ -255,6 +255,6 @@ void DCAuthorization::onConfigurationReceived(Config *config)
         dcconfig.setId(dcoption->id());
     }
 
-    DC_CONFIG_SAVE;
+    TELEGRAM_CONFIG_SAVE;
     emit authorized(this->_dcsession->dc());
 }

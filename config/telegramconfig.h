@@ -1,11 +1,11 @@
 #ifndef TELEGRAMCONFIG_H
 #define TELEGRAMCONFIG_H
 
-#define DC_CONFIG_SIGNED_DCID TelegramConfig::config()->signedDcId()
 #define DC_CONFIG_UPDATES_STATE TelegramConfig::config()->updateState()
-#define DC_CONFIG_SAVE TelegramConfig::config()->save()
+#define DC_CONFIG_SIGNED_DCID (TelegramConfig::config() ? TelegramConfig::config()->signedDcId() : -1)
 
 #define TELEGRAM_CONFIG TelegramConfig::config()
+#define TELEGRAM_CONFIG_SAVE TelegramConfig::config()->save()
 #define IS_LOGGED_IN (DC_CONFIG_SIGNED_DCID != -1)
 
 #define GET_DC_CONFIG_FROM_DCID(dcid) TelegramConfig::config()->dcConfig(dcid)
@@ -55,10 +55,12 @@ class TelegramConfig
     private:
         void saveDCConfig();
         void loadDCConfig();
+        void saveState();
+        void loadState();
         void updateStoragePath(const QString& storagepath, const QString& phonenumber);
-        void write(const QString& filename, const QString& content);
+        void write(const QString& filename, const QByteArray &content);
         bool configExists(const QString& filename);
-        QString read(const QString& filename);
+        QByteArray read(const QString& filename);
 
     private:
         bool _debugmode;
@@ -79,6 +81,7 @@ class TelegramConfig
 
     private:
         static const QString DCCONFIG_FILE;
+        static const QString STATE_FILE;
         static TelegramConfig* _config;
 };
 

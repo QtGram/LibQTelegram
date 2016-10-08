@@ -21,6 +21,7 @@ class LIBQTELEGRAMSHARED_EXPORT Telegram : public QObject
 
     public:
         explicit Telegram(QObject *parent = 0);
+        ~Telegram();
         const QString& publicKey() const;
         const QString& host() const;
         const QString& apiHash() const;

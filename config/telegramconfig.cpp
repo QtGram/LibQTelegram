@@ -10,6 +10,7 @@
 #define CONFIG_FOLDER "telegram"
 
 const QString TelegramConfig::DCCONFIG_FILE = "dcconfig.json";
+const QString TelegramConfig::STATE_FILE = "state.mtproto";
 TelegramConfig* TelegramConfig::_config = NULL;
 
 TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0)
@@ -25,10 +26,7 @@ TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0)
 TelegramConfig *TelegramConfig::config()
 {
     if(!TelegramConfig::_config)
-    {
-        qFatal("NO CONFIGURATION SET");
         return NULL;
-    }
 
     return TelegramConfig::_config;
 }
@@ -111,10 +109,12 @@ UpdatesState *TelegramConfig::updateState()
 void TelegramConfig::save()
 {
     this->saveDCConfig();
+    this->saveState();
 }
 
 void TelegramConfig::load()
 {
+    this->loadState();
     this->loadDCConfig();
 }
 
@@ -218,7 +218,7 @@ void TelegramConfig::saveDCConfig()
 
     QJsonDocument doc(dcconfig);
 
-    this->write(TelegramConfig::DCCONFIG_FILE, QString(doc.toJson()));
+    this->write(TelegramConfig::DCCONFIG_FILE, doc.toJson());
 }
 
 void TelegramConfig::loadDCConfig()
@@ -226,7 +226,7 @@ void TelegramConfig::loadDCConfig()
     if(!this->configExists(TelegramConfig::DCCONFIG_FILE))
         return;
 
-    QString s = this->read(TelegramConfig::DCCONFIG_FILE);
+    QString s = QString::fromUtf8(this->read(TelegramConfig::DCCONFIG_FILE));
     QJsonParseError parseerror;
     QJsonDocument docobj = QJsonDocument::fromJson(s.toUtf8(), &parseerror);
 
@@ -251,6 +251,24 @@ void TelegramConfig::loadDCConfig()
     }
 }
 
+void TelegramConfig::saveState()
+{
+    MTProtoStream mtstream;
+    this->_updatesstate->write(&mtstream);
+
+    this->write(TelegramConfig::STATE_FILE, mtstream.data());
+}
+
+void TelegramConfig::loadState()
+{
+    if(!this->configExists(TelegramConfig::STATE_FILE))
+        return;
+
+    QByteArray data = this->read(TelegramConfig::STATE_FILE);
+    MTProtoStream mtstream(data);
+    this->_updatesstate->read(&mtstream);
+}
+
 void TelegramConfig::updateStoragePath(const QString &storagepath, const QString &phonenumber)
 {
     QDir storagepathdir(storagepath);
@@ -259,7 +277,7 @@ void TelegramConfig::updateStoragePath(const QString &storagepath, const QString
     this->_phonenumber = phonenumber;
 }
 
-void TelegramConfig::write(const QString &filename, const QString& content)
+void TelegramConfig::write(const QString &filename, const QByteArray& content)
 {
     QDir dir(this->_storagepath);
     dir.mkpath(this->_storagepath);
@@ -272,7 +290,7 @@ void TelegramConfig::write(const QString &filename, const QString& content)
         return;
     }
 
-    f.write(content.toUtf8());
+    f.write(content);
     f.close();
 }
 
@@ -282,7 +300,7 @@ bool TelegramConfig::configExists(const QString &filename)
     return QFile::exists(dir.absoluteFilePath(filename));
 }
 
-QString TelegramConfig::read(const QString &filename)
+QByteArray TelegramConfig::read(const QString &filename)
 {
     QDir dir(this->_storagepath);
     dir.mkpath(this->_storagepath);
@@ -292,11 +310,11 @@ QString TelegramConfig::read(const QString &filename)
     if(!f.open(QFile::ReadOnly))
     {
         qWarning() << "Cannot read" << dir.absoluteFilePath(filename);
-        return QString();
+        return QByteArray();
     }
 
-    QString s = QString(f.readAll());
+    QByteArray data = f.readAll();
     f.close();
 
-    return s;
+    return data;
 }

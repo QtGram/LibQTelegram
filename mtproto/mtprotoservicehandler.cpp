@@ -122,7 +122,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     {
         DCConfig& config = GET_DC_CONFIG_FROM_DCID(this->_dcid);
         config.setServerSalt(badmsgnotification.newServerSalt());
-        DC_CONFIG_SAVE;
+        TELEGRAM_CONFIG_SAVE;
 
         emit saltChanged();
     }

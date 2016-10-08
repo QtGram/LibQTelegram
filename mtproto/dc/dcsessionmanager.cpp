@@ -118,7 +118,7 @@ DCSession *DCSessionManager::createSession(int dcid)
 void DCSessionManager::onAuthorized(DC* dc)
 {
     Q_ASSERT(this->_dcauthorizations.contains(dc));
-    DC_CONFIG_SAVE;
+    TELEGRAM_CONFIG_SAVE;
 
     DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
     dcauthorization->deleteLater();

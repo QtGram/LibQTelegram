@@ -20,10 +20,13 @@ class MTProtoUpdateHandler : public QObject
         bool handle(MTProtoReply* mtreply);
         void sync();
 
-    private:
-        void syncState(Updates* updates);
+    private: // MTProto Raw Replies
         bool handleUpdates(MTProtoReply* mtreply);
+        bool handleUpdatesState(MTProtoReply* mtreply);
+
+    private:
         bool handleUpdate(Update* update);
+        bool handleUpdateShort(Update* update);
         bool handleUpdateNewAuthorization(Update* update);
 
     private:

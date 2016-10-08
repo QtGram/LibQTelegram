@@ -2,9 +2,19 @@
 #include "mtproto/mtprotoupdatehandler.h"
 #include "config/cache/cacheinitializer.h"
 #include "config/cache/telegramcache.h"
+#include <QDebug>
 
 Telegram::Telegram(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false)
 {
+}
+
+Telegram::~Telegram()
+{
+    if(DC_CONFIG_SIGNED_DCID == -1)
+        return;
+
+    TELEGRAM_CONFIG_SAVE;
+    TELEGRAM_CACHE_SAVE;
 }
 
 const QString &Telegram::publicKey() const
@@ -164,8 +174,8 @@ void Telegram::tryConnect()
         DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(signeddcid);
         DCSessionManager::instance()->createMainSession(dcconfig);
 
-        UPDATE_HANDLER_SYNC;
         TELEGRAM_CACHE_LOAD;
+        UPDATE_HANDLER_SYNC;
         emit loginCompleted();
         return;
     }
@@ -199,7 +209,7 @@ void Telegram::onLoginCompleted(MTProtoReply *mtreply)
     authorization.read(mtreply);
 
     dcconfig.setAuthorization(DCConfig::Signed);
-    DC_CONFIG_SAVE;
+    TELEGRAM_CONFIG_SAVE;
 
     CacheInitializer* cacheinitializer = new CacheInitializer(this);
 
