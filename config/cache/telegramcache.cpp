@@ -118,7 +118,7 @@ void TelegramCache::onEditMessage(Message *message)
 
     if(!this->_messages.contains(id))
     {
-        qWarning() << "Edited message not available";
+        qWarning("Edited message %x not available", id);
         return;
     }
 
