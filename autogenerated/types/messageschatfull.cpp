@@ -7,16 +7,16 @@
 MessagesChatFull::MessagesChatFull(QObject* parent) : TelegramObject(parent)
 {
 	this->_full_chat = NULL;
-	this->_constructorid = MessagesChatFull::ctorMessagesChatFull;
+	this->_constructorid = MessagesChatFull::CtorMessagesChatFull;
 }
 
 void MessagesChatFull::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesChatFull::ctorMessagesChatFull));
+	Q_ASSERT((this->_constructorid == MessagesChatFull::CtorMessagesChatFull));
 	
-	if(this->_constructorid == MessagesChatFull::ctorMessagesChatFull)
+	if(this->_constructorid == MessagesChatFull::CtorMessagesChatFull)
 	{
 		TLInt full_chat_ctor = mtstream->peekTLConstructor();
 		
@@ -38,12 +38,12 @@ void MessagesChatFull::read(MTProtoStream* mtstream)
 
 void MessagesChatFull::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesChatFull::ctorMessagesChatFull));
+	Q_ASSERT((this->_constructorid == MessagesChatFull::CtorMessagesChatFull));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesChatFull::ctorMessagesChatFull)
+	if(this->_constructorid == MessagesChatFull::CtorMessagesChatFull)
 	{
 		if(this->_full_chat != NULL)
 			this->_full_chat->write(mtstream);

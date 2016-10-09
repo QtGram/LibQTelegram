@@ -20,8 +20,8 @@ class FileLocation: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorFileLocationUnavailable = 0x7c596b46,
-			ctorFileLocation = 0x53d69076,
+			CtorFileLocationUnavailable = 0x7c596b46,
+			CtorFileLocation = 0x53d69076,
 		};
 
 	public:

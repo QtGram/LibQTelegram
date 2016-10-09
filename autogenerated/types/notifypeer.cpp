@@ -13,12 +13,12 @@ void NotifyPeer::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == NotifyPeer::ctorNotifyPeer) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyUsers) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyChats) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyAll));
+	Q_ASSERT((this->_constructorid == NotifyPeer::CtorNotifyPeer) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyUsers) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyChats) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyAll));
 	
-	if(this->_constructorid == NotifyPeer::ctorNotifyPeer)
+	if(this->_constructorid == NotifyPeer::CtorNotifyPeer)
 	{
 		TLInt peer_ctor = mtstream->peekTLConstructor();
 		
@@ -37,15 +37,15 @@ void NotifyPeer::read(MTProtoStream* mtstream)
 
 void NotifyPeer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == NotifyPeer::ctorNotifyPeer) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyUsers) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyChats) ||
-		 (this->_constructorid == NotifyPeer::ctorNotifyAll));
+	Q_ASSERT((this->_constructorid == NotifyPeer::CtorNotifyPeer) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyUsers) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyChats) ||
+		 (this->_constructorid == NotifyPeer::CtorNotifyAll));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == NotifyPeer::ctorNotifyPeer)
+	if(this->_constructorid == NotifyPeer::CtorNotifyPeer)
 	{
 		if(this->_peer != NULL)
 			this->_peer->write(mtstream);

@@ -12,14 +12,14 @@ void PeerNotifyEvents::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PeerNotifyEvents::ctorPeerNotifyEventsEmpty) ||
-		 (this->_constructorid == PeerNotifyEvents::ctorPeerNotifyEventsAll));
+	Q_ASSERT((this->_constructorid == PeerNotifyEvents::CtorPeerNotifyEventsEmpty) ||
+		 (this->_constructorid == PeerNotifyEvents::CtorPeerNotifyEventsAll));
 }
 
 void PeerNotifyEvents::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PeerNotifyEvents::ctorPeerNotifyEventsEmpty) ||
-		 (this->_constructorid == PeerNotifyEvents::ctorPeerNotifyEventsAll));
+	Q_ASSERT((this->_constructorid == PeerNotifyEvents::CtorPeerNotifyEventsEmpty) ||
+		 (this->_constructorid == PeerNotifyEvents::CtorPeerNotifyEventsAll));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

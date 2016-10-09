@@ -7,16 +7,16 @@
 MessagesArchivedStickers::MessagesArchivedStickers(QObject* parent) : TelegramObject(parent)
 {
 	this->_count = 0;
-	this->_constructorid = MessagesArchivedStickers::ctorMessagesArchivedStickers;
+	this->_constructorid = MessagesArchivedStickers::CtorMessagesArchivedStickers;
 }
 
 void MessagesArchivedStickers::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesArchivedStickers::ctorMessagesArchivedStickers));
+	Q_ASSERT((this->_constructorid == MessagesArchivedStickers::CtorMessagesArchivedStickers));
 	
-	if(this->_constructorid == MessagesArchivedStickers::ctorMessagesArchivedStickers)
+	if(this->_constructorid == MessagesArchivedStickers::CtorMessagesArchivedStickers)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
@@ -25,12 +25,12 @@ void MessagesArchivedStickers::read(MTProtoStream* mtstream)
 
 void MessagesArchivedStickers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesArchivedStickers::ctorMessagesArchivedStickers));
+	Q_ASSERT((this->_constructorid == MessagesArchivedStickers::CtorMessagesArchivedStickers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesArchivedStickers::ctorMessagesArchivedStickers)
+	if(this->_constructorid == MessagesArchivedStickers::CtorMessagesArchivedStickers)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_sets, false);

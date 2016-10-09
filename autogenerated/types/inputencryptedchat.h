@@ -18,7 +18,7 @@ class InputEncryptedChat: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputEncryptedChat = 0xf141b5e1,
+			CtorInputEncryptedChat = 0xf141b5e1,
 		};
 
 	public:

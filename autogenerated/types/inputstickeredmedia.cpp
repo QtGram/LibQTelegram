@@ -14,10 +14,10 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto) ||
-		 (this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument));
+	Q_ASSERT((this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaPhoto) ||
+		 (this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaDocument));
 	
-	if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto)
+	if(this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaPhoto)
 	{
 		TLInt id_inputstickeredmediaphoto_ctor = mtstream->peekTLConstructor();
 		
@@ -32,7 +32,7 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument)
+	else if(this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaDocument)
 	{
 		TLInt id_inputstickeredmediadocument_ctor = mtstream->peekTLConstructor();
 		
@@ -51,20 +51,20 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 
 void InputStickeredMedia::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto) ||
-		 (this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument));
+	Q_ASSERT((this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaPhoto) ||
+		 (this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaDocument));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaPhoto)
+	if(this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaPhoto)
 	{
 		if(this->_id_inputstickeredmediaphoto != NULL)
 			this->_id_inputstickeredmediaphoto->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputStickeredMedia::ctorInputStickeredMediaDocument)
+	else if(this->_constructorid == InputStickeredMedia::CtorInputStickeredMediaDocument)
 	{
 		if(this->_id_inputstickeredmediadocument != NULL)
 			this->_id_inputstickeredmediadocument->write(mtstream);

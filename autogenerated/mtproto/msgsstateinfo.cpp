@@ -7,16 +7,16 @@
 MsgsStateInfo::MsgsStateInfo(QObject* parent) : TelegramObject(parent)
 {
 	this->_req_msg_id = 0;
-	this->_constructorid = MsgsStateInfo::ctorMsgsStateInfo;
+	this->_constructorid = MsgsStateInfo::CtorMsgsStateInfo;
 }
 
 void MsgsStateInfo::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MsgsStateInfo::ctorMsgsStateInfo));
+	Q_ASSERT((this->_constructorid == MsgsStateInfo::CtorMsgsStateInfo));
 	
-	if(this->_constructorid == MsgsStateInfo::ctorMsgsStateInfo)
+	if(this->_constructorid == MsgsStateInfo::CtorMsgsStateInfo)
 	{
 		this->_req_msg_id = mtstream->readTLLong();
 		this->_info = mtstream->readTLString();
@@ -25,12 +25,12 @@ void MsgsStateInfo::read(MTProtoStream* mtstream)
 
 void MsgsStateInfo::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MsgsStateInfo::ctorMsgsStateInfo));
+	Q_ASSERT((this->_constructorid == MsgsStateInfo::CtorMsgsStateInfo));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MsgsStateInfo::ctorMsgsStateInfo)
+	if(this->_constructorid == MsgsStateInfo::CtorMsgsStateInfo)
 	{
 		mtstream->writeTLLong(this->_req_msg_id);
 		mtstream->writeTLString(this->_info);

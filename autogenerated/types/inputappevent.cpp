@@ -8,16 +8,16 @@ InputAppEvent::InputAppEvent(QObject* parent) : TelegramObject(parent)
 {
 	this->_time = 0;
 	this->_peer = 0;
-	this->_constructorid = InputAppEvent::ctorInputAppEvent;
+	this->_constructorid = InputAppEvent::CtorInputAppEvent;
 }
 
 void InputAppEvent::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputAppEvent::ctorInputAppEvent));
+	Q_ASSERT((this->_constructorid == InputAppEvent::CtorInputAppEvent));
 	
-	if(this->_constructorid == InputAppEvent::ctorInputAppEvent)
+	if(this->_constructorid == InputAppEvent::CtorInputAppEvent)
 	{
 		this->_time = mtstream->readTLDouble();
 		this->_type = mtstream->readTLString();
@@ -28,12 +28,12 @@ void InputAppEvent::read(MTProtoStream* mtstream)
 
 void InputAppEvent::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputAppEvent::ctorInputAppEvent));
+	Q_ASSERT((this->_constructorid == InputAppEvent::CtorInputAppEvent));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputAppEvent::ctorInputAppEvent)
+	if(this->_constructorid == InputAppEvent::CtorInputAppEvent)
 	{
 		mtstream->writeTLDouble(this->_time);
 		mtstream->writeTLString(this->_type);

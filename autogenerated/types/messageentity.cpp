@@ -16,84 +16,84 @@ void MessageEntity::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessageEntity::ctorMessageEntityUnknown) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityMention) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityHashtag) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityBotCommand) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityUrl) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityEmail) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityBold) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityItalic) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityCode) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityPre) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityTextUrl) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityMentionName) ||
-		 (this->_constructorid == MessageEntity::ctorInputMessageEntityMentionName));
+	Q_ASSERT((this->_constructorid == MessageEntity::CtorMessageEntityUnknown) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityMention) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityHashtag) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityBotCommand) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityUrl) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityEmail) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityBold) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityItalic) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityCode) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityPre) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityTextUrl) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityMentionName) ||
+		 (this->_constructorid == MessageEntity::CtorInputMessageEntityMentionName));
 	
-	if(this->_constructorid == MessageEntity::ctorMessageEntityUnknown)
+	if(this->_constructorid == MessageEntity::CtorMessageEntityUnknown)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityMention)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityMention)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityHashtag)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityHashtag)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityBotCommand)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityBotCommand)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityUrl)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityUrl)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityEmail)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityEmail)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityBold)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityBold)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityItalic)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityItalic)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityCode)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityCode)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityPre)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityPre)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 		this->_language = mtstream->readTLString();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityTextUrl)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityTextUrl)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 		this->_url = mtstream->readTLString();
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityMentionName)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityMentionName)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
 		this->_user_id_messageentitymentionname = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageEntity::ctorInputMessageEntityMentionName)
+	else if(this->_constructorid == MessageEntity::CtorInputMessageEntityMentionName)
 	{
 		this->_offset = mtstream->readTLInt();
 		this->_length = mtstream->readTLInt();
@@ -114,87 +114,87 @@ void MessageEntity::read(MTProtoStream* mtstream)
 
 void MessageEntity::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessageEntity::ctorMessageEntityUnknown) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityMention) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityHashtag) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityBotCommand) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityUrl) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityEmail) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityBold) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityItalic) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityCode) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityPre) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityTextUrl) ||
-		 (this->_constructorid == MessageEntity::ctorMessageEntityMentionName) ||
-		 (this->_constructorid == MessageEntity::ctorInputMessageEntityMentionName));
+	Q_ASSERT((this->_constructorid == MessageEntity::CtorMessageEntityUnknown) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityMention) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityHashtag) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityBotCommand) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityUrl) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityEmail) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityBold) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityItalic) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityCode) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityPre) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityTextUrl) ||
+		 (this->_constructorid == MessageEntity::CtorMessageEntityMentionName) ||
+		 (this->_constructorid == MessageEntity::CtorInputMessageEntityMentionName));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessageEntity::ctorMessageEntityUnknown)
+	if(this->_constructorid == MessageEntity::CtorMessageEntityUnknown)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityMention)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityMention)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityHashtag)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityHashtag)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityBotCommand)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityBotCommand)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityUrl)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityUrl)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityEmail)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityEmail)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityBold)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityBold)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityItalic)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityItalic)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityCode)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityCode)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityPre)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityPre)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 		mtstream->writeTLString(this->_language);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityTextUrl)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityTextUrl)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 		mtstream->writeTLString(this->_url);
 	}
-	else if(this->_constructorid == MessageEntity::ctorMessageEntityMentionName)
+	else if(this->_constructorid == MessageEntity::CtorMessageEntityMentionName)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);
 		mtstream->writeTLInt(this->_user_id_messageentitymentionname);
 	}
-	else if(this->_constructorid == MessageEntity::ctorInputMessageEntityMentionName)
+	else if(this->_constructorid == MessageEntity::CtorInputMessageEntityMentionName)
 	{
 		mtstream->writeTLInt(this->_offset);
 		mtstream->writeTLInt(this->_length);

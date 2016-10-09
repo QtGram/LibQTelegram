@@ -19,10 +19,10 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == BotInlineResult::ctorBotInlineResult) ||
-		 (this->_constructorid == BotInlineResult::ctorBotInlineMediaResult));
+	Q_ASSERT((this->_constructorid == BotInlineResult::CtorBotInlineResult) ||
+		 (this->_constructorid == BotInlineResult::CtorBotInlineMediaResult));
 	
-	if(this->_constructorid == BotInlineResult::ctorBotInlineResult)
+	if(this->_constructorid == BotInlineResult::CtorBotInlineResult)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLString();
@@ -67,7 +67,7 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == BotInlineResult::ctorBotInlineMediaResult)
+	else if(this->_constructorid == BotInlineResult::CtorBotInlineMediaResult)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLString();
@@ -127,13 +127,13 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 
 void BotInlineResult::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == BotInlineResult::ctorBotInlineResult) ||
-		 (this->_constructorid == BotInlineResult::ctorBotInlineMediaResult));
+	Q_ASSERT((this->_constructorid == BotInlineResult::CtorBotInlineResult) ||
+		 (this->_constructorid == BotInlineResult::CtorBotInlineMediaResult));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == BotInlineResult::ctorBotInlineResult)
+	if(this->_constructorid == BotInlineResult::CtorBotInlineResult)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_id);
@@ -170,7 +170,7 @@ void BotInlineResult::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == BotInlineResult::ctorBotInlineMediaResult)
+	else if(this->_constructorid == BotInlineResult::CtorBotInlineMediaResult)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_id);
@@ -208,7 +208,7 @@ void BotInlineResult::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == BotInlineResult::ctorBotInlineResult)
+	if(this->_constructorid == BotInlineResult::CtorBotInlineResult)
 	{
 		if(!this->_title.isEmpty())
 			SET_FLAG_BIT(this->_flags, 1);
@@ -229,7 +229,7 @@ void BotInlineResult::compileFlags()
 		if(this->_duration)
 			SET_FLAG_BIT(this->_flags, 7);
 	}
-	else if(this->_constructorid == BotInlineResult::ctorBotInlineMediaResult)
+	else if(this->_constructorid == BotInlineResult::CtorBotInlineMediaResult)
 	{
 		if(this->_photo)
 			SET_FLAG_BIT(this->_flags, 0);

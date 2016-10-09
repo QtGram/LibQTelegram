@@ -19,21 +19,21 @@ void InputMedia::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputMedia::ctorInputMediaEmpty) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaPhoto) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGeoPoint) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaContact) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaVenue) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGifExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaPhotoExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaDocumentExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGame));
+	Q_ASSERT((this->_constructorid == InputMedia::CtorInputMediaEmpty) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedPhoto) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaPhoto) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGeoPoint) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaContact) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaVenue) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGifExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaPhotoExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaDocumentExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGame));
 	
-	if(this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto)
+	if(this->_constructorid == InputMedia::CtorInputMediaUploadedPhoto)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt file_ctor = mtstream->peekTLConstructor();
@@ -53,7 +53,7 @@ void InputMedia::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->readTLVector<InputDocument>(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaPhoto)
+	else if(this->_constructorid == InputMedia::CtorInputMediaPhoto)
 	{
 		TLInt id_inputmediaphoto_ctor = mtstream->peekTLConstructor();
 		
@@ -70,7 +70,7 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGeoPoint)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGeoPoint)
 	{
 		TLInt geo_point_ctor = mtstream->peekTLConstructor();
 		
@@ -85,13 +85,13 @@ void InputMedia::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaContact)
+	else if(this->_constructorid == InputMedia::CtorInputMediaContact)
 	{
 		this->_phone_number = mtstream->readTLString();
 		this->_first_name = mtstream->readTLString();
 		this->_last_name = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedDocument)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt file_ctor = mtstream->peekTLConstructor();
@@ -113,7 +113,7 @@ void InputMedia::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->readTLVector<InputDocument>(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt file_ctor = mtstream->peekTLConstructor();
@@ -148,7 +148,7 @@ void InputMedia::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->readTLVector<InputDocument>(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaDocument)
 	{
 		TLInt id_inputmediadocument_ctor = mtstream->peekTLConstructor();
 		
@@ -165,7 +165,7 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaVenue)
+	else if(this->_constructorid == InputMedia::CtorInputMediaVenue)
 	{
 		TLInt geo_point_ctor = mtstream->peekTLConstructor();
 		
@@ -185,22 +185,22 @@ void InputMedia::read(MTProtoStream* mtstream)
 		this->_provider = mtstream->readTLString();
 		this->_venue_id = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGifExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGifExternal)
 	{
 		this->_url = mtstream->readTLString();
 		this->_q = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaPhotoExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaPhotoExternal)
 	{
 		this->_url = mtstream->readTLString();
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaDocumentExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaDocumentExternal)
 	{
 		this->_url = mtstream->readTLString();
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGame)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGame)
 	{
 		TLInt id_inputmediagame_ctor = mtstream->peekTLConstructor();
 		
@@ -219,24 +219,24 @@ void InputMedia::read(MTProtoStream* mtstream)
 
 void InputMedia::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputMedia::ctorInputMediaEmpty) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaPhoto) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGeoPoint) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaContact) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaDocument) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaVenue) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGifExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaPhotoExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaDocumentExternal) ||
-		 (this->_constructorid == InputMedia::ctorInputMediaGame));
+	Q_ASSERT((this->_constructorid == InputMedia::CtorInputMediaEmpty) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedPhoto) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaPhoto) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGeoPoint) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaContact) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaDocument) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaVenue) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGifExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaPhotoExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaDocumentExternal) ||
+		 (this->_constructorid == InputMedia::CtorInputMediaGame));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto)
+	if(this->_constructorid == InputMedia::CtorInputMediaUploadedPhoto)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_file != NULL)
@@ -248,7 +248,7 @@ void InputMedia::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLVector(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaPhoto)
+	else if(this->_constructorid == InputMedia::CtorInputMediaPhoto)
 	{
 		if(this->_id_inputmediaphoto != NULL)
 			this->_id_inputmediaphoto->write(mtstream);
@@ -257,20 +257,20 @@ void InputMedia::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGeoPoint)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGeoPoint)
 	{
 		if(this->_geo_point != NULL)
 			this->_geo_point->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaContact)
+	else if(this->_constructorid == InputMedia::CtorInputMediaContact)
 	{
 		mtstream->writeTLString(this->_phone_number);
 		mtstream->writeTLString(this->_first_name);
 		mtstream->writeTLString(this->_last_name);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedDocument)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_file != NULL)
@@ -284,7 +284,7 @@ void InputMedia::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLVector(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_file != NULL)
@@ -303,7 +303,7 @@ void InputMedia::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLVector(this->_stickers, false);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaDocument)
 	{
 		if(this->_id_inputmediadocument != NULL)
 			this->_id_inputmediadocument->write(mtstream);
@@ -312,7 +312,7 @@ void InputMedia::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaVenue)
+	else if(this->_constructorid == InputMedia::CtorInputMediaVenue)
 	{
 		if(this->_geo_point != NULL)
 			this->_geo_point->write(mtstream);
@@ -324,22 +324,22 @@ void InputMedia::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_provider);
 		mtstream->writeTLString(this->_venue_id);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGifExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGifExternal)
 	{
 		mtstream->writeTLString(this->_url);
 		mtstream->writeTLString(this->_q);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaPhotoExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaPhotoExternal)
 	{
 		mtstream->writeTLString(this->_url);
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaDocumentExternal)
+	else if(this->_constructorid == InputMedia::CtorInputMediaDocumentExternal)
 	{
 		mtstream->writeTLString(this->_url);
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaGame)
+	else if(this->_constructorid == InputMedia::CtorInputMediaGame)
 	{
 		if(this->_id_inputmediagame != NULL)
 			this->_id_inputmediagame->write(mtstream);
@@ -352,17 +352,17 @@ void InputMedia::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == InputMedia::ctorInputMediaUploadedPhoto)
+	if(this->_constructorid == InputMedia::CtorInputMediaUploadedPhoto)
 	{
 		if(!this->_stickers.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedDocument)
 	{
 		if(!this->_stickers.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == InputMedia::ctorInputMediaUploadedThumbDocument)
+	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument)
 	{
 		if(!this->_stickers.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);

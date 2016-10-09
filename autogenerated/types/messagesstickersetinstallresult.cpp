@@ -13,22 +13,22 @@ void MessagesStickerSetInstallResult::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess) ||
-		 (this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive));
+	Q_ASSERT((this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultSuccess) ||
+		 (this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive));
 	
-	if(this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive)
+	if(this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive)
 		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
 }
 
 void MessagesStickerSetInstallResult::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultSuccess) ||
-		 (this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive));
+	Q_ASSERT((this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultSuccess) ||
+		 (this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesStickerSetInstallResult::ctorMessagesStickerSetInstallResultArchive)
+	if(this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive)
 		mtstream->writeTLVector(this->_sets, false);
 }
 

@@ -19,9 +19,9 @@ class ChatParticipant: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChatParticipant = 0xc8d7493e,
-			ctorChatParticipantCreator = 0xda13538a,
-			ctorChatParticipantAdmin = 0xe2d6e436,
+			CtorChatParticipant = 0xc8d7493e,
+			CtorChatParticipantCreator = 0xda13538a,
+			CtorChatParticipantAdmin = 0xe2d6e436,
 		};
 
 	public:

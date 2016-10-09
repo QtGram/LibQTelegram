@@ -14,12 +14,12 @@ void MessagesSentEncryptedMessage::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage) ||
-		 (this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile));
+	Q_ASSERT((this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedMessage) ||
+		 (this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedFile));
 	
-	if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage)
+	if(this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedMessage)
 		this->_date = mtstream->readTLInt();
-	else if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
+	else if(this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedFile)
 	{
 		this->_date = mtstream->readTLInt();
 		TLInt file_ctor = mtstream->peekTLConstructor();
@@ -39,15 +39,15 @@ void MessagesSentEncryptedMessage::read(MTProtoStream* mtstream)
 
 void MessagesSentEncryptedMessage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage) ||
-		 (this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile));
+	Q_ASSERT((this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedMessage) ||
+		 (this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedFile));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedMessage)
+	if(this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedMessage)
 		mtstream->writeTLInt(this->_date);
-	else if(this->_constructorid == MessagesSentEncryptedMessage::ctorMessagesSentEncryptedFile)
+	else if(this->_constructorid == MessagesSentEncryptedMessage::CtorMessagesSentEncryptedFile)
 	{
 		mtstream->writeTLInt(this->_date);
 		if(this->_file != NULL)

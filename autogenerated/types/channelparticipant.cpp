@@ -16,88 +16,88 @@ void ChannelParticipant::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelParticipant::ctorChannelParticipant) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantSelf) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantModerator) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantEditor) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantKicked) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantCreator));
+	Q_ASSERT((this->_constructorid == ChannelParticipant::CtorChannelParticipant) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantSelf) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantModerator) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantEditor) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantKicked) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantCreator));
 	
-	if(this->_constructorid == ChannelParticipant::ctorChannelParticipant)
+	if(this->_constructorid == ChannelParticipant::CtorChannelParticipant)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantSelf)
-	{
-		this->_user_id = mtstream->readTLInt();
-		this->_inviter_id = mtstream->readTLInt();
-		this->_date = mtstream->readTLInt();
-	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantModerator)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantSelf)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_inviter_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantEditor)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantModerator)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_inviter_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantKicked)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantEditor)
+	{
+		this->_user_id = mtstream->readTLInt();
+		this->_inviter_id = mtstream->readTLInt();
+		this->_date = mtstream->readTLInt();
+	}
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantKicked)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_kicked_by = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantCreator)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantCreator)
 		this->_user_id = mtstream->readTLInt();
 }
 
 void ChannelParticipant::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelParticipant::ctorChannelParticipant) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantSelf) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantModerator) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantEditor) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantKicked) ||
-		 (this->_constructorid == ChannelParticipant::ctorChannelParticipantCreator));
+	Q_ASSERT((this->_constructorid == ChannelParticipant::CtorChannelParticipant) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantSelf) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantModerator) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantEditor) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantKicked) ||
+		 (this->_constructorid == ChannelParticipant::CtorChannelParticipantCreator));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChannelParticipant::ctorChannelParticipant)
+	if(this->_constructorid == ChannelParticipant::CtorChannelParticipant)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantSelf)
-	{
-		mtstream->writeTLInt(this->_user_id);
-		mtstream->writeTLInt(this->_inviter_id);
-		mtstream->writeTLInt(this->_date);
-	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantModerator)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantSelf)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_inviter_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantEditor)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantModerator)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_inviter_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantKicked)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantEditor)
+	{
+		mtstream->writeTLInt(this->_user_id);
+		mtstream->writeTLInt(this->_inviter_id);
+		mtstream->writeTLInt(this->_date);
+	}
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantKicked)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_kicked_by);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == ChannelParticipant::ctorChannelParticipantCreator)
+	else if(this->_constructorid == ChannelParticipant::CtorChannelParticipantCreator)
 		mtstream->writeTLInt(this->_user_id);
 }
 

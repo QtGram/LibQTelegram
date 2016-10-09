@@ -17,7 +17,7 @@ class ExportedMessageLink: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorExportedMessageLink = 0x1f486803,
+			CtorExportedMessageLink = 0x1f486803,
 		};
 
 	public:

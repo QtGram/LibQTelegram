@@ -18,7 +18,7 @@ class ReceivedNotifyMessage: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorReceivedNotifyMessage = 0xa384b779,
+			CtorReceivedNotifyMessage = 0xa384b779,
 		};
 
 	public:

@@ -7,27 +7,27 @@
 AuthCheckedPhone::AuthCheckedPhone(QObject* parent) : TelegramObject(parent)
 {
 	this->_is_phone_registered = false;
-	this->_constructorid = AuthCheckedPhone::ctorAuthCheckedPhone;
+	this->_constructorid = AuthCheckedPhone::CtorAuthCheckedPhone;
 }
 
 void AuthCheckedPhone::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthCheckedPhone::ctorAuthCheckedPhone));
+	Q_ASSERT((this->_constructorid == AuthCheckedPhone::CtorAuthCheckedPhone));
 	
-	if(this->_constructorid == AuthCheckedPhone::ctorAuthCheckedPhone)
+	if(this->_constructorid == AuthCheckedPhone::CtorAuthCheckedPhone)
 		this->_is_phone_registered = mtstream->readTLBool();
 }
 
 void AuthCheckedPhone::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthCheckedPhone::ctorAuthCheckedPhone));
+	Q_ASSERT((this->_constructorid == AuthCheckedPhone::CtorAuthCheckedPhone));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthCheckedPhone::ctorAuthCheckedPhone)
+	if(this->_constructorid == AuthCheckedPhone::CtorAuthCheckedPhone)
 		mtstream->writeTLBool(this->_is_phone_registered);
 }
 

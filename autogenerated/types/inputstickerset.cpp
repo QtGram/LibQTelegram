@@ -14,34 +14,34 @@ void InputStickerSet::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputStickerSet::ctorInputStickerSetEmpty) ||
-		 (this->_constructorid == InputStickerSet::ctorInputStickerSetID) ||
-		 (this->_constructorid == InputStickerSet::ctorInputStickerSetShortName));
+	Q_ASSERT((this->_constructorid == InputStickerSet::CtorInputStickerSetEmpty) ||
+		 (this->_constructorid == InputStickerSet::CtorInputStickerSetID) ||
+		 (this->_constructorid == InputStickerSet::CtorInputStickerSetShortName));
 	
-	if(this->_constructorid == InputStickerSet::ctorInputStickerSetID)
+	if(this->_constructorid == InputStickerSet::CtorInputStickerSetID)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == InputStickerSet::ctorInputStickerSetShortName)
+	else if(this->_constructorid == InputStickerSet::CtorInputStickerSetShortName)
 		this->_short_name = mtstream->readTLString();
 }
 
 void InputStickerSet::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputStickerSet::ctorInputStickerSetEmpty) ||
-		 (this->_constructorid == InputStickerSet::ctorInputStickerSetID) ||
-		 (this->_constructorid == InputStickerSet::ctorInputStickerSetShortName));
+	Q_ASSERT((this->_constructorid == InputStickerSet::CtorInputStickerSetEmpty) ||
+		 (this->_constructorid == InputStickerSet::CtorInputStickerSetID) ||
+		 (this->_constructorid == InputStickerSet::CtorInputStickerSetShortName));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputStickerSet::ctorInputStickerSetID)
+	if(this->_constructorid == InputStickerSet::CtorInputStickerSetID)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
 	}
-	else if(this->_constructorid == InputStickerSet::ctorInputStickerSetShortName)
+	else if(this->_constructorid == InputStickerSet::CtorInputStickerSetShortName)
 		mtstream->writeTLString(this->_short_name);
 }
 

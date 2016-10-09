@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "photosize.h"
+#include "../../types/basic.h"
 
 class Photo: public TelegramObject
 {
@@ -23,8 +23,8 @@ class Photo: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPhotoEmpty = 0x2331b22d,
-			ctorPhoto = 0x9288dd29,
+			CtorPhotoEmpty = 0x2331b22d,
+			CtorPhoto = 0x9288dd29,
 		};
 
 	public:

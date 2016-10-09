@@ -20,12 +20,12 @@ class ChannelParticipant: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChannelParticipant = 0x15ebac1d,
-			ctorChannelParticipantSelf = 0xa3289a6d,
-			ctorChannelParticipantModerator = 0x91057fef,
-			ctorChannelParticipantEditor = 0x98192d61,
-			ctorChannelParticipantKicked = 0x8cc5e69a,
-			ctorChannelParticipantCreator = 0xe3e2e1f9,
+			CtorChannelParticipant = 0x15ebac1d,
+			CtorChannelParticipantSelf = 0xa3289a6d,
+			CtorChannelParticipantModerator = 0x91057fef,
+			CtorChannelParticipantEditor = 0x98192d61,
+			CtorChannelParticipantKicked = 0x8cc5e69a,
+			CtorChannelParticipantCreator = 0xe3e2e1f9,
 		};
 
 	public:

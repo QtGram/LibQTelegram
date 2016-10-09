@@ -19,9 +19,9 @@ class RpcDropAnswer: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorRpcAnswerUnknown = 0x5e2ad36e,
-			ctorRpcAnswerDroppedRunning = 0xcd78e586,
-			ctorRpcAnswerDropped = 0xa43ad8b7,
+			CtorRpcAnswerUnknown = 0x5e2ad36e,
+			CtorRpcAnswerDroppedRunning = 0xcd78e586,
+			CtorRpcAnswerDropped = 0xa43ad8b7,
 		};
 
 	public:

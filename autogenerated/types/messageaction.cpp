@@ -19,29 +19,29 @@ void MessageAction::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessageAction::ctorMessageActionEmpty) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatCreate) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatEditTitle) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatDeletePhoto) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatAddUser) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatDeleteUser) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatJoinedByLink) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChannelCreate) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatMigrateTo) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChannelMigrateFrom) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionPinMessage) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionHistoryClear) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionGameScore));
+	Q_ASSERT((this->_constructorid == MessageAction::CtorMessageActionEmpty) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatCreate) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatEditTitle) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatEditPhoto) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatDeletePhoto) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatAddUser) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatDeleteUser) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatJoinedByLink) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChannelCreate) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatMigrateTo) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChannelMigrateFrom) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionPinMessage) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionHistoryClear) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionGameScore));
 	
-	if(this->_constructorid == MessageAction::ctorMessageActionChatCreate)
+	if(this->_constructorid == MessageAction::CtorMessageActionChatCreate)
 	{
 		this->_title = mtstream->readTLString();
 		mtstream->readTLVector<TLInt>(this->_users, false);
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditTitle)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatEditTitle)
 		this->_title = mtstream->readTLString();
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatEditPhoto)
 	{
 		TLInt photo_ctor = mtstream->peekTLConstructor();
 		
@@ -56,22 +56,22 @@ void MessageAction::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatAddUser)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatAddUser)
 		mtstream->readTLVector<TLInt>(this->_users, false);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatDeleteUser)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatDeleteUser)
 		this->_user_id = mtstream->readTLInt();
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatJoinedByLink)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatJoinedByLink)
 		this->_inviter_id = mtstream->readTLInt();
-	else if(this->_constructorid == MessageAction::ctorMessageActionChannelCreate)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChannelCreate)
 		this->_title = mtstream->readTLString();
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatMigrateTo)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatMigrateTo)
 		this->_channel_id = mtstream->readTLInt();
-	else if(this->_constructorid == MessageAction::ctorMessageActionChannelMigrateFrom)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChannelMigrateFrom)
 	{
 		this->_title = mtstream->readTLString();
 		this->_chat_id = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionGameScore)
+	else if(this->_constructorid == MessageAction::CtorMessageActionGameScore)
 	{
 		this->_game_id = mtstream->readTLLong();
 		this->_score = mtstream->readTLInt();
@@ -80,54 +80,54 @@ void MessageAction::read(MTProtoStream* mtstream)
 
 void MessageAction::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessageAction::ctorMessageActionEmpty) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatCreate) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatEditTitle) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatDeletePhoto) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatAddUser) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatDeleteUser) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatJoinedByLink) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChannelCreate) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChatMigrateTo) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionChannelMigrateFrom) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionPinMessage) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionHistoryClear) ||
-		 (this->_constructorid == MessageAction::ctorMessageActionGameScore));
+	Q_ASSERT((this->_constructorid == MessageAction::CtorMessageActionEmpty) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatCreate) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatEditTitle) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatEditPhoto) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatDeletePhoto) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatAddUser) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatDeleteUser) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatJoinedByLink) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChannelCreate) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChatMigrateTo) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionChannelMigrateFrom) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionPinMessage) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionHistoryClear) ||
+		 (this->_constructorid == MessageAction::CtorMessageActionGameScore));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessageAction::ctorMessageActionChatCreate)
+	if(this->_constructorid == MessageAction::CtorMessageActionChatCreate)
 	{
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditTitle)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatEditTitle)
 		mtstream->writeTLString(this->_title);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatEditPhoto)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatEditPhoto)
 	{
 		if(this->_photo != NULL)
 			this->_photo->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatAddUser)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatAddUser)
 		mtstream->writeTLVector(this->_users, false);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatDeleteUser)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatDeleteUser)
 		mtstream->writeTLInt(this->_user_id);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatJoinedByLink)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatJoinedByLink)
 		mtstream->writeTLInt(this->_inviter_id);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChannelCreate)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChannelCreate)
 		mtstream->writeTLString(this->_title);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChatMigrateTo)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChatMigrateTo)
 		mtstream->writeTLInt(this->_channel_id);
-	else if(this->_constructorid == MessageAction::ctorMessageActionChannelMigrateFrom)
+	else if(this->_constructorid == MessageAction::CtorMessageActionChannelMigrateFrom)
 	{
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLInt(this->_chat_id);
 	}
-	else if(this->_constructorid == MessageAction::ctorMessageActionGameScore)
+	else if(this->_constructorid == MessageAction::CtorMessageActionGameScore)
 	{
 		mtstream->writeTLLong(this->_game_id);
 		mtstream->writeTLInt(this->_score);

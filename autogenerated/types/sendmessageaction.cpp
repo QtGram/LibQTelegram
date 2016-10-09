@@ -13,54 +13,54 @@ void SendMessageAction::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == SendMessageAction::ctorSendMessageTypingAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageCancelAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageRecordVideoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadVideoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageRecordAudioAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadAudioAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadPhotoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadDocumentAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGeoLocationAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageChooseContactAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGamePlayAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGameStopAction));
+	Q_ASSERT((this->_constructorid == SendMessageAction::CtorSendMessageTypingAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageCancelAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageRecordVideoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadVideoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageRecordAudioAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadAudioAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadPhotoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadDocumentAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGeoLocationAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageChooseContactAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGamePlayAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGameStopAction));
 	
-	if(this->_constructorid == SendMessageAction::ctorSendMessageUploadVideoAction)
+	if(this->_constructorid == SendMessageAction::CtorSendMessageUploadVideoAction)
 		this->_progress = mtstream->readTLInt();
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadAudioAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadAudioAction)
 		this->_progress = mtstream->readTLInt();
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadPhotoAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadPhotoAction)
 		this->_progress = mtstream->readTLInt();
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadDocumentAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadDocumentAction)
 		this->_progress = mtstream->readTLInt();
 }
 
 void SendMessageAction::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == SendMessageAction::ctorSendMessageTypingAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageCancelAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageRecordVideoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadVideoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageRecordAudioAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadAudioAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadPhotoAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageUploadDocumentAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGeoLocationAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageChooseContactAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGamePlayAction) ||
-		 (this->_constructorid == SendMessageAction::ctorSendMessageGameStopAction));
+	Q_ASSERT((this->_constructorid == SendMessageAction::CtorSendMessageTypingAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageCancelAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageRecordVideoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadVideoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageRecordAudioAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadAudioAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadPhotoAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageUploadDocumentAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGeoLocationAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageChooseContactAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGamePlayAction) ||
+		 (this->_constructorid == SendMessageAction::CtorSendMessageGameStopAction));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == SendMessageAction::ctorSendMessageUploadVideoAction)
+	if(this->_constructorid == SendMessageAction::CtorSendMessageUploadVideoAction)
 		mtstream->writeTLInt(this->_progress);
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadAudioAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadAudioAction)
 		mtstream->writeTLInt(this->_progress);
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadPhotoAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadPhotoAction)
 		mtstream->writeTLInt(this->_progress);
-	else if(this->_constructorid == SendMessageAction::ctorSendMessageUploadDocumentAction)
+	else if(this->_constructorid == SendMessageAction::CtorSendMessageUploadDocumentAction)
 		mtstream->writeTLInt(this->_progress);
 }
 

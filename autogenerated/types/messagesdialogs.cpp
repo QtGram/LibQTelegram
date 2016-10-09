@@ -13,17 +13,17 @@ void MessagesDialogs::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesDialogs::ctorMessagesDialogs) ||
-		 (this->_constructorid == MessagesDialogs::ctorMessagesDialogsSlice));
+	Q_ASSERT((this->_constructorid == MessagesDialogs::CtorMessagesDialogs) ||
+		 (this->_constructorid == MessagesDialogs::CtorMessagesDialogsSlice));
 	
-	if(this->_constructorid == MessagesDialogs::ctorMessagesDialogs)
+	if(this->_constructorid == MessagesDialogs::CtorMessagesDialogs)
 	{
 		mtstream->readTLVector<Dialog>(this->_dialogs, false);
 		mtstream->readTLVector<Message>(this->_messages, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesDialogs::ctorMessagesDialogsSlice)
+	else if(this->_constructorid == MessagesDialogs::CtorMessagesDialogsSlice)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<Dialog>(this->_dialogs, false);
@@ -35,20 +35,20 @@ void MessagesDialogs::read(MTProtoStream* mtstream)
 
 void MessagesDialogs::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesDialogs::ctorMessagesDialogs) ||
-		 (this->_constructorid == MessagesDialogs::ctorMessagesDialogsSlice));
+	Q_ASSERT((this->_constructorid == MessagesDialogs::CtorMessagesDialogs) ||
+		 (this->_constructorid == MessagesDialogs::CtorMessagesDialogsSlice));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesDialogs::ctorMessagesDialogs)
+	if(this->_constructorid == MessagesDialogs::CtorMessagesDialogs)
 	{
 		mtstream->writeTLVector(this->_dialogs, false);
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesDialogs::ctorMessagesDialogsSlice)
+	else if(this->_constructorid == MessagesDialogs::CtorMessagesDialogsSlice)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_dialogs, false);

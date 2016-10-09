@@ -13,23 +13,23 @@ void SetClientDHParamsAnswer::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == SetClientDHParamsAnswer::ctorDhGenOk) ||
-		 (this->_constructorid == SetClientDHParamsAnswer::ctorDhGenRetry) ||
-		 (this->_constructorid == SetClientDHParamsAnswer::ctorDhGenFail));
+	Q_ASSERT((this->_constructorid == SetClientDHParamsAnswer::CtorDhGenOk) ||
+		 (this->_constructorid == SetClientDHParamsAnswer::CtorDhGenRetry) ||
+		 (this->_constructorid == SetClientDHParamsAnswer::CtorDhGenFail));
 	
-	if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenOk)
+	if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenOk)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_new_nonce_hash1 = mtstream->readTLInt128();
 	}
-	else if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenRetry)
+	else if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenRetry)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_new_nonce_hash2 = mtstream->readTLInt128();
 	}
-	else if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenFail)
+	else if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenFail)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
@@ -39,26 +39,26 @@ void SetClientDHParamsAnswer::read(MTProtoStream* mtstream)
 
 void SetClientDHParamsAnswer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == SetClientDHParamsAnswer::ctorDhGenOk) ||
-		 (this->_constructorid == SetClientDHParamsAnswer::ctorDhGenRetry) ||
-		 (this->_constructorid == SetClientDHParamsAnswer::ctorDhGenFail));
+	Q_ASSERT((this->_constructorid == SetClientDHParamsAnswer::CtorDhGenOk) ||
+		 (this->_constructorid == SetClientDHParamsAnswer::CtorDhGenRetry) ||
+		 (this->_constructorid == SetClientDHParamsAnswer::CtorDhGenFail));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenOk)
+	if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenOk)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLInt128(this->_new_nonce_hash1);
 	}
-	else if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenRetry)
+	else if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenRetry)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLInt128(this->_new_nonce_hash2);
 	}
-	else if(this->_constructorid == SetClientDHParamsAnswer::ctorDhGenFail)
+	else if(this->_constructorid == SetClientDHParamsAnswer::CtorDhGenFail)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);

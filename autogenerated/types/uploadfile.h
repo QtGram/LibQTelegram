@@ -20,7 +20,7 @@ class UploadFile: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorUploadFile = 0x96a18d5,
+			CtorUploadFile = 0x96a18d5,
 		};
 
 	public:

@@ -15,17 +15,17 @@ class MessagesFilter: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputMessagesFilterEmpty = 0x57e2f66c,
-			ctorInputMessagesFilterPhotos = 0x9609a51c,
-			ctorInputMessagesFilterVideo = 0x9fc00e65,
-			ctorInputMessagesFilterPhotoVideo = 0x56e9f0e4,
-			ctorInputMessagesFilterPhotoVideoDocuments = 0xd95e73bb,
-			ctorInputMessagesFilterDocument = 0x9eddf188,
-			ctorInputMessagesFilterUrl = 0x7ef0dd87,
-			ctorInputMessagesFilterGif = 0xffc86587,
-			ctorInputMessagesFilterVoice = 0x50f5c392,
-			ctorInputMessagesFilterMusic = 0x3751b49e,
-			ctorInputMessagesFilterChatPhotos = 0x3a20ecb8,
+			CtorInputMessagesFilterEmpty = 0x57e2f66c,
+			CtorInputMessagesFilterPhotos = 0x9609a51c,
+			CtorInputMessagesFilterVideo = 0x9fc00e65,
+			CtorInputMessagesFilterPhotoVideo = 0x56e9f0e4,
+			CtorInputMessagesFilterPhotoVideoDocuments = 0xd95e73bb,
+			CtorInputMessagesFilterDocument = 0x9eddf188,
+			CtorInputMessagesFilterUrl = 0x7ef0dd87,
+			CtorInputMessagesFilterGif = 0xffc86587,
+			CtorInputMessagesFilterVoice = 0x50f5c392,
+			CtorInputMessagesFilterMusic = 0x3751b49e,
+			CtorInputMessagesFilterChatPhotos = 0x3a20ecb8,
 		};
 
 	public:

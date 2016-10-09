@@ -18,8 +18,8 @@ class InputChannel: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputChannelEmpty = 0xee8c1e86,
-			ctorInputChannel = 0xafeb712e,
+			CtorInputChannelEmpty = 0xee8c1e86,
+			CtorInputChannel = 0xafeb712e,
 		};
 
 	public:

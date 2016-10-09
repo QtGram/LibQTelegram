@@ -13,22 +13,22 @@ void ExportedChatInvite::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ExportedChatInvite::ctorChatInviteEmpty) ||
-		 (this->_constructorid == ExportedChatInvite::ctorChatInviteExported));
+	Q_ASSERT((this->_constructorid == ExportedChatInvite::CtorChatInviteEmpty) ||
+		 (this->_constructorid == ExportedChatInvite::CtorChatInviteExported));
 	
-	if(this->_constructorid == ExportedChatInvite::ctorChatInviteExported)
+	if(this->_constructorid == ExportedChatInvite::CtorChatInviteExported)
 		this->_link = mtstream->readTLString();
 }
 
 void ExportedChatInvite::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ExportedChatInvite::ctorChatInviteEmpty) ||
-		 (this->_constructorid == ExportedChatInvite::ctorChatInviteExported));
+	Q_ASSERT((this->_constructorid == ExportedChatInvite::CtorChatInviteEmpty) ||
+		 (this->_constructorid == ExportedChatInvite::CtorChatInviteExported));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ExportedChatInvite::ctorChatInviteExported)
+	if(this->_constructorid == ExportedChatInvite::CtorChatInviteExported)
 		mtstream->writeTLString(this->_link);
 }
 

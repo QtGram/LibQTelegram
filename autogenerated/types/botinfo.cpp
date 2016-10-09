@@ -7,16 +7,16 @@
 BotInfo::BotInfo(QObject* parent) : TelegramObject(parent)
 {
 	this->_user_id = 0;
-	this->_constructorid = BotInfo::ctorBotInfo;
+	this->_constructorid = BotInfo::CtorBotInfo;
 }
 
 void BotInfo::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == BotInfo::ctorBotInfo));
+	Q_ASSERT((this->_constructorid == BotInfo::CtorBotInfo));
 	
-	if(this->_constructorid == BotInfo::ctorBotInfo)
+	if(this->_constructorid == BotInfo::CtorBotInfo)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_description = mtstream->readTLString();
@@ -26,12 +26,12 @@ void BotInfo::read(MTProtoStream* mtstream)
 
 void BotInfo::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == BotInfo::ctorBotInfo));
+	Q_ASSERT((this->_constructorid == BotInfo::CtorBotInfo));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == BotInfo::ctorBotInfo)
+	if(this->_constructorid == BotInfo::CtorBotInfo)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLString(this->_description);

@@ -13,10 +13,10 @@ void MessagesFeaturedStickers::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified) ||
-		 (this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickers));
+	Q_ASSERT((this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickersNotModified) ||
+		 (this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickers));
 	
-	if(this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickers)
+	if(this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickers)
 	{
 		this->_hash = mtstream->readTLInt();
 		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
@@ -26,13 +26,13 @@ void MessagesFeaturedStickers::read(MTProtoStream* mtstream)
 
 void MessagesFeaturedStickers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickersNotModified) ||
-		 (this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickers));
+	Q_ASSERT((this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickersNotModified) ||
+		 (this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesFeaturedStickers::ctorMessagesFeaturedStickers)
+	if(this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickers)
 	{
 		mtstream->writeTLInt(this->_hash);
 		mtstream->writeTLVector(this->_sets, false);

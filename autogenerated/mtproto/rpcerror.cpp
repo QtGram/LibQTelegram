@@ -7,16 +7,16 @@
 RpcError::RpcError(QObject* parent) : TelegramObject(parent)
 {
 	this->_error_code = 0;
-	this->_constructorid = RpcError::ctorRpcError;
+	this->_constructorid = RpcError::CtorRpcError;
 }
 
 void RpcError::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == RpcError::ctorRpcError));
+	Q_ASSERT((this->_constructorid == RpcError::CtorRpcError));
 	
-	if(this->_constructorid == RpcError::ctorRpcError)
+	if(this->_constructorid == RpcError::CtorRpcError)
 	{
 		this->_error_code = mtstream->readTLInt();
 		this->_error_message = mtstream->readTLString();
@@ -25,12 +25,12 @@ void RpcError::read(MTProtoStream* mtstream)
 
 void RpcError::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == RpcError::ctorRpcError));
+	Q_ASSERT((this->_constructorid == RpcError::CtorRpcError));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == RpcError::ctorRpcError)
+	if(this->_constructorid == RpcError::CtorRpcError)
 	{
 		mtstream->writeTLInt(this->_error_code);
 		mtstream->writeTLString(this->_error_message);

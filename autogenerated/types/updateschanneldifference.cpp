@@ -20,11 +20,11 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty) ||
-		 (this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong) ||
-		 (this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifference));
+	Q_ASSERT((this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceEmpty) ||
+		 (this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceTooLong) ||
+		 (this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference));
 	
-	if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty)
+	if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceEmpty)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_final = IS_FLAG_SET(this->_flags, 0);
@@ -32,7 +32,7 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			this->_timeout = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceTooLong)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_final = IS_FLAG_SET(this->_flags, 0);
@@ -48,7 +48,7 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifference)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_final = IS_FLAG_SET(this->_flags, 0);
@@ -65,21 +65,21 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 
 void UpdatesChannelDifference::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty) ||
-		 (this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong) ||
-		 (this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifference));
+	Q_ASSERT((this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceEmpty) ||
+		 (this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceTooLong) ||
+		 (this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty)
+	if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceEmpty)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_pts);
 		if(IS_FLAG_SET(this->_flags, 1))
 			mtstream->writeTLInt(this->_timeout);
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceTooLong)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_pts);
@@ -94,7 +94,7 @@ void UpdatesChannelDifference::write(MTProtoStream* mtstream)
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifference)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_pts);
@@ -112,21 +112,21 @@ void UpdatesChannelDifference::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceEmpty)
+	if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceEmpty)
 	{
 		if(this->_is_final)
 			SET_FLAG_BIT(this->_flags, 0);
 		if(this->_timeout)
 			SET_FLAG_BIT(this->_flags, 1);
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifferenceTooLong)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifferenceTooLong)
 	{
 		if(this->_is_final)
 			SET_FLAG_BIT(this->_flags, 0);
 		if(this->_timeout)
 			SET_FLAG_BIT(this->_flags, 1);
 	}
-	else if(this->_constructorid == UpdatesChannelDifference::ctorUpdatesChannelDifference)
+	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference)
 	{
 		if(this->_is_final)
 			SET_FLAG_BIT(this->_flags, 0);

@@ -9,16 +9,16 @@ NewSession::NewSession(QObject* parent) : TelegramObject(parent)
 	this->_first_msg_id = 0;
 	this->_unique_id = 0;
 	this->_server_salt = 0;
-	this->_constructorid = NewSession::ctorNewSessionCreated;
+	this->_constructorid = NewSession::CtorNewSessionCreated;
 }
 
 void NewSession::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == NewSession::ctorNewSessionCreated));
+	Q_ASSERT((this->_constructorid == NewSession::CtorNewSessionCreated));
 	
-	if(this->_constructorid == NewSession::ctorNewSessionCreated)
+	if(this->_constructorid == NewSession::CtorNewSessionCreated)
 	{
 		this->_first_msg_id = mtstream->readTLLong();
 		this->_unique_id = mtstream->readTLLong();
@@ -28,12 +28,12 @@ void NewSession::read(MTProtoStream* mtstream)
 
 void NewSession::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == NewSession::ctorNewSessionCreated));
+	Q_ASSERT((this->_constructorid == NewSession::CtorNewSessionCreated));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == NewSession::ctorNewSessionCreated)
+	if(this->_constructorid == NewSession::CtorNewSessionCreated)
 	{
 		mtstream->writeTLLong(this->_first_msg_id);
 		mtstream->writeTLLong(this->_unique_id);

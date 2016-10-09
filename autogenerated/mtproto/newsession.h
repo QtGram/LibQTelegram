@@ -19,7 +19,7 @@ class NewSession: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorNewSessionCreated = 0x9ec20908,
+			CtorNewSessionCreated = 0x9ec20908,
 		};
 
 	public:

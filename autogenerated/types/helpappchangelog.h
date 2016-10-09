@@ -17,8 +17,8 @@ class HelpAppChangelog: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHelpAppChangelogEmpty = 0xaf7e0394,
-			ctorHelpAppChangelog = 0x4668e6bd,
+			CtorHelpAppChangelogEmpty = 0xaf7e0394,
+			CtorHelpAppChangelog = 0x4668e6bd,
 		};
 
 	public:

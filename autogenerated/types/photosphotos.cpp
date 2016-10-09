@@ -13,15 +13,15 @@ void PhotosPhotos::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PhotosPhotos::ctorPhotosPhotos) ||
-		 (this->_constructorid == PhotosPhotos::ctorPhotosPhotosSlice));
+	Q_ASSERT((this->_constructorid == PhotosPhotos::CtorPhotosPhotos) ||
+		 (this->_constructorid == PhotosPhotos::CtorPhotosPhotosSlice));
 	
-	if(this->_constructorid == PhotosPhotos::ctorPhotosPhotos)
+	if(this->_constructorid == PhotosPhotos::CtorPhotosPhotos)
 	{
 		mtstream->readTLVector<Photo>(this->_photos, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == PhotosPhotos::ctorPhotosPhotosSlice)
+	else if(this->_constructorid == PhotosPhotos::CtorPhotosPhotosSlice)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<Photo>(this->_photos, false);
@@ -31,18 +31,18 @@ void PhotosPhotos::read(MTProtoStream* mtstream)
 
 void PhotosPhotos::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PhotosPhotos::ctorPhotosPhotos) ||
-		 (this->_constructorid == PhotosPhotos::ctorPhotosPhotosSlice));
+	Q_ASSERT((this->_constructorid == PhotosPhotos::CtorPhotosPhotos) ||
+		 (this->_constructorid == PhotosPhotos::CtorPhotosPhotosSlice));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PhotosPhotos::ctorPhotosPhotos)
+	if(this->_constructorid == PhotosPhotos::CtorPhotosPhotos)
 	{
 		mtstream->writeTLVector(this->_photos, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == PhotosPhotos::ctorPhotosPhotosSlice)
+	else if(this->_constructorid == PhotosPhotos::CtorPhotosPhotosSlice)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_photos, false);

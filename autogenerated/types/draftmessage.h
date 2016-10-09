@@ -22,9 +22,9 @@ class DraftMessage: public TelegramObject
 	Q_ENUMS(Constructors)
 
 	public:
-		enum Constructors {
-			ctorDraftMessageEmpty = 0xba4baec5,
-			ctorDraftMessage = 0xfd8e711f,
+        enum Constructors {
+			CtorDraftMessageEmpty = 0xba4baec5,
+			CtorDraftMessage = 0xfd8e711f,
 		};
 
 	public:

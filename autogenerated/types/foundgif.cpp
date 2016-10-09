@@ -16,10 +16,10 @@ void FoundGif::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == FoundGif::ctorFoundGif) ||
-		 (this->_constructorid == FoundGif::ctorFoundGifCached));
+	Q_ASSERT((this->_constructorid == FoundGif::CtorFoundGif) ||
+		 (this->_constructorid == FoundGif::CtorFoundGifCached));
 	
-	if(this->_constructorid == FoundGif::ctorFoundGif)
+	if(this->_constructorid == FoundGif::CtorFoundGif)
 	{
 		this->_url = mtstream->readTLString();
 		this->_thumb_url = mtstream->readTLString();
@@ -28,7 +28,7 @@ void FoundGif::read(MTProtoStream* mtstream)
 		this->_w = mtstream->readTLInt();
 		this->_h = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == FoundGif::ctorFoundGifCached)
+	else if(this->_constructorid == FoundGif::CtorFoundGifCached)
 	{
 		this->_url = mtstream->readTLString();
 		TLInt photo_ctor = mtstream->peekTLConstructor();
@@ -61,13 +61,13 @@ void FoundGif::read(MTProtoStream* mtstream)
 
 void FoundGif::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == FoundGif::ctorFoundGif) ||
-		 (this->_constructorid == FoundGif::ctorFoundGifCached));
+	Q_ASSERT((this->_constructorid == FoundGif::CtorFoundGif) ||
+		 (this->_constructorid == FoundGif::CtorFoundGifCached));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == FoundGif::ctorFoundGif)
+	if(this->_constructorid == FoundGif::CtorFoundGif)
 	{
 		mtstream->writeTLString(this->_url);
 		mtstream->writeTLString(this->_thumb_url);
@@ -76,7 +76,7 @@ void FoundGif::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_w);
 		mtstream->writeTLInt(this->_h);
 	}
-	else if(this->_constructorid == FoundGif::ctorFoundGifCached)
+	else if(this->_constructorid == FoundGif::CtorFoundGifCached)
 	{
 		mtstream->writeTLString(this->_url);
 		if(this->_photo != NULL)

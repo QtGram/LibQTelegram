@@ -20,8 +20,8 @@ class BadMsgNotification: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorBadMsgNotification = 0xa7eff811,
-			ctorBadServerSalt = 0xedab447b,
+			CtorBadMsgNotification = 0xa7eff811,
+			CtorBadServerSalt = 0xedab447b,
 		};
 
 	public:

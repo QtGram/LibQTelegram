@@ -18,7 +18,7 @@ class PeerSettings: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPeerSettings = 0x818426cd,
+			CtorPeerSettings = 0x818426cd,
 		};
 
 	public:

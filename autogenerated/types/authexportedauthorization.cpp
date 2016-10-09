@@ -7,16 +7,16 @@
 AuthExportedAuthorization::AuthExportedAuthorization(QObject* parent) : TelegramObject(parent)
 {
 	this->_id = 0;
-	this->_constructorid = AuthExportedAuthorization::ctorAuthExportedAuthorization;
+	this->_constructorid = AuthExportedAuthorization::CtorAuthExportedAuthorization;
 }
 
 void AuthExportedAuthorization::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthExportedAuthorization::ctorAuthExportedAuthorization));
+	Q_ASSERT((this->_constructorid == AuthExportedAuthorization::CtorAuthExportedAuthorization));
 	
-	if(this->_constructorid == AuthExportedAuthorization::ctorAuthExportedAuthorization)
+	if(this->_constructorid == AuthExportedAuthorization::CtorAuthExportedAuthorization)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_bytes = mtstream->readTLBytes();
@@ -25,12 +25,12 @@ void AuthExportedAuthorization::read(MTProtoStream* mtstream)
 
 void AuthExportedAuthorization::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthExportedAuthorization::ctorAuthExportedAuthorization));
+	Q_ASSERT((this->_constructorid == AuthExportedAuthorization::CtorAuthExportedAuthorization));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthExportedAuthorization::ctorAuthExportedAuthorization)
+	if(this->_constructorid == AuthExportedAuthorization::CtorAuthExportedAuthorization)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLBytes(this->_bytes);

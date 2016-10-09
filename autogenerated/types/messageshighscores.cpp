@@ -6,16 +6,16 @@
 
 MessagesHighScores::MessagesHighScores(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = MessagesHighScores::ctorMessagesHighScores;
+	this->_constructorid = MessagesHighScores::CtorMessagesHighScores;
 }
 
 void MessagesHighScores::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesHighScores::ctorMessagesHighScores));
+	Q_ASSERT((this->_constructorid == MessagesHighScores::CtorMessagesHighScores));
 	
-	if(this->_constructorid == MessagesHighScores::ctorMessagesHighScores)
+	if(this->_constructorid == MessagesHighScores::CtorMessagesHighScores)
 	{
 		mtstream->readTLVector<HighScore>(this->_scores, false);
 		mtstream->readTLVector<User>(this->_users, false);
@@ -24,12 +24,12 @@ void MessagesHighScores::read(MTProtoStream* mtstream)
 
 void MessagesHighScores::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesHighScores::ctorMessagesHighScores));
+	Q_ASSERT((this->_constructorid == MessagesHighScores::CtorMessagesHighScores));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesHighScores::ctorMessagesHighScores)
+	if(this->_constructorid == MessagesHighScores::CtorMessagesHighScores)
 	{
 		mtstream->writeTLVector(this->_scores, false);
 		mtstream->writeTLVector(this->_users, false);

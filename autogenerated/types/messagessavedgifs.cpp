@@ -13,10 +13,10 @@ void MessagesSavedGifs::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifsNotModified) ||
-		 (this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifs));
+	Q_ASSERT((this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifsNotModified) ||
+		 (this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifs));
 	
-	if(this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifs)
+	if(this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifs)
 	{
 		this->_hash = mtstream->readTLInt();
 		mtstream->readTLVector<Document>(this->_gifs, false);
@@ -25,13 +25,13 @@ void MessagesSavedGifs::read(MTProtoStream* mtstream)
 
 void MessagesSavedGifs::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifsNotModified) ||
-		 (this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifs));
+	Q_ASSERT((this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifsNotModified) ||
+		 (this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifs));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesSavedGifs::ctorMessagesSavedGifs)
+	if(this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifs)
 	{
 		mtstream->writeTLInt(this->_hash);
 		mtstream->writeTLVector(this->_gifs, false);

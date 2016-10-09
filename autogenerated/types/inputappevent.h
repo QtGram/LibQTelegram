@@ -20,7 +20,7 @@ class InputAppEvent: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputAppEvent = 0x770656a8,
+			CtorInputAppEvent = 0x770656a8,
 		};
 
 	public:

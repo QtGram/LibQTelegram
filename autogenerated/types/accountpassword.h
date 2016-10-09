@@ -21,8 +21,8 @@ class AccountPassword: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAccountNoPassword = 0x96dabc18,
-			ctorAccountPassword = 0x7c18141c,
+			CtorAccountNoPassword = 0x96dabc18,
+			CtorAccountPassword = 0x7c18141c,
 		};
 
 	public:

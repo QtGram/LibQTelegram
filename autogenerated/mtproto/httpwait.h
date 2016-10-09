@@ -19,7 +19,7 @@ class HttpWait: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHttpWait = 0x9299359f,
+			CtorHttpWait = 0x9299359f,
 		};
 
 	public:

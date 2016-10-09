@@ -29,7 +29,7 @@ class Authorization: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthorization = 0x7bf2e6f6,
+			CtorAuthorization = 0x7bf2e6f6,
 		};
 
 	public:

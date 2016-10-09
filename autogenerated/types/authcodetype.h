@@ -15,9 +15,9 @@ class AuthCodeType: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthCodeTypeSms = 0x72a3158c,
-			ctorAuthCodeTypeCall = 0x741cd3e3,
-			ctorAuthCodeTypeFlashCall = 0x226ccefb,
+			CtorAuthCodeTypeSms = 0x72a3158c,
+			CtorAuthCodeTypeCall = 0x741cd3e3,
+			CtorAuthCodeTypeFlashCall = 0x226ccefb,
 		};
 
 	public:

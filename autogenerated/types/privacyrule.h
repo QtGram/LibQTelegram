@@ -17,12 +17,12 @@ class PrivacyRule: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPrivacyValueAllowContacts = 0xfffe1bac,
-			ctorPrivacyValueAllowAll = 0x65427b82,
-			ctorPrivacyValueAllowUsers = 0x4d5bbe0c,
-			ctorPrivacyValueDisallowContacts = 0xf888fa1a,
-			ctorPrivacyValueDisallowAll = 0x8b73e763,
-			ctorPrivacyValueDisallowUsers = 0xc7f49b7,
+			CtorPrivacyValueAllowContacts = 0xfffe1bac,
+			CtorPrivacyValueAllowAll = 0x65427b82,
+			CtorPrivacyValueAllowUsers = 0x4d5bbe0c,
+			CtorPrivacyValueDisallowContacts = 0xf888fa1a,
+			CtorPrivacyValueDisallowAll = 0x8b73e763,
+			CtorPrivacyValueDisallowUsers = 0xc7f49b7,
 		};
 
 	public:

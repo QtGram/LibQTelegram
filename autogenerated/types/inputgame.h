@@ -21,8 +21,8 @@ class InputGame: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputGameID = 0x32c3e77,
-			ctorInputGameShortName = 0xc331e80a,
+			CtorInputGameID = 0x32c3e77,
+			CtorInputGameShortName = 0xc331e80a,
 		};
 
 	public:

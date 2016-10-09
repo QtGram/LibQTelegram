@@ -7,16 +7,16 @@
 ChannelsChannelParticipants::ChannelsChannelParticipants(QObject* parent) : TelegramObject(parent)
 {
 	this->_count = 0;
-	this->_constructorid = ChannelsChannelParticipants::ctorChannelsChannelParticipants;
+	this->_constructorid = ChannelsChannelParticipants::CtorChannelsChannelParticipants;
 }
 
 void ChannelsChannelParticipants::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelsChannelParticipants::ctorChannelsChannelParticipants));
+	Q_ASSERT((this->_constructorid == ChannelsChannelParticipants::CtorChannelsChannelParticipants));
 	
-	if(this->_constructorid == ChannelsChannelParticipants::ctorChannelsChannelParticipants)
+	if(this->_constructorid == ChannelsChannelParticipants::CtorChannelsChannelParticipants)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<ChannelParticipant>(this->_participants, false);
@@ -26,12 +26,12 @@ void ChannelsChannelParticipants::read(MTProtoStream* mtstream)
 
 void ChannelsChannelParticipants::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelsChannelParticipants::ctorChannelsChannelParticipants));
+	Q_ASSERT((this->_constructorid == ChannelsChannelParticipants::CtorChannelsChannelParticipants));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChannelsChannelParticipants::ctorChannelsChannelParticipants)
+	if(this->_constructorid == ChannelsChannelParticipants::CtorChannelsChannelParticipants)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_participants, false);

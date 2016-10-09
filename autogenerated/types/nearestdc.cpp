@@ -8,16 +8,16 @@ NearestDc::NearestDc(QObject* parent) : TelegramObject(parent)
 {
 	this->_this_dc = 0;
 	this->_nearest_dc = 0;
-	this->_constructorid = NearestDc::ctorNearestDc;
+	this->_constructorid = NearestDc::CtorNearestDc;
 }
 
 void NearestDc::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == NearestDc::ctorNearestDc));
+	Q_ASSERT((this->_constructorid == NearestDc::CtorNearestDc));
 	
-	if(this->_constructorid == NearestDc::ctorNearestDc)
+	if(this->_constructorid == NearestDc::CtorNearestDc)
 	{
 		this->_country = mtstream->readTLString();
 		this->_this_dc = mtstream->readTLInt();
@@ -27,12 +27,12 @@ void NearestDc::read(MTProtoStream* mtstream)
 
 void NearestDc::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == NearestDc::ctorNearestDc));
+	Q_ASSERT((this->_constructorid == NearestDc::CtorNearestDc));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == NearestDc::ctorNearestDc)
+	if(this->_constructorid == NearestDc::CtorNearestDc)
 	{
 		mtstream->writeTLString(this->_country);
 		mtstream->writeTLInt(this->_this_dc);

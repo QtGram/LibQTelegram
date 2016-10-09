@@ -20,8 +20,8 @@ class ServerDHParams: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorServerDHParamsFail = 0x79cb045d,
-			ctorServerDHParamsOk = 0xd0e8075c,
+			CtorServerDHParamsFail = 0x79cb045d,
+			CtorServerDHParamsOk = 0xd0e8075c,
 		};
 
 	public:

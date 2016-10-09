@@ -5,19 +5,19 @@
 
 Null::Null(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = Null::ctorNull;
+	this->_constructorid = Null::CtorNull;
 }
 
 void Null::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Null::ctorNull));
+	Q_ASSERT((this->_constructorid == Null::CtorNull));
 }
 
 void Null::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Null::ctorNull));
+	Q_ASSERT((this->_constructorid == Null::CtorNull));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

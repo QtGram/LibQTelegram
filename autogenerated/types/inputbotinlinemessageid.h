@@ -19,7 +19,7 @@ class InputBotInlineMessageID: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputBotInlineMessageID = 0x890c3d89,
+			CtorInputBotInlineMessageID = 0x890c3d89,
 		};
 
 	public:

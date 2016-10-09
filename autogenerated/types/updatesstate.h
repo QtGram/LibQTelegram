@@ -21,7 +21,7 @@ class UpdatesState: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorUpdatesState = 0xa56c2a3e,
+			CtorUpdatesState = 0xa56c2a3e,
 		};
 
 	public:

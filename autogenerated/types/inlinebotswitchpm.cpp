@@ -6,16 +6,16 @@
 
 InlineBotSwitchPM::InlineBotSwitchPM(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = InlineBotSwitchPM::ctorInlineBotSwitchPM;
+	this->_constructorid = InlineBotSwitchPM::CtorInlineBotSwitchPM;
 }
 
 void InlineBotSwitchPM::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InlineBotSwitchPM::ctorInlineBotSwitchPM));
+	Q_ASSERT((this->_constructorid == InlineBotSwitchPM::CtorInlineBotSwitchPM));
 	
-	if(this->_constructorid == InlineBotSwitchPM::ctorInlineBotSwitchPM)
+	if(this->_constructorid == InlineBotSwitchPM::CtorInlineBotSwitchPM)
 	{
 		this->_text = mtstream->readTLString();
 		this->_start_param = mtstream->readTLString();
@@ -24,12 +24,12 @@ void InlineBotSwitchPM::read(MTProtoStream* mtstream)
 
 void InlineBotSwitchPM::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InlineBotSwitchPM::ctorInlineBotSwitchPM));
+	Q_ASSERT((this->_constructorid == InlineBotSwitchPM::CtorInlineBotSwitchPM));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InlineBotSwitchPM::ctorInlineBotSwitchPM)
+	if(this->_constructorid == InlineBotSwitchPM::CtorInlineBotSwitchPM)
 	{
 		mtstream->writeTLString(this->_text);
 		mtstream->writeTLString(this->_start_param);

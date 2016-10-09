@@ -17,8 +17,8 @@ class ExportedChatInvite: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChatInviteEmpty = 0x69df3769,
-			ctorChatInviteExported = 0xfc2e05bc,
+			CtorChatInviteEmpty = 0x69df3769,
+			CtorChatInviteExported = 0xfc2e05bc,
 		};
 
 	public:

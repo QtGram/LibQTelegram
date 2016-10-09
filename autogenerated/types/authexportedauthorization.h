@@ -18,7 +18,7 @@ class AuthExportedAuthorization: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthExportedAuthorization = 0xdf969c2d,
+			CtorAuthExportedAuthorization = 0xdf969c2d,
 		};
 
 	public:

@@ -13,26 +13,26 @@ void DestroySessionRes::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == DestroySessionRes::ctorDestroySessionOk) ||
-		 (this->_constructorid == DestroySessionRes::ctorDestroySessionNone));
+	Q_ASSERT((this->_constructorid == DestroySessionRes::CtorDestroySessionOk) ||
+		 (this->_constructorid == DestroySessionRes::CtorDestroySessionNone));
 	
-	if(this->_constructorid == DestroySessionRes::ctorDestroySessionOk)
+	if(this->_constructorid == DestroySessionRes::CtorDestroySessionOk)
 		this->_session_id = mtstream->readTLLong();
-	else if(this->_constructorid == DestroySessionRes::ctorDestroySessionNone)
+	else if(this->_constructorid == DestroySessionRes::CtorDestroySessionNone)
 		this->_session_id = mtstream->readTLLong();
 }
 
 void DestroySessionRes::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == DestroySessionRes::ctorDestroySessionOk) ||
-		 (this->_constructorid == DestroySessionRes::ctorDestroySessionNone));
+	Q_ASSERT((this->_constructorid == DestroySessionRes::CtorDestroySessionOk) ||
+		 (this->_constructorid == DestroySessionRes::CtorDestroySessionNone));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == DestroySessionRes::ctorDestroySessionOk)
+	if(this->_constructorid == DestroySessionRes::CtorDestroySessionOk)
 		mtstream->writeTLLong(this->_session_id);
-	else if(this->_constructorid == DestroySessionRes::ctorDestroySessionNone)
+	else if(this->_constructorid == DestroySessionRes::CtorDestroySessionNone)
 		mtstream->writeTLLong(this->_session_id);
 }
 

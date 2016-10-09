@@ -18,7 +18,7 @@ class RpcError: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorRpcError = 0x2144ca19,
+			CtorRpcError = 0x2144ca19,
 		};
 
 	public:

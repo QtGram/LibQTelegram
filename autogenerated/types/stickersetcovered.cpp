@@ -14,10 +14,10 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == StickerSetCovered::ctorStickerSetCovered) ||
-		 (this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered));
+	Q_ASSERT((this->_constructorid == StickerSetCovered::CtorStickerSetCovered) ||
+		 (this->_constructorid == StickerSetCovered::CtorStickerSetMultiCovered));
 	
-	if(this->_constructorid == StickerSetCovered::ctorStickerSetCovered)
+	if(this->_constructorid == StickerSetCovered::CtorStickerSetCovered)
 	{
 		TLInt set_ctor = mtstream->peekTLConstructor();
 		
@@ -45,7 +45,7 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered)
+	else if(this->_constructorid == StickerSetCovered::CtorStickerSetMultiCovered)
 	{
 		TLInt set_ctor = mtstream->peekTLConstructor();
 		
@@ -66,13 +66,13 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 
 void StickerSetCovered::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == StickerSetCovered::ctorStickerSetCovered) ||
-		 (this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered));
+	Q_ASSERT((this->_constructorid == StickerSetCovered::CtorStickerSetCovered) ||
+		 (this->_constructorid == StickerSetCovered::CtorStickerSetMultiCovered));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == StickerSetCovered::ctorStickerSetCovered)
+	if(this->_constructorid == StickerSetCovered::CtorStickerSetCovered)
 	{
 		if(this->_set != NULL)
 			this->_set->write(mtstream);
@@ -84,7 +84,7 @@ void StickerSetCovered::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == StickerSetCovered::ctorStickerSetMultiCovered)
+	else if(this->_constructorid == StickerSetCovered::CtorStickerSetMultiCovered)
 	{
 		if(this->_set != NULL)
 			this->_set->write(mtstream);

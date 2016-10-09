@@ -20,11 +20,11 @@ class InputPeer: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPeerEmpty = 0x7f3b18ea,
-			ctorInputPeerSelf = 0x7da07ec9,
-			ctorInputPeerChat = 0x179be863,
-			ctorInputPeerUser = 0x7b8e7de6,
-			ctorInputPeerChannel = 0x20adaef8,
+			CtorInputPeerEmpty = 0x7f3b18ea,
+			CtorInputPeerSelf = 0x7da07ec9,
+			CtorInputPeerChat = 0x179be863,
+			CtorInputPeerUser = 0x7b8e7de6,
+			CtorInputPeerChannel = 0x20adaef8,
 		};
 
 	public:

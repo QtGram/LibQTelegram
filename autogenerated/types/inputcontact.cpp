@@ -7,16 +7,16 @@
 InputContact::InputContact(QObject* parent) : TelegramObject(parent)
 {
 	this->_client_id = 0;
-	this->_constructorid = InputContact::ctorInputPhoneContact;
+	this->_constructorid = InputContact::CtorInputPhoneContact;
 }
 
 void InputContact::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputContact::ctorInputPhoneContact));
+	Q_ASSERT((this->_constructorid == InputContact::CtorInputPhoneContact));
 	
-	if(this->_constructorid == InputContact::ctorInputPhoneContact)
+	if(this->_constructorid == InputContact::CtorInputPhoneContact)
 	{
 		this->_client_id = mtstream->readTLLong();
 		this->_phone = mtstream->readTLString();
@@ -27,12 +27,12 @@ void InputContact::read(MTProtoStream* mtstream)
 
 void InputContact::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputContact::ctorInputPhoneContact));
+	Q_ASSERT((this->_constructorid == InputContact::CtorInputPhoneContact));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputContact::ctorInputPhoneContact)
+	if(this->_constructorid == InputContact::CtorInputPhoneContact)
 	{
 		mtstream->writeTLLong(this->_client_id);
 		mtstream->writeTLString(this->_phone);

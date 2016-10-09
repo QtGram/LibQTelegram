@@ -7,16 +7,16 @@
 ChannelsChannelParticipant::ChannelsChannelParticipant(QObject* parent) : TelegramObject(parent)
 {
 	this->_participant = NULL;
-	this->_constructorid = ChannelsChannelParticipant::ctorChannelsChannelParticipant;
+	this->_constructorid = ChannelsChannelParticipant::CtorChannelsChannelParticipant;
 }
 
 void ChannelsChannelParticipant::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant));
+	Q_ASSERT((this->_constructorid == ChannelsChannelParticipant::CtorChannelsChannelParticipant));
 	
-	if(this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
+	if(this->_constructorid == ChannelsChannelParticipant::CtorChannelsChannelParticipant)
 	{
 		TLInt participant_ctor = mtstream->peekTLConstructor();
 		
@@ -37,12 +37,12 @@ void ChannelsChannelParticipant::read(MTProtoStream* mtstream)
 
 void ChannelsChannelParticipant::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant));
+	Q_ASSERT((this->_constructorid == ChannelsChannelParticipant::CtorChannelsChannelParticipant));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChannelsChannelParticipant::ctorChannelsChannelParticipant)
+	if(this->_constructorid == ChannelsChannelParticipant::CtorChannelsChannelParticipant)
 	{
 		if(this->_participant != NULL)
 			this->_participant->write(mtstream);

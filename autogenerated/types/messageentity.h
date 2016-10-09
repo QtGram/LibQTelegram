@@ -23,19 +23,19 @@ class MessageEntity: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessageEntityUnknown = 0xbb92ba95,
-			ctorMessageEntityMention = 0xfa04579d,
-			ctorMessageEntityHashtag = 0x6f635b0d,
-			ctorMessageEntityBotCommand = 0x6cef8ac7,
-			ctorMessageEntityUrl = 0x6ed02538,
-			ctorMessageEntityEmail = 0x64e475c2,
-			ctorMessageEntityBold = 0xbd610bc9,
-			ctorMessageEntityItalic = 0x826f8b60,
-			ctorMessageEntityCode = 0x28a20571,
-			ctorMessageEntityPre = 0x73924be0,
-			ctorMessageEntityTextUrl = 0x76a6d327,
-			ctorMessageEntityMentionName = 0x352dca58,
-			ctorInputMessageEntityMentionName = 0x208e68c9,
+			CtorMessageEntityUnknown = 0xbb92ba95,
+			CtorMessageEntityMention = 0xfa04579d,
+			CtorMessageEntityHashtag = 0x6f635b0d,
+			CtorMessageEntityBotCommand = 0x6cef8ac7,
+			CtorMessageEntityUrl = 0x6ed02538,
+			CtorMessageEntityEmail = 0x64e475c2,
+			CtorMessageEntityBold = 0xbd610bc9,
+			CtorMessageEntityItalic = 0x826f8b60,
+			CtorMessageEntityCode = 0x28a20571,
+			CtorMessageEntityPre = 0x73924be0,
+			CtorMessageEntityTextUrl = 0x76a6d327,
+			CtorMessageEntityMentionName = 0x352dca58,
+			CtorInputMessageEntityMentionName = 0x208e68c9,
 		};
 
 	public:

@@ -7,16 +7,16 @@
 MessagesPeerDialogs::MessagesPeerDialogs(QObject* parent) : TelegramObject(parent)
 {
 	this->_state = NULL;
-	this->_constructorid = MessagesPeerDialogs::ctorMessagesPeerDialogs;
+	this->_constructorid = MessagesPeerDialogs::CtorMessagesPeerDialogs;
 }
 
 void MessagesPeerDialogs::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesPeerDialogs::ctorMessagesPeerDialogs));
+	Q_ASSERT((this->_constructorid == MessagesPeerDialogs::CtorMessagesPeerDialogs));
 	
-	if(this->_constructorid == MessagesPeerDialogs::ctorMessagesPeerDialogs)
+	if(this->_constructorid == MessagesPeerDialogs::CtorMessagesPeerDialogs)
 	{
 		mtstream->readTLVector<Dialog>(this->_dialogs, false);
 		mtstream->readTLVector<Message>(this->_messages, false);
@@ -39,12 +39,12 @@ void MessagesPeerDialogs::read(MTProtoStream* mtstream)
 
 void MessagesPeerDialogs::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesPeerDialogs::ctorMessagesPeerDialogs));
+	Q_ASSERT((this->_constructorid == MessagesPeerDialogs::CtorMessagesPeerDialogs));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesPeerDialogs::ctorMessagesPeerDialogs)
+	if(this->_constructorid == MessagesPeerDialogs::CtorMessagesPeerDialogs)
 	{
 		mtstream->writeTLVector(this->_dialogs, false);
 		mtstream->writeTLVector(this->_messages, false);

@@ -16,16 +16,16 @@ void FileLocation::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == FileLocation::ctorFileLocationUnavailable) ||
-		 (this->_constructorid == FileLocation::ctorFileLocation));
+	Q_ASSERT((this->_constructorid == FileLocation::CtorFileLocationUnavailable) ||
+		 (this->_constructorid == FileLocation::CtorFileLocation));
 	
-	if(this->_constructorid == FileLocation::ctorFileLocationUnavailable)
+	if(this->_constructorid == FileLocation::CtorFileLocationUnavailable)
 	{
 		this->_volume_id = mtstream->readTLLong();
 		this->_local_id = mtstream->readTLInt();
 		this->_secret = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == FileLocation::ctorFileLocation)
+	else if(this->_constructorid == FileLocation::CtorFileLocation)
 	{
 		this->_dc_id = mtstream->readTLInt();
 		this->_volume_id = mtstream->readTLLong();
@@ -36,19 +36,19 @@ void FileLocation::read(MTProtoStream* mtstream)
 
 void FileLocation::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == FileLocation::ctorFileLocationUnavailable) ||
-		 (this->_constructorid == FileLocation::ctorFileLocation));
+	Q_ASSERT((this->_constructorid == FileLocation::CtorFileLocationUnavailable) ||
+		 (this->_constructorid == FileLocation::CtorFileLocation));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == FileLocation::ctorFileLocationUnavailable)
+	if(this->_constructorid == FileLocation::CtorFileLocationUnavailable)
 	{
 		mtstream->writeTLLong(this->_volume_id);
 		mtstream->writeTLInt(this->_local_id);
 		mtstream->writeTLLong(this->_secret);
 	}
-	else if(this->_constructorid == FileLocation::ctorFileLocation)
+	else if(this->_constructorid == FileLocation::CtorFileLocation)
 	{
 		mtstream->writeTLInt(this->_dc_id);
 		mtstream->writeTLLong(this->_volume_id);

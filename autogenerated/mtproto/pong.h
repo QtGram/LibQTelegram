@@ -18,7 +18,7 @@ class Pong: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPong = 0x347773c5,
+			CtorPong = 0x347773c5,
 		};
 
 	public:

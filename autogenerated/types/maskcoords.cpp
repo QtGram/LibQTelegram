@@ -10,16 +10,16 @@ MaskCoords::MaskCoords(QObject* parent) : TelegramObject(parent)
 	this->_x = 0;
 	this->_y = 0;
 	this->_zoom = 0;
-	this->_constructorid = MaskCoords::ctorMaskCoords;
+	this->_constructorid = MaskCoords::CtorMaskCoords;
 }
 
 void MaskCoords::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MaskCoords::ctorMaskCoords));
+	Q_ASSERT((this->_constructorid == MaskCoords::CtorMaskCoords));
 	
-	if(this->_constructorid == MaskCoords::ctorMaskCoords)
+	if(this->_constructorid == MaskCoords::CtorMaskCoords)
 	{
 		this->_n = mtstream->readTLInt();
 		this->_x = mtstream->readTLDouble();
@@ -30,12 +30,12 @@ void MaskCoords::read(MTProtoStream* mtstream)
 
 void MaskCoords::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MaskCoords::ctorMaskCoords));
+	Q_ASSERT((this->_constructorid == MaskCoords::CtorMaskCoords));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MaskCoords::ctorMaskCoords)
+	if(this->_constructorid == MaskCoords::CtorMaskCoords)
 	{
 		mtstream->writeTLInt(this->_n);
 		mtstream->writeTLDouble(this->_x);

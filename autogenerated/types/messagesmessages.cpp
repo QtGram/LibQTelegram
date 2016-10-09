@@ -15,24 +15,24 @@ void MessagesMessages::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesMessages::ctorMessagesMessages) ||
-		 (this->_constructorid == MessagesMessages::ctorMessagesMessagesSlice) ||
-		 (this->_constructorid == MessagesMessages::ctorMessagesChannelMessages));
+	Q_ASSERT((this->_constructorid == MessagesMessages::CtorMessagesMessages) ||
+		 (this->_constructorid == MessagesMessages::CtorMessagesMessagesSlice) ||
+		 (this->_constructorid == MessagesMessages::CtorMessagesChannelMessages));
 	
-	if(this->_constructorid == MessagesMessages::ctorMessagesMessages)
+	if(this->_constructorid == MessagesMessages::CtorMessagesMessages)
 	{
 		mtstream->readTLVector<Message>(this->_messages, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesMessages::ctorMessagesMessagesSlice)
+	else if(this->_constructorid == MessagesMessages::CtorMessagesMessagesSlice)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<Message>(this->_messages, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesMessages::ctorMessagesChannelMessages)
+	else if(this->_constructorid == MessagesMessages::CtorMessagesChannelMessages)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_pts = mtstream->readTLInt();
@@ -45,27 +45,27 @@ void MessagesMessages::read(MTProtoStream* mtstream)
 
 void MessagesMessages::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesMessages::ctorMessagesMessages) ||
-		 (this->_constructorid == MessagesMessages::ctorMessagesMessagesSlice) ||
-		 (this->_constructorid == MessagesMessages::ctorMessagesChannelMessages));
+	Q_ASSERT((this->_constructorid == MessagesMessages::CtorMessagesMessages) ||
+		 (this->_constructorid == MessagesMessages::CtorMessagesMessagesSlice) ||
+		 (this->_constructorid == MessagesMessages::CtorMessagesChannelMessages));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesMessages::ctorMessagesMessages)
+	if(this->_constructorid == MessagesMessages::CtorMessagesMessages)
 	{
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesMessages::ctorMessagesMessagesSlice)
+	else if(this->_constructorid == MessagesMessages::CtorMessagesMessagesSlice)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLVector(this->_chats, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == MessagesMessages::ctorMessagesChannelMessages)
+	else if(this->_constructorid == MessagesMessages::CtorMessagesChannelMessages)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_pts);

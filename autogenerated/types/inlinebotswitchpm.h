@@ -18,7 +18,7 @@ class InlineBotSwitchPM: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInlineBotSwitchPM = 0x3c20629f,
+			CtorInlineBotSwitchPM = 0x3c20629f,
 		};
 
 	public:

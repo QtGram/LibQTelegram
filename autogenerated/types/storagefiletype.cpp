@@ -12,30 +12,30 @@ void StorageFileType::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == StorageFileType::ctorStorageFileUnknown) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileJpeg) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileGif) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePng) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePdf) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMp3) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMov) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePartial) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMp4) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileWebp));
+	Q_ASSERT((this->_constructorid == StorageFileType::CtorStorageFileUnknown) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileJpeg) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileGif) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePng) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePdf) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMp3) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMov) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePartial) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMp4) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileWebp));
 }
 
 void StorageFileType::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == StorageFileType::ctorStorageFileUnknown) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileJpeg) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileGif) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePng) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePdf) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMp3) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMov) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFilePartial) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileMp4) ||
-		 (this->_constructorid == StorageFileType::ctorStorageFileWebp));
+	Q_ASSERT((this->_constructorid == StorageFileType::CtorStorageFileUnknown) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileJpeg) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileGif) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePng) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePdf) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMp3) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMov) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFilePartial) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileMp4) ||
+		 (this->_constructorid == StorageFileType::CtorStorageFileWebp));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

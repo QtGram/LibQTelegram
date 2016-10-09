@@ -6,27 +6,27 @@
 
 MsgResendReq::MsgResendReq(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = MsgResendReq::ctorMsgResendReq;
+	this->_constructorid = MsgResendReq::CtorMsgResendReq;
 }
 
 void MsgResendReq::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MsgResendReq::ctorMsgResendReq));
+	Q_ASSERT((this->_constructorid == MsgResendReq::CtorMsgResendReq));
 	
-	if(this->_constructorid == MsgResendReq::ctorMsgResendReq)
+	if(this->_constructorid == MsgResendReq::CtorMsgResendReq)
 		mtstream->readTLVector<TLLong>(this->_msg_ids, false);
 }
 
 void MsgResendReq::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MsgResendReq::ctorMsgResendReq));
+	Q_ASSERT((this->_constructorid == MsgResendReq::CtorMsgResendReq));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MsgResendReq::ctorMsgResendReq)
+	if(this->_constructorid == MsgResendReq::CtorMsgResendReq)
 		mtstream->writeTLVector(this->_msg_ids, false);
 }
 

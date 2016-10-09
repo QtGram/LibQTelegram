@@ -9,16 +9,16 @@ InputBotInlineMessageID::InputBotInlineMessageID(QObject* parent) : TelegramObje
 	this->_dc_id = 0;
 	this->_id = 0;
 	this->_access_hash = 0;
-	this->_constructorid = InputBotInlineMessageID::ctorInputBotInlineMessageID;
+	this->_constructorid = InputBotInlineMessageID::CtorInputBotInlineMessageID;
 }
 
 void InputBotInlineMessageID::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputBotInlineMessageID::ctorInputBotInlineMessageID));
+	Q_ASSERT((this->_constructorid == InputBotInlineMessageID::CtorInputBotInlineMessageID));
 	
-	if(this->_constructorid == InputBotInlineMessageID::ctorInputBotInlineMessageID)
+	if(this->_constructorid == InputBotInlineMessageID::CtorInputBotInlineMessageID)
 	{
 		this->_dc_id = mtstream->readTLInt();
 		this->_id = mtstream->readTLLong();
@@ -28,12 +28,12 @@ void InputBotInlineMessageID::read(MTProtoStream* mtstream)
 
 void InputBotInlineMessageID::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputBotInlineMessageID::ctorInputBotInlineMessageID));
+	Q_ASSERT((this->_constructorid == InputBotInlineMessageID::CtorInputBotInlineMessageID));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputBotInlineMessageID::ctorInputBotInlineMessageID)
+	if(this->_constructorid == InputBotInlineMessageID::CtorInputBotInlineMessageID)
 	{
 		mtstream->writeTLInt(this->_dc_id);
 		mtstream->writeTLLong(this->_id);

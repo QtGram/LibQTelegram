@@ -9,16 +9,16 @@ AuthAuthorization::AuthAuthorization(QObject* parent) : TelegramObject(parent)
 	this->_flags = 0;
 	this->_tmp_sessions = 0;
 	this->_user = NULL;
-	this->_constructorid = AuthAuthorization::ctorAuthAuthorization;
+	this->_constructorid = AuthAuthorization::CtorAuthAuthorization;
 }
 
 void AuthAuthorization::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthAuthorization::ctorAuthAuthorization));
+	Q_ASSERT((this->_constructorid == AuthAuthorization::CtorAuthAuthorization));
 	
-	if(this->_constructorid == AuthAuthorization::ctorAuthAuthorization)
+	if(this->_constructorid == AuthAuthorization::CtorAuthAuthorization)
 	{
 		this->_flags = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -41,12 +41,12 @@ void AuthAuthorization::read(MTProtoStream* mtstream)
 
 void AuthAuthorization::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthAuthorization::ctorAuthAuthorization));
+	Q_ASSERT((this->_constructorid == AuthAuthorization::CtorAuthAuthorization));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthAuthorization::ctorAuthAuthorization)
+	if(this->_constructorid == AuthAuthorization::CtorAuthAuthorization)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -63,7 +63,7 @@ void AuthAuthorization::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == AuthAuthorization::ctorAuthAuthorization)
+	if(this->_constructorid == AuthAuthorization::CtorAuthAuthorization)
 	{
 		if(this->_tmp_sessions)
 			SET_FLAG_BIT(this->_flags, 0);

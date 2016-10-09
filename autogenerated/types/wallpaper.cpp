@@ -15,17 +15,17 @@ void WallPaper::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == WallPaper::ctorWallPaper) ||
-		 (this->_constructorid == WallPaper::ctorWallPaperSolid));
+	Q_ASSERT((this->_constructorid == WallPaper::CtorWallPaper) ||
+		 (this->_constructorid == WallPaper::CtorWallPaperSolid));
 	
-	if(this->_constructorid == WallPaper::ctorWallPaper)
+	if(this->_constructorid == WallPaper::CtorWallPaper)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_title = mtstream->readTLString();
 		mtstream->readTLVector<PhotoSize>(this->_sizes, false);
 		this->_color = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == WallPaper::ctorWallPaperSolid)
+	else if(this->_constructorid == WallPaper::CtorWallPaperSolid)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_title = mtstream->readTLString();
@@ -36,20 +36,20 @@ void WallPaper::read(MTProtoStream* mtstream)
 
 void WallPaper::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == WallPaper::ctorWallPaper) ||
-		 (this->_constructorid == WallPaper::ctorWallPaperSolid));
+	Q_ASSERT((this->_constructorid == WallPaper::CtorWallPaper) ||
+		 (this->_constructorid == WallPaper::CtorWallPaperSolid));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == WallPaper::ctorWallPaper)
+	if(this->_constructorid == WallPaper::CtorWallPaper)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLString(this->_title);
 		mtstream->writeTLVector(this->_sizes, false);
 		mtstream->writeTLInt(this->_color);
 	}
-	else if(this->_constructorid == WallPaper::ctorWallPaperSolid)
+	else if(this->_constructorid == WallPaper::CtorWallPaperSolid)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLString(this->_title);

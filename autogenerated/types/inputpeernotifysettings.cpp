@@ -10,16 +10,16 @@ InputPeerNotifySettings::InputPeerNotifySettings(QObject* parent) : TelegramObje
 	this->_is_show_previews = false;
 	this->_is_silent = false;
 	this->_mute_until = 0;
-	this->_constructorid = InputPeerNotifySettings::ctorInputPeerNotifySettings;
+	this->_constructorid = InputPeerNotifySettings::CtorInputPeerNotifySettings;
 }
 
 void InputPeerNotifySettings::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputPeerNotifySettings::ctorInputPeerNotifySettings));
+	Q_ASSERT((this->_constructorid == InputPeerNotifySettings::CtorInputPeerNotifySettings));
 	
-	if(this->_constructorid == InputPeerNotifySettings::ctorInputPeerNotifySettings)
+	if(this->_constructorid == InputPeerNotifySettings::CtorInputPeerNotifySettings)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_show_previews = IS_FLAG_SET(this->_flags, 0);
@@ -31,12 +31,12 @@ void InputPeerNotifySettings::read(MTProtoStream* mtstream)
 
 void InputPeerNotifySettings::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputPeerNotifySettings::ctorInputPeerNotifySettings));
+	Q_ASSERT((this->_constructorid == InputPeerNotifySettings::CtorInputPeerNotifySettings));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputPeerNotifySettings::ctorInputPeerNotifySettings)
+	if(this->_constructorid == InputPeerNotifySettings::CtorInputPeerNotifySettings)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_mute_until);
@@ -48,7 +48,7 @@ void InputPeerNotifySettings::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == InputPeerNotifySettings::ctorInputPeerNotifySettings)
+	if(this->_constructorid == InputPeerNotifySettings::CtorInputPeerNotifySettings)
 	{
 		if(this->_is_show_previews)
 			SET_FLAG_BIT(this->_flags, 0);

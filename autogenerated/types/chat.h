@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
+#include "chatphoto.h"
 #include "../../types/basic.h"
 #include "inputchannel.h"
-#include "chatphoto.h"
 
 class Chat: public TelegramObject
 {
@@ -44,11 +44,11 @@ class Chat: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChatEmpty = 0x9ba2d800,
-			ctorChat = 0xd91cdd54,
-			ctorChatForbidden = 0x7328bdb,
-			ctorChannel = 0xa14dca52,
-			ctorChannelForbidden = 0x8537784f,
+			CtorChatEmpty = 0x9ba2d800,
+			CtorChat = 0xd91cdd54,
+			CtorChatForbidden = 0x7328bdb,
+			CtorChannel = 0xa14dca52,
+			CtorChannelForbidden = 0x8537784f,
 		};
 
 	public:

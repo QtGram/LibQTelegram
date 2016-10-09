@@ -8,16 +8,16 @@ MessageRange::MessageRange(QObject* parent) : TelegramObject(parent)
 {
 	this->_min_id = 0;
 	this->_max_id = 0;
-	this->_constructorid = MessageRange::ctorMessageRange;
+	this->_constructorid = MessageRange::CtorMessageRange;
 }
 
 void MessageRange::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessageRange::ctorMessageRange));
+	Q_ASSERT((this->_constructorid == MessageRange::CtorMessageRange));
 	
-	if(this->_constructorid == MessageRange::ctorMessageRange)
+	if(this->_constructorid == MessageRange::CtorMessageRange)
 	{
 		this->_min_id = mtstream->readTLInt();
 		this->_max_id = mtstream->readTLInt();
@@ -26,12 +26,12 @@ void MessageRange::read(MTProtoStream* mtstream)
 
 void MessageRange::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessageRange::ctorMessageRange));
+	Q_ASSERT((this->_constructorid == MessageRange::CtorMessageRange));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessageRange::ctorMessageRange)
+	if(this->_constructorid == MessageRange::CtorMessageRange)
 	{
 		mtstream->writeTLInt(this->_min_id);
 		mtstream->writeTLInt(this->_max_id);

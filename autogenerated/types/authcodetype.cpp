@@ -12,16 +12,16 @@ void AuthCodeType::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthCodeType::ctorAuthCodeTypeSms) ||
-		 (this->_constructorid == AuthCodeType::ctorAuthCodeTypeCall) ||
-		 (this->_constructorid == AuthCodeType::ctorAuthCodeTypeFlashCall));
+	Q_ASSERT((this->_constructorid == AuthCodeType::CtorAuthCodeTypeSms) ||
+		 (this->_constructorid == AuthCodeType::CtorAuthCodeTypeCall) ||
+		 (this->_constructorid == AuthCodeType::CtorAuthCodeTypeFlashCall));
 }
 
 void AuthCodeType::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthCodeType::ctorAuthCodeTypeSms) ||
-		 (this->_constructorid == AuthCodeType::ctorAuthCodeTypeCall) ||
-		 (this->_constructorid == AuthCodeType::ctorAuthCodeTypeFlashCall));
+	Q_ASSERT((this->_constructorid == AuthCodeType::CtorAuthCodeTypeSms) ||
+		 (this->_constructorid == AuthCodeType::CtorAuthCodeTypeCall) ||
+		 (this->_constructorid == AuthCodeType::CtorAuthCodeTypeFlashCall));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

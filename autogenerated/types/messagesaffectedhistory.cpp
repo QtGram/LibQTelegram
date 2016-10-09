@@ -9,16 +9,16 @@ MessagesAffectedHistory::MessagesAffectedHistory(QObject* parent) : TelegramObje
 	this->_pts = 0;
 	this->_pts_count = 0;
 	this->_offset = 0;
-	this->_constructorid = MessagesAffectedHistory::ctorMessagesAffectedHistory;
+	this->_constructorid = MessagesAffectedHistory::CtorMessagesAffectedHistory;
 }
 
 void MessagesAffectedHistory::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesAffectedHistory::ctorMessagesAffectedHistory));
+	Q_ASSERT((this->_constructorid == MessagesAffectedHistory::CtorMessagesAffectedHistory));
 	
-	if(this->_constructorid == MessagesAffectedHistory::ctorMessagesAffectedHistory)
+	if(this->_constructorid == MessagesAffectedHistory::CtorMessagesAffectedHistory)
 	{
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
@@ -28,12 +28,12 @@ void MessagesAffectedHistory::read(MTProtoStream* mtstream)
 
 void MessagesAffectedHistory::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesAffectedHistory::ctorMessagesAffectedHistory));
+	Q_ASSERT((this->_constructorid == MessagesAffectedHistory::CtorMessagesAffectedHistory));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesAffectedHistory::ctorMessagesAffectedHistory)
+	if(this->_constructorid == MessagesAffectedHistory::CtorMessagesAffectedHistory)
 	{
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);

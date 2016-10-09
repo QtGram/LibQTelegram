@@ -17,7 +17,7 @@ class AccountPasswordSettings: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAccountPasswordSettings = 0xb7b72ab3,
+			CtorAccountPasswordSettings = 0xb7b72ab3,
 		};
 
 	public:

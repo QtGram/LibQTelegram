@@ -18,9 +18,9 @@ class InputUser: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputUserEmpty = 0xb98886cf,
-			ctorInputUserSelf = 0xf7c1b13f,
-			ctorInputUser = 0xd8292816,
+			CtorInputUserEmpty = 0xb98886cf,
+			CtorInputUserSelf = 0xf7c1b13f,
+			CtorInputUser = 0xd8292816,
 		};
 
 	public:

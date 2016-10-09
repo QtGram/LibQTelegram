@@ -16,23 +16,23 @@ void ReplyMarkup::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ReplyMarkup::ctorReplyKeyboardHide) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyKeyboardForceReply) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyKeyboardMarkup) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyInlineMarkup));
+	Q_ASSERT((this->_constructorid == ReplyMarkup::CtorReplyKeyboardHide) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyKeyboardForceReply) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyKeyboardMarkup) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyInlineMarkup));
 	
-	if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardHide)
+	if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardHide)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_selective = IS_FLAG_SET(this->_flags, 2);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardForceReply)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardForceReply)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_single_use = IS_FLAG_SET(this->_flags, 1);
 		this->_is_selective = IS_FLAG_SET(this->_flags, 2);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardMarkup)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardMarkup)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_resize = IS_FLAG_SET(this->_flags, 0);
@@ -40,30 +40,30 @@ void ReplyMarkup::read(MTProtoStream* mtstream)
 		this->_is_selective = IS_FLAG_SET(this->_flags, 2);
 		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyInlineMarkup)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyInlineMarkup)
 		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false);
 }
 
 void ReplyMarkup::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ReplyMarkup::ctorReplyKeyboardHide) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyKeyboardForceReply) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyKeyboardMarkup) ||
-		 (this->_constructorid == ReplyMarkup::ctorReplyInlineMarkup));
+	Q_ASSERT((this->_constructorid == ReplyMarkup::CtorReplyKeyboardHide) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyKeyboardForceReply) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyKeyboardMarkup) ||
+		 (this->_constructorid == ReplyMarkup::CtorReplyInlineMarkup));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardHide)
+	if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardHide)
 		mtstream->writeTLInt(this->_flags);
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardForceReply)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardForceReply)
 		mtstream->writeTLInt(this->_flags);
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardMarkup)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardMarkup)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLVector(this->_rows, false);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyInlineMarkup)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyInlineMarkup)
 		mtstream->writeTLVector(this->_rows, false);
 }
 
@@ -71,19 +71,19 @@ void ReplyMarkup::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardHide)
+	if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardHide)
 	{
 		if(this->_is_selective)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardForceReply)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardForceReply)
 	{
 		if(this->_is_single_use)
 			SET_FLAG_BIT(this->_flags, 1);
 		if(this->_is_selective)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == ReplyMarkup::ctorReplyKeyboardMarkup)
+	else if(this->_constructorid == ReplyMarkup::CtorReplyKeyboardMarkup)
 	{
 		if(this->_is_resize)
 			SET_FLAG_BIT(this->_flags, 0);

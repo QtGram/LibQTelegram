@@ -6,27 +6,27 @@
 
 MessagesChats::MessagesChats(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = MessagesChats::ctorMessagesChats;
+	this->_constructorid = MessagesChats::CtorMessagesChats;
 }
 
 void MessagesChats::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesChats::ctorMessagesChats));
+	Q_ASSERT((this->_constructorid == MessagesChats::CtorMessagesChats));
 	
-	if(this->_constructorid == MessagesChats::ctorMessagesChats)
+	if(this->_constructorid == MessagesChats::CtorMessagesChats)
 		mtstream->readTLVector<Chat>(this->_chats, false);
 }
 
 void MessagesChats::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesChats::ctorMessagesChats));
+	Q_ASSERT((this->_constructorid == MessagesChats::CtorMessagesChats));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesChats::ctorMessagesChats)
+	if(this->_constructorid == MessagesChats::CtorMessagesChats)
 		mtstream->writeTLVector(this->_chats, false);
 }
 

@@ -20,7 +20,7 @@ class ResPQ: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorResPQ = 0x05162463,
+			CtorResPQ = 0x05162463,
 		};
 
 	public:

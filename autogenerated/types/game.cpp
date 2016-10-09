@@ -11,16 +11,16 @@ Game::Game(QObject* parent) : TelegramObject(parent)
 	this->_access_hash = 0;
 	this->_photo = NULL;
 	this->_document = NULL;
-	this->_constructorid = Game::ctorGame;
+	this->_constructorid = Game::CtorGame;
 }
 
 void Game::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Game::ctorGame));
+	Q_ASSERT((this->_constructorid == Game::CtorGame));
 	
-	if(this->_constructorid == Game::ctorGame)
+	if(this->_constructorid == Game::CtorGame)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLLong();
@@ -61,12 +61,12 @@ void Game::read(MTProtoStream* mtstream)
 
 void Game::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Game::ctorGame));
+	Q_ASSERT((this->_constructorid == Game::CtorGame));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Game::ctorGame)
+	if(this->_constructorid == Game::CtorGame)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_id);
@@ -93,7 +93,7 @@ void Game::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Game::ctorGame)
+	if(this->_constructorid == Game::CtorGame)
 	{
 		if(this->_document)
 			SET_FLAG_BIT(this->_flags, 0);

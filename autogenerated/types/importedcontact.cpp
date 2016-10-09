@@ -8,16 +8,16 @@ ImportedContact::ImportedContact(QObject* parent) : TelegramObject(parent)
 {
 	this->_user_id = 0;
 	this->_client_id = 0;
-	this->_constructorid = ImportedContact::ctorImportedContact;
+	this->_constructorid = ImportedContact::CtorImportedContact;
 }
 
 void ImportedContact::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ImportedContact::ctorImportedContact));
+	Q_ASSERT((this->_constructorid == ImportedContact::CtorImportedContact));
 	
-	if(this->_constructorid == ImportedContact::ctorImportedContact)
+	if(this->_constructorid == ImportedContact::CtorImportedContact)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_client_id = mtstream->readTLLong();
@@ -26,12 +26,12 @@ void ImportedContact::read(MTProtoStream* mtstream)
 
 void ImportedContact::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ImportedContact::ctorImportedContact));
+	Q_ASSERT((this->_constructorid == ImportedContact::CtorImportedContact));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ImportedContact::ctorImportedContact)
+	if(this->_constructorid == ImportedContact::CtorImportedContact)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLLong(this->_client_id);

@@ -7,27 +7,27 @@
 AccountDaysTTL::AccountDaysTTL(QObject* parent) : TelegramObject(parent)
 {
 	this->_days = 0;
-	this->_constructorid = AccountDaysTTL::ctorAccountDaysTTL;
+	this->_constructorid = AccountDaysTTL::CtorAccountDaysTTL;
 }
 
 void AccountDaysTTL::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountDaysTTL::ctorAccountDaysTTL));
+	Q_ASSERT((this->_constructorid == AccountDaysTTL::CtorAccountDaysTTL));
 	
-	if(this->_constructorid == AccountDaysTTL::ctorAccountDaysTTL)
+	if(this->_constructorid == AccountDaysTTL::CtorAccountDaysTTL)
 		this->_days = mtstream->readTLInt();
 }
 
 void AccountDaysTTL::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountDaysTTL::ctorAccountDaysTTL));
+	Q_ASSERT((this->_constructorid == AccountDaysTTL::CtorAccountDaysTTL));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountDaysTTL::ctorAccountDaysTTL)
+	if(this->_constructorid == AccountDaysTTL::CtorAccountDaysTTL)
 		mtstream->writeTLInt(this->_days);
 }
 

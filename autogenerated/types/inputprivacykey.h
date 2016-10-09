@@ -15,8 +15,8 @@ class InputPrivacyKey: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPrivacyKeyStatusTimestamp = 0x4f96cb18,
-			ctorInputPrivacyKeyChatInvite = 0xbdfb0426,
+			CtorInputPrivacyKeyStatusTimestamp = 0x4f96cb18,
+			CtorInputPrivacyKeyChatInvite = 0xbdfb0426,
 		};
 
 	public:

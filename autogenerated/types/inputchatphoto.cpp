@@ -14,11 +14,11 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputChatPhoto::ctorInputChatPhotoEmpty) ||
-		 (this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto) ||
-		 (this->_constructorid == InputChatPhoto::ctorInputChatPhoto));
+	Q_ASSERT((this->_constructorid == InputChatPhoto::CtorInputChatPhotoEmpty) ||
+		 (this->_constructorid == InputChatPhoto::CtorInputChatUploadedPhoto) ||
+		 (this->_constructorid == InputChatPhoto::CtorInputChatPhoto));
 	
-	if(this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto)
+	if(this->_constructorid == InputChatPhoto::CtorInputChatUploadedPhoto)
 	{
 		TLInt file_ctor = mtstream->peekTLConstructor();
 		
@@ -33,7 +33,7 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputChatPhoto::ctorInputChatPhoto)
+	else if(this->_constructorid == InputChatPhoto::CtorInputChatPhoto)
 	{
 		TLInt id_ctor = mtstream->peekTLConstructor();
 		
@@ -52,21 +52,21 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 
 void InputChatPhoto::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputChatPhoto::ctorInputChatPhotoEmpty) ||
-		 (this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto) ||
-		 (this->_constructorid == InputChatPhoto::ctorInputChatPhoto));
+	Q_ASSERT((this->_constructorid == InputChatPhoto::CtorInputChatPhotoEmpty) ||
+		 (this->_constructorid == InputChatPhoto::CtorInputChatUploadedPhoto) ||
+		 (this->_constructorid == InputChatPhoto::CtorInputChatPhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputChatPhoto::ctorInputChatUploadedPhoto)
+	if(this->_constructorid == InputChatPhoto::CtorInputChatUploadedPhoto)
 	{
 		if(this->_file != NULL)
 			this->_file->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputChatPhoto::ctorInputChatPhoto)
+	else if(this->_constructorid == InputChatPhoto::CtorInputChatPhoto)
 	{
 		if(this->_id != NULL)
 			this->_id->write(mtstream);

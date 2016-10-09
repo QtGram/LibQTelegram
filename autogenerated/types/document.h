@@ -6,8 +6,8 @@
 
 #include "documentattribute.h"
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "photosize.h"
+#include "../../types/basic.h"
 
 class Document: public TelegramObject
 {
@@ -27,8 +27,8 @@ class Document: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorDocumentEmpty = 0x36f8c871,
-			ctorDocument = 0x87232bc7,
+			CtorDocumentEmpty = 0x36f8c871,
+			CtorDocument = 0x87232bc7,
 		};
 
 	public:

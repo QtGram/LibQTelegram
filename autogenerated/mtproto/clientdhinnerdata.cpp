@@ -7,16 +7,16 @@
 ClientDHInnerData::ClientDHInnerData(QObject* parent) : TelegramObject(parent)
 {
 	this->_retry_id = 0;
-	this->_constructorid = ClientDHInnerData::ctorClientDHInnerData;
+	this->_constructorid = ClientDHInnerData::CtorClientDHInnerData;
 }
 
 void ClientDHInnerData::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ClientDHInnerData::ctorClientDHInnerData));
+	Q_ASSERT((this->_constructorid == ClientDHInnerData::CtorClientDHInnerData));
 	
-	if(this->_constructorid == ClientDHInnerData::ctorClientDHInnerData)
+	if(this->_constructorid == ClientDHInnerData::CtorClientDHInnerData)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
@@ -27,12 +27,12 @@ void ClientDHInnerData::read(MTProtoStream* mtstream)
 
 void ClientDHInnerData::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ClientDHInnerData::ctorClientDHInnerData));
+	Q_ASSERT((this->_constructorid == ClientDHInnerData::CtorClientDHInnerData));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ClientDHInnerData::ctorClientDHInnerData)
+	if(this->_constructorid == ClientDHInnerData::CtorClientDHInnerData)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);

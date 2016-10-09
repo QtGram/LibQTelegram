@@ -19,12 +19,12 @@ void Document::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Document::ctorDocumentEmpty) ||
-		 (this->_constructorid == Document::ctorDocument));
+	Q_ASSERT((this->_constructorid == Document::CtorDocumentEmpty) ||
+		 (this->_constructorid == Document::CtorDocument));
 	
-	if(this->_constructorid == Document::ctorDocumentEmpty)
+	if(this->_constructorid == Document::CtorDocumentEmpty)
 		this->_id = mtstream->readTLLong();
-	else if(this->_constructorid == Document::ctorDocument)
+	else if(this->_constructorid == Document::CtorDocument)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
@@ -52,15 +52,15 @@ void Document::read(MTProtoStream* mtstream)
 
 void Document::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Document::ctorDocumentEmpty) ||
-		 (this->_constructorid == Document::ctorDocument));
+	Q_ASSERT((this->_constructorid == Document::CtorDocumentEmpty) ||
+		 (this->_constructorid == Document::CtorDocument));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Document::ctorDocumentEmpty)
+	if(this->_constructorid == Document::CtorDocumentEmpty)
 		mtstream->writeTLLong(this->_id);
-	else if(this->_constructorid == Document::ctorDocument)
+	else if(this->_constructorid == Document::CtorDocument)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);

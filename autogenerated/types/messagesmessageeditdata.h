@@ -18,7 +18,7 @@ class MessagesMessageEditData: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesMessageEditData = 0x26b5dde6,
+			CtorMessagesMessageEditData = 0x26b5dde6,
 		};
 
 	public:

@@ -14,10 +14,10 @@ void InputPhoto::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputPhoto::ctorInputPhotoEmpty) ||
-		 (this->_constructorid == InputPhoto::ctorInputPhoto));
+	Q_ASSERT((this->_constructorid == InputPhoto::CtorInputPhotoEmpty) ||
+		 (this->_constructorid == InputPhoto::CtorInputPhoto));
 	
-	if(this->_constructorid == InputPhoto::ctorInputPhoto)
+	if(this->_constructorid == InputPhoto::CtorInputPhoto)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
@@ -26,13 +26,13 @@ void InputPhoto::read(MTProtoStream* mtstream)
 
 void InputPhoto::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputPhoto::ctorInputPhotoEmpty) ||
-		 (this->_constructorid == InputPhoto::ctorInputPhoto));
+	Q_ASSERT((this->_constructorid == InputPhoto::CtorInputPhotoEmpty) ||
+		 (this->_constructorid == InputPhoto::CtorInputPhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputPhoto::ctorInputPhoto)
+	if(this->_constructorid == InputPhoto::CtorInputPhoto)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);

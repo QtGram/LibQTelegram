@@ -6,16 +6,16 @@
 
 ContactsFound::ContactsFound(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = ContactsFound::ctorContactsFound;
+	this->_constructorid = ContactsFound::CtorContactsFound;
 }
 
 void ContactsFound::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsFound::ctorContactsFound));
+	Q_ASSERT((this->_constructorid == ContactsFound::CtorContactsFound));
 	
-	if(this->_constructorid == ContactsFound::ctorContactsFound)
+	if(this->_constructorid == ContactsFound::CtorContactsFound)
 	{
 		mtstream->readTLVector<Peer>(this->_results, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
@@ -25,12 +25,12 @@ void ContactsFound::read(MTProtoStream* mtstream)
 
 void ContactsFound::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsFound::ctorContactsFound));
+	Q_ASSERT((this->_constructorid == ContactsFound::CtorContactsFound));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsFound::ctorContactsFound)
+	if(this->_constructorid == ContactsFound::CtorContactsFound)
 	{
 		mtstream->writeTLVector(this->_results, false);
 		mtstream->writeTLVector(this->_chats, false);

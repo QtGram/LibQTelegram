@@ -6,27 +6,27 @@
 
 MsgsAck::MsgsAck(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = MsgsAck::ctorMsgsAck;
+	this->_constructorid = MsgsAck::CtorMsgsAck;
 }
 
 void MsgsAck::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MsgsAck::ctorMsgsAck));
+	Q_ASSERT((this->_constructorid == MsgsAck::CtorMsgsAck));
 	
-	if(this->_constructorid == MsgsAck::ctorMsgsAck)
+	if(this->_constructorid == MsgsAck::CtorMsgsAck)
 		mtstream->readTLVector<TLLong>(this->_msg_ids, false);
 }
 
 void MsgsAck::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MsgsAck::ctorMsgsAck));
+	Q_ASSERT((this->_constructorid == MsgsAck::CtorMsgsAck));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MsgsAck::ctorMsgsAck)
+	if(this->_constructorid == MsgsAck::CtorMsgsAck)
 		mtstream->writeTLVector(this->_msg_ids, false);
 }
 

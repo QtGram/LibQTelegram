@@ -6,27 +6,27 @@
 
 AuthPasswordRecovery::AuthPasswordRecovery(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = AuthPasswordRecovery::ctorAuthPasswordRecovery;
+	this->_constructorid = AuthPasswordRecovery::CtorAuthPasswordRecovery;
 }
 
 void AuthPasswordRecovery::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthPasswordRecovery::ctorAuthPasswordRecovery));
+	Q_ASSERT((this->_constructorid == AuthPasswordRecovery::CtorAuthPasswordRecovery));
 	
-	if(this->_constructorid == AuthPasswordRecovery::ctorAuthPasswordRecovery)
+	if(this->_constructorid == AuthPasswordRecovery::CtorAuthPasswordRecovery)
 		this->_email_pattern = mtstream->readTLString();
 }
 
 void AuthPasswordRecovery::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthPasswordRecovery::ctorAuthPasswordRecovery));
+	Q_ASSERT((this->_constructorid == AuthPasswordRecovery::CtorAuthPasswordRecovery));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthPasswordRecovery::ctorAuthPasswordRecovery)
+	if(this->_constructorid == AuthPasswordRecovery::CtorAuthPasswordRecovery)
 		mtstream->writeTLString(this->_email_pattern);
 }
 

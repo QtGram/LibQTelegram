@@ -6,16 +6,16 @@
 
 ContactsImportedContacts::ContactsImportedContacts(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = ContactsImportedContacts::ctorContactsImportedContacts;
+	this->_constructorid = ContactsImportedContacts::CtorContactsImportedContacts;
 }
 
 void ContactsImportedContacts::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsImportedContacts::ctorContactsImportedContacts));
+	Q_ASSERT((this->_constructorid == ContactsImportedContacts::CtorContactsImportedContacts));
 	
-	if(this->_constructorid == ContactsImportedContacts::ctorContactsImportedContacts)
+	if(this->_constructorid == ContactsImportedContacts::CtorContactsImportedContacts)
 	{
 		mtstream->readTLVector<ImportedContact>(this->_imported, false);
 		mtstream->readTLVector<TLLong>(this->_retry_contacts, false);
@@ -25,12 +25,12 @@ void ContactsImportedContacts::read(MTProtoStream* mtstream)
 
 void ContactsImportedContacts::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsImportedContacts::ctorContactsImportedContacts));
+	Q_ASSERT((this->_constructorid == ContactsImportedContacts::CtorContactsImportedContacts));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsImportedContacts::ctorContactsImportedContacts)
+	if(this->_constructorid == ContactsImportedContacts::CtorContactsImportedContacts)
 	{
 		mtstream->writeTLVector(this->_imported, false);
 		mtstream->writeTLVector(this->_retry_contacts, false);

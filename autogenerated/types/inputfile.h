@@ -20,8 +20,8 @@ class InputFile: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputFile = 0xf52ff27f,
-			ctorInputFileBig = 0xfa4f0bb5,
+			CtorInputFile = 0xf52ff27f,
+			CtorInputFileBig = 0xfa4f0bb5,
 		};
 
 	public:

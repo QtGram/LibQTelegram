@@ -18,8 +18,8 @@ class GeoPoint: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorGeoPointEmpty = 0x1117dd5f,
-			ctorGeoPoint = 0x2049d70c,
+			CtorGeoPointEmpty = 0x1117dd5f,
+			CtorGeoPoint = 0x2049d70c,
 		};
 
 	public:

@@ -16,13 +16,13 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaAuto) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageText) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact));
+	Q_ASSERT((this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaAuto) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageText) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaGeo) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaVenue) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaContact));
 	
-	if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaAuto)
+	if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaAuto)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_caption = mtstream->readTLString();
@@ -42,7 +42,7 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageText)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageText)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_no_webpage = IS_FLAG_SET(this->_flags, 0);
@@ -66,7 +66,7 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaGeo)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt geo_ctor = mtstream->peekTLConstructor();
@@ -98,7 +98,7 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaVenue)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt geo_ctor = mtstream->peekTLConstructor();
@@ -134,7 +134,7 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaContact)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_phone_number = mtstream->readTLString();
@@ -160,16 +160,16 @@ void BotInlineMessage::read(MTProtoStream* mtstream)
 
 void BotInlineMessage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaAuto) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageText) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue) ||
-		 (this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact));
+	Q_ASSERT((this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaAuto) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageText) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaGeo) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaVenue) ||
+		 (this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaContact));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaAuto)
+	if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaAuto)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_caption);
@@ -181,7 +181,7 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageText)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageText)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_message);
@@ -196,7 +196,7 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaGeo)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_geo != NULL)
@@ -212,7 +212,7 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaVenue)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_geo != NULL)
@@ -232,7 +232,7 @@ void BotInlineMessage::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaContact)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_phone_number);
@@ -252,12 +252,12 @@ void BotInlineMessage::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaAuto)
+	if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaAuto)
 	{
 		if(this->_reply_markup)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageText)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageText)
 	{
 		if(this->_is_no_webpage)
 			SET_FLAG_BIT(this->_flags, 0);
@@ -266,17 +266,17 @@ void BotInlineMessage::compileFlags()
 		if(this->_reply_markup)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaGeo)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaGeo)
 	{
 		if(this->_reply_markup)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaVenue)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaVenue)
 	{
 		if(this->_reply_markup)
 			SET_FLAG_BIT(this->_flags, 2);
 	}
-	else if(this->_constructorid == BotInlineMessage::ctorBotInlineMessageMediaContact)
+	else if(this->_constructorid == BotInlineMessage::CtorBotInlineMessageMediaContact)
 	{
 		if(this->_reply_markup)
 			SET_FLAG_BIT(this->_flags, 2);

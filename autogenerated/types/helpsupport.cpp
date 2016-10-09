@@ -7,16 +7,16 @@
 HelpSupport::HelpSupport(QObject* parent) : TelegramObject(parent)
 {
 	this->_user = NULL;
-	this->_constructorid = HelpSupport::ctorHelpSupport;
+	this->_constructorid = HelpSupport::CtorHelpSupport;
 }
 
 void HelpSupport::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HelpSupport::ctorHelpSupport));
+	Q_ASSERT((this->_constructorid == HelpSupport::CtorHelpSupport));
 	
-	if(this->_constructorid == HelpSupport::ctorHelpSupport)
+	if(this->_constructorid == HelpSupport::CtorHelpSupport)
 	{
 		this->_phone_number = mtstream->readTLString();
 		TLInt user_ctor = mtstream->peekTLConstructor();
@@ -36,12 +36,12 @@ void HelpSupport::read(MTProtoStream* mtstream)
 
 void HelpSupport::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HelpSupport::ctorHelpSupport));
+	Q_ASSERT((this->_constructorid == HelpSupport::CtorHelpSupport));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HelpSupport::ctorHelpSupport)
+	if(this->_constructorid == HelpSupport::CtorHelpSupport)
 	{
 		mtstream->writeTLString(this->_phone_number);
 		if(this->_user != NULL)

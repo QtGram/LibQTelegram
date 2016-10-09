@@ -10,16 +10,16 @@ MessagesBotResults::MessagesBotResults(QObject* parent) : TelegramObject(parent)
 	this->_is_gallery = false;
 	this->_query_id = 0;
 	this->_switch_pm = NULL;
-	this->_constructorid = MessagesBotResults::ctorMessagesBotResults;
+	this->_constructorid = MessagesBotResults::CtorMessagesBotResults;
 }
 
 void MessagesBotResults::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesBotResults::ctorMessagesBotResults));
+	Q_ASSERT((this->_constructorid == MessagesBotResults::CtorMessagesBotResults));
 	
-	if(this->_constructorid == MessagesBotResults::ctorMessagesBotResults)
+	if(this->_constructorid == MessagesBotResults::CtorMessagesBotResults)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_gallery = IS_FLAG_SET(this->_flags, 0);
@@ -49,12 +49,12 @@ void MessagesBotResults::read(MTProtoStream* mtstream)
 
 void MessagesBotResults::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesBotResults::ctorMessagesBotResults));
+	Q_ASSERT((this->_constructorid == MessagesBotResults::CtorMessagesBotResults));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesBotResults::ctorMessagesBotResults)
+	if(this->_constructorid == MessagesBotResults::CtorMessagesBotResults)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
@@ -77,7 +77,7 @@ void MessagesBotResults::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == MessagesBotResults::ctorMessagesBotResults)
+	if(this->_constructorid == MessagesBotResults::CtorMessagesBotResults)
 	{
 		if(this->_is_gallery)
 			SET_FLAG_BIT(this->_flags, 0);

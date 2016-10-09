@@ -19,9 +19,9 @@ class Peer: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPeerUser = 0x9db1bc6d,
-			ctorPeerChat = 0xbad0e5bb,
-			ctorPeerChannel = 0xbddde532,
+			CtorPeerUser = 0x9db1bc6d,
+			CtorPeerChat = 0xbad0e5bb,
+			CtorPeerChannel = 0xbddde532,
 		};
 
 	public:

@@ -20,8 +20,8 @@ class MsgDetailedInfo: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMsgDetailedInfo = 0x276d3ec6,
-			ctorMsgNewDetailedInfo = 0x809db6df,
+			CtorMsgDetailedInfo = 0x276d3ec6,
+			CtorMsgNewDetailedInfo = 0x809db6df,
 		};
 
 	public:

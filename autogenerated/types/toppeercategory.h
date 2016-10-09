@@ -15,11 +15,11 @@ class TopPeerCategory: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorTopPeerCategoryBotsPM = 0xab661b5b,
-			ctorTopPeerCategoryBotsInline = 0x148677e2,
-			ctorTopPeerCategoryCorrespondents = 0x637b7ed,
-			ctorTopPeerCategoryGroups = 0xbd17a14a,
-			ctorTopPeerCategoryChannels = 0x161d9628,
+			CtorTopPeerCategoryBotsPM = 0xab661b5b,
+			CtorTopPeerCategoryBotsInline = 0x148677e2,
+			CtorTopPeerCategoryCorrespondents = 0x637b7ed,
+			CtorTopPeerCategoryGroups = 0xbd17a14a,
+			CtorTopPeerCategoryChannels = 0x161d9628,
 		};
 
 	public:

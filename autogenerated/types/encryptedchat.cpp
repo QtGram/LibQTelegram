@@ -18,15 +18,15 @@ void EncryptedChat::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == EncryptedChat::ctorEncryptedChatEmpty) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatWaiting) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatRequested) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChat) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatDiscarded));
+	Q_ASSERT((this->_constructorid == EncryptedChat::CtorEncryptedChatEmpty) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatWaiting) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatRequested) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChat) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatDiscarded));
 	
-	if(this->_constructorid == EncryptedChat::ctorEncryptedChatEmpty)
+	if(this->_constructorid == EncryptedChat::CtorEncryptedChatEmpty)
 		this->_id = mtstream->readTLInt();
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatWaiting)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatWaiting)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -34,7 +34,7 @@ void EncryptedChat::read(MTProtoStream* mtstream)
 		this->_admin_id = mtstream->readTLInt();
 		this->_participant_id = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatRequested)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatRequested)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -43,7 +43,7 @@ void EncryptedChat::read(MTProtoStream* mtstream)
 		this->_participant_id = mtstream->readTLInt();
 		this->_g_a = mtstream->readTLBytes();
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChat)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChat)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -53,24 +53,24 @@ void EncryptedChat::read(MTProtoStream* mtstream)
 		this->_g_a_or_b = mtstream->readTLBytes();
 		this->_key_fingerprint = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatDiscarded)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatDiscarded)
 		this->_id = mtstream->readTLInt();
 }
 
 void EncryptedChat::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == EncryptedChat::ctorEncryptedChatEmpty) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatWaiting) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatRequested) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChat) ||
-		 (this->_constructorid == EncryptedChat::ctorEncryptedChatDiscarded));
+	Q_ASSERT((this->_constructorid == EncryptedChat::CtorEncryptedChatEmpty) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatWaiting) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatRequested) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChat) ||
+		 (this->_constructorid == EncryptedChat::CtorEncryptedChatDiscarded));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == EncryptedChat::ctorEncryptedChatEmpty)
+	if(this->_constructorid == EncryptedChat::CtorEncryptedChatEmpty)
 		mtstream->writeTLInt(this->_id);
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatWaiting)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatWaiting)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
@@ -78,7 +78,7 @@ void EncryptedChat::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_admin_id);
 		mtstream->writeTLInt(this->_participant_id);
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatRequested)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatRequested)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
@@ -87,7 +87,7 @@ void EncryptedChat::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_participant_id);
 		mtstream->writeTLBytes(this->_g_a);
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChat)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChat)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
@@ -97,7 +97,7 @@ void EncryptedChat::write(MTProtoStream* mtstream)
 		mtstream->writeTLBytes(this->_g_a_or_b);
 		mtstream->writeTLLong(this->_key_fingerprint);
 	}
-	else if(this->_constructorid == EncryptedChat::ctorEncryptedChatDiscarded)
+	else if(this->_constructorid == EncryptedChat::CtorEncryptedChatDiscarded)
 		mtstream->writeTLInt(this->_id);
 }
 

@@ -8,16 +8,16 @@ TopPeer::TopPeer(QObject* parent) : TelegramObject(parent)
 {
 	this->_peer = NULL;
 	this->_rating = 0;
-	this->_constructorid = TopPeer::ctorTopPeer;
+	this->_constructorid = TopPeer::CtorTopPeer;
 }
 
 void TopPeer::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == TopPeer::ctorTopPeer));
+	Q_ASSERT((this->_constructorid == TopPeer::CtorTopPeer));
 	
-	if(this->_constructorid == TopPeer::ctorTopPeer)
+	if(this->_constructorid == TopPeer::CtorTopPeer)
 	{
 		TLInt peer_ctor = mtstream->peekTLConstructor();
 		
@@ -38,12 +38,12 @@ void TopPeer::read(MTProtoStream* mtstream)
 
 void TopPeer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == TopPeer::ctorTopPeer));
+	Q_ASSERT((this->_constructorid == TopPeer::CtorTopPeer));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == TopPeer::ctorTopPeer)
+	if(this->_constructorid == TopPeer::CtorTopPeer)
 	{
 		if(this->_peer != NULL)
 			this->_peer->write(mtstream);

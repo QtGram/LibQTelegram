@@ -17,10 +17,10 @@ class ReportReason: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputReportReasonSpam = 0x58dbcab8,
-			ctorInputReportReasonViolence = 0x1e22c78d,
-			ctorInputReportReasonPornography = 0x2e59d922,
-			ctorInputReportReasonOther = 0xe1746d0a,
+			CtorInputReportReasonSpam = 0x58dbcab8,
+			CtorInputReportReasonViolence = 0x1e22c78d,
+			CtorInputReportReasonPornography = 0x2e59d922,
+			CtorInputReportReasonOther = 0xe1746d0a,
 		};
 
 	public:

@@ -21,7 +21,7 @@ class MessageFwdHeader: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessageFwdHeader = 0xc786ddcb,
+			CtorMessageFwdHeader = 0xc786ddcb,
 		};
 
 	public:

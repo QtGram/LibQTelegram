@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "user.h"
+#include "../../types/basic.h"
 
 class HelpSupport: public TelegramObject
 {
@@ -19,7 +19,7 @@ class HelpSupport: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHelpSupport = 0x17c6b5f6,
+			CtorHelpSupport = 0x17c6b5f6,
 		};
 
 	public:

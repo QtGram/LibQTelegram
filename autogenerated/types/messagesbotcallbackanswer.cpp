@@ -9,16 +9,16 @@ MessagesBotCallbackAnswer::MessagesBotCallbackAnswer(QObject* parent) : Telegram
 	this->_flags = 0;
 	this->_is_alert = false;
 	this->_has_url = false;
-	this->_constructorid = MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer;
+	this->_constructorid = MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer;
 }
 
 void MessagesBotCallbackAnswer::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer));
+	Q_ASSERT((this->_constructorid == MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer));
 	
-	if(this->_constructorid == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer)
+	if(this->_constructorid == MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_alert = IS_FLAG_SET(this->_flags, 1);
@@ -33,12 +33,12 @@ void MessagesBotCallbackAnswer::read(MTProtoStream* mtstream)
 
 void MessagesBotCallbackAnswer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer));
+	Q_ASSERT((this->_constructorid == MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer)
+	if(this->_constructorid == MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -53,7 +53,7 @@ void MessagesBotCallbackAnswer::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == MessagesBotCallbackAnswer::ctorMessagesBotCallbackAnswer)
+	if(this->_constructorid == MessagesBotCallbackAnswer::CtorMessagesBotCallbackAnswer)
 	{
 		if(this->_is_alert)
 			SET_FLAG_BIT(this->_flags, 1);

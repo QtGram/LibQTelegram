@@ -14,11 +14,11 @@ void InputUser::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputUser::ctorInputUserEmpty) ||
-		 (this->_constructorid == InputUser::ctorInputUserSelf) ||
-		 (this->_constructorid == InputUser::ctorInputUser));
+	Q_ASSERT((this->_constructorid == InputUser::CtorInputUserEmpty) ||
+		 (this->_constructorid == InputUser::CtorInputUserSelf) ||
+		 (this->_constructorid == InputUser::CtorInputUser));
 	
-	if(this->_constructorid == InputUser::ctorInputUser)
+	if(this->_constructorid == InputUser::CtorInputUser)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -27,14 +27,14 @@ void InputUser::read(MTProtoStream* mtstream)
 
 void InputUser::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputUser::ctorInputUserEmpty) ||
-		 (this->_constructorid == InputUser::ctorInputUserSelf) ||
-		 (this->_constructorid == InputUser::ctorInputUser));
+	Q_ASSERT((this->_constructorid == InputUser::CtorInputUserEmpty) ||
+		 (this->_constructorid == InputUser::CtorInputUserSelf) ||
+		 (this->_constructorid == InputUser::CtorInputUser));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputUser::ctorInputUser)
+	if(this->_constructorid == InputUser::CtorInputUser)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLLong(this->_access_hash);

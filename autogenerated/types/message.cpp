@@ -30,13 +30,13 @@ void Message::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Message::ctorMessageEmpty) ||
-		 (this->_constructorid == Message::ctorMessage) ||
-		 (this->_constructorid == Message::ctorMessageService));
+	Q_ASSERT((this->_constructorid == Message::CtorMessageEmpty) ||
+		 (this->_constructorid == Message::CtorMessage) ||
+		 (this->_constructorid == Message::CtorMessageService));
 	
-	if(this->_constructorid == Message::ctorMessageEmpty)
+	if(this->_constructorid == Message::CtorMessageEmpty)
 		this->_id = mtstream->readTLInt();
-	else if(this->_constructorid == Message::ctorMessage)
+	else if(this->_constructorid == Message::CtorMessage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_out = IS_FLAG_SET(this->_flags, 1);
@@ -126,7 +126,7 @@ void Message::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 15))
 			this->_edit_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Message::ctorMessageService)
+	else if(this->_constructorid == Message::CtorMessageService)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_out = IS_FLAG_SET(this->_flags, 1);
@@ -172,16 +172,16 @@ void Message::read(MTProtoStream* mtstream)
 
 void Message::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Message::ctorMessageEmpty) ||
-		 (this->_constructorid == Message::ctorMessage) ||
-		 (this->_constructorid == Message::ctorMessageService));
+	Q_ASSERT((this->_constructorid == Message::CtorMessageEmpty) ||
+		 (this->_constructorid == Message::CtorMessage) ||
+		 (this->_constructorid == Message::CtorMessageService));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Message::ctorMessageEmpty)
+	if(this->_constructorid == Message::CtorMessageEmpty)
 		mtstream->writeTLInt(this->_id);
-	else if(this->_constructorid == Message::ctorMessage)
+	else if(this->_constructorid == Message::CtorMessage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -234,7 +234,7 @@ void Message::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 15))
 			mtstream->writeTLInt(this->_edit_date);
 	}
-	else if(this->_constructorid == Message::ctorMessageService)
+	else if(this->_constructorid == Message::CtorMessageService)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -261,7 +261,7 @@ void Message::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Message::ctorMessage)
+	if(this->_constructorid == Message::CtorMessage)
 	{
 		if(this->_is_out)
 			SET_FLAG_BIT(this->_flags, 1);
@@ -292,7 +292,7 @@ void Message::compileFlags()
 		if(this->_edit_date)
 			SET_FLAG_BIT(this->_flags, 15);
 	}
-	else if(this->_constructorid == Message::ctorMessageService)
+	else if(this->_constructorid == Message::CtorMessageService)
 	{
 		if(this->_is_out)
 			SET_FLAG_BIT(this->_flags, 1);

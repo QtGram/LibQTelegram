@@ -11,16 +11,16 @@ Authorization::Authorization(QObject* parent) : TelegramObject(parent)
 	this->_api_id = 0;
 	this->_date_created = 0;
 	this->_date_active = 0;
-	this->_constructorid = Authorization::ctorAuthorization;
+	this->_constructorid = Authorization::CtorAuthorization;
 }
 
 void Authorization::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Authorization::ctorAuthorization));
+	Q_ASSERT((this->_constructorid == Authorization::CtorAuthorization));
 	
-	if(this->_constructorid == Authorization::ctorAuthorization)
+	if(this->_constructorid == Authorization::CtorAuthorization)
 	{
 		this->_hash = mtstream->readTLLong();
 		this->_flags = mtstream->readTLInt();
@@ -40,12 +40,12 @@ void Authorization::read(MTProtoStream* mtstream)
 
 void Authorization::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Authorization::ctorAuthorization));
+	Q_ASSERT((this->_constructorid == Authorization::CtorAuthorization));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Authorization::ctorAuthorization)
+	if(this->_constructorid == Authorization::CtorAuthorization)
 	{
 		mtstream->writeTLLong(this->_hash);
 		mtstream->writeTLInt(this->_flags);

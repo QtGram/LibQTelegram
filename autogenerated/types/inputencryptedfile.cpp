@@ -16,24 +16,24 @@ void InputEncryptedFile::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileEmpty) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileUploaded) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFile) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileBigUploaded));
+	Q_ASSERT((this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileEmpty) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileUploaded) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFile) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileBigUploaded));
 	
-	if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileUploaded)
+	if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileUploaded)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_parts = mtstream->readTLInt();
 		this->_md5_checksum = mtstream->readTLString();
 		this->_key_fingerprint = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFile)
+	else if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFile)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileBigUploaded)
+	else if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileBigUploaded)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_parts = mtstream->readTLInt();
@@ -43,27 +43,27 @@ void InputEncryptedFile::read(MTProtoStream* mtstream)
 
 void InputEncryptedFile::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileEmpty) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileUploaded) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFile) ||
-		 (this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileBigUploaded));
+	Q_ASSERT((this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileEmpty) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileUploaded) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFile) ||
+		 (this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileBigUploaded));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileUploaded)
+	if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileUploaded)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLInt(this->_parts);
 		mtstream->writeTLString(this->_md5_checksum);
 		mtstream->writeTLInt(this->_key_fingerprint);
 	}
-	else if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFile)
+	else if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFile)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
 	}
-	else if(this->_constructorid == InputEncryptedFile::ctorInputEncryptedFileBigUploaded)
+	else if(this->_constructorid == InputEncryptedFile::CtorInputEncryptedFileBigUploaded)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLInt(this->_parts);

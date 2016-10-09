@@ -8,16 +8,16 @@ ContactBlocked::ContactBlocked(QObject* parent) : TelegramObject(parent)
 {
 	this->_user_id = 0;
 	this->_date = 0;
-	this->_constructorid = ContactBlocked::ctorContactBlocked;
+	this->_constructorid = ContactBlocked::CtorContactBlocked;
 }
 
 void ContactBlocked::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactBlocked::ctorContactBlocked));
+	Q_ASSERT((this->_constructorid == ContactBlocked::CtorContactBlocked));
 	
-	if(this->_constructorid == ContactBlocked::ctorContactBlocked)
+	if(this->_constructorid == ContactBlocked::CtorContactBlocked)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
@@ -26,12 +26,12 @@ void ContactBlocked::read(MTProtoStream* mtstream)
 
 void ContactBlocked::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactBlocked::ctorContactBlocked));
+	Q_ASSERT((this->_constructorid == ContactBlocked::CtorContactBlocked));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactBlocked::ctorContactBlocked)
+	if(this->_constructorid == ContactBlocked::CtorContactBlocked)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_date);

@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "foundgif.h"
+#include "../../types/basic.h"
 
 class MessagesFoundGifs: public TelegramObject
 {
@@ -19,7 +19,7 @@ class MessagesFoundGifs: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesFoundGifs = 0x450a1c0a,
+			CtorMessagesFoundGifs = 0x450a1c0a,
 		};
 
 	public:

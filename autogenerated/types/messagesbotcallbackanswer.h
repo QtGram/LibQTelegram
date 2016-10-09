@@ -21,7 +21,7 @@ class MessagesBotCallbackAnswer: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesBotCallbackAnswer = 0xb10df1fb,
+			CtorMessagesBotCallbackAnswer = 0xb10df1fb,
 		};
 
 	public:

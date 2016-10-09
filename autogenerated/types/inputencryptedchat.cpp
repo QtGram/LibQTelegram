@@ -8,16 +8,16 @@ InputEncryptedChat::InputEncryptedChat(QObject* parent) : TelegramObject(parent)
 {
 	this->_chat_id = 0;
 	this->_access_hash = 0;
-	this->_constructorid = InputEncryptedChat::ctorInputEncryptedChat;
+	this->_constructorid = InputEncryptedChat::CtorInputEncryptedChat;
 }
 
 void InputEncryptedChat::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputEncryptedChat::ctorInputEncryptedChat));
+	Q_ASSERT((this->_constructorid == InputEncryptedChat::CtorInputEncryptedChat));
 	
-	if(this->_constructorid == InputEncryptedChat::ctorInputEncryptedChat)
+	if(this->_constructorid == InputEncryptedChat::CtorInputEncryptedChat)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -26,12 +26,12 @@ void InputEncryptedChat::read(MTProtoStream* mtstream)
 
 void InputEncryptedChat::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputEncryptedChat::ctorInputEncryptedChat));
+	Q_ASSERT((this->_constructorid == InputEncryptedChat::CtorInputEncryptedChat));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputEncryptedChat::ctorInputEncryptedChat)
+	if(this->_constructorid == InputEncryptedChat::CtorInputEncryptedChat)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLLong(this->_access_hash);

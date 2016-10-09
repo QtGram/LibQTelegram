@@ -12,14 +12,14 @@ void PrivacyKey::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PrivacyKey::ctorPrivacyKeyStatusTimestamp) ||
-		 (this->_constructorid == PrivacyKey::ctorPrivacyKeyChatInvite));
+	Q_ASSERT((this->_constructorid == PrivacyKey::CtorPrivacyKeyStatusTimestamp) ||
+		 (this->_constructorid == PrivacyKey::CtorPrivacyKeyChatInvite));
 }
 
 void PrivacyKey::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PrivacyKey::ctorPrivacyKeyStatusTimestamp) ||
-		 (this->_constructorid == PrivacyKey::ctorPrivacyKeyChatInvite));
+	Q_ASSERT((this->_constructorid == PrivacyKey::CtorPrivacyKeyStatusTimestamp) ||
+		 (this->_constructorid == PrivacyKey::CtorPrivacyKeyChatInvite));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

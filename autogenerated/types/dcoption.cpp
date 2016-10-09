@@ -12,16 +12,16 @@ DcOption::DcOption(QObject* parent) : TelegramObject(parent)
 	this->_is_tcpo_only = false;
 	this->_id = 0;
 	this->_port = 0;
-	this->_constructorid = DcOption::ctorDcOption;
+	this->_constructorid = DcOption::CtorDcOption;
 }
 
 void DcOption::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == DcOption::ctorDcOption));
+	Q_ASSERT((this->_constructorid == DcOption::CtorDcOption));
 	
-	if(this->_constructorid == DcOption::ctorDcOption)
+	if(this->_constructorid == DcOption::CtorDcOption)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_ipv6 = IS_FLAG_SET(this->_flags, 0);
@@ -35,12 +35,12 @@ void DcOption::read(MTProtoStream* mtstream)
 
 void DcOption::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == DcOption::ctorDcOption));
+	Q_ASSERT((this->_constructorid == DcOption::CtorDcOption));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == DcOption::ctorDcOption)
+	if(this->_constructorid == DcOption::CtorDcOption)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -53,7 +53,7 @@ void DcOption::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == DcOption::ctorDcOption)
+	if(this->_constructorid == DcOption::CtorDcOption)
 	{
 		if(this->_is_ipv6)
 			SET_FLAG_BIT(this->_flags, 0);

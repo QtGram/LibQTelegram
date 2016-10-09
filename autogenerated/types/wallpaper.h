@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "photosize.h"
+#include "../../types/basic.h"
 
 class WallPaper: public TelegramObject
 {
@@ -22,8 +22,8 @@ class WallPaper: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorWallPaper = 0xccb03657,
-			ctorWallPaperSolid = 0x63117f24,
+			CtorWallPaper = 0xccb03657,
+			CtorWallPaperSolid = 0x63117f24,
 		};
 
 	public:

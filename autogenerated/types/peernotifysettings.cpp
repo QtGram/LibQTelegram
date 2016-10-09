@@ -16,10 +16,10 @@ void PeerNotifySettings::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PeerNotifySettings::ctorPeerNotifySettingsEmpty) ||
-		 (this->_constructorid == PeerNotifySettings::ctorPeerNotifySettings));
+	Q_ASSERT((this->_constructorid == PeerNotifySettings::CtorPeerNotifySettingsEmpty) ||
+		 (this->_constructorid == PeerNotifySettings::CtorPeerNotifySettings));
 	
-	if(this->_constructorid == PeerNotifySettings::ctorPeerNotifySettings)
+	if(this->_constructorid == PeerNotifySettings::CtorPeerNotifySettings)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_show_previews = IS_FLAG_SET(this->_flags, 0);
@@ -31,13 +31,13 @@ void PeerNotifySettings::read(MTProtoStream* mtstream)
 
 void PeerNotifySettings::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PeerNotifySettings::ctorPeerNotifySettingsEmpty) ||
-		 (this->_constructorid == PeerNotifySettings::ctorPeerNotifySettings));
+	Q_ASSERT((this->_constructorid == PeerNotifySettings::CtorPeerNotifySettingsEmpty) ||
+		 (this->_constructorid == PeerNotifySettings::CtorPeerNotifySettings));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PeerNotifySettings::ctorPeerNotifySettings)
+	if(this->_constructorid == PeerNotifySettings::CtorPeerNotifySettings)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_mute_until);
@@ -49,7 +49,7 @@ void PeerNotifySettings::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == PeerNotifySettings::ctorPeerNotifySettings)
+	if(this->_constructorid == PeerNotifySettings::CtorPeerNotifySettings)
 	{
 		if(this->_is_show_previews)
 			SET_FLAG_BIT(this->_flags, 0);

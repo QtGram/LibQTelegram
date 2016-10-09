@@ -8,16 +8,16 @@ TopPeerCategoryPeers::TopPeerCategoryPeers(QObject* parent) : TelegramObject(par
 {
 	this->_category = NULL;
 	this->_count = 0;
-	this->_constructorid = TopPeerCategoryPeers::ctorTopPeerCategoryPeers;
+	this->_constructorid = TopPeerCategoryPeers::CtorTopPeerCategoryPeers;
 }
 
 void TopPeerCategoryPeers::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers));
+	Q_ASSERT((this->_constructorid == TopPeerCategoryPeers::CtorTopPeerCategoryPeers));
 	
-	if(this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
+	if(this->_constructorid == TopPeerCategoryPeers::CtorTopPeerCategoryPeers)
 	{
 		TLInt category_ctor = mtstream->peekTLConstructor();
 		
@@ -39,12 +39,12 @@ void TopPeerCategoryPeers::read(MTProtoStream* mtstream)
 
 void TopPeerCategoryPeers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers));
+	Q_ASSERT((this->_constructorid == TopPeerCategoryPeers::CtorTopPeerCategoryPeers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == TopPeerCategoryPeers::ctorTopPeerCategoryPeers)
+	if(this->_constructorid == TopPeerCategoryPeers::CtorTopPeerCategoryPeers)
 	{
 		if(this->_category != NULL)
 			this->_category->write(mtstream);

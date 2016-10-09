@@ -158,8 +158,9 @@ void TelegramCache::onNewDraftMessage(Update *update)
         return;
     }
 
-    DraftMessage* olddraftmessage = update->draft();
-    this->_dialogs[id]->setDraft(update->draft());
+    Dialog* dialog = this->_dialogs[id];
+    DraftMessage* olddraftmessage = dialog->draft();
+    dialog->setDraft(update->draft());
     olddraftmessage->deleteLater();
 
     emit dialogsChanged();

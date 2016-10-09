@@ -11,16 +11,16 @@ MessageFwdHeader::MessageFwdHeader(QObject* parent) : TelegramObject(parent)
 	this->_date = 0;
 	this->_channel_id = 0;
 	this->_channel_post = 0;
-	this->_constructorid = MessageFwdHeader::ctorMessageFwdHeader;
+	this->_constructorid = MessageFwdHeader::CtorMessageFwdHeader;
 }
 
 void MessageFwdHeader::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessageFwdHeader::ctorMessageFwdHeader));
+	Q_ASSERT((this->_constructorid == MessageFwdHeader::CtorMessageFwdHeader));
 	
-	if(this->_constructorid == MessageFwdHeader::ctorMessageFwdHeader)
+	if(this->_constructorid == MessageFwdHeader::CtorMessageFwdHeader)
 	{
 		this->_flags = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -37,12 +37,12 @@ void MessageFwdHeader::read(MTProtoStream* mtstream)
 
 void MessageFwdHeader::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessageFwdHeader::ctorMessageFwdHeader));
+	Q_ASSERT((this->_constructorid == MessageFwdHeader::CtorMessageFwdHeader));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessageFwdHeader::ctorMessageFwdHeader)
+	if(this->_constructorid == MessageFwdHeader::CtorMessageFwdHeader)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -61,7 +61,7 @@ void MessageFwdHeader::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == MessageFwdHeader::ctorMessageFwdHeader)
+	if(this->_constructorid == MessageFwdHeader::CtorMessageFwdHeader)
 	{
 		if(this->_from_id)
 			SET_FLAG_BIT(this->_flags, 0);

@@ -17,12 +17,12 @@ void Photo::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Photo::ctorPhotoEmpty) ||
-		 (this->_constructorid == Photo::ctorPhoto));
+	Q_ASSERT((this->_constructorid == Photo::CtorPhotoEmpty) ||
+		 (this->_constructorid == Photo::CtorPhoto));
 	
-	if(this->_constructorid == Photo::ctorPhotoEmpty)
+	if(this->_constructorid == Photo::CtorPhotoEmpty)
 		this->_id = mtstream->readTLLong();
-	else if(this->_constructorid == Photo::ctorPhoto)
+	else if(this->_constructorid == Photo::CtorPhoto)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_has_stickers = IS_FLAG_SET(this->_flags, 0);
@@ -35,15 +35,15 @@ void Photo::read(MTProtoStream* mtstream)
 
 void Photo::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Photo::ctorPhotoEmpty) ||
-		 (this->_constructorid == Photo::ctorPhoto));
+	Q_ASSERT((this->_constructorid == Photo::CtorPhotoEmpty) ||
+		 (this->_constructorid == Photo::CtorPhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Photo::ctorPhotoEmpty)
+	if(this->_constructorid == Photo::CtorPhotoEmpty)
 		mtstream->writeTLLong(this->_id);
-	else if(this->_constructorid == Photo::ctorPhoto)
+	else if(this->_constructorid == Photo::CtorPhoto)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_id);
@@ -57,7 +57,7 @@ void Photo::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Photo::ctorPhoto)
+	if(this->_constructorid == Photo::CtorPhoto)
 	{
 		if(this->_has_stickers)
 			SET_FLAG_BIT(this->_flags, 0);

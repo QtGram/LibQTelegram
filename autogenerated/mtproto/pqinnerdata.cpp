@@ -6,16 +6,16 @@
 
 PQInnerData::PQInnerData(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = PQInnerData::ctorPQInnerData;
+	this->_constructorid = PQInnerData::CtorPQInnerData;
 }
 
 void PQInnerData::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PQInnerData::ctorPQInnerData));
+	Q_ASSERT((this->_constructorid == PQInnerData::CtorPQInnerData));
 	
-	if(this->_constructorid == PQInnerData::ctorPQInnerData)
+	if(this->_constructorid == PQInnerData::CtorPQInnerData)
 	{
 		this->_pq = mtstream->readTLString();
 		this->_p = mtstream->readTLString();
@@ -28,12 +28,12 @@ void PQInnerData::read(MTProtoStream* mtstream)
 
 void PQInnerData::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PQInnerData::ctorPQInnerData));
+	Q_ASSERT((this->_constructorid == PQInnerData::CtorPQInnerData));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PQInnerData::ctorPQInnerData)
+	if(this->_constructorid == PQInnerData::CtorPQInnerData)
 	{
 		mtstream->writeTLString(this->_pq);
 		mtstream->writeTLString(this->_p);

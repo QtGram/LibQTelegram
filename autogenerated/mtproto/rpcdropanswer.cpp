@@ -15,11 +15,11 @@ void RpcDropAnswer::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == RpcDropAnswer::ctorRpcAnswerUnknown) ||
-		 (this->_constructorid == RpcDropAnswer::ctorRpcAnswerDroppedRunning) ||
-		 (this->_constructorid == RpcDropAnswer::ctorRpcAnswerDropped));
+	Q_ASSERT((this->_constructorid == RpcDropAnswer::CtorRpcAnswerUnknown) ||
+		 (this->_constructorid == RpcDropAnswer::CtorRpcAnswerDroppedRunning) ||
+		 (this->_constructorid == RpcDropAnswer::CtorRpcAnswerDropped));
 	
-	if(this->_constructorid == RpcDropAnswer::ctorRpcAnswerDropped)
+	if(this->_constructorid == RpcDropAnswer::CtorRpcAnswerDropped)
 	{
 		this->_msg_id = mtstream->readTLLong();
 		this->_seq_no = mtstream->readTLInt();
@@ -29,14 +29,14 @@ void RpcDropAnswer::read(MTProtoStream* mtstream)
 
 void RpcDropAnswer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == RpcDropAnswer::ctorRpcAnswerUnknown) ||
-		 (this->_constructorid == RpcDropAnswer::ctorRpcAnswerDroppedRunning) ||
-		 (this->_constructorid == RpcDropAnswer::ctorRpcAnswerDropped));
+	Q_ASSERT((this->_constructorid == RpcDropAnswer::CtorRpcAnswerUnknown) ||
+		 (this->_constructorid == RpcDropAnswer::CtorRpcAnswerDroppedRunning) ||
+		 (this->_constructorid == RpcDropAnswer::CtorRpcAnswerDropped));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == RpcDropAnswer::ctorRpcAnswerDropped)
+	if(this->_constructorid == RpcDropAnswer::CtorRpcAnswerDropped)
 	{
 		mtstream->writeTLLong(this->_msg_id);
 		mtstream->writeTLInt(this->_seq_no);

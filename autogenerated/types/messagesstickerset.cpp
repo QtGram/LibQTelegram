@@ -7,16 +7,16 @@
 MessagesStickerSet::MessagesStickerSet(QObject* parent) : TelegramObject(parent)
 {
 	this->_set = NULL;
-	this->_constructorid = MessagesStickerSet::ctorMessagesStickerSet;
+	this->_constructorid = MessagesStickerSet::CtorMessagesStickerSet;
 }
 
 void MessagesStickerSet::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet));
+	Q_ASSERT((this->_constructorid == MessagesStickerSet::CtorMessagesStickerSet));
 	
-	if(this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet)
+	if(this->_constructorid == MessagesStickerSet::CtorMessagesStickerSet)
 	{
 		TLInt set_ctor = mtstream->peekTLConstructor();
 		
@@ -38,12 +38,12 @@ void MessagesStickerSet::read(MTProtoStream* mtstream)
 
 void MessagesStickerSet::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet));
+	Q_ASSERT((this->_constructorid == MessagesStickerSet::CtorMessagesStickerSet));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesStickerSet::ctorMessagesStickerSet)
+	if(this->_constructorid == MessagesStickerSet::CtorMessagesStickerSet)
 	{
 		if(this->_set != NULL)
 			this->_set->write(mtstream);

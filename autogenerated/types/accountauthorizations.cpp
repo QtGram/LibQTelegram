@@ -6,27 +6,27 @@
 
 AccountAuthorizations::AccountAuthorizations(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = AccountAuthorizations::ctorAccountAuthorizations;
+	this->_constructorid = AccountAuthorizations::CtorAccountAuthorizations;
 }
 
 void AccountAuthorizations::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountAuthorizations::ctorAccountAuthorizations));
+	Q_ASSERT((this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations));
 	
-	if(this->_constructorid == AccountAuthorizations::ctorAccountAuthorizations)
+	if(this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations)
 		mtstream->readTLVector<Authorization>(this->_authorizations, false);
 }
 
 void AccountAuthorizations::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountAuthorizations::ctorAccountAuthorizations));
+	Q_ASSERT((this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountAuthorizations::ctorAccountAuthorizations)
+	if(this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations)
 		mtstream->writeTLVector(this->_authorizations, false);
 }
 

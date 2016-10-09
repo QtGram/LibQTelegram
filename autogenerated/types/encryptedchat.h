@@ -24,11 +24,11 @@ class EncryptedChat: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorEncryptedChatEmpty = 0xab7ec0a0,
-			ctorEncryptedChatWaiting = 0x3bf703dc,
-			ctorEncryptedChatRequested = 0xc878527e,
-			ctorEncryptedChat = 0xfa56ce36,
-			ctorEncryptedChatDiscarded = 0x13d6dd27,
+			CtorEncryptedChatEmpty = 0xab7ec0a0,
+			CtorEncryptedChatWaiting = 0x3bf703dc,
+			CtorEncryptedChatRequested = 0xc878527e,
+			CtorEncryptedChat = 0xfa56ce36,
+			CtorEncryptedChatDiscarded = 0x13d6dd27,
 		};
 
 	public:

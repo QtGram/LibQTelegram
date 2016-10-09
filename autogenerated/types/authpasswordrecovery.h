@@ -17,7 +17,7 @@ class AuthPasswordRecovery: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthPasswordRecovery = 0x137948a5,
+			CtorAuthPasswordRecovery = 0x137948a5,
 		};
 
 	public:

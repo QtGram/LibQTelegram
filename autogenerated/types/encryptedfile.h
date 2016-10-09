@@ -21,8 +21,8 @@ class EncryptedFile: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorEncryptedFileEmpty = 0xc21f497e,
-			ctorEncryptedFile = 0x4a70994c,
+			CtorEncryptedFileEmpty = 0xc21f497e,
+			CtorEncryptedFile = 0x4a70994c,
 		};
 
 	public:

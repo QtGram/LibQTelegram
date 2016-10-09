@@ -16,10 +16,10 @@ void EncryptedMessage::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == EncryptedMessage::ctorEncryptedMessage) ||
-		 (this->_constructorid == EncryptedMessage::ctorEncryptedMessageService));
+	Q_ASSERT((this->_constructorid == EncryptedMessage::CtorEncryptedMessage) ||
+		 (this->_constructorid == EncryptedMessage::CtorEncryptedMessageService));
 	
-	if(this->_constructorid == EncryptedMessage::ctorEncryptedMessage)
+	if(this->_constructorid == EncryptedMessage::CtorEncryptedMessage)
 	{
 		this->_random_id = mtstream->readTLLong();
 		this->_chat_id = mtstream->readTLInt();
@@ -38,7 +38,7 @@ void EncryptedMessage::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == EncryptedMessage::ctorEncryptedMessageService)
+	else if(this->_constructorid == EncryptedMessage::CtorEncryptedMessageService)
 	{
 		this->_random_id = mtstream->readTLLong();
 		this->_chat_id = mtstream->readTLInt();
@@ -49,13 +49,13 @@ void EncryptedMessage::read(MTProtoStream* mtstream)
 
 void EncryptedMessage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == EncryptedMessage::ctorEncryptedMessage) ||
-		 (this->_constructorid == EncryptedMessage::ctorEncryptedMessageService));
+	Q_ASSERT((this->_constructorid == EncryptedMessage::CtorEncryptedMessage) ||
+		 (this->_constructorid == EncryptedMessage::CtorEncryptedMessageService));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == EncryptedMessage::ctorEncryptedMessage)
+	if(this->_constructorid == EncryptedMessage::CtorEncryptedMessage)
 	{
 		mtstream->writeTLLong(this->_random_id);
 		mtstream->writeTLInt(this->_chat_id);
@@ -66,7 +66,7 @@ void EncryptedMessage::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == EncryptedMessage::ctorEncryptedMessageService)
+	else if(this->_constructorid == EncryptedMessage::CtorEncryptedMessageService)
 	{
 		mtstream->writeTLLong(this->_random_id);
 		mtstream->writeTLInt(this->_chat_id);

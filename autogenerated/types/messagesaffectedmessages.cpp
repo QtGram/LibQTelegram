@@ -8,16 +8,16 @@ MessagesAffectedMessages::MessagesAffectedMessages(QObject* parent) : TelegramOb
 {
 	this->_pts = 0;
 	this->_pts_count = 0;
-	this->_constructorid = MessagesAffectedMessages::ctorMessagesAffectedMessages;
+	this->_constructorid = MessagesAffectedMessages::CtorMessagesAffectedMessages;
 }
 
 void MessagesAffectedMessages::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesAffectedMessages::ctorMessagesAffectedMessages));
+	Q_ASSERT((this->_constructorid == MessagesAffectedMessages::CtorMessagesAffectedMessages));
 	
-	if(this->_constructorid == MessagesAffectedMessages::ctorMessagesAffectedMessages)
+	if(this->_constructorid == MessagesAffectedMessages::CtorMessagesAffectedMessages)
 	{
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
@@ -26,12 +26,12 @@ void MessagesAffectedMessages::read(MTProtoStream* mtstream)
 
 void MessagesAffectedMessages::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesAffectedMessages::ctorMessagesAffectedMessages));
+	Q_ASSERT((this->_constructorid == MessagesAffectedMessages::CtorMessagesAffectedMessages));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesAffectedMessages::ctorMessagesAffectedMessages)
+	if(this->_constructorid == MessagesAffectedMessages::CtorMessagesAffectedMessages)
 	{
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);

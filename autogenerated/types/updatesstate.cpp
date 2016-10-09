@@ -11,16 +11,16 @@ UpdatesState::UpdatesState(QObject* parent) : TelegramObject(parent)
 	this->_date = 0;
 	this->_seq = 0;
 	this->_unread_count = 0;
-	this->_constructorid = UpdatesState::ctorUpdatesState;
+	this->_constructorid = UpdatesState::CtorUpdatesState;
 }
 
 void UpdatesState::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UpdatesState::ctorUpdatesState));
+	Q_ASSERT((this->_constructorid == UpdatesState::CtorUpdatesState));
 	
-	if(this->_constructorid == UpdatesState::ctorUpdatesState)
+	if(this->_constructorid == UpdatesState::CtorUpdatesState)
 	{
 		this->_pts = mtstream->readTLInt();
 		this->_qts = mtstream->readTLInt();
@@ -32,12 +32,12 @@ void UpdatesState::read(MTProtoStream* mtstream)
 
 void UpdatesState::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UpdatesState::ctorUpdatesState));
+	Q_ASSERT((this->_constructorid == UpdatesState::CtorUpdatesState));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UpdatesState::ctorUpdatesState)
+	if(this->_constructorid == UpdatesState::CtorUpdatesState)
 	{
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_qts);

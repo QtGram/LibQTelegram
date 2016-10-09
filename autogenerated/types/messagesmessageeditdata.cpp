@@ -8,16 +8,16 @@ MessagesMessageEditData::MessagesMessageEditData(QObject* parent) : TelegramObje
 {
 	this->_flags = 0;
 	this->_is_caption = false;
-	this->_constructorid = MessagesMessageEditData::ctorMessagesMessageEditData;
+	this->_constructorid = MessagesMessageEditData::CtorMessagesMessageEditData;
 }
 
 void MessagesMessageEditData::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesMessageEditData::ctorMessagesMessageEditData));
+	Q_ASSERT((this->_constructorid == MessagesMessageEditData::CtorMessagesMessageEditData));
 	
-	if(this->_constructorid == MessagesMessageEditData::ctorMessagesMessageEditData)
+	if(this->_constructorid == MessagesMessageEditData::CtorMessagesMessageEditData)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_caption = IS_FLAG_SET(this->_flags, 0);
@@ -26,12 +26,12 @@ void MessagesMessageEditData::read(MTProtoStream* mtstream)
 
 void MessagesMessageEditData::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesMessageEditData::ctorMessagesMessageEditData));
+	Q_ASSERT((this->_constructorid == MessagesMessageEditData::CtorMessagesMessageEditData));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesMessageEditData::ctorMessagesMessageEditData)
+	if(this->_constructorid == MessagesMessageEditData::CtorMessagesMessageEditData)
 		mtstream->writeTLInt(this->_flags);
 }
 
@@ -39,7 +39,7 @@ void MessagesMessageEditData::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == MessagesMessageEditData::ctorMessagesMessageEditData)
+	if(this->_constructorid == MessagesMessageEditData::CtorMessagesMessageEditData)
 	{
 		if(this->_is_caption)
 			SET_FLAG_BIT(this->_flags, 0);

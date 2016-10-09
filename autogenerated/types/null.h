@@ -15,7 +15,7 @@ class Null: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorNull = 0x56730bcc,
+			CtorNull = 0x56730bcc,
 		};
 
 	public:

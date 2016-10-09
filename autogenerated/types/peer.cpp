@@ -15,32 +15,32 @@ void Peer::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Peer::ctorPeerUser) ||
-		 (this->_constructorid == Peer::ctorPeerChat) ||
-		 (this->_constructorid == Peer::ctorPeerChannel));
+	Q_ASSERT((this->_constructorid == Peer::CtorPeerUser) ||
+		 (this->_constructorid == Peer::CtorPeerChat) ||
+		 (this->_constructorid == Peer::CtorPeerChannel));
 	
-	if(this->_constructorid == Peer::ctorPeerUser)
+	if(this->_constructorid == Peer::CtorPeerUser)
 		this->_user_id = mtstream->readTLInt();
-	else if(this->_constructorid == Peer::ctorPeerChat)
+	else if(this->_constructorid == Peer::CtorPeerChat)
 		this->_chat_id = mtstream->readTLInt();
-	else if(this->_constructorid == Peer::ctorPeerChannel)
+	else if(this->_constructorid == Peer::CtorPeerChannel)
 		this->_channel_id = mtstream->readTLInt();
 }
 
 void Peer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Peer::ctorPeerUser) ||
-		 (this->_constructorid == Peer::ctorPeerChat) ||
-		 (this->_constructorid == Peer::ctorPeerChannel));
+	Q_ASSERT((this->_constructorid == Peer::CtorPeerUser) ||
+		 (this->_constructorid == Peer::CtorPeerChat) ||
+		 (this->_constructorid == Peer::CtorPeerChannel));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Peer::ctorPeerUser)
+	if(this->_constructorid == Peer::CtorPeerUser)
 		mtstream->writeTLInt(this->_user_id);
-	else if(this->_constructorid == Peer::ctorPeerChat)
+	else if(this->_constructorid == Peer::CtorPeerChat)
 		mtstream->writeTLInt(this->_chat_id);
-	else if(this->_constructorid == Peer::ctorPeerChannel)
+	else if(this->_constructorid == Peer::CtorPeerChannel)
 		mtstream->writeTLInt(this->_channel_id);
 }
 

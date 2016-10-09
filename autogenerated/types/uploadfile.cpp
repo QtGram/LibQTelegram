@@ -8,16 +8,16 @@ UploadFile::UploadFile(QObject* parent) : TelegramObject(parent)
 {
 	this->_type = NULL;
 	this->_mtime = 0;
-	this->_constructorid = UploadFile::ctorUploadFile;
+	this->_constructorid = UploadFile::CtorUploadFile;
 }
 
 void UploadFile::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UploadFile::ctorUploadFile));
+	Q_ASSERT((this->_constructorid == UploadFile::CtorUploadFile));
 	
-	if(this->_constructorid == UploadFile::ctorUploadFile)
+	if(this->_constructorid == UploadFile::CtorUploadFile)
 	{
 		TLInt type_ctor = mtstream->peekTLConstructor();
 		
@@ -39,12 +39,12 @@ void UploadFile::read(MTProtoStream* mtstream)
 
 void UploadFile::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UploadFile::ctorUploadFile));
+	Q_ASSERT((this->_constructorid == UploadFile::CtorUploadFile));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UploadFile::ctorUploadFile)
+	if(this->_constructorid == UploadFile::CtorUploadFile)
 	{
 		if(this->_type != NULL)
 			this->_type->write(mtstream);

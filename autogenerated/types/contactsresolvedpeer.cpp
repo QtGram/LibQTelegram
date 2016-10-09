@@ -7,16 +7,16 @@
 ContactsResolvedPeer::ContactsResolvedPeer(QObject* parent) : TelegramObject(parent)
 {
 	this->_peer = NULL;
-	this->_constructorid = ContactsResolvedPeer::ctorContactsResolvedPeer;
+	this->_constructorid = ContactsResolvedPeer::CtorContactsResolvedPeer;
 }
 
 void ContactsResolvedPeer::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer));
+	Q_ASSERT((this->_constructorid == ContactsResolvedPeer::CtorContactsResolvedPeer));
 	
-	if(this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer)
+	if(this->_constructorid == ContactsResolvedPeer::CtorContactsResolvedPeer)
 	{
 		TLInt peer_ctor = mtstream->peekTLConstructor();
 		
@@ -38,12 +38,12 @@ void ContactsResolvedPeer::read(MTProtoStream* mtstream)
 
 void ContactsResolvedPeer::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer));
+	Q_ASSERT((this->_constructorid == ContactsResolvedPeer::CtorContactsResolvedPeer));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsResolvedPeer::ctorContactsResolvedPeer)
+	if(this->_constructorid == ContactsResolvedPeer::CtorContactsResolvedPeer)
 	{
 		if(this->_peer != NULL)
 			this->_peer->write(mtstream);

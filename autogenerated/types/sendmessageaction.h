@@ -17,18 +17,18 @@ class SendMessageAction: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorSendMessageTypingAction = 0x16bf744e,
-			ctorSendMessageCancelAction = 0xfd5ec8f5,
-			ctorSendMessageRecordVideoAction = 0xa187d66f,
-			ctorSendMessageUploadVideoAction = 0xe9763aec,
-			ctorSendMessageRecordAudioAction = 0xd52f73f7,
-			ctorSendMessageUploadAudioAction = 0xf351d7ab,
-			ctorSendMessageUploadPhotoAction = 0xd1d34a26,
-			ctorSendMessageUploadDocumentAction = 0xaa0cd9e4,
-			ctorSendMessageGeoLocationAction = 0x176f8ba1,
-			ctorSendMessageChooseContactAction = 0x628cbc6f,
-			ctorSendMessageGamePlayAction = 0xdd6a8f48,
-			ctorSendMessageGameStopAction = 0x15c2c99a,
+			CtorSendMessageTypingAction = 0x16bf744e,
+			CtorSendMessageCancelAction = 0xfd5ec8f5,
+			CtorSendMessageRecordVideoAction = 0xa187d66f,
+			CtorSendMessageUploadVideoAction = 0xe9763aec,
+			CtorSendMessageRecordAudioAction = 0xd52f73f7,
+			CtorSendMessageUploadAudioAction = 0xf351d7ab,
+			CtorSendMessageUploadPhotoAction = 0xd1d34a26,
+			CtorSendMessageUploadDocumentAction = 0xaa0cd9e4,
+			CtorSendMessageGeoLocationAction = 0x176f8ba1,
+			CtorSendMessageChooseContactAction = 0x628cbc6f,
+			CtorSendMessageGamePlayAction = 0xdd6a8f48,
+			CtorSendMessageGameStopAction = 0x15c2c99a,
 		};
 
 	public:

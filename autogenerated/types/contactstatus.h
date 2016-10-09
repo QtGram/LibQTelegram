@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "userstatus.h"
+#include "../../types/basic.h"
 
 class ContactStatus: public TelegramObject
 {
@@ -19,7 +19,7 @@ class ContactStatus: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorContactStatus = 0xd3680c61,
+			CtorContactStatus = 0xd3680c61,
 		};
 
 	public:

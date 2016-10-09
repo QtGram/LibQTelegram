@@ -22,9 +22,9 @@ class InputFileLocation: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputFileLocation = 0x14637196,
-			ctorInputEncryptedFileLocation = 0xf5235d55,
-			ctorInputDocumentFileLocation = 0x430f0724,
+			CtorInputFileLocation = 0x14637196,
+			CtorInputEncryptedFileLocation = 0xf5235d55,
+			CtorInputDocumentFileLocation = 0x430f0724,
 		};
 
 	public:

@@ -19,7 +19,7 @@ class NearestDc: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorNearestDc = 0x8e1a1775,
+			CtorNearestDc = 0x8e1a1775,
 		};
 
 	public:

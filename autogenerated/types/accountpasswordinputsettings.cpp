@@ -7,16 +7,16 @@
 AccountPasswordInputSettings::AccountPasswordInputSettings(QObject* parent) : TelegramObject(parent)
 {
 	this->_flags = 0;
-	this->_constructorid = AccountPasswordInputSettings::ctorAccountPasswordInputSettings;
+	this->_constructorid = AccountPasswordInputSettings::CtorAccountPasswordInputSettings;
 }
 
 void AccountPasswordInputSettings::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountPasswordInputSettings::ctorAccountPasswordInputSettings));
+	Q_ASSERT((this->_constructorid == AccountPasswordInputSettings::CtorAccountPasswordInputSettings));
 	
-	if(this->_constructorid == AccountPasswordInputSettings::ctorAccountPasswordInputSettings)
+	if(this->_constructorid == AccountPasswordInputSettings::CtorAccountPasswordInputSettings)
 	{
 		this->_flags = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -35,12 +35,12 @@ void AccountPasswordInputSettings::read(MTProtoStream* mtstream)
 
 void AccountPasswordInputSettings::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountPasswordInputSettings::ctorAccountPasswordInputSettings));
+	Q_ASSERT((this->_constructorid == AccountPasswordInputSettings::CtorAccountPasswordInputSettings));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountPasswordInputSettings::ctorAccountPasswordInputSettings)
+	if(this->_constructorid == AccountPasswordInputSettings::CtorAccountPasswordInputSettings)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -61,7 +61,7 @@ void AccountPasswordInputSettings::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == AccountPasswordInputSettings::ctorAccountPasswordInputSettings)
+	if(this->_constructorid == AccountPasswordInputSettings::CtorAccountPasswordInputSettings)
 	{
 		if(!this->_new_salt.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);

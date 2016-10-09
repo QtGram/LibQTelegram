@@ -62,61 +62,61 @@ void Update::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Update::ctorUpdateNewMessage) ||
-		 (this->_constructorid == Update::ctorUpdateMessageID) ||
-		 (this->_constructorid == Update::ctorUpdateDeleteMessages) ||
-		 (this->_constructorid == Update::ctorUpdateUserTyping) ||
-		 (this->_constructorid == Update::ctorUpdateChatUserTyping) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipants) ||
-		 (this->_constructorid == Update::ctorUpdateUserStatus) ||
-		 (this->_constructorid == Update::ctorUpdateUserName) ||
-		 (this->_constructorid == Update::ctorUpdateUserPhoto) ||
-		 (this->_constructorid == Update::ctorUpdateContactRegistered) ||
-		 (this->_constructorid == Update::ctorUpdateContactLink) ||
-		 (this->_constructorid == Update::ctorUpdateNewAuthorization) ||
-		 (this->_constructorid == Update::ctorUpdateNewEncryptedMessage) ||
-		 (this->_constructorid == Update::ctorUpdateEncryptedChatTyping) ||
-		 (this->_constructorid == Update::ctorUpdateEncryption) ||
-		 (this->_constructorid == Update::ctorUpdateEncryptedMessagesRead) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantAdd) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantDelete) ||
-		 (this->_constructorid == Update::ctorUpdateDcOptions) ||
-		 (this->_constructorid == Update::ctorUpdateUserBlocked) ||
-		 (this->_constructorid == Update::ctorUpdateNotifySettings) ||
-		 (this->_constructorid == Update::ctorUpdateServiceNotification) ||
-		 (this->_constructorid == Update::ctorUpdatePrivacy) ||
-		 (this->_constructorid == Update::ctorUpdateUserPhone) ||
-		 (this->_constructorid == Update::ctorUpdateReadHistoryInbox) ||
-		 (this->_constructorid == Update::ctorUpdateReadHistoryOutbox) ||
-		 (this->_constructorid == Update::ctorUpdateWebPage) ||
-		 (this->_constructorid == Update::ctorUpdateReadMessagesContents) ||
-		 (this->_constructorid == Update::ctorUpdateChannelTooLong) ||
-		 (this->_constructorid == Update::ctorUpdateChannel) ||
-		 (this->_constructorid == Update::ctorUpdateNewChannelMessage) ||
-		 (this->_constructorid == Update::ctorUpdateReadChannelInbox) ||
-		 (this->_constructorid == Update::ctorUpdateDeleteChannelMessages) ||
-		 (this->_constructorid == Update::ctorUpdateChannelMessageViews) ||
-		 (this->_constructorid == Update::ctorUpdateChatAdmins) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantAdmin) ||
-		 (this->_constructorid == Update::ctorUpdateNewStickerSet) ||
-		 (this->_constructorid == Update::ctorUpdateStickerSetsOrder) ||
-		 (this->_constructorid == Update::ctorUpdateStickerSets) ||
-		 (this->_constructorid == Update::ctorUpdateSavedGifs) ||
-		 (this->_constructorid == Update::ctorUpdateBotInlineQuery) ||
-		 (this->_constructorid == Update::ctorUpdateBotInlineSend) ||
-		 (this->_constructorid == Update::ctorUpdateEditChannelMessage) ||
-		 (this->_constructorid == Update::ctorUpdateChannelPinnedMessage) ||
-		 (this->_constructorid == Update::ctorUpdateBotCallbackQuery) ||
-		 (this->_constructorid == Update::ctorUpdateEditMessage) ||
-		 (this->_constructorid == Update::ctorUpdateInlineBotCallbackQuery) ||
-		 (this->_constructorid == Update::ctorUpdateReadChannelOutbox) ||
-		 (this->_constructorid == Update::ctorUpdateDraftMessage) ||
-		 (this->_constructorid == Update::ctorUpdateReadFeaturedStickers) ||
-		 (this->_constructorid == Update::ctorUpdateRecentStickers) ||
-		 (this->_constructorid == Update::ctorUpdateConfig) ||
-		 (this->_constructorid == Update::ctorUpdatePtsChanged));
+	Q_ASSERT((this->_constructorid == Update::CtorUpdateNewMessage) ||
+		 (this->_constructorid == Update::CtorUpdateMessageID) ||
+		 (this->_constructorid == Update::CtorUpdateDeleteMessages) ||
+		 (this->_constructorid == Update::CtorUpdateUserTyping) ||
+		 (this->_constructorid == Update::CtorUpdateChatUserTyping) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipants) ||
+		 (this->_constructorid == Update::CtorUpdateUserStatus) ||
+		 (this->_constructorid == Update::CtorUpdateUserName) ||
+		 (this->_constructorid == Update::CtorUpdateUserPhoto) ||
+		 (this->_constructorid == Update::CtorUpdateContactRegistered) ||
+		 (this->_constructorid == Update::CtorUpdateContactLink) ||
+		 (this->_constructorid == Update::CtorUpdateNewAuthorization) ||
+		 (this->_constructorid == Update::CtorUpdateNewEncryptedMessage) ||
+		 (this->_constructorid == Update::CtorUpdateEncryptedChatTyping) ||
+		 (this->_constructorid == Update::CtorUpdateEncryption) ||
+		 (this->_constructorid == Update::CtorUpdateEncryptedMessagesRead) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantAdd) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantDelete) ||
+		 (this->_constructorid == Update::CtorUpdateDcOptions) ||
+		 (this->_constructorid == Update::CtorUpdateUserBlocked) ||
+		 (this->_constructorid == Update::CtorUpdateNotifySettings) ||
+		 (this->_constructorid == Update::CtorUpdateServiceNotification) ||
+		 (this->_constructorid == Update::CtorUpdatePrivacy) ||
+		 (this->_constructorid == Update::CtorUpdateUserPhone) ||
+		 (this->_constructorid == Update::CtorUpdateReadHistoryInbox) ||
+		 (this->_constructorid == Update::CtorUpdateReadHistoryOutbox) ||
+		 (this->_constructorid == Update::CtorUpdateWebPage) ||
+		 (this->_constructorid == Update::CtorUpdateReadMessagesContents) ||
+		 (this->_constructorid == Update::CtorUpdateChannelTooLong) ||
+		 (this->_constructorid == Update::CtorUpdateChannel) ||
+		 (this->_constructorid == Update::CtorUpdateNewChannelMessage) ||
+		 (this->_constructorid == Update::CtorUpdateReadChannelInbox) ||
+		 (this->_constructorid == Update::CtorUpdateDeleteChannelMessages) ||
+		 (this->_constructorid == Update::CtorUpdateChannelMessageViews) ||
+		 (this->_constructorid == Update::CtorUpdateChatAdmins) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantAdmin) ||
+		 (this->_constructorid == Update::CtorUpdateNewStickerSet) ||
+		 (this->_constructorid == Update::CtorUpdateStickerSetsOrder) ||
+		 (this->_constructorid == Update::CtorUpdateStickerSets) ||
+		 (this->_constructorid == Update::CtorUpdateSavedGifs) ||
+		 (this->_constructorid == Update::CtorUpdateBotInlineQuery) ||
+		 (this->_constructorid == Update::CtorUpdateBotInlineSend) ||
+		 (this->_constructorid == Update::CtorUpdateEditChannelMessage) ||
+		 (this->_constructorid == Update::CtorUpdateChannelPinnedMessage) ||
+		 (this->_constructorid == Update::CtorUpdateBotCallbackQuery) ||
+		 (this->_constructorid == Update::CtorUpdateEditMessage) ||
+		 (this->_constructorid == Update::CtorUpdateInlineBotCallbackQuery) ||
+		 (this->_constructorid == Update::CtorUpdateReadChannelOutbox) ||
+		 (this->_constructorid == Update::CtorUpdateDraftMessage) ||
+		 (this->_constructorid == Update::CtorUpdateReadFeaturedStickers) ||
+		 (this->_constructorid == Update::CtorUpdateRecentStickers) ||
+		 (this->_constructorid == Update::CtorUpdateConfig) ||
+		 (this->_constructorid == Update::CtorUpdatePtsChanged));
 	
-	if(this->_constructorid == Update::ctorUpdateNewMessage)
+	if(this->_constructorid == Update::CtorUpdateNewMessage)
 	{
 		TLInt message_updatenewmessage_ctor = mtstream->peekTLConstructor();
 		
@@ -134,18 +134,18 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateMessageID)
+	else if(this->_constructorid == Update::CtorUpdateMessageID)
 	{
 		this->_id_updatemessageid = mtstream->readTLInt();
 		this->_random_id = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == Update::ctorUpdateDeleteMessages)
+	else if(this->_constructorid == Update::CtorUpdateDeleteMessages)
 	{
 		mtstream->readTLVector<TLInt>(this->_messages, false);
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserTyping)
+	else if(this->_constructorid == Update::CtorUpdateUserTyping)
 	{
 		this->_user_id = mtstream->readTLInt();
 		TLInt action_ctor = mtstream->peekTLConstructor();
@@ -161,7 +161,7 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatUserTyping)
+	else if(this->_constructorid == Update::CtorUpdateChatUserTyping)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
@@ -178,7 +178,7 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipants)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipants)
 	{
 		TLInt participants_ctor = mtstream->peekTLConstructor();
 		
@@ -193,7 +193,7 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserStatus)
+	else if(this->_constructorid == Update::CtorUpdateUserStatus)
 	{
 		this->_user_id = mtstream->readTLInt();
 		TLInt status_ctor = mtstream->peekTLConstructor();
@@ -209,14 +209,14 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserName)
+	else if(this->_constructorid == Update::CtorUpdateUserName)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_first_name = mtstream->readTLString();
 		this->_last_name = mtstream->readTLString();
 		this->_username = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserPhoto)
+	else if(this->_constructorid == Update::CtorUpdateUserPhoto)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
@@ -235,12 +235,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		this->_is_previous = mtstream->readTLBool();
 	}
-	else if(this->_constructorid == Update::ctorUpdateContactRegistered)
+	else if(this->_constructorid == Update::CtorUpdateContactRegistered)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateContactLink)
+	else if(this->_constructorid == Update::CtorUpdateContactLink)
 	{
 		this->_user_id = mtstream->readTLInt();
 		TLInt my_link_ctor = mtstream->peekTLConstructor();
@@ -269,14 +269,14 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewAuthorization)
+	else if(this->_constructorid == Update::CtorUpdateNewAuthorization)
 	{
 		this->_auth_key_id = mtstream->readTLLong();
 		this->_date = mtstream->readTLInt();
 		this->_device = mtstream->readTLString();
 		this->_location = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewEncryptedMessage)
+	else if(this->_constructorid == Update::CtorUpdateNewEncryptedMessage)
 	{
 		TLInt message_updatenewencryptedmessage_ctor = mtstream->peekTLConstructor();
 		
@@ -293,9 +293,9 @@ void Update::read(MTProtoStream* mtstream)
 		
 		this->_qts = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateEncryptedChatTyping)
+	else if(this->_constructorid == Update::CtorUpdateEncryptedChatTyping)
 		this->_chat_id = mtstream->readTLInt();
-	else if(this->_constructorid == Update::ctorUpdateEncryption)
+	else if(this->_constructorid == Update::CtorUpdateEncryption)
 	{
 		TLInt chat_ctor = mtstream->peekTLConstructor();
 		
@@ -312,13 +312,13 @@ void Update::read(MTProtoStream* mtstream)
 		
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateEncryptedMessagesRead)
+	else if(this->_constructorid == Update::CtorUpdateEncryptedMessagesRead)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_max_date = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantAdd)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantAdd)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
@@ -326,20 +326,20 @@ void Update::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantDelete)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantDelete)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateDcOptions)
+	else if(this->_constructorid == Update::CtorUpdateDcOptions)
 		mtstream->readTLVector<DcOption>(this->_dc_options, false);
-	else if(this->_constructorid == Update::ctorUpdateUserBlocked)
+	else if(this->_constructorid == Update::CtorUpdateUserBlocked)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_is_blocked = mtstream->readTLBool();
 	}
-	else if(this->_constructorid == Update::ctorUpdateNotifySettings)
+	else if(this->_constructorid == Update::CtorUpdateNotifySettings)
 	{
 		TLInt peer_updatenotifysettings_ctor = mtstream->peekTLConstructor();
 		
@@ -367,7 +367,7 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateServiceNotification)
+	else if(this->_constructorid == Update::CtorUpdateServiceNotification)
 	{
 		this->_type = mtstream->readTLString();
 		this->_message_updateservicenotification = mtstream->readTLString();
@@ -386,7 +386,7 @@ void Update::read(MTProtoStream* mtstream)
 		
 		this->_is_popup = mtstream->readTLBool();
 	}
-	else if(this->_constructorid == Update::ctorUpdatePrivacy)
+	else if(this->_constructorid == Update::CtorUpdatePrivacy)
 	{
 		TLInt key_ctor = mtstream->peekTLConstructor();
 		
@@ -403,12 +403,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		mtstream->readTLVector<PrivacyRule>(this->_rules, false);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserPhone)
+	else if(this->_constructorid == Update::CtorUpdateUserPhone)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_phone = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadHistoryInbox)
+	else if(this->_constructorid == Update::CtorUpdateReadHistoryInbox)
 	{
 		TLInt peer_updatereadhistoryinbox_ctor = mtstream->peekTLConstructor();
 		
@@ -427,7 +427,7 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadHistoryOutbox)
+	else if(this->_constructorid == Update::CtorUpdateReadHistoryOutbox)
 	{
 		TLInt peer_ctor = mtstream->peekTLConstructor();
 		
@@ -446,7 +446,7 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateWebPage)
+	else if(this->_constructorid == Update::CtorUpdateWebPage)
 	{
 		TLInt webpage_ctor = mtstream->peekTLConstructor();
 		
@@ -464,22 +464,22 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadMessagesContents)
+	else if(this->_constructorid == Update::CtorUpdateReadMessagesContents)
 	{
 		mtstream->readTLVector<TLInt>(this->_messages, false);
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelTooLong)
+	else if(this->_constructorid == Update::CtorUpdateChannelTooLong)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_channel_id = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 0))
 			this->_pts = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannel)
+	else if(this->_constructorid == Update::CtorUpdateChannel)
 		this->_channel_id = mtstream->readTLInt();
-	else if(this->_constructorid == Update::ctorUpdateNewChannelMessage)
+	else if(this->_constructorid == Update::CtorUpdateNewChannelMessage)
 	{
 		TLInt message_updatenewchannelmessage_ctor = mtstream->peekTLConstructor();
 		
@@ -497,38 +497,38 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadChannelInbox)
+	else if(this->_constructorid == Update::CtorUpdateReadChannelInbox)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		this->_max_id = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateDeleteChannelMessages)
+	else if(this->_constructorid == Update::CtorUpdateDeleteChannelMessages)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		mtstream->readTLVector<TLInt>(this->_messages, false);
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelMessageViews)
+	else if(this->_constructorid == Update::CtorUpdateChannelMessageViews)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		this->_id = mtstream->readTLInt();
 		this->_views = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatAdmins)
+	else if(this->_constructorid == Update::CtorUpdateChatAdmins)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_is_enabled = mtstream->readTLBool();
 		this->_version = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantAdmin)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantAdmin)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
 		this->_is_admin = mtstream->readTLBool();
 		this->_version = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewStickerSet)
+	else if(this->_constructorid == Update::CtorUpdateNewStickerSet)
 	{
 		TLInt stickerset_ctor = mtstream->peekTLConstructor();
 		
@@ -543,13 +543,13 @@ void Update::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateStickerSetsOrder)
+	else if(this->_constructorid == Update::CtorUpdateStickerSetsOrder)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_masks = IS_FLAG_SET(this->_flags, 0);
 		mtstream->readTLVector<TLLong>(this->_order, false);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineQuery)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_query_id = mtstream->readTLLong();
@@ -573,7 +573,7 @@ void Update::read(MTProtoStream* mtstream)
 		
 		this->_offset = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineSend)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineSend)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
@@ -611,7 +611,7 @@ void Update::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateEditChannelMessage)
+	else if(this->_constructorid == Update::CtorUpdateEditChannelMessage)
 	{
 		TLInt message_ctor = mtstream->peekTLConstructor();
 		
@@ -629,12 +629,12 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelPinnedMessage)
+	else if(this->_constructorid == Update::CtorUpdateChannelPinnedMessage)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		this->_id_updatechannelpinnedmessage = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotCallbackQuery)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_query_id = mtstream->readTLLong();
@@ -660,7 +660,7 @@ void Update::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			this->_game_short_name = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateEditMessage)
+	else if(this->_constructorid == Update::CtorUpdateEditMessage)
 	{
 		TLInt message_ctor = mtstream->peekTLConstructor();
 		
@@ -678,7 +678,7 @@ void Update::read(MTProtoStream* mtstream)
 		this->_pts = mtstream->readTLInt();
 		this->_pts_count = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateInlineBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateInlineBotCallbackQuery)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_query_id = mtstream->readTLLong();
@@ -703,12 +703,12 @@ void Update::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			this->_game_short_name = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadChannelOutbox)
+	else if(this->_constructorid == Update::CtorUpdateReadChannelOutbox)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		this->_max_id = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Update::ctorUpdateDraftMessage)
+	else if(this->_constructorid == Update::CtorUpdateDraftMessage)
 	{
 		TLInt peer_ctor = mtstream->peekTLConstructor();
 		
@@ -740,64 +740,64 @@ void Update::read(MTProtoStream* mtstream)
 
 void Update::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Update::ctorUpdateNewMessage) ||
-		 (this->_constructorid == Update::ctorUpdateMessageID) ||
-		 (this->_constructorid == Update::ctorUpdateDeleteMessages) ||
-		 (this->_constructorid == Update::ctorUpdateUserTyping) ||
-		 (this->_constructorid == Update::ctorUpdateChatUserTyping) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipants) ||
-		 (this->_constructorid == Update::ctorUpdateUserStatus) ||
-		 (this->_constructorid == Update::ctorUpdateUserName) ||
-		 (this->_constructorid == Update::ctorUpdateUserPhoto) ||
-		 (this->_constructorid == Update::ctorUpdateContactRegistered) ||
-		 (this->_constructorid == Update::ctorUpdateContactLink) ||
-		 (this->_constructorid == Update::ctorUpdateNewAuthorization) ||
-		 (this->_constructorid == Update::ctorUpdateNewEncryptedMessage) ||
-		 (this->_constructorid == Update::ctorUpdateEncryptedChatTyping) ||
-		 (this->_constructorid == Update::ctorUpdateEncryption) ||
-		 (this->_constructorid == Update::ctorUpdateEncryptedMessagesRead) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantAdd) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantDelete) ||
-		 (this->_constructorid == Update::ctorUpdateDcOptions) ||
-		 (this->_constructorid == Update::ctorUpdateUserBlocked) ||
-		 (this->_constructorid == Update::ctorUpdateNotifySettings) ||
-		 (this->_constructorid == Update::ctorUpdateServiceNotification) ||
-		 (this->_constructorid == Update::ctorUpdatePrivacy) ||
-		 (this->_constructorid == Update::ctorUpdateUserPhone) ||
-		 (this->_constructorid == Update::ctorUpdateReadHistoryInbox) ||
-		 (this->_constructorid == Update::ctorUpdateReadHistoryOutbox) ||
-		 (this->_constructorid == Update::ctorUpdateWebPage) ||
-		 (this->_constructorid == Update::ctorUpdateReadMessagesContents) ||
-		 (this->_constructorid == Update::ctorUpdateChannelTooLong) ||
-		 (this->_constructorid == Update::ctorUpdateChannel) ||
-		 (this->_constructorid == Update::ctorUpdateNewChannelMessage) ||
-		 (this->_constructorid == Update::ctorUpdateReadChannelInbox) ||
-		 (this->_constructorid == Update::ctorUpdateDeleteChannelMessages) ||
-		 (this->_constructorid == Update::ctorUpdateChannelMessageViews) ||
-		 (this->_constructorid == Update::ctorUpdateChatAdmins) ||
-		 (this->_constructorid == Update::ctorUpdateChatParticipantAdmin) ||
-		 (this->_constructorid == Update::ctorUpdateNewStickerSet) ||
-		 (this->_constructorid == Update::ctorUpdateStickerSetsOrder) ||
-		 (this->_constructorid == Update::ctorUpdateStickerSets) ||
-		 (this->_constructorid == Update::ctorUpdateSavedGifs) ||
-		 (this->_constructorid == Update::ctorUpdateBotInlineQuery) ||
-		 (this->_constructorid == Update::ctorUpdateBotInlineSend) ||
-		 (this->_constructorid == Update::ctorUpdateEditChannelMessage) ||
-		 (this->_constructorid == Update::ctorUpdateChannelPinnedMessage) ||
-		 (this->_constructorid == Update::ctorUpdateBotCallbackQuery) ||
-		 (this->_constructorid == Update::ctorUpdateEditMessage) ||
-		 (this->_constructorid == Update::ctorUpdateInlineBotCallbackQuery) ||
-		 (this->_constructorid == Update::ctorUpdateReadChannelOutbox) ||
-		 (this->_constructorid == Update::ctorUpdateDraftMessage) ||
-		 (this->_constructorid == Update::ctorUpdateReadFeaturedStickers) ||
-		 (this->_constructorid == Update::ctorUpdateRecentStickers) ||
-		 (this->_constructorid == Update::ctorUpdateConfig) ||
-		 (this->_constructorid == Update::ctorUpdatePtsChanged));
+	Q_ASSERT((this->_constructorid == Update::CtorUpdateNewMessage) ||
+		 (this->_constructorid == Update::CtorUpdateMessageID) ||
+		 (this->_constructorid == Update::CtorUpdateDeleteMessages) ||
+		 (this->_constructorid == Update::CtorUpdateUserTyping) ||
+		 (this->_constructorid == Update::CtorUpdateChatUserTyping) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipants) ||
+		 (this->_constructorid == Update::CtorUpdateUserStatus) ||
+		 (this->_constructorid == Update::CtorUpdateUserName) ||
+		 (this->_constructorid == Update::CtorUpdateUserPhoto) ||
+		 (this->_constructorid == Update::CtorUpdateContactRegistered) ||
+		 (this->_constructorid == Update::CtorUpdateContactLink) ||
+		 (this->_constructorid == Update::CtorUpdateNewAuthorization) ||
+		 (this->_constructorid == Update::CtorUpdateNewEncryptedMessage) ||
+		 (this->_constructorid == Update::CtorUpdateEncryptedChatTyping) ||
+		 (this->_constructorid == Update::CtorUpdateEncryption) ||
+		 (this->_constructorid == Update::CtorUpdateEncryptedMessagesRead) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantAdd) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantDelete) ||
+		 (this->_constructorid == Update::CtorUpdateDcOptions) ||
+		 (this->_constructorid == Update::CtorUpdateUserBlocked) ||
+		 (this->_constructorid == Update::CtorUpdateNotifySettings) ||
+		 (this->_constructorid == Update::CtorUpdateServiceNotification) ||
+		 (this->_constructorid == Update::CtorUpdatePrivacy) ||
+		 (this->_constructorid == Update::CtorUpdateUserPhone) ||
+		 (this->_constructorid == Update::CtorUpdateReadHistoryInbox) ||
+		 (this->_constructorid == Update::CtorUpdateReadHistoryOutbox) ||
+		 (this->_constructorid == Update::CtorUpdateWebPage) ||
+		 (this->_constructorid == Update::CtorUpdateReadMessagesContents) ||
+		 (this->_constructorid == Update::CtorUpdateChannelTooLong) ||
+		 (this->_constructorid == Update::CtorUpdateChannel) ||
+		 (this->_constructorid == Update::CtorUpdateNewChannelMessage) ||
+		 (this->_constructorid == Update::CtorUpdateReadChannelInbox) ||
+		 (this->_constructorid == Update::CtorUpdateDeleteChannelMessages) ||
+		 (this->_constructorid == Update::CtorUpdateChannelMessageViews) ||
+		 (this->_constructorid == Update::CtorUpdateChatAdmins) ||
+		 (this->_constructorid == Update::CtorUpdateChatParticipantAdmin) ||
+		 (this->_constructorid == Update::CtorUpdateNewStickerSet) ||
+		 (this->_constructorid == Update::CtorUpdateStickerSetsOrder) ||
+		 (this->_constructorid == Update::CtorUpdateStickerSets) ||
+		 (this->_constructorid == Update::CtorUpdateSavedGifs) ||
+		 (this->_constructorid == Update::CtorUpdateBotInlineQuery) ||
+		 (this->_constructorid == Update::CtorUpdateBotInlineSend) ||
+		 (this->_constructorid == Update::CtorUpdateEditChannelMessage) ||
+		 (this->_constructorid == Update::CtorUpdateChannelPinnedMessage) ||
+		 (this->_constructorid == Update::CtorUpdateBotCallbackQuery) ||
+		 (this->_constructorid == Update::CtorUpdateEditMessage) ||
+		 (this->_constructorid == Update::CtorUpdateInlineBotCallbackQuery) ||
+		 (this->_constructorid == Update::CtorUpdateReadChannelOutbox) ||
+		 (this->_constructorid == Update::CtorUpdateDraftMessage) ||
+		 (this->_constructorid == Update::CtorUpdateReadFeaturedStickers) ||
+		 (this->_constructorid == Update::CtorUpdateRecentStickers) ||
+		 (this->_constructorid == Update::CtorUpdateConfig) ||
+		 (this->_constructorid == Update::CtorUpdatePtsChanged));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Update::ctorUpdateNewMessage)
+	if(this->_constructorid == Update::CtorUpdateNewMessage)
 	{
 		if(this->_message_updatenewmessage != NULL)
 			this->_message_updatenewmessage->write(mtstream);
@@ -807,18 +807,18 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateMessageID)
+	else if(this->_constructorid == Update::CtorUpdateMessageID)
 	{
 		mtstream->writeTLInt(this->_id_updatemessageid);
 		mtstream->writeTLLong(this->_random_id);
 	}
-	else if(this->_constructorid == Update::ctorUpdateDeleteMessages)
+	else if(this->_constructorid == Update::CtorUpdateDeleteMessages)
 	{
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserTyping)
+	else if(this->_constructorid == Update::CtorUpdateUserTyping)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		if(this->_action != NULL)
@@ -826,7 +826,7 @@ void Update::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatUserTyping)
+	else if(this->_constructorid == Update::CtorUpdateChatUserTyping)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_user_id);
@@ -835,14 +835,14 @@ void Update::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipants)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipants)
 	{
 		if(this->_participants != NULL)
 			this->_participants->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserStatus)
+	else if(this->_constructorid == Update::CtorUpdateUserStatus)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		if(this->_status != NULL)
@@ -850,14 +850,14 @@ void Update::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserName)
+	else if(this->_constructorid == Update::CtorUpdateUserName)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLString(this->_first_name);
 		mtstream->writeTLString(this->_last_name);
 		mtstream->writeTLString(this->_username);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserPhoto)
+	else if(this->_constructorid == Update::CtorUpdateUserPhoto)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_date);
@@ -868,12 +868,12 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLBool(this->_is_previous);
 	}
-	else if(this->_constructorid == Update::ctorUpdateContactRegistered)
+	else if(this->_constructorid == Update::CtorUpdateContactRegistered)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == Update::ctorUpdateContactLink)
+	else if(this->_constructorid == Update::CtorUpdateContactLink)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		if(this->_my_link != NULL)
@@ -886,14 +886,14 @@ void Update::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewAuthorization)
+	else if(this->_constructorid == Update::CtorUpdateNewAuthorization)
 	{
 		mtstream->writeTLLong(this->_auth_key_id);
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLString(this->_device);
 		mtstream->writeTLString(this->_location);
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewEncryptedMessage)
+	else if(this->_constructorid == Update::CtorUpdateNewEncryptedMessage)
 	{
 		if(this->_message_updatenewencryptedmessage != NULL)
 			this->_message_updatenewencryptedmessage->write(mtstream);
@@ -902,9 +902,9 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLInt(this->_qts);
 	}
-	else if(this->_constructorid == Update::ctorUpdateEncryptedChatTyping)
+	else if(this->_constructorid == Update::CtorUpdateEncryptedChatTyping)
 		mtstream->writeTLInt(this->_chat_id);
-	else if(this->_constructorid == Update::ctorUpdateEncryption)
+	else if(this->_constructorid == Update::CtorUpdateEncryption)
 	{
 		if(this->_chat != NULL)
 			this->_chat->write(mtstream);
@@ -913,13 +913,13 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == Update::ctorUpdateEncryptedMessagesRead)
+	else if(this->_constructorid == Update::CtorUpdateEncryptedMessagesRead)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_max_date);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantAdd)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantAdd)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_user_id);
@@ -927,20 +927,20 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLInt(this->_version);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantDelete)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantDelete)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_version);
 	}
-	else if(this->_constructorid == Update::ctorUpdateDcOptions)
+	else if(this->_constructorid == Update::CtorUpdateDcOptions)
 		mtstream->writeTLVector(this->_dc_options, false);
-	else if(this->_constructorid == Update::ctorUpdateUserBlocked)
+	else if(this->_constructorid == Update::CtorUpdateUserBlocked)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLBool(this->_is_blocked);
 	}
-	else if(this->_constructorid == Update::ctorUpdateNotifySettings)
+	else if(this->_constructorid == Update::CtorUpdateNotifySettings)
 	{
 		if(this->_peer_updatenotifysettings != NULL)
 			this->_peer_updatenotifysettings->write(mtstream);
@@ -952,7 +952,7 @@ void Update::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateServiceNotification)
+	else if(this->_constructorid == Update::CtorUpdateServiceNotification)
 	{
 		mtstream->writeTLString(this->_type);
 		mtstream->writeTLString(this->_message_updateservicenotification);
@@ -963,7 +963,7 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLBool(this->_is_popup);
 	}
-	else if(this->_constructorid == Update::ctorUpdatePrivacy)
+	else if(this->_constructorid == Update::CtorUpdatePrivacy)
 	{
 		if(this->_key != NULL)
 			this->_key->write(mtstream);
@@ -972,12 +972,12 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLVector(this->_rules, false);
 	}
-	else if(this->_constructorid == Update::ctorUpdateUserPhone)
+	else if(this->_constructorid == Update::CtorUpdateUserPhone)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLString(this->_phone);
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadHistoryInbox)
+	else if(this->_constructorid == Update::CtorUpdateReadHistoryInbox)
 	{
 		if(this->_peer_updatereadhistoryinbox != NULL)
 			this->_peer_updatereadhistoryinbox->write(mtstream);
@@ -988,7 +988,7 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadHistoryOutbox)
+	else if(this->_constructorid == Update::CtorUpdateReadHistoryOutbox)
 	{
 		if(this->_peer != NULL)
 			this->_peer->write(mtstream);
@@ -999,7 +999,7 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateWebPage)
+	else if(this->_constructorid == Update::CtorUpdateWebPage)
 	{
 		if(this->_webpage != NULL)
 			this->_webpage->write(mtstream);
@@ -1009,22 +1009,22 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadMessagesContents)
+	else if(this->_constructorid == Update::CtorUpdateReadMessagesContents)
 	{
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelTooLong)
+	else if(this->_constructorid == Update::CtorUpdateChannelTooLong)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_channel_id);
 		if(IS_FLAG_SET(this->_flags, 0))
 			mtstream->writeTLInt(this->_pts);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannel)
+	else if(this->_constructorid == Update::CtorUpdateChannel)
 		mtstream->writeTLInt(this->_channel_id);
-	else if(this->_constructorid == Update::ctorUpdateNewChannelMessage)
+	else if(this->_constructorid == Update::CtorUpdateNewChannelMessage)
 	{
 		if(this->_message_updatenewchannelmessage != NULL)
 			this->_message_updatenewchannelmessage->write(mtstream);
@@ -1034,50 +1034,50 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadChannelInbox)
+	else if(this->_constructorid == Update::CtorUpdateReadChannelInbox)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLInt(this->_max_id);
 	}
-	else if(this->_constructorid == Update::ctorUpdateDeleteChannelMessages)
+	else if(this->_constructorid == Update::CtorUpdateDeleteChannelMessages)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLVector(this->_messages, false);
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelMessageViews)
+	else if(this->_constructorid == Update::CtorUpdateChannelMessageViews)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLInt(this->_views);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatAdmins)
+	else if(this->_constructorid == Update::CtorUpdateChatAdmins)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLBool(this->_is_enabled);
 		mtstream->writeTLInt(this->_version);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChatParticipantAdmin)
+	else if(this->_constructorid == Update::CtorUpdateChatParticipantAdmin)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLBool(this->_is_admin);
 		mtstream->writeTLInt(this->_version);
 	}
-	else if(this->_constructorid == Update::ctorUpdateNewStickerSet)
+	else if(this->_constructorid == Update::CtorUpdateNewStickerSet)
 	{
 		if(this->_stickerset != NULL)
 			this->_stickerset->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == Update::ctorUpdateStickerSetsOrder)
+	else if(this->_constructorid == Update::CtorUpdateStickerSetsOrder)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLVector(this->_order, false);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineQuery)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
@@ -1093,7 +1093,7 @@ void Update::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLString(this->_offset);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineSend)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineSend)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_user_id);
@@ -1115,7 +1115,7 @@ void Update::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == Update::ctorUpdateEditChannelMessage)
+	else if(this->_constructorid == Update::CtorUpdateEditChannelMessage)
 	{
 		if(this->_message != NULL)
 			this->_message->write(mtstream);
@@ -1125,12 +1125,12 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateChannelPinnedMessage)
+	else if(this->_constructorid == Update::CtorUpdateChannelPinnedMessage)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLInt(this->_id_updatechannelpinnedmessage);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotCallbackQuery)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
@@ -1148,7 +1148,7 @@ void Update::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			mtstream->writeTLString(this->_game_short_name);
 	}
-	else if(this->_constructorid == Update::ctorUpdateEditMessage)
+	else if(this->_constructorid == Update::CtorUpdateEditMessage)
 	{
 		if(this->_message != NULL)
 			this->_message->write(mtstream);
@@ -1158,7 +1158,7 @@ void Update::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_pts);
 		mtstream->writeTLInt(this->_pts_count);
 	}
-	else if(this->_constructorid == Update::ctorUpdateInlineBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateInlineBotCallbackQuery)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_query_id);
@@ -1175,12 +1175,12 @@ void Update::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			mtstream->writeTLString(this->_game_short_name);
 	}
-	else if(this->_constructorid == Update::ctorUpdateReadChannelOutbox)
+	else if(this->_constructorid == Update::CtorUpdateReadChannelOutbox)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLInt(this->_max_id);
 	}
-	else if(this->_constructorid == Update::ctorUpdateDraftMessage)
+	else if(this->_constructorid == Update::CtorUpdateDraftMessage)
 	{
 		if(this->_peer != NULL)
 			this->_peer->write(mtstream);
@@ -1198,36 +1198,36 @@ void Update::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Update::ctorUpdateChannelTooLong)
+	if(this->_constructorid == Update::CtorUpdateChannelTooLong)
 	{
 		if(this->_pts)
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == Update::ctorUpdateStickerSetsOrder)
+	else if(this->_constructorid == Update::CtorUpdateStickerSetsOrder)
 	{
 		if(this->_is_masks)
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineQuery)
 	{
 		if(this->_geo)
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotInlineSend)
+	else if(this->_constructorid == Update::CtorUpdateBotInlineSend)
 	{
 		if(this->_geo)
 			SET_FLAG_BIT(this->_flags, 0);
 		if(this->_msg_id_updatebotinlinesend)
 			SET_FLAG_BIT(this->_flags, 1);
 	}
-	else if(this->_constructorid == Update::ctorUpdateBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateBotCallbackQuery)
 	{
 		if(!this->_data.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);
 		if(!this->_game_short_name.isEmpty())
 			SET_FLAG_BIT(this->_flags, 1);
 	}
-	else if(this->_constructorid == Update::ctorUpdateInlineBotCallbackQuery)
+	else if(this->_constructorid == Update::CtorUpdateInlineBotCallbackQuery)
 	{
 		if(!this->_data.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);

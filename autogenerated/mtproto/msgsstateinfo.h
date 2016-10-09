@@ -18,7 +18,7 @@ class MsgsStateInfo: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMsgsStateInfo = 0x04deb57d,
+			CtorMsgsStateInfo = 0x04deb57d,
 		};
 
 	public:

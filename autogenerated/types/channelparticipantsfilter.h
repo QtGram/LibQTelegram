@@ -15,10 +15,10 @@ class ChannelParticipantsFilter: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChannelParticipantsRecent = 0xde3f3c79,
-			ctorChannelParticipantsAdmins = 0xb4608969,
-			ctorChannelParticipantsKicked = 0x3c37bb7a,
-			ctorChannelParticipantsBots = 0xb0d1865b,
+			CtorChannelParticipantsRecent = 0xde3f3c79,
+			CtorChannelParticipantsAdmins = 0xb4608969,
+			CtorChannelParticipantsKicked = 0x3c37bb7a,
+			CtorChannelParticipantsBots = 0xb0d1865b,
 		};
 
 	public:

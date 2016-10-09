@@ -20,8 +20,8 @@ class MessagesDhConfig: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesDhConfigNotModified = 0xc0e24635,
-			ctorMessagesDhConfig = 0x2c221edd,
+			CtorMessagesDhConfigNotModified = 0xc0e24635,
+			CtorMessagesDhConfig = 0x2c221edd,
 		};
 
 	public:

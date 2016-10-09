@@ -19,7 +19,7 @@ class FutureSalt: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorFutureSalt = 0x0949d9dc,
+			CtorFutureSalt = 0x0949d9dc,
 		};
 
 	public:

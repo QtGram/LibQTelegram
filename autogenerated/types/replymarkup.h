@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "keyboardbuttonrow.h"
+#include "../../types/basic.h"
 
 class ReplyMarkup: public TelegramObject
 {
@@ -22,10 +22,10 @@ class ReplyMarkup: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorReplyKeyboardHide = 0xa03e5b85,
-			ctorReplyKeyboardForceReply = 0xf4108aa0,
-			ctorReplyKeyboardMarkup = 0x3502758c,
-			ctorReplyInlineMarkup = 0x48a30254,
+			CtorReplyKeyboardHide = 0xa03e5b85,
+			CtorReplyKeyboardForceReply = 0xf4108aa0,
+			CtorReplyKeyboardMarkup = 0x3502758c,
+			CtorReplyInlineMarkup = 0x48a30254,
 		};
 
 	public:

@@ -14,10 +14,10 @@ void InputGeoPoint::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputGeoPoint::ctorInputGeoPointEmpty) ||
-		 (this->_constructorid == InputGeoPoint::ctorInputGeoPoint));
+	Q_ASSERT((this->_constructorid == InputGeoPoint::CtorInputGeoPointEmpty) ||
+		 (this->_constructorid == InputGeoPoint::CtorInputGeoPoint));
 	
-	if(this->_constructorid == InputGeoPoint::ctorInputGeoPoint)
+	if(this->_constructorid == InputGeoPoint::CtorInputGeoPoint)
 	{
 		this->_latitude = mtstream->readTLDouble();
 		this->_longitude = mtstream->readTLDouble();
@@ -26,13 +26,13 @@ void InputGeoPoint::read(MTProtoStream* mtstream)
 
 void InputGeoPoint::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputGeoPoint::ctorInputGeoPointEmpty) ||
-		 (this->_constructorid == InputGeoPoint::ctorInputGeoPoint));
+	Q_ASSERT((this->_constructorid == InputGeoPoint::CtorInputGeoPointEmpty) ||
+		 (this->_constructorid == InputGeoPoint::CtorInputGeoPoint));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputGeoPoint::ctorInputGeoPoint)
+	if(this->_constructorid == InputGeoPoint::CtorInputGeoPoint)
 	{
 		mtstream->writeTLDouble(this->_latitude);
 		mtstream->writeTLDouble(this->_longitude);

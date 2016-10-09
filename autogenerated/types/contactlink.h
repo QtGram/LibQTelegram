@@ -15,10 +15,10 @@ class ContactLink: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorContactLinkUnknown = 0x5f4f9247,
-			ctorContactLinkNone = 0xfeedd3ad,
-			ctorContactLinkHasPhone = 0x268f3f59,
-			ctorContactLinkContact = 0xd502c2d0,
+			CtorContactLinkUnknown = 0x5f4f9247,
+			CtorContactLinkNone = 0xfeedd3ad,
+			CtorContactLinkHasPhone = 0x268f3f59,
+			CtorContactLinkContact = 0xd502c2d0,
 		};
 
 	public:

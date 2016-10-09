@@ -6,9 +6,9 @@
 
 #include "inputgeopoint.h"
 #include "../../types/telegramobject.h"
+#include "replymarkup.h"
 #include "../../types/basic.h"
 #include "messageentity.h"
-#include "replymarkup.h"
 
 class InputBotInlineMessage: public TelegramObject
 {
@@ -33,12 +33,12 @@ class InputBotInlineMessage: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputBotInlineMessageMediaAuto = 0x292fed13,
-			ctorInputBotInlineMessageText = 0x3dcd7a87,
-			ctorInputBotInlineMessageMediaGeo = 0xf4a59de1,
-			ctorInputBotInlineMessageMediaVenue = 0xaaafadc8,
-			ctorInputBotInlineMessageMediaContact = 0x2daf01a7,
-			ctorInputBotInlineMessageGame = 0x4b425864,
+			CtorInputBotInlineMessageMediaAuto = 0x292fed13,
+			CtorInputBotInlineMessageText = 0x3dcd7a87,
+			CtorInputBotInlineMessageMediaGeo = 0xf4a59de1,
+			CtorInputBotInlineMessageMediaVenue = 0xaaafadc8,
+			CtorInputBotInlineMessageMediaContact = 0x2daf01a7,
+			CtorInputBotInlineMessageGame = 0x4b425864,
 		};
 
 	public:

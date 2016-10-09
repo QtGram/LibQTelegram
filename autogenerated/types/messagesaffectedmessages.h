@@ -18,7 +18,7 @@ class MessagesAffectedMessages: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesAffectedMessages = 0x84d19185,
+			CtorMessagesAffectedMessages = 0x84d19185,
 		};
 
 	public:

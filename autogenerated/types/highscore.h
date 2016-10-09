@@ -19,7 +19,7 @@ class HighScore: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHighScore = 0x58fffcd0,
+			CtorHighScore = 0x58fffcd0,
 		};
 
 	public:

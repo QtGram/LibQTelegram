@@ -18,22 +18,22 @@ void InputFileLocation::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputFileLocation::ctorInputFileLocation) ||
-		 (this->_constructorid == InputFileLocation::ctorInputEncryptedFileLocation) ||
-		 (this->_constructorid == InputFileLocation::ctorInputDocumentFileLocation));
+	Q_ASSERT((this->_constructorid == InputFileLocation::CtorInputFileLocation) ||
+		 (this->_constructorid == InputFileLocation::CtorInputEncryptedFileLocation) ||
+		 (this->_constructorid == InputFileLocation::CtorInputDocumentFileLocation));
 	
-	if(this->_constructorid == InputFileLocation::ctorInputFileLocation)
+	if(this->_constructorid == InputFileLocation::CtorInputFileLocation)
 	{
 		this->_volume_id = mtstream->readTLLong();
 		this->_local_id = mtstream->readTLInt();
 		this->_secret = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == InputFileLocation::ctorInputEncryptedFileLocation)
+	else if(this->_constructorid == InputFileLocation::CtorInputEncryptedFileLocation)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == InputFileLocation::ctorInputDocumentFileLocation)
+	else if(this->_constructorid == InputFileLocation::CtorInputDocumentFileLocation)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
@@ -43,25 +43,25 @@ void InputFileLocation::read(MTProtoStream* mtstream)
 
 void InputFileLocation::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputFileLocation::ctorInputFileLocation) ||
-		 (this->_constructorid == InputFileLocation::ctorInputEncryptedFileLocation) ||
-		 (this->_constructorid == InputFileLocation::ctorInputDocumentFileLocation));
+	Q_ASSERT((this->_constructorid == InputFileLocation::CtorInputFileLocation) ||
+		 (this->_constructorid == InputFileLocation::CtorInputEncryptedFileLocation) ||
+		 (this->_constructorid == InputFileLocation::CtorInputDocumentFileLocation));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputFileLocation::ctorInputFileLocation)
+	if(this->_constructorid == InputFileLocation::CtorInputFileLocation)
 	{
 		mtstream->writeTLLong(this->_volume_id);
 		mtstream->writeTLInt(this->_local_id);
 		mtstream->writeTLLong(this->_secret);
 	}
-	else if(this->_constructorid == InputFileLocation::ctorInputEncryptedFileLocation)
+	else if(this->_constructorid == InputFileLocation::CtorInputEncryptedFileLocation)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
 	}
-	else if(this->_constructorid == InputFileLocation::ctorInputDocumentFileLocation)
+	else if(this->_constructorid == InputFileLocation::CtorInputDocumentFileLocation)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);

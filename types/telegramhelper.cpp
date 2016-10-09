@@ -12,7 +12,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
              (updates->constructorId() == TLTypes::UpdateShortChatMessage));
 
     Message* message = new Message();
-    message->setConstructorId(Message::ctorMessage);
+    message->setConstructorId(Message::CtorMessage);
     message->setFlags(updates->flags());
     message->setIsOut(updates->isOut());
     message->setIsMentioned(updates->isMentioned());
@@ -29,7 +29,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     if(updates->constructorId() == TLTypes::UpdateShortMessage)
     {
         Peer* topeer = new Peer();
-        topeer->setConstructorId(Peer::ctorPeerUser);
+        topeer->setConstructorId(Peer::CtorPeerUser);
         topeer->setUserId(updates->isOut() ? updates->userId() : me->id());
 
         message->setFromId(updates->isOut() ? me->id() : updates->userId());
@@ -38,7 +38,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     else if(updates->constructorId() == TLTypes::UpdateShortChatMessage)
     {
         Peer* topeer = new Peer();
-        topeer->setConstructorId(Peer::ctorPeerChat);
+        topeer->setConstructorId(Peer::CtorPeerChat);
         topeer->setChatId(updates->chatId());
 
         message->setFromId(updates->fromId());

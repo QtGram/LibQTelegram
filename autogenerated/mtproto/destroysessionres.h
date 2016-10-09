@@ -17,8 +17,8 @@ class DestroySessionRes: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorDestroySessionOk = 0xe22045fc,
-			ctorDestroySessionNone = 0x62d350c9,
+			CtorDestroySessionOk = 0xe22045fc,
+			CtorDestroySessionNone = 0x62d350c9,
 		};
 
 	public:

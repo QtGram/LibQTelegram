@@ -12,14 +12,14 @@ void InputPrivacyKey::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp) ||
-		 (this->_constructorid == InputPrivacyKey::ctorInputPrivacyKeyChatInvite));
+	Q_ASSERT((this->_constructorid == InputPrivacyKey::CtorInputPrivacyKeyStatusTimestamp) ||
+		 (this->_constructorid == InputPrivacyKey::CtorInputPrivacyKeyChatInvite));
 }
 
 void InputPrivacyKey::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputPrivacyKey::ctorInputPrivacyKeyStatusTimestamp) ||
-		 (this->_constructorid == InputPrivacyKey::ctorInputPrivacyKeyChatInvite));
+	Q_ASSERT((this->_constructorid == InputPrivacyKey::CtorInputPrivacyKeyStatusTimestamp) ||
+		 (this->_constructorid == InputPrivacyKey::CtorInputPrivacyKeyChatInvite));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

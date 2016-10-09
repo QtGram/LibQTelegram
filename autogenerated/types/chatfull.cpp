@@ -29,10 +29,10 @@ void ChatFull::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChatFull::ctorChatFull) ||
-		 (this->_constructorid == ChatFull::ctorChannelFull));
+	Q_ASSERT((this->_constructorid == ChatFull::CtorChatFull) ||
+		 (this->_constructorid == ChatFull::CtorChannelFull));
 	
-	if(this->_constructorid == ChatFull::ctorChatFull)
+	if(this->_constructorid == ChatFull::CtorChatFull)
 	{
 		this->_id = mtstream->readTLInt();
 		TLInt participants_ctor = mtstream->peekTLConstructor();
@@ -89,7 +89,7 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		mtstream->readTLVector<BotInfo>(this->_bot_info, false);
 	}
-	else if(this->_constructorid == ChatFull::ctorChannelFull)
+	else if(this->_constructorid == ChatFull::CtorChannelFull)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_can_view_participants = IS_FLAG_SET(this->_flags, 3);
@@ -161,13 +161,13 @@ void ChatFull::read(MTProtoStream* mtstream)
 
 void ChatFull::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChatFull::ctorChatFull) ||
-		 (this->_constructorid == ChatFull::ctorChannelFull));
+	Q_ASSERT((this->_constructorid == ChatFull::CtorChatFull) ||
+		 (this->_constructorid == ChatFull::CtorChannelFull));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChatFull::ctorChatFull)
+	if(this->_constructorid == ChatFull::CtorChatFull)
 	{
 		mtstream->writeTLInt(this->_id);
 		if(this->_participants != NULL)
@@ -192,7 +192,7 @@ void ChatFull::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLVector(this->_bot_info, false);
 	}
-	else if(this->_constructorid == ChatFull::ctorChannelFull)
+	else if(this->_constructorid == ChatFull::CtorChannelFull)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -240,7 +240,7 @@ void ChatFull::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == ChatFull::ctorChannelFull)
+	if(this->_constructorid == ChatFull::CtorChannelFull)
 	{
 		if(this->_is_can_view_participants)
 			SET_FLAG_BIT(this->_flags, 3);

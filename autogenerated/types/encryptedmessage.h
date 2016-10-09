@@ -22,8 +22,8 @@ class EncryptedMessage: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorEncryptedMessage = 0xed18c118,
-			ctorEncryptedMessageService = 0x23734b06,
+			CtorEncryptedMessage = 0xed18c118,
+			CtorEncryptedMessageService = 0x23734b06,
 		};
 
 	public:

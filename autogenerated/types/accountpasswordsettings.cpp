@@ -6,27 +6,27 @@
 
 AccountPasswordSettings::AccountPasswordSettings(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = AccountPasswordSettings::ctorAccountPasswordSettings;
+	this->_constructorid = AccountPasswordSettings::CtorAccountPasswordSettings;
 }
 
 void AccountPasswordSettings::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountPasswordSettings::ctorAccountPasswordSettings));
+	Q_ASSERT((this->_constructorid == AccountPasswordSettings::CtorAccountPasswordSettings));
 	
-	if(this->_constructorid == AccountPasswordSettings::ctorAccountPasswordSettings)
+	if(this->_constructorid == AccountPasswordSettings::CtorAccountPasswordSettings)
 		this->_email = mtstream->readTLString();
 }
 
 void AccountPasswordSettings::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountPasswordSettings::ctorAccountPasswordSettings));
+	Q_ASSERT((this->_constructorid == AccountPasswordSettings::CtorAccountPasswordSettings));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountPasswordSettings::ctorAccountPasswordSettings)
+	if(this->_constructorid == AccountPasswordSettings::CtorAccountPasswordSettings)
 		mtstream->writeTLString(this->_email);
 }
 

@@ -19,8 +19,8 @@ class MessagesSentEncryptedMessage: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesSentEncryptedMessage = 0x560f8935,
-			ctorMessagesSentEncryptedFile = 0x9493ff32,
+			CtorMessagesSentEncryptedMessage = 0x560f8935,
+			CtorMessagesSentEncryptedFile = 0x9493ff32,
 		};
 
 	public:

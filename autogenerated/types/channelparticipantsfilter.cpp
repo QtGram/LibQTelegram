@@ -12,18 +12,18 @@ void ChannelParticipantsFilter::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsRecent) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsAdmins) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsKicked) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsBots));
+	Q_ASSERT((this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsRecent) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsAdmins) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsKicked) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsBots));
 }
 
 void ChannelParticipantsFilter::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsRecent) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsAdmins) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsKicked) ||
-		 (this->_constructorid == ChannelParticipantsFilter::ctorChannelParticipantsBots));
+	Q_ASSERT((this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsRecent) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsAdmins) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsKicked) ||
+		 (this->_constructorid == ChannelParticipantsFilter::CtorChannelParticipantsBots));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

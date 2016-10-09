@@ -22,7 +22,7 @@ class PQInnerData: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPQInnerData = 0x83c95aec,
+			CtorPQInnerData = 0x83c95aec,
 		};
 
 	public:

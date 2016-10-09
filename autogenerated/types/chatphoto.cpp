@@ -14,10 +14,10 @@ void ChatPhoto::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChatPhoto::ctorChatPhotoEmpty) ||
-		 (this->_constructorid == ChatPhoto::ctorChatPhoto));
+	Q_ASSERT((this->_constructorid == ChatPhoto::CtorChatPhotoEmpty) ||
+		 (this->_constructorid == ChatPhoto::CtorChatPhoto));
 	
-	if(this->_constructorid == ChatPhoto::ctorChatPhoto)
+	if(this->_constructorid == ChatPhoto::CtorChatPhoto)
 	{
 		TLInt photo_small_ctor = mtstream->peekTLConstructor();
 		
@@ -49,13 +49,13 @@ void ChatPhoto::read(MTProtoStream* mtstream)
 
 void ChatPhoto::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChatPhoto::ctorChatPhotoEmpty) ||
-		 (this->_constructorid == ChatPhoto::ctorChatPhoto));
+	Q_ASSERT((this->_constructorid == ChatPhoto::CtorChatPhotoEmpty) ||
+		 (this->_constructorid == ChatPhoto::CtorChatPhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChatPhoto::ctorChatPhoto)
+	if(this->_constructorid == ChatPhoto::CtorChatPhoto)
 	{
 		if(this->_photo_small != NULL)
 			this->_photo_small->write(mtstream);

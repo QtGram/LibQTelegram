@@ -6,27 +6,27 @@
 
 ExportedMessageLink::ExportedMessageLink(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = ExportedMessageLink::ctorExportedMessageLink;
+	this->_constructorid = ExportedMessageLink::CtorExportedMessageLink;
 }
 
 void ExportedMessageLink::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ExportedMessageLink::ctorExportedMessageLink));
+	Q_ASSERT((this->_constructorid == ExportedMessageLink::CtorExportedMessageLink));
 	
-	if(this->_constructorid == ExportedMessageLink::ctorExportedMessageLink)
+	if(this->_constructorid == ExportedMessageLink::CtorExportedMessageLink)
 		this->_link = mtstream->readTLString();
 }
 
 void ExportedMessageLink::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ExportedMessageLink::ctorExportedMessageLink));
+	Q_ASSERT((this->_constructorid == ExportedMessageLink::CtorExportedMessageLink));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ExportedMessageLink::ctorExportedMessageLink)
+	if(this->_constructorid == ExportedMessageLink::CtorExportedMessageLink)
 		mtstream->writeTLString(this->_link);
 }
 

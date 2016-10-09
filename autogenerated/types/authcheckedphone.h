@@ -17,7 +17,7 @@ class AuthCheckedPhone: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthCheckedPhone = 0x811ea28e,
+			CtorAuthCheckedPhone = 0x811ea28e,
 		};
 
 	public:

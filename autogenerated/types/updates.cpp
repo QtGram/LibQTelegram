@@ -31,15 +31,15 @@ void Updates::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Updates::ctorUpdatesTooLong) ||
-		 (this->_constructorid == Updates::ctorUpdateShortMessage) ||
-		 (this->_constructorid == Updates::ctorUpdateShortChatMessage) ||
-		 (this->_constructorid == Updates::ctorUpdateShort) ||
-		 (this->_constructorid == Updates::ctorUpdatesCombined) ||
-		 (this->_constructorid == Updates::ctorUpdates) ||
-		 (this->_constructorid == Updates::ctorUpdateShortSentMessage));
+	Q_ASSERT((this->_constructorid == Updates::CtorUpdatesTooLong) ||
+		 (this->_constructorid == Updates::CtorUpdateShortMessage) ||
+		 (this->_constructorid == Updates::CtorUpdateShortChatMessage) ||
+		 (this->_constructorid == Updates::CtorUpdateShort) ||
+		 (this->_constructorid == Updates::CtorUpdatesCombined) ||
+		 (this->_constructorid == Updates::CtorUpdates) ||
+		 (this->_constructorid == Updates::CtorUpdateShortSentMessage));
 	
-	if(this->_constructorid == Updates::ctorUpdateShortMessage)
+	if(this->_constructorid == Updates::CtorUpdateShortMessage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_out = IS_FLAG_SET(this->_flags, 1);
@@ -77,7 +77,7 @@ void Updates::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			mtstream->readTLVector<MessageEntity>(this->_entities, false);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortChatMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortChatMessage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_out = IS_FLAG_SET(this->_flags, 1);
@@ -116,7 +116,7 @@ void Updates::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			mtstream->readTLVector<MessageEntity>(this->_entities, false);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShort)
+	else if(this->_constructorid == Updates::CtorUpdateShort)
 	{
 		TLInt update_ctor = mtstream->peekTLConstructor();
 		
@@ -133,7 +133,7 @@ void Updates::read(MTProtoStream* mtstream)
 		
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Updates::ctorUpdatesCombined)
+	else if(this->_constructorid == Updates::CtorUpdatesCombined)
 	{
 		mtstream->readTLVector<Update>(this->_updates, false);
 		mtstream->readTLVector<User>(this->_users, false);
@@ -142,7 +142,7 @@ void Updates::read(MTProtoStream* mtstream)
 		this->_seq_start = mtstream->readTLInt();
 		this->_seq = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Updates::ctorUpdates)
+	else if(this->_constructorid == Updates::CtorUpdates)
 	{
 		mtstream->readTLVector<Update>(this->_updates, false);
 		mtstream->readTLVector<User>(this->_users, false);
@@ -150,7 +150,7 @@ void Updates::read(MTProtoStream* mtstream)
 		this->_date = mtstream->readTLInt();
 		this->_seq = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortSentMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortSentMessage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_out = IS_FLAG_SET(this->_flags, 1);
@@ -181,18 +181,18 @@ void Updates::read(MTProtoStream* mtstream)
 
 void Updates::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Updates::ctorUpdatesTooLong) ||
-		 (this->_constructorid == Updates::ctorUpdateShortMessage) ||
-		 (this->_constructorid == Updates::ctorUpdateShortChatMessage) ||
-		 (this->_constructorid == Updates::ctorUpdateShort) ||
-		 (this->_constructorid == Updates::ctorUpdatesCombined) ||
-		 (this->_constructorid == Updates::ctorUpdates) ||
-		 (this->_constructorid == Updates::ctorUpdateShortSentMessage));
+	Q_ASSERT((this->_constructorid == Updates::CtorUpdatesTooLong) ||
+		 (this->_constructorid == Updates::CtorUpdateShortMessage) ||
+		 (this->_constructorid == Updates::CtorUpdateShortChatMessage) ||
+		 (this->_constructorid == Updates::CtorUpdateShort) ||
+		 (this->_constructorid == Updates::CtorUpdatesCombined) ||
+		 (this->_constructorid == Updates::CtorUpdates) ||
+		 (this->_constructorid == Updates::CtorUpdateShortSentMessage));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Updates::ctorUpdateShortMessage)
+	if(this->_constructorid == Updates::CtorUpdateShortMessage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -218,7 +218,7 @@ void Updates::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			mtstream->writeTLVector(this->_entities, false);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortChatMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortChatMessage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -245,7 +245,7 @@ void Updates::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 7))
 			mtstream->writeTLVector(this->_entities, false);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShort)
+	else if(this->_constructorid == Updates::CtorUpdateShort)
 	{
 		if(this->_update != NULL)
 			this->_update->write(mtstream);
@@ -254,7 +254,7 @@ void Updates::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == Updates::ctorUpdatesCombined)
+	else if(this->_constructorid == Updates::CtorUpdatesCombined)
 	{
 		mtstream->writeTLVector(this->_updates, false);
 		mtstream->writeTLVector(this->_users, false);
@@ -263,7 +263,7 @@ void Updates::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_seq_start);
 		mtstream->writeTLInt(this->_seq);
 	}
-	else if(this->_constructorid == Updates::ctorUpdates)
+	else if(this->_constructorid == Updates::CtorUpdates)
 	{
 		mtstream->writeTLVector(this->_updates, false);
 		mtstream->writeTLVector(this->_users, false);
@@ -271,7 +271,7 @@ void Updates::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLInt(this->_seq);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortSentMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortSentMessage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -295,7 +295,7 @@ void Updates::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Updates::ctorUpdateShortMessage)
+	if(this->_constructorid == Updates::CtorUpdateShortMessage)
 	{
 		if(this->_is_out)
 			SET_FLAG_BIT(this->_flags, 1);
@@ -314,7 +314,7 @@ void Updates::compileFlags()
 		if(!this->_entities.isEmpty())
 			SET_FLAG_BIT(this->_flags, 7);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortChatMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortChatMessage)
 	{
 		if(this->_is_out)
 			SET_FLAG_BIT(this->_flags, 1);
@@ -333,7 +333,7 @@ void Updates::compileFlags()
 		if(!this->_entities.isEmpty())
 			SET_FLAG_BIT(this->_flags, 7);
 	}
-	else if(this->_constructorid == Updates::ctorUpdateShortSentMessage)
+	else if(this->_constructorid == Updates::CtorUpdateShortSentMessage)
 	{
 		if(this->_is_out)
 			SET_FLAG_BIT(this->_flags, 1);

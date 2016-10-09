@@ -17,7 +17,7 @@ class HelpTermsOfService: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHelpTermsOfService = 0xf1ee3e90,
+			CtorHelpTermsOfService = 0xf1ee3e90,
 		};
 
 	public:

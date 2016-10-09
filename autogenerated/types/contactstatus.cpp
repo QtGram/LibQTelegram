@@ -8,16 +8,16 @@ ContactStatus::ContactStatus(QObject* parent) : TelegramObject(parent)
 {
 	this->_user_id = 0;
 	this->_status = NULL;
-	this->_constructorid = ContactStatus::ctorContactStatus;
+	this->_constructorid = ContactStatus::CtorContactStatus;
 }
 
 void ContactStatus::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactStatus::ctorContactStatus));
+	Q_ASSERT((this->_constructorid == ContactStatus::CtorContactStatus));
 	
-	if(this->_constructorid == ContactStatus::ctorContactStatus)
+	if(this->_constructorid == ContactStatus::CtorContactStatus)
 	{
 		this->_user_id = mtstream->readTLInt();
 		TLInt status_ctor = mtstream->peekTLConstructor();
@@ -37,12 +37,12 @@ void ContactStatus::read(MTProtoStream* mtstream)
 
 void ContactStatus::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactStatus::ctorContactStatus));
+	Q_ASSERT((this->_constructorid == ContactStatus::CtorContactStatus));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactStatus::ctorContactStatus)
+	if(this->_constructorid == ContactStatus::CtorContactStatus)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		if(this->_status != NULL)

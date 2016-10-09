@@ -17,7 +17,7 @@ class MsgResendReq: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMsgResendReq = 0x7d861a08,
+			CtorMsgResendReq = 0x7d861a08,
 		};
 
 	public:

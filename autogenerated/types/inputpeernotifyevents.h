@@ -15,8 +15,8 @@ class InputPeerNotifyEvents: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPeerNotifyEventsEmpty = 0xf03064d8,
-			ctorInputPeerNotifyEventsAll = 0xe86a2c74,
+			CtorInputPeerNotifyEventsEmpty = 0xf03064d8,
+			CtorInputPeerNotifyEventsAll = 0xe86a2c74,
 		};
 
 	public:

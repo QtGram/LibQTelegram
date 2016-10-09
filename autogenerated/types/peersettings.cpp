@@ -8,16 +8,16 @@ PeerSettings::PeerSettings(QObject* parent) : TelegramObject(parent)
 {
 	this->_flags = 0;
 	this->_is_report_spam = false;
-	this->_constructorid = PeerSettings::ctorPeerSettings;
+	this->_constructorid = PeerSettings::CtorPeerSettings;
 }
 
 void PeerSettings::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PeerSettings::ctorPeerSettings));
+	Q_ASSERT((this->_constructorid == PeerSettings::CtorPeerSettings));
 	
-	if(this->_constructorid == PeerSettings::ctorPeerSettings)
+	if(this->_constructorid == PeerSettings::CtorPeerSettings)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_report_spam = IS_FLAG_SET(this->_flags, 0);
@@ -26,12 +26,12 @@ void PeerSettings::read(MTProtoStream* mtstream)
 
 void PeerSettings::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PeerSettings::ctorPeerSettings));
+	Q_ASSERT((this->_constructorid == PeerSettings::CtorPeerSettings));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PeerSettings::ctorPeerSettings)
+	if(this->_constructorid == PeerSettings::CtorPeerSettings)
 		mtstream->writeTLInt(this->_flags);
 }
 
@@ -39,7 +39,7 @@ void PeerSettings::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == PeerSettings::ctorPeerSettings)
+	if(this->_constructorid == PeerSettings::CtorPeerSettings)
 	{
 		if(this->_is_report_spam)
 			SET_FLAG_BIT(this->_flags, 0);

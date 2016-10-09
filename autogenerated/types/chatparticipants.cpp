@@ -16,10 +16,10 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChatParticipants::ctorChatParticipantsForbidden) ||
-		 (this->_constructorid == ChatParticipants::ctorChatParticipants));
+	Q_ASSERT((this->_constructorid == ChatParticipants::CtorChatParticipantsForbidden) ||
+		 (this->_constructorid == ChatParticipants::CtorChatParticipants));
 	
-	if(this->_constructorid == ChatParticipants::ctorChatParticipantsForbidden)
+	if(this->_constructorid == ChatParticipants::CtorChatParticipantsForbidden)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_chat_id = mtstream->readTLInt();
@@ -39,7 +39,7 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == ChatParticipants::ctorChatParticipants)
+	else if(this->_constructorid == ChatParticipants::CtorChatParticipants)
 	{
 		this->_chat_id = mtstream->readTLInt();
 		mtstream->readTLVector<ChatParticipant>(this->_participants, false);
@@ -49,13 +49,13 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 
 void ChatParticipants::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChatParticipants::ctorChatParticipantsForbidden) ||
-		 (this->_constructorid == ChatParticipants::ctorChatParticipants));
+	Q_ASSERT((this->_constructorid == ChatParticipants::CtorChatParticipantsForbidden) ||
+		 (this->_constructorid == ChatParticipants::CtorChatParticipants));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChatParticipants::ctorChatParticipantsForbidden)
+	if(this->_constructorid == ChatParticipants::CtorChatParticipantsForbidden)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_chat_id);
@@ -67,7 +67,7 @@ void ChatParticipants::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == ChatParticipants::ctorChatParticipants)
+	else if(this->_constructorid == ChatParticipants::CtorChatParticipants)
 	{
 		mtstream->writeTLInt(this->_chat_id);
 		mtstream->writeTLVector(this->_participants, false);
@@ -79,7 +79,7 @@ void ChatParticipants::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == ChatParticipants::ctorChatParticipantsForbidden)
+	if(this->_constructorid == ChatParticipants::CtorChatParticipantsForbidden)
 	{
 		if(this->_self_participant)
 			SET_FLAG_BIT(this->_flags, 0);

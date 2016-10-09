@@ -16,10 +16,10 @@ void DraftMessage::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == DraftMessage::ctorDraftMessageEmpty) ||
-		 (this->_constructorid == DraftMessage::ctorDraftMessage));
+	Q_ASSERT((this->_constructorid == DraftMessage::CtorDraftMessageEmpty) ||
+		 (this->_constructorid == DraftMessage::CtorDraftMessage));
 	
-	if(this->_constructorid == DraftMessage::ctorDraftMessage)
+	if(this->_constructorid == DraftMessage::CtorDraftMessage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_no_webpage = IS_FLAG_SET(this->_flags, 1);
@@ -36,13 +36,13 @@ void DraftMessage::read(MTProtoStream* mtstream)
 
 void DraftMessage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == DraftMessage::ctorDraftMessageEmpty) ||
-		 (this->_constructorid == DraftMessage::ctorDraftMessage));
+	Q_ASSERT((this->_constructorid == DraftMessage::CtorDraftMessageEmpty) ||
+		 (this->_constructorid == DraftMessage::CtorDraftMessage));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == DraftMessage::ctorDraftMessage)
+	if(this->_constructorid == DraftMessage::CtorDraftMessage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(IS_FLAG_SET(this->_flags, 0))
@@ -60,7 +60,7 @@ void DraftMessage::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == DraftMessage::ctorDraftMessage)
+	if(this->_constructorid == DraftMessage::CtorDraftMessage)
 	{
 		if(this->_is_no_webpage)
 			SET_FLAG_BIT(this->_flags, 1);

@@ -15,10 +15,10 @@ void UserProfilePhoto::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UserProfilePhoto::ctorUserProfilePhotoEmpty) ||
-		 (this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto));
+	Q_ASSERT((this->_constructorid == UserProfilePhoto::CtorUserProfilePhotoEmpty) ||
+		 (this->_constructorid == UserProfilePhoto::CtorUserProfilePhoto));
 	
-	if(this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto)
+	if(this->_constructorid == UserProfilePhoto::CtorUserProfilePhoto)
 	{
 		this->_photo_id = mtstream->readTLLong();
 		TLInt photo_small_ctor = mtstream->peekTLConstructor();
@@ -51,13 +51,13 @@ void UserProfilePhoto::read(MTProtoStream* mtstream)
 
 void UserProfilePhoto::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UserProfilePhoto::ctorUserProfilePhotoEmpty) ||
-		 (this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto));
+	Q_ASSERT((this->_constructorid == UserProfilePhoto::CtorUserProfilePhotoEmpty) ||
+		 (this->_constructorid == UserProfilePhoto::CtorUserProfilePhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UserProfilePhoto::ctorUserProfilePhoto)
+	if(this->_constructorid == UserProfilePhoto::CtorUserProfilePhoto)
 	{
 		mtstream->writeTLLong(this->_photo_id);
 		if(this->_photo_small != NULL)

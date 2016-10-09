@@ -18,7 +18,7 @@ class Error: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorError = 0xc4b9f9bb,
+			CtorError = 0xc4b9f9bb,
 		};
 
 	public:

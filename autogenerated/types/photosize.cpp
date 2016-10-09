@@ -16,13 +16,13 @@ void PhotoSize::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PhotoSize::ctorPhotoSizeEmpty) ||
-		 (this->_constructorid == PhotoSize::ctorPhotoSize) ||
-		 (this->_constructorid == PhotoSize::ctorPhotoCachedSize));
+	Q_ASSERT((this->_constructorid == PhotoSize::CtorPhotoSizeEmpty) ||
+		 (this->_constructorid == PhotoSize::CtorPhotoSize) ||
+		 (this->_constructorid == PhotoSize::CtorPhotoCachedSize));
 	
-	if(this->_constructorid == PhotoSize::ctorPhotoSizeEmpty)
+	if(this->_constructorid == PhotoSize::CtorPhotoSizeEmpty)
 		this->_type = mtstream->readTLString();
-	else if(this->_constructorid == PhotoSize::ctorPhotoSize)
+	else if(this->_constructorid == PhotoSize::CtorPhotoSize)
 	{
 		this->_type = mtstream->readTLString();
 		TLInt location_ctor = mtstream->peekTLConstructor();
@@ -42,7 +42,7 @@ void PhotoSize::read(MTProtoStream* mtstream)
 		this->_h = mtstream->readTLInt();
 		this->_size = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == PhotoSize::ctorPhotoCachedSize)
+	else if(this->_constructorid == PhotoSize::CtorPhotoCachedSize)
 	{
 		this->_type = mtstream->readTLString();
 		TLInt location_ctor = mtstream->peekTLConstructor();
@@ -66,16 +66,16 @@ void PhotoSize::read(MTProtoStream* mtstream)
 
 void PhotoSize::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PhotoSize::ctorPhotoSizeEmpty) ||
-		 (this->_constructorid == PhotoSize::ctorPhotoSize) ||
-		 (this->_constructorid == PhotoSize::ctorPhotoCachedSize));
+	Q_ASSERT((this->_constructorid == PhotoSize::CtorPhotoSizeEmpty) ||
+		 (this->_constructorid == PhotoSize::CtorPhotoSize) ||
+		 (this->_constructorid == PhotoSize::CtorPhotoCachedSize));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PhotoSize::ctorPhotoSizeEmpty)
+	if(this->_constructorid == PhotoSize::CtorPhotoSizeEmpty)
 		mtstream->writeTLString(this->_type);
-	else if(this->_constructorid == PhotoSize::ctorPhotoSize)
+	else if(this->_constructorid == PhotoSize::CtorPhotoSize)
 	{
 		mtstream->writeTLString(this->_type);
 		if(this->_location != NULL)
@@ -87,7 +87,7 @@ void PhotoSize::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt(this->_h);
 		mtstream->writeTLInt(this->_size);
 	}
-	else if(this->_constructorid == PhotoSize::ctorPhotoCachedSize)
+	else if(this->_constructorid == PhotoSize::CtorPhotoCachedSize)
 	{
 		mtstream->writeTLString(this->_type);
 		if(this->_location != NULL)

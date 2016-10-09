@@ -28,16 +28,16 @@ Config::Config(QObject* parent) : TelegramObject(parent)
 	this->_rating_e_decay = 0;
 	this->_stickers_recent_limit = 0;
 	this->_tmp_sessions = 0;
-	this->_constructorid = Config::ctorConfig;
+	this->_constructorid = Config::CtorConfig;
 }
 
 void Config::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Config::ctorConfig));
+	Q_ASSERT((this->_constructorid == Config::CtorConfig));
 	
-	if(this->_constructorid == Config::ctorConfig)
+	if(this->_constructorid == Config::CtorConfig)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
@@ -70,12 +70,12 @@ void Config::read(MTProtoStream* mtstream)
 
 void Config::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Config::ctorConfig));
+	Q_ASSERT((this->_constructorid == Config::CtorConfig));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Config::ctorConfig)
+	if(this->_constructorid == Config::CtorConfig)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_date);
@@ -110,7 +110,7 @@ void Config::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Config::ctorConfig)
+	if(this->_constructorid == Config::CtorConfig)
 	{
 		if(this->_tmp_sessions)
 			SET_FLAG_BIT(this->_flags, 0);

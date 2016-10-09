@@ -19,9 +19,9 @@ class InputStickerSet: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputStickerSetEmpty = 0xffb62b95,
-			ctorInputStickerSetID = 0x9de7a269,
-			ctorInputStickerSetShortName = 0x861cc8a0,
+			CtorInputStickerSetEmpty = 0xffb62b95,
+			CtorInputStickerSetID = 0x9de7a269,
+			CtorInputStickerSetShortName = 0x861cc8a0,
 		};
 
 	public:

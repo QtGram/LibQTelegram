@@ -13,15 +13,15 @@ void AccountPassword::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountPassword::ctorAccountNoPassword) ||
-		 (this->_constructorid == AccountPassword::ctorAccountPassword));
+	Q_ASSERT((this->_constructorid == AccountPassword::CtorAccountNoPassword) ||
+		 (this->_constructorid == AccountPassword::CtorAccountPassword));
 	
-	if(this->_constructorid == AccountPassword::ctorAccountNoPassword)
+	if(this->_constructorid == AccountPassword::CtorAccountNoPassword)
 	{
 		this->_new_salt = mtstream->readTLBytes();
 		this->_email_unconfirmed_pattern = mtstream->readTLString();
 	}
-	else if(this->_constructorid == AccountPassword::ctorAccountPassword)
+	else if(this->_constructorid == AccountPassword::CtorAccountPassword)
 	{
 		this->_current_salt = mtstream->readTLBytes();
 		this->_new_salt = mtstream->readTLBytes();
@@ -33,18 +33,18 @@ void AccountPassword::read(MTProtoStream* mtstream)
 
 void AccountPassword::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountPassword::ctorAccountNoPassword) ||
-		 (this->_constructorid == AccountPassword::ctorAccountPassword));
+	Q_ASSERT((this->_constructorid == AccountPassword::CtorAccountNoPassword) ||
+		 (this->_constructorid == AccountPassword::CtorAccountPassword));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountPassword::ctorAccountNoPassword)
+	if(this->_constructorid == AccountPassword::CtorAccountNoPassword)
 	{
 		mtstream->writeTLBytes(this->_new_salt);
 		mtstream->writeTLString(this->_email_unconfirmed_pattern);
 	}
-	else if(this->_constructorid == AccountPassword::ctorAccountPassword)
+	else if(this->_constructorid == AccountPassword::CtorAccountPassword)
 	{
 		mtstream->writeTLBytes(this->_current_salt);
 		mtstream->writeTLBytes(this->_new_salt);

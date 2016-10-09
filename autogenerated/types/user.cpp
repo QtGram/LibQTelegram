@@ -29,12 +29,12 @@ void User::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == User::ctorUserEmpty) ||
-		 (this->_constructorid == User::ctorUser));
+	Q_ASSERT((this->_constructorid == User::CtorUserEmpty) ||
+		 (this->_constructorid == User::CtorUser));
 	
-	if(this->_constructorid == User::ctorUserEmpty)
+	if(this->_constructorid == User::CtorUserEmpty)
 		this->_id = mtstream->readTLInt();
-	else if(this->_constructorid == User::ctorUser)
+	else if(this->_constructorid == User::CtorUser)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_self = IS_FLAG_SET(this->_flags, 10);
@@ -109,15 +109,15 @@ void User::read(MTProtoStream* mtstream)
 
 void User::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == User::ctorUserEmpty) ||
-		 (this->_constructorid == User::ctorUser));
+	Q_ASSERT((this->_constructorid == User::CtorUserEmpty) ||
+		 (this->_constructorid == User::CtorUser));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == User::ctorUserEmpty)
+	if(this->_constructorid == User::CtorUserEmpty)
 		mtstream->writeTLInt(this->_id);
-	else if(this->_constructorid == User::ctorUser)
+	else if(this->_constructorid == User::CtorUser)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -167,7 +167,7 @@ void User::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == User::ctorUser)
+	if(this->_constructorid == User::CtorUser)
 	{
 		if(this->_is_self)
 			SET_FLAG_BIT(this->_flags, 10);

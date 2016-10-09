@@ -17,7 +17,7 @@ class MsgsAck: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMsgsAck = 0x62d6b459,
+			CtorMsgsAck = 0x62d6b459,
 		};
 
 	public:

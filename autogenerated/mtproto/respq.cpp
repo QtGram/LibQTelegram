@@ -6,16 +6,16 @@
 
 ResPQ::ResPQ(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = ResPQ::ctorResPQ;
+	this->_constructorid = ResPQ::CtorResPQ;
 }
 
 void ResPQ::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ResPQ::ctorResPQ));
+	Q_ASSERT((this->_constructorid == ResPQ::CtorResPQ));
 	
-	if(this->_constructorid == ResPQ::ctorResPQ)
+	if(this->_constructorid == ResPQ::CtorResPQ)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
@@ -26,12 +26,12 @@ void ResPQ::read(MTProtoStream* mtstream)
 
 void ResPQ::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ResPQ::ctorResPQ));
+	Q_ASSERT((this->_constructorid == ResPQ::CtorResPQ));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ResPQ::ctorResPQ)
+	if(this->_constructorid == ResPQ::CtorResPQ)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);

@@ -8,16 +8,16 @@ ReceivedNotifyMessage::ReceivedNotifyMessage(QObject* parent) : TelegramObject(p
 {
 	this->_id = 0;
 	this->_flags = 0;
-	this->_constructorid = ReceivedNotifyMessage::ctorReceivedNotifyMessage;
+	this->_constructorid = ReceivedNotifyMessage::CtorReceivedNotifyMessage;
 }
 
 void ReceivedNotifyMessage::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ReceivedNotifyMessage::ctorReceivedNotifyMessage));
+	Q_ASSERT((this->_constructorid == ReceivedNotifyMessage::CtorReceivedNotifyMessage));
 	
-	if(this->_constructorid == ReceivedNotifyMessage::ctorReceivedNotifyMessage)
+	if(this->_constructorid == ReceivedNotifyMessage::CtorReceivedNotifyMessage)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_flags = mtstream->readTLInt();
@@ -26,12 +26,12 @@ void ReceivedNotifyMessage::read(MTProtoStream* mtstream)
 
 void ReceivedNotifyMessage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ReceivedNotifyMessage::ctorReceivedNotifyMessage));
+	Q_ASSERT((this->_constructorid == ReceivedNotifyMessage::CtorReceivedNotifyMessage));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ReceivedNotifyMessage::ctorReceivedNotifyMessage)
+	if(this->_constructorid == ReceivedNotifyMessage::CtorReceivedNotifyMessage)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLInt(this->_flags);

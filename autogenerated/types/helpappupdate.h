@@ -20,8 +20,8 @@ class HelpAppUpdate: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHelpAppUpdate = 0x8987f311,
-			ctorHelpNoAppUpdate = 0xc45a6536,
+			CtorHelpAppUpdate = 0x8987f311,
+			CtorHelpNoAppUpdate = 0xc45a6536,
 		};
 
 	public:

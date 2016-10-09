@@ -6,27 +6,27 @@
 
 HelpInviteText::HelpInviteText(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = HelpInviteText::ctorHelpInviteText;
+	this->_constructorid = HelpInviteText::CtorHelpInviteText;
 }
 
 void HelpInviteText::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HelpInviteText::ctorHelpInviteText));
+	Q_ASSERT((this->_constructorid == HelpInviteText::CtorHelpInviteText));
 	
-	if(this->_constructorid == HelpInviteText::ctorHelpInviteText)
+	if(this->_constructorid == HelpInviteText::CtorHelpInviteText)
 		this->_message = mtstream->readTLString();
 }
 
 void HelpInviteText::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HelpInviteText::ctorHelpInviteText));
+	Q_ASSERT((this->_constructorid == HelpInviteText::CtorHelpInviteText));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HelpInviteText::ctorHelpInviteText)
+	if(this->_constructorid == HelpInviteText::CtorHelpInviteText)
 		mtstream->writeTLString(this->_message);
 }
 

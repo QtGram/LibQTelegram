@@ -14,10 +14,10 @@ void HelpAppUpdate::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HelpAppUpdate::ctorHelpAppUpdate) ||
-		 (this->_constructorid == HelpAppUpdate::ctorHelpNoAppUpdate));
+	Q_ASSERT((this->_constructorid == HelpAppUpdate::CtorHelpAppUpdate) ||
+		 (this->_constructorid == HelpAppUpdate::CtorHelpNoAppUpdate));
 	
-	if(this->_constructorid == HelpAppUpdate::ctorHelpAppUpdate)
+	if(this->_constructorid == HelpAppUpdate::CtorHelpAppUpdate)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_is_critical = mtstream->readTLBool();
@@ -28,13 +28,13 @@ void HelpAppUpdate::read(MTProtoStream* mtstream)
 
 void HelpAppUpdate::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HelpAppUpdate::ctorHelpAppUpdate) ||
-		 (this->_constructorid == HelpAppUpdate::ctorHelpNoAppUpdate));
+	Q_ASSERT((this->_constructorid == HelpAppUpdate::CtorHelpAppUpdate) ||
+		 (this->_constructorid == HelpAppUpdate::CtorHelpNoAppUpdate));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HelpAppUpdate::ctorHelpAppUpdate)
+	if(this->_constructorid == HelpAppUpdate::CtorHelpAppUpdate)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLBool(this->_is_critical);

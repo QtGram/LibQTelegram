@@ -12,16 +12,16 @@ void ChannelParticipantRole::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelParticipantRole::ctorChannelRoleEmpty) ||
-		 (this->_constructorid == ChannelParticipantRole::ctorChannelRoleModerator) ||
-		 (this->_constructorid == ChannelParticipantRole::ctorChannelRoleEditor));
+	Q_ASSERT((this->_constructorid == ChannelParticipantRole::CtorChannelRoleEmpty) ||
+		 (this->_constructorid == ChannelParticipantRole::CtorChannelRoleModerator) ||
+		 (this->_constructorid == ChannelParticipantRole::CtorChannelRoleEditor));
 }
 
 void ChannelParticipantRole::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelParticipantRole::ctorChannelRoleEmpty) ||
-		 (this->_constructorid == ChannelParticipantRole::ctorChannelRoleModerator) ||
-		 (this->_constructorid == ChannelParticipantRole::ctorChannelRoleEditor));
+	Q_ASSERT((this->_constructorid == ChannelParticipantRole::CtorChannelRoleEmpty) ||
+		 (this->_constructorid == ChannelParticipantRole::CtorChannelRoleModerator) ||
+		 (this->_constructorid == ChannelParticipantRole::CtorChannelRoleEditor));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

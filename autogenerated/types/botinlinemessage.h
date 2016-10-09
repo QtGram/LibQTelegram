@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
+#include "replymarkup.h"
 #include "../../types/basic.h"
 #include "messageentity.h"
 #include "geopoint.h"
-#include "replymarkup.h"
 
 class BotInlineMessage: public TelegramObject
 {
@@ -33,11 +33,11 @@ class BotInlineMessage: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorBotInlineMessageMediaAuto = 0xa74b15b,
-			ctorBotInlineMessageText = 0x8c7f65e2,
-			ctorBotInlineMessageMediaGeo = 0x3a8fd8b8,
-			ctorBotInlineMessageMediaVenue = 0x4366232e,
-			ctorBotInlineMessageMediaContact = 0x35edb4d4,
+			CtorBotInlineMessageMediaAuto = 0xa74b15b,
+			CtorBotInlineMessageText = 0x8c7f65e2,
+			CtorBotInlineMessageMediaGeo = 0x3a8fd8b8,
+			CtorBotInlineMessageMediaVenue = 0x4366232e,
+			CtorBotInlineMessageMediaContact = 0x35edb4d4,
 		};
 
 	public:

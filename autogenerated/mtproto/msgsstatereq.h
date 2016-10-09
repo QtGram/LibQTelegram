@@ -17,7 +17,7 @@ class MsgsStateReq: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMsgsStateReq = 0xda69fb52,
+			CtorMsgsStateReq = 0xda69fb52,
 		};
 
 	public:

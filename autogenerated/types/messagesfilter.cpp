@@ -12,32 +12,32 @@ void MessagesFilter::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesFilter::ctorInputMessagesFilterEmpty) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotos) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterVideo) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotoVideo) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterDocument) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterUrl) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterGif) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterVoice) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterMusic) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterChatPhotos));
+	Q_ASSERT((this->_constructorid == MessagesFilter::CtorInputMessagesFilterEmpty) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotos) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterVideo) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotoVideo) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotoVideoDocuments) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterDocument) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterUrl) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterGif) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterVoice) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterMusic) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterChatPhotos));
 }
 
 void MessagesFilter::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesFilter::ctorInputMessagesFilterEmpty) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotos) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterVideo) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotoVideo) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterPhotoVideoDocuments) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterDocument) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterUrl) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterGif) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterVoice) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterMusic) ||
-		 (this->_constructorid == MessagesFilter::ctorInputMessagesFilterChatPhotos));
+	Q_ASSERT((this->_constructorid == MessagesFilter::CtorInputMessagesFilterEmpty) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotos) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterVideo) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotoVideo) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterPhotoVideoDocuments) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterDocument) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterUrl) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterGif) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterVoice) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterMusic) ||
+		 (this->_constructorid == MessagesFilter::CtorInputMessagesFilterChatPhotos));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

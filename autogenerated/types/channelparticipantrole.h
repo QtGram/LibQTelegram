@@ -15,9 +15,9 @@ class ChannelParticipantRole: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChannelRoleEmpty = 0xb285a0c6,
-			ctorChannelRoleModerator = 0x9618d975,
-			ctorChannelRoleEditor = 0x820bfe8c,
+			CtorChannelRoleEmpty = 0xb285a0c6,
+			CtorChannelRoleModerator = 0x9618d975,
+			CtorChannelRoleEditor = 0x820bfe8c,
 		};
 
 	public:

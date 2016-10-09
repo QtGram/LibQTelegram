@@ -17,7 +17,7 @@ class AccountDaysTTL: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAccountDaysTTL = 0xb8d0afdf,
+			CtorAccountDaysTTL = 0xb8d0afdf,
 		};
 
 	public:

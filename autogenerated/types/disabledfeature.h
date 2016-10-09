@@ -18,7 +18,7 @@ class DisabledFeature: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorDisabledFeature = 0xae636f24,
+			CtorDisabledFeature = 0xae636f24,
 		};
 
 	public:

@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "channelparticipant.h"
 #include "user.h"
+#include "../../types/basic.h"
 
 class ChannelsChannelParticipant: public TelegramObject
 {
@@ -20,7 +20,7 @@ class ChannelsChannelParticipant: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChannelsChannelParticipant = 0xd0d9b163,
+			CtorChannelsChannelParticipant = 0xd0d9b163,
 		};
 
 	public:

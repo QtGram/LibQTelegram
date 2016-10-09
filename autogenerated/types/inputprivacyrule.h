@@ -18,12 +18,12 @@ class InputPrivacyRule: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPrivacyValueAllowContacts = 0xd09e07b,
-			ctorInputPrivacyValueAllowAll = 0x184b35ce,
-			ctorInputPrivacyValueAllowUsers = 0x131cc67f,
-			ctorInputPrivacyValueDisallowContacts = 0xba52007,
-			ctorInputPrivacyValueDisallowAll = 0xd66b66c9,
-			ctorInputPrivacyValueDisallowUsers = 0x90110467,
+			CtorInputPrivacyValueAllowContacts = 0xd09e07b,
+			CtorInputPrivacyValueAllowAll = 0x184b35ce,
+			CtorInputPrivacyValueAllowUsers = 0x131cc67f,
+			CtorInputPrivacyValueDisallowContacts = 0xba52007,
+			CtorInputPrivacyValueDisallowAll = 0xd66b66c9,
+			CtorInputPrivacyValueDisallowUsers = 0x90110467,
 		};
 
 	public:

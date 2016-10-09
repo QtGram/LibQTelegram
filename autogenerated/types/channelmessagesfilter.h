@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "messagerange.h"
+#include "../../types/basic.h"
 
 class ChannelMessagesFilter: public TelegramObject
 {
@@ -20,8 +20,8 @@ class ChannelMessagesFilter: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorChannelMessagesFilterEmpty = 0x94d42ee7,
-			ctorChannelMessagesFilter = 0xcd77d957,
+			CtorChannelMessagesFilterEmpty = 0x94d42ee7,
+			CtorChannelMessagesFilter = 0xcd77d957,
 		};
 
 	public:

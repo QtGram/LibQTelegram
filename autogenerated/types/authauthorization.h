@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "user.h"
+#include "../../types/basic.h"
 
 class AuthAuthorization: public TelegramObject
 {
@@ -20,7 +20,7 @@ class AuthAuthorization: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthAuthorization = 0xcd050916,
+			CtorAuthAuthorization = 0xcd050916,
 		};
 
 	public:

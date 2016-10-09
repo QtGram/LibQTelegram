@@ -13,38 +13,38 @@ void AuthSentCodeType::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeApp) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeSms) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeCall) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall));
+	Q_ASSERT((this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeApp) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeSms) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeCall) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeFlashCall));
 	
-	if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeApp)
+	if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeApp)
 		this->_length = mtstream->readTLInt();
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeSms)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeSms)
 		this->_length = mtstream->readTLInt();
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeCall)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeCall)
 		this->_length = mtstream->readTLInt();
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeFlashCall)
 		this->_pattern = mtstream->readTLString();
 }
 
 void AuthSentCodeType::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeApp) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeSms) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeCall) ||
-		 (this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall));
+	Q_ASSERT((this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeApp) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeSms) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeCall) ||
+		 (this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeFlashCall));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeApp)
+	if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeApp)
 		mtstream->writeTLInt(this->_length);
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeSms)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeSms)
 		mtstream->writeTLInt(this->_length);
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeCall)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeCall)
 		mtstream->writeTLInt(this->_length);
-	else if(this->_constructorid == AuthSentCodeType::ctorAuthSentCodeTypeFlashCall)
+	else if(this->_constructorid == AuthSentCodeType::CtorAuthSentCodeTypeFlashCall)
 		mtstream->writeTLString(this->_pattern);
 }
 

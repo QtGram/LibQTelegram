@@ -26,9 +26,9 @@
 #include "newsession.h"
 #include "httpwait.h"
 #include "../../types/mtproto/rpcresult.h"
-#include "../../types/mtproto/messagecontainer.h"
-#include "../../types/mtproto/messagecopy.h"
 #include "../../types/mtproto/mtprotoobject.h"
+#include "../../types/mtproto/messagecopy.h"
 #include "../../types/mtproto/mtprotomessage.h"
+#include "../../types/mtproto/messagecontainer.h"
 
 #endif // MTPROTO_H

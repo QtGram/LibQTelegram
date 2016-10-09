@@ -22,7 +22,7 @@ class ServerDHInnerData: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorServerDHInnerData = 0xb5890dba,
+			CtorServerDHInnerData = 0xb5890dba,
 		};
 
 	public:

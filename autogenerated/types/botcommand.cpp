@@ -6,16 +6,16 @@
 
 BotCommand::BotCommand(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = BotCommand::ctorBotCommand;
+	this->_constructorid = BotCommand::CtorBotCommand;
 }
 
 void BotCommand::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == BotCommand::ctorBotCommand));
+	Q_ASSERT((this->_constructorid == BotCommand::CtorBotCommand));
 	
-	if(this->_constructorid == BotCommand::ctorBotCommand)
+	if(this->_constructorid == BotCommand::CtorBotCommand)
 	{
 		this->_command = mtstream->readTLString();
 		this->_description = mtstream->readTLString();
@@ -24,12 +24,12 @@ void BotCommand::read(MTProtoStream* mtstream)
 
 void BotCommand::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == BotCommand::ctorBotCommand));
+	Q_ASSERT((this->_constructorid == BotCommand::CtorBotCommand));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == BotCommand::ctorBotCommand)
+	if(this->_constructorid == BotCommand::CtorBotCommand)
 	{
 		mtstream->writeTLString(this->_command);
 		mtstream->writeTLString(this->_description);

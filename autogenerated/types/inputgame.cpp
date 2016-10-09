@@ -15,15 +15,15 @@ void InputGame::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputGame::ctorInputGameID) ||
-		 (this->_constructorid == InputGame::ctorInputGameShortName));
+	Q_ASSERT((this->_constructorid == InputGame::CtorInputGameID) ||
+		 (this->_constructorid == InputGame::CtorInputGameShortName));
 	
-	if(this->_constructorid == InputGame::ctorInputGameID)
+	if(this->_constructorid == InputGame::CtorInputGameID)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
 	}
-	else if(this->_constructorid == InputGame::ctorInputGameShortName)
+	else if(this->_constructorid == InputGame::CtorInputGameShortName)
 	{
 		TLInt bot_id_ctor = mtstream->peekTLConstructor();
 		
@@ -44,18 +44,18 @@ void InputGame::read(MTProtoStream* mtstream)
 
 void InputGame::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputGame::ctorInputGameID) ||
-		 (this->_constructorid == InputGame::ctorInputGameShortName));
+	Q_ASSERT((this->_constructorid == InputGame::CtorInputGameID) ||
+		 (this->_constructorid == InputGame::CtorInputGameShortName));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputGame::ctorInputGameID)
+	if(this->_constructorid == InputGame::CtorInputGameID)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLLong(this->_access_hash);
 	}
-	else if(this->_constructorid == InputGame::ctorInputGameShortName)
+	else if(this->_constructorid == InputGame::CtorInputGameShortName)
 	{
 		if(this->_bot_id != NULL)
 			this->_bot_id->write(mtstream);

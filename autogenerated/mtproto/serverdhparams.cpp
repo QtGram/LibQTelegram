@@ -13,16 +13,16 @@ void ServerDHParams::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ServerDHParams::ctorServerDHParamsFail) ||
-		 (this->_constructorid == ServerDHParams::ctorServerDHParamsOk));
+	Q_ASSERT((this->_constructorid == ServerDHParams::CtorServerDHParamsFail) ||
+		 (this->_constructorid == ServerDHParams::CtorServerDHParamsOk));
 	
-	if(this->_constructorid == ServerDHParams::ctorServerDHParamsFail)
+	if(this->_constructorid == ServerDHParams::CtorServerDHParamsFail)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_new_nonce_hash = mtstream->readTLInt128();
 	}
-	else if(this->_constructorid == ServerDHParams::ctorServerDHParamsOk)
+	else if(this->_constructorid == ServerDHParams::CtorServerDHParamsOk)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
@@ -32,19 +32,19 @@ void ServerDHParams::read(MTProtoStream* mtstream)
 
 void ServerDHParams::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ServerDHParams::ctorServerDHParamsFail) ||
-		 (this->_constructorid == ServerDHParams::ctorServerDHParamsOk));
+	Q_ASSERT((this->_constructorid == ServerDHParams::CtorServerDHParamsFail) ||
+		 (this->_constructorid == ServerDHParams::CtorServerDHParamsOk));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ServerDHParams::ctorServerDHParamsFail)
+	if(this->_constructorid == ServerDHParams::CtorServerDHParamsFail)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLInt128(this->_new_nonce_hash);
 	}
-	else if(this->_constructorid == ServerDHParams::ctorServerDHParamsOk)
+	else if(this->_constructorid == ServerDHParams::CtorServerDHParamsOk)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);

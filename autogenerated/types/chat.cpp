@@ -35,15 +35,15 @@ void Chat::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Chat::ctorChatEmpty) ||
-		 (this->_constructorid == Chat::ctorChat) ||
-		 (this->_constructorid == Chat::ctorChatForbidden) ||
-		 (this->_constructorid == Chat::ctorChannel) ||
-		 (this->_constructorid == Chat::ctorChannelForbidden));
+	Q_ASSERT((this->_constructorid == Chat::CtorChatEmpty) ||
+		 (this->_constructorid == Chat::CtorChat) ||
+		 (this->_constructorid == Chat::CtorChatForbidden) ||
+		 (this->_constructorid == Chat::CtorChannel) ||
+		 (this->_constructorid == Chat::CtorChannelForbidden));
 	
-	if(this->_constructorid == Chat::ctorChatEmpty)
+	if(this->_constructorid == Chat::CtorChatEmpty)
 		this->_id = mtstream->readTLInt();
-	else if(this->_constructorid == Chat::ctorChat)
+	else if(this->_constructorid == Chat::CtorChat)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_creator = IS_FLAG_SET(this->_flags, 0);
@@ -86,12 +86,12 @@ void Chat::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == Chat::ctorChatForbidden)
+	else if(this->_constructorid == Chat::CtorChatForbidden)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_title = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Chat::ctorChannel)
+	else if(this->_constructorid == Chat::CtorChannel)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_creator = IS_FLAG_SET(this->_flags, 0);
@@ -132,7 +132,7 @@ void Chat::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 9))
 			this->_restriction_reason = mtstream->readTLString();
 	}
-	else if(this->_constructorid == Chat::ctorChannelForbidden)
+	else if(this->_constructorid == Chat::CtorChannelForbidden)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_broadcast = IS_FLAG_SET(this->_flags, 5);
@@ -145,18 +145,18 @@ void Chat::read(MTProtoStream* mtstream)
 
 void Chat::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Chat::ctorChatEmpty) ||
-		 (this->_constructorid == Chat::ctorChat) ||
-		 (this->_constructorid == Chat::ctorChatForbidden) ||
-		 (this->_constructorid == Chat::ctorChannel) ||
-		 (this->_constructorid == Chat::ctorChannelForbidden));
+	Q_ASSERT((this->_constructorid == Chat::CtorChatEmpty) ||
+		 (this->_constructorid == Chat::CtorChat) ||
+		 (this->_constructorid == Chat::CtorChatForbidden) ||
+		 (this->_constructorid == Chat::CtorChannel) ||
+		 (this->_constructorid == Chat::CtorChannelForbidden));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Chat::ctorChatEmpty)
+	if(this->_constructorid == Chat::CtorChatEmpty)
 		mtstream->writeTLInt(this->_id);
-	else if(this->_constructorid == Chat::ctorChat)
+	else if(this->_constructorid == Chat::CtorChat)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -177,12 +177,12 @@ void Chat::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == Chat::ctorChatForbidden)
+	else if(this->_constructorid == Chat::CtorChatForbidden)
 	{
 		mtstream->writeTLInt(this->_id);
 		mtstream->writeTLString(this->_title);
 	}
-	else if(this->_constructorid == Chat::ctorChannel)
+	else if(this->_constructorid == Chat::CtorChannel)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -203,7 +203,7 @@ void Chat::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 9))
 			mtstream->writeTLString(this->_restriction_reason);
 	}
-	else if(this->_constructorid == Chat::ctorChannelForbidden)
+	else if(this->_constructorid == Chat::CtorChannelForbidden)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_id);
@@ -216,7 +216,7 @@ void Chat::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Chat::ctorChat)
+	if(this->_constructorid == Chat::CtorChat)
 	{
 		if(this->_is_creator)
 			SET_FLAG_BIT(this->_flags, 0);
@@ -233,7 +233,7 @@ void Chat::compileFlags()
 		if(this->_migrated_to)
 			SET_FLAG_BIT(this->_flags, 6);
 	}
-	else if(this->_constructorid == Chat::ctorChannel)
+	else if(this->_constructorid == Chat::CtorChannel)
 	{
 		if(this->_is_creator)
 			SET_FLAG_BIT(this->_flags, 0);
@@ -266,7 +266,7 @@ void Chat::compileFlags()
 		if(!this->_restriction_reason.isEmpty())
 			SET_FLAG_BIT(this->_flags, 9);
 	}
-	else if(this->_constructorid == Chat::ctorChannelForbidden)
+	else if(this->_constructorid == Chat::CtorChannelForbidden)
 	{
 		if(this->_is_broadcast)
 			SET_FLAG_BIT(this->_flags, 5);

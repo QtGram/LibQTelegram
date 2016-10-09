@@ -13,22 +13,22 @@ void HelpAppChangelog::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HelpAppChangelog::ctorHelpAppChangelogEmpty) ||
-		 (this->_constructorid == HelpAppChangelog::ctorHelpAppChangelog));
+	Q_ASSERT((this->_constructorid == HelpAppChangelog::CtorHelpAppChangelogEmpty) ||
+		 (this->_constructorid == HelpAppChangelog::CtorHelpAppChangelog));
 	
-	if(this->_constructorid == HelpAppChangelog::ctorHelpAppChangelog)
+	if(this->_constructorid == HelpAppChangelog::CtorHelpAppChangelog)
 		this->_text = mtstream->readTLString();
 }
 
 void HelpAppChangelog::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HelpAppChangelog::ctorHelpAppChangelogEmpty) ||
-		 (this->_constructorid == HelpAppChangelog::ctorHelpAppChangelog));
+	Q_ASSERT((this->_constructorid == HelpAppChangelog::CtorHelpAppChangelogEmpty) ||
+		 (this->_constructorid == HelpAppChangelog::CtorHelpAppChangelog));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HelpAppChangelog::ctorHelpAppChangelog)
+	if(this->_constructorid == HelpAppChangelog::CtorHelpAppChangelog)
 		mtstream->writeTLString(this->_text);
 }
 

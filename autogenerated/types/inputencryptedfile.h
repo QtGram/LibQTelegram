@@ -21,10 +21,10 @@ class InputEncryptedFile: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputEncryptedFileEmpty = 0x1837c364,
-			ctorInputEncryptedFileUploaded = 0x64bd0306,
-			ctorInputEncryptedFile = 0x5a17b5e5,
-			ctorInputEncryptedFileBigUploaded = 0x2dc173c8,
+			CtorInputEncryptedFileEmpty = 0x1837c364,
+			CtorInputEncryptedFileUploaded = 0x64bd0306,
+			CtorInputEncryptedFile = 0x5a17b5e5,
+			CtorInputEncryptedFileBigUploaded = 0x2dc173c8,
 		};
 
 	public:

@@ -6,27 +6,27 @@
 
 KeyboardButtonRow::KeyboardButtonRow(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = KeyboardButtonRow::ctorKeyboardButtonRow;
+	this->_constructorid = KeyboardButtonRow::CtorKeyboardButtonRow;
 }
 
 void KeyboardButtonRow::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == KeyboardButtonRow::ctorKeyboardButtonRow));
+	Q_ASSERT((this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow));
 	
-	if(this->_constructorid == KeyboardButtonRow::ctorKeyboardButtonRow)
+	if(this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow)
 		mtstream->readTLVector<KeyboardButton>(this->_buttons, false);
 }
 
 void KeyboardButtonRow::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == KeyboardButtonRow::ctorKeyboardButtonRow));
+	Q_ASSERT((this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == KeyboardButtonRow::ctorKeyboardButtonRow)
+	if(this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow)
 		mtstream->writeTLVector(this->_buttons, false);
 }
 

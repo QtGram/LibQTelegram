@@ -13,34 +13,34 @@ void InputPrivacyRule::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowContacts) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowAll) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowUsers) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowAll) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers));
+	Q_ASSERT((this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowContacts) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowAll) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowUsers) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowContacts) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowAll) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers));
 	
-	if(this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowUsers)
+	if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowUsers)
 		mtstream->readTLVector<InputUser>(this->_users, false);
-	else if(this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers)
+	else if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers)
 		mtstream->readTLVector<InputUser>(this->_users, false);
 }
 
 void InputPrivacyRule::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowContacts) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowAll) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowUsers) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowContacts) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowAll) ||
-		 (this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers));
+	Q_ASSERT((this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowContacts) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowAll) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowUsers) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowContacts) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowAll) ||
+		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueAllowUsers)
+	if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowUsers)
 		mtstream->writeTLVector(this->_users, false);
-	else if(this->_constructorid == InputPrivacyRule::ctorInputPrivacyValueDisallowUsers)
+	else if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers)
 		mtstream->writeTLVector(this->_users, false);
 }
 

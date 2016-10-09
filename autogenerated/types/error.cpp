@@ -7,16 +7,16 @@
 Error::Error(QObject* parent) : TelegramObject(parent)
 {
 	this->_code = 0;
-	this->_constructorid = Error::ctorError;
+	this->_constructorid = Error::CtorError;
 }
 
 void Error::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Error::ctorError));
+	Q_ASSERT((this->_constructorid == Error::CtorError));
 	
-	if(this->_constructorid == Error::ctorError)
+	if(this->_constructorid == Error::CtorError)
 	{
 		this->_code = mtstream->readTLInt();
 		this->_text = mtstream->readTLString();
@@ -25,12 +25,12 @@ void Error::read(MTProtoStream* mtstream)
 
 void Error::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Error::ctorError));
+	Q_ASSERT((this->_constructorid == Error::CtorError));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Error::ctorError)
+	if(this->_constructorid == Error::CtorError)
 	{
 		mtstream->writeTLInt(this->_code);
 		mtstream->writeTLString(this->_text);

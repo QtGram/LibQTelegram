@@ -13,10 +13,10 @@ void MessagesRecentStickers::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickersNotModified) ||
-		 (this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickers));
+	Q_ASSERT((this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickersNotModified) ||
+		 (this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickers));
 	
-	if(this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickers)
+	if(this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickers)
 	{
 		this->_hash = mtstream->readTLInt();
 		mtstream->readTLVector<Document>(this->_stickers, false);
@@ -25,13 +25,13 @@ void MessagesRecentStickers::read(MTProtoStream* mtstream)
 
 void MessagesRecentStickers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickersNotModified) ||
-		 (this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickers));
+	Q_ASSERT((this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickersNotModified) ||
+		 (this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesRecentStickers::ctorMessagesRecentStickers)
+	if(this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickers)
 	{
 		mtstream->writeTLInt(this->_hash);
 		mtstream->writeTLVector(this->_stickers, false);

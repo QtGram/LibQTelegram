@@ -7,16 +7,16 @@
 MessagesFoundGifs::MessagesFoundGifs(QObject* parent) : TelegramObject(parent)
 {
 	this->_next_offset = 0;
-	this->_constructorid = MessagesFoundGifs::ctorMessagesFoundGifs;
+	this->_constructorid = MessagesFoundGifs::CtorMessagesFoundGifs;
 }
 
 void MessagesFoundGifs::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesFoundGifs::ctorMessagesFoundGifs));
+	Q_ASSERT((this->_constructorid == MessagesFoundGifs::CtorMessagesFoundGifs));
 	
-	if(this->_constructorid == MessagesFoundGifs::ctorMessagesFoundGifs)
+	if(this->_constructorid == MessagesFoundGifs::CtorMessagesFoundGifs)
 	{
 		this->_next_offset = mtstream->readTLInt();
 		mtstream->readTLVector<FoundGif>(this->_results, false);
@@ -25,12 +25,12 @@ void MessagesFoundGifs::read(MTProtoStream* mtstream)
 
 void MessagesFoundGifs::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesFoundGifs::ctorMessagesFoundGifs));
+	Q_ASSERT((this->_constructorid == MessagesFoundGifs::CtorMessagesFoundGifs));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesFoundGifs::ctorMessagesFoundGifs)
+	if(this->_constructorid == MessagesFoundGifs::CtorMessagesFoundGifs)
 	{
 		mtstream->writeTLInt(this->_next_offset);
 		mtstream->writeTLVector(this->_results, false);

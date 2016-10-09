@@ -9,16 +9,16 @@ HttpWait::HttpWait(QObject* parent) : TelegramObject(parent)
 	this->_max_delay = 0;
 	this->_wait_after = 0;
 	this->_max_wait = 0;
-	this->_constructorid = HttpWait::ctorHttpWait;
+	this->_constructorid = HttpWait::CtorHttpWait;
 }
 
 void HttpWait::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HttpWait::ctorHttpWait));
+	Q_ASSERT((this->_constructorid == HttpWait::CtorHttpWait));
 	
-	if(this->_constructorid == HttpWait::ctorHttpWait)
+	if(this->_constructorid == HttpWait::CtorHttpWait)
 	{
 		this->_max_delay = mtstream->readTLInt();
 		this->_wait_after = mtstream->readTLInt();
@@ -28,12 +28,12 @@ void HttpWait::read(MTProtoStream* mtstream)
 
 void HttpWait::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HttpWait::ctorHttpWait));
+	Q_ASSERT((this->_constructorid == HttpWait::CtorHttpWait));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HttpWait::ctorHttpWait)
+	if(this->_constructorid == HttpWait::CtorHttpWait)
 	{
 		mtstream->writeTLInt(this->_max_delay);
 		mtstream->writeTLInt(this->_wait_after);

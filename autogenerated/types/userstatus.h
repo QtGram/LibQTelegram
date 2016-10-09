@@ -18,12 +18,12 @@ class UserStatus: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorUserStatusEmpty = 0x9d05049,
-			ctorUserStatusOnline = 0xedb93949,
-			ctorUserStatusOffline = 0x8c703f,
-			ctorUserStatusRecently = 0xe26f42f1,
-			ctorUserStatusLastWeek = 0x7bf09fc,
-			ctorUserStatusLastMonth = 0x77ebc742,
+			CtorUserStatusEmpty = 0x9d05049,
+			CtorUserStatusOnline = 0xedb93949,
+			CtorUserStatusOffline = 0x8c703f,
+			CtorUserStatusRecently = 0xe26f42f1,
+			CtorUserStatusLastWeek = 0x7bf09fc,
+			CtorUserStatusLastMonth = 0x77ebc742,
 		};
 
 	public:

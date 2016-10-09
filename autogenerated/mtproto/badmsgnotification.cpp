@@ -16,16 +16,16 @@ void BadMsgNotification::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == BadMsgNotification::ctorBadMsgNotification) ||
-		 (this->_constructorid == BadMsgNotification::ctorBadServerSalt));
+	Q_ASSERT((this->_constructorid == BadMsgNotification::CtorBadMsgNotification) ||
+		 (this->_constructorid == BadMsgNotification::CtorBadServerSalt));
 	
-	if(this->_constructorid == BadMsgNotification::ctorBadMsgNotification)
+	if(this->_constructorid == BadMsgNotification::CtorBadMsgNotification)
 	{
 		this->_bad_msg_id = mtstream->readTLLong();
 		this->_bad_msg_seqno = mtstream->readTLInt();
 		this->_error_code = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == BadMsgNotification::ctorBadServerSalt)
+	else if(this->_constructorid == BadMsgNotification::CtorBadServerSalt)
 	{
 		this->_bad_msg_id = mtstream->readTLLong();
 		this->_bad_msg_seqno = mtstream->readTLInt();
@@ -36,19 +36,19 @@ void BadMsgNotification::read(MTProtoStream* mtstream)
 
 void BadMsgNotification::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == BadMsgNotification::ctorBadMsgNotification) ||
-		 (this->_constructorid == BadMsgNotification::ctorBadServerSalt));
+	Q_ASSERT((this->_constructorid == BadMsgNotification::CtorBadMsgNotification) ||
+		 (this->_constructorid == BadMsgNotification::CtorBadServerSalt));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == BadMsgNotification::ctorBadMsgNotification)
+	if(this->_constructorid == BadMsgNotification::CtorBadMsgNotification)
 	{
 		mtstream->writeTLLong(this->_bad_msg_id);
 		mtstream->writeTLInt(this->_bad_msg_seqno);
 		mtstream->writeTLInt(this->_error_code);
 	}
-	else if(this->_constructorid == BadMsgNotification::ctorBadServerSalt)
+	else if(this->_constructorid == BadMsgNotification::CtorBadServerSalt)
 	{
 		mtstream->writeTLLong(this->_bad_msg_id);
 		mtstream->writeTLInt(this->_bad_msg_seqno);

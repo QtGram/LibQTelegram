@@ -18,8 +18,8 @@ class InputPhoto: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPhotoEmpty = 0x1cd7bf0d,
-			ctorInputPhoto = 0xfb95c6c4,
+			CtorInputPhotoEmpty = 0x1cd7bf0d,
+			CtorInputPhoto = 0xfb95c6c4,
 		};
 
 	public:

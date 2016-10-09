@@ -9,16 +9,16 @@ ContactsLink::ContactsLink(QObject* parent) : TelegramObject(parent)
 	this->_my_link = NULL;
 	this->_foreign_link = NULL;
 	this->_user = NULL;
-	this->_constructorid = ContactsLink::ctorContactsLink;
+	this->_constructorid = ContactsLink::CtorContactsLink;
 }
 
 void ContactsLink::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsLink::ctorContactsLink));
+	Q_ASSERT((this->_constructorid == ContactsLink::CtorContactsLink));
 	
-	if(this->_constructorid == ContactsLink::ctorContactsLink)
+	if(this->_constructorid == ContactsLink::CtorContactsLink)
 	{
 		TLInt my_link_ctor = mtstream->peekTLConstructor();
 		
@@ -63,12 +63,12 @@ void ContactsLink::read(MTProtoStream* mtstream)
 
 void ContactsLink::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsLink::ctorContactsLink));
+	Q_ASSERT((this->_constructorid == ContactsLink::CtorContactsLink));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsLink::ctorContactsLink)
+	if(this->_constructorid == ContactsLink::CtorContactsLink)
 	{
 		if(this->_my_link != NULL)
 			this->_my_link->write(mtstream);

@@ -18,7 +18,7 @@ class StickerPack: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorStickerPack = 0x12b299d4,
+			CtorStickerPack = 0x12b299d4,
 		};
 
 	public:

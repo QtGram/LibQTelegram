@@ -13,15 +13,15 @@ void ContactsBlocked::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsBlocked::ctorContactsBlocked) ||
-		 (this->_constructorid == ContactsBlocked::ctorContactsBlockedSlice));
+	Q_ASSERT((this->_constructorid == ContactsBlocked::CtorContactsBlocked) ||
+		 (this->_constructorid == ContactsBlocked::CtorContactsBlockedSlice));
 	
-	if(this->_constructorid == ContactsBlocked::ctorContactsBlocked)
+	if(this->_constructorid == ContactsBlocked::CtorContactsBlocked)
 	{
 		mtstream->readTLVector<ContactBlocked>(this->_blocked, false);
 		mtstream->readTLVector<User>(this->_users, false);
 	}
-	else if(this->_constructorid == ContactsBlocked::ctorContactsBlockedSlice)
+	else if(this->_constructorid == ContactsBlocked::CtorContactsBlockedSlice)
 	{
 		this->_count = mtstream->readTLInt();
 		mtstream->readTLVector<ContactBlocked>(this->_blocked, false);
@@ -31,18 +31,18 @@ void ContactsBlocked::read(MTProtoStream* mtstream)
 
 void ContactsBlocked::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsBlocked::ctorContactsBlocked) ||
-		 (this->_constructorid == ContactsBlocked::ctorContactsBlockedSlice));
+	Q_ASSERT((this->_constructorid == ContactsBlocked::CtorContactsBlocked) ||
+		 (this->_constructorid == ContactsBlocked::CtorContactsBlockedSlice));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsBlocked::ctorContactsBlocked)
+	if(this->_constructorid == ContactsBlocked::CtorContactsBlocked)
 	{
 		mtstream->writeTLVector(this->_blocked, false);
 		mtstream->writeTLVector(this->_users, false);
 	}
-	else if(this->_constructorid == ContactsBlocked::ctorContactsBlockedSlice)
+	else if(this->_constructorid == ContactsBlocked::CtorContactsBlockedSlice)
 	{
 		mtstream->writeTLInt(this->_count);
 		mtstream->writeTLVector(this->_blocked, false);

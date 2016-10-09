@@ -20,10 +20,10 @@ void ChatInvite::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChatInvite::ctorChatInviteAlready) ||
-		 (this->_constructorid == ChatInvite::ctorChatInvite));
+	Q_ASSERT((this->_constructorid == ChatInvite::CtorChatInviteAlready) ||
+		 (this->_constructorid == ChatInvite::CtorChatInvite));
 	
-	if(this->_constructorid == ChatInvite::ctorChatInviteAlready)
+	if(this->_constructorid == ChatInvite::CtorChatInviteAlready)
 	{
 		TLInt chat_ctor = mtstream->peekTLConstructor();
 		
@@ -38,7 +38,7 @@ void ChatInvite::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == ChatInvite::ctorChatInvite)
+	else if(this->_constructorid == ChatInvite::CtorChatInvite)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_channel = IS_FLAG_SET(this->_flags, 0);
@@ -67,20 +67,20 @@ void ChatInvite::read(MTProtoStream* mtstream)
 
 void ChatInvite::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChatInvite::ctorChatInviteAlready) ||
-		 (this->_constructorid == ChatInvite::ctorChatInvite));
+	Q_ASSERT((this->_constructorid == ChatInvite::CtorChatInviteAlready) ||
+		 (this->_constructorid == ChatInvite::CtorChatInvite));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChatInvite::ctorChatInviteAlready)
+	if(this->_constructorid == ChatInvite::CtorChatInviteAlready)
 	{
 		if(this->_chat != NULL)
 			this->_chat->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == ChatInvite::ctorChatInvite)
+	else if(this->_constructorid == ChatInvite::CtorChatInvite)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_title);
@@ -99,7 +99,7 @@ void ChatInvite::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == ChatInvite::ctorChatInvite)
+	if(this->_constructorid == ChatInvite::CtorChatInvite)
 	{
 		if(this->_is_channel)
 			SET_FLAG_BIT(this->_flags, 0);

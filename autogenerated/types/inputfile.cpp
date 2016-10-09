@@ -14,17 +14,17 @@ void InputFile::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputFile::ctorInputFile) ||
-		 (this->_constructorid == InputFile::ctorInputFileBig));
+	Q_ASSERT((this->_constructorid == InputFile::CtorInputFile) ||
+		 (this->_constructorid == InputFile::CtorInputFileBig));
 	
-	if(this->_constructorid == InputFile::ctorInputFile)
+	if(this->_constructorid == InputFile::CtorInputFile)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_parts = mtstream->readTLInt();
 		this->_name = mtstream->readTLString();
 		this->_md5_checksum = mtstream->readTLString();
 	}
-	else if(this->_constructorid == InputFile::ctorInputFileBig)
+	else if(this->_constructorid == InputFile::CtorInputFileBig)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_parts = mtstream->readTLInt();
@@ -34,20 +34,20 @@ void InputFile::read(MTProtoStream* mtstream)
 
 void InputFile::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputFile::ctorInputFile) ||
-		 (this->_constructorid == InputFile::ctorInputFileBig));
+	Q_ASSERT((this->_constructorid == InputFile::CtorInputFile) ||
+		 (this->_constructorid == InputFile::CtorInputFileBig));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputFile::ctorInputFile)
+	if(this->_constructorid == InputFile::CtorInputFile)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLInt(this->_parts);
 		mtstream->writeTLString(this->_name);
 		mtstream->writeTLString(this->_md5_checksum);
 	}
-	else if(this->_constructorid == InputFile::ctorInputFileBig)
+	else if(this->_constructorid == InputFile::CtorInputFileBig)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLInt(this->_parts);

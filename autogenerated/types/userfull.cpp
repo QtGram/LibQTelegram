@@ -13,16 +13,16 @@ UserFull::UserFull(QObject* parent) : TelegramObject(parent)
 	this->_profile_photo = NULL;
 	this->_notify_settings = NULL;
 	this->_bot_info = NULL;
-	this->_constructorid = UserFull::ctorUserFull;
+	this->_constructorid = UserFull::CtorUserFull;
 }
 
 void UserFull::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UserFull::ctorUserFull));
+	Q_ASSERT((this->_constructorid == UserFull::CtorUserFull));
 	
-	if(this->_constructorid == UserFull::ctorUserFull)
+	if(this->_constructorid == UserFull::CtorUserFull)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_blocked = IS_FLAG_SET(this->_flags, 0);
@@ -104,12 +104,12 @@ void UserFull::read(MTProtoStream* mtstream)
 
 void UserFull::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UserFull::ctorUserFull));
+	Q_ASSERT((this->_constructorid == UserFull::CtorUserFull));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UserFull::ctorUserFull)
+	if(this->_constructorid == UserFull::CtorUserFull)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_user != NULL)
@@ -152,7 +152,7 @@ void UserFull::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == UserFull::ctorUserFull)
+	if(this->_constructorid == UserFull::CtorUserFull)
 	{
 		if(this->_is_blocked)
 			SET_FLAG_BIT(this->_flags, 0);

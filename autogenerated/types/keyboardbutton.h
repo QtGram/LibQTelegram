@@ -22,13 +22,13 @@ class KeyboardButton: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorKeyboardButton = 0xa2fa4880,
-			ctorKeyboardButtonUrl = 0x258aff05,
-			ctorKeyboardButtonCallback = 0x683a5e46,
-			ctorKeyboardButtonRequestPhone = 0xb16a6c29,
-			ctorKeyboardButtonRequestGeoLocation = 0xfc796b3f,
-			ctorKeyboardButtonSwitchInline = 0x568a748,
-			ctorKeyboardButtonGame = 0x50f41ccf,
+			CtorKeyboardButton = 0xa2fa4880,
+			CtorKeyboardButtonUrl = 0x258aff05,
+			CtorKeyboardButtonCallback = 0x683a5e46,
+			CtorKeyboardButtonRequestPhone = 0xb16a6c29,
+			CtorKeyboardButtonRequestGeoLocation = 0xfc796b3f,
+			CtorKeyboardButtonSwitchInline = 0x568a748,
+			CtorKeyboardButtonGame = 0x50f41ccf,
 		};
 
 	public:

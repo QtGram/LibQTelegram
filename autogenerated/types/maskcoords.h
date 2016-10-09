@@ -20,7 +20,7 @@ class MaskCoords: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMaskCoords = 0xaed6dbb2,
+			CtorMaskCoords = 0xaed6dbb2,
 		};
 
 	public:

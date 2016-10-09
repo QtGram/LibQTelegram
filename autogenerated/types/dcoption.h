@@ -23,7 +23,7 @@ class DcOption: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorDcOption = 0x5d8c6cc,
+			CtorDcOption = 0x5d8c6cc,
 		};
 
 	public:

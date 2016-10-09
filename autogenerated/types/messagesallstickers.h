@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "stickerset.h"
+#include "../../types/basic.h"
 
 class MessagesAllStickers: public TelegramObject
 {
@@ -19,8 +19,8 @@ class MessagesAllStickers: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessagesAllStickersNotModified = 0xe86602c3,
-			ctorMessagesAllStickers = 0xedfd405f,
+			CtorMessagesAllStickersNotModified = 0xe86602c3,
+			CtorMessagesAllStickers = 0xedfd405f,
 		};
 
 	public:

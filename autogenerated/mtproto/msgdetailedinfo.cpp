@@ -16,17 +16,17 @@ void MsgDetailedInfo::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MsgDetailedInfo::ctorMsgDetailedInfo) ||
-		 (this->_constructorid == MsgDetailedInfo::ctorMsgNewDetailedInfo));
+	Q_ASSERT((this->_constructorid == MsgDetailedInfo::CtorMsgDetailedInfo) ||
+		 (this->_constructorid == MsgDetailedInfo::CtorMsgNewDetailedInfo));
 	
-	if(this->_constructorid == MsgDetailedInfo::ctorMsgDetailedInfo)
+	if(this->_constructorid == MsgDetailedInfo::CtorMsgDetailedInfo)
 	{
 		this->_msg_id = mtstream->readTLLong();
 		this->_answer_msg_id = mtstream->readTLLong();
 		this->_bytes = mtstream->readTLInt();
 		this->_status = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MsgDetailedInfo::ctorMsgNewDetailedInfo)
+	else if(this->_constructorid == MsgDetailedInfo::CtorMsgNewDetailedInfo)
 	{
 		this->_answer_msg_id = mtstream->readTLLong();
 		this->_bytes = mtstream->readTLInt();
@@ -36,20 +36,20 @@ void MsgDetailedInfo::read(MTProtoStream* mtstream)
 
 void MsgDetailedInfo::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MsgDetailedInfo::ctorMsgDetailedInfo) ||
-		 (this->_constructorid == MsgDetailedInfo::ctorMsgNewDetailedInfo));
+	Q_ASSERT((this->_constructorid == MsgDetailedInfo::CtorMsgDetailedInfo) ||
+		 (this->_constructorid == MsgDetailedInfo::CtorMsgNewDetailedInfo));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MsgDetailedInfo::ctorMsgDetailedInfo)
+	if(this->_constructorid == MsgDetailedInfo::CtorMsgDetailedInfo)
 	{
 		mtstream->writeTLLong(this->_msg_id);
 		mtstream->writeTLLong(this->_answer_msg_id);
 		mtstream->writeTLInt(this->_bytes);
 		mtstream->writeTLInt(this->_status);
 	}
-	else if(this->_constructorid == MsgDetailedInfo::ctorMsgNewDetailedInfo)
+	else if(this->_constructorid == MsgDetailedInfo::CtorMsgNewDetailedInfo)
 	{
 		mtstream->writeTLLong(this->_answer_msg_id);
 		mtstream->writeTLInt(this->_bytes);

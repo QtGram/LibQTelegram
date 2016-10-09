@@ -12,20 +12,20 @@ void TopPeerCategory::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == TopPeerCategory::ctorTopPeerCategoryBotsPM) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryBotsInline) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryCorrespondents) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryGroups) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryChannels));
+	Q_ASSERT((this->_constructorid == TopPeerCategory::CtorTopPeerCategoryBotsPM) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryBotsInline) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryCorrespondents) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryGroups) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryChannels));
 }
 
 void TopPeerCategory::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == TopPeerCategory::ctorTopPeerCategoryBotsPM) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryBotsInline) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryCorrespondents) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryGroups) ||
-		 (this->_constructorid == TopPeerCategory::ctorTopPeerCategoryChannels));
+	Q_ASSERT((this->_constructorid == TopPeerCategory::CtorTopPeerCategoryBotsPM) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryBotsInline) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryCorrespondents) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryGroups) ||
+		 (this->_constructorid == TopPeerCategory::CtorTopPeerCategoryChannels));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

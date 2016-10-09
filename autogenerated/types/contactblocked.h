@@ -18,7 +18,7 @@ class ContactBlocked: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorContactBlocked = 0x561bc879,
+			CtorContactBlocked = 0x561bc879,
 		};
 
 	public:

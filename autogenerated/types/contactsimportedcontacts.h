@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/telegramobject.h"
-#include "../../types/basic.h"
 #include "importedcontact.h"
 #include "user.h"
+#include "../../types/basic.h"
 
 class ContactsImportedContacts: public TelegramObject
 {
@@ -21,7 +21,7 @@ class ContactsImportedContacts: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorContactsImportedContacts = 0xad524315,
+			CtorContactsImportedContacts = 0xad524315,
 		};
 
 	public:

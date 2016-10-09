@@ -13,26 +13,26 @@ void ReportReason::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ReportReason::ctorInputReportReasonSpam) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonViolence) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonPornography) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonOther));
+	Q_ASSERT((this->_constructorid == ReportReason::CtorInputReportReasonSpam) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonViolence) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonPornography) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonOther));
 	
-	if(this->_constructorid == ReportReason::ctorInputReportReasonOther)
+	if(this->_constructorid == ReportReason::CtorInputReportReasonOther)
 		this->_text = mtstream->readTLString();
 }
 
 void ReportReason::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ReportReason::ctorInputReportReasonSpam) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonViolence) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonPornography) ||
-		 (this->_constructorid == ReportReason::ctorInputReportReasonOther));
+	Q_ASSERT((this->_constructorid == ReportReason::CtorInputReportReasonSpam) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonViolence) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonPornography) ||
+		 (this->_constructorid == ReportReason::CtorInputReportReasonOther));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ReportReason::ctorInputReportReasonOther)
+	if(this->_constructorid == ReportReason::CtorInputReportReasonOther)
 		mtstream->writeTLString(this->_text);
 }
 

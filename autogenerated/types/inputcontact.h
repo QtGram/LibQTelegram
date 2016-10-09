@@ -20,7 +20,7 @@ class InputContact: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputPhoneContact = 0xf392b7f4,
+			CtorInputPhoneContact = 0xf392b7f4,
 		};
 
 	public:

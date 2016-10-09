@@ -12,18 +12,18 @@ void ContactLink::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactLink::ctorContactLinkUnknown) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkNone) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkHasPhone) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkContact));
+	Q_ASSERT((this->_constructorid == ContactLink::CtorContactLinkUnknown) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkNone) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkHasPhone) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkContact));
 }
 
 void ContactLink::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactLink::ctorContactLinkUnknown) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkNone) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkHasPhone) ||
-		 (this->_constructorid == ContactLink::ctorContactLinkContact));
+	Q_ASSERT((this->_constructorid == ContactLink::CtorContactLinkUnknown) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkNone) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkHasPhone) ||
+		 (this->_constructorid == ContactLink::CtorContactLinkContact));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);

@@ -13,10 +13,10 @@ void ContactsTopPeers::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsTopPeers::ctorContactsTopPeersNotModified) ||
-		 (this->_constructorid == ContactsTopPeers::ctorContactsTopPeers));
+	Q_ASSERT((this->_constructorid == ContactsTopPeers::CtorContactsTopPeersNotModified) ||
+		 (this->_constructorid == ContactsTopPeers::CtorContactsTopPeers));
 	
-	if(this->_constructorid == ContactsTopPeers::ctorContactsTopPeers)
+	if(this->_constructorid == ContactsTopPeers::CtorContactsTopPeers)
 	{
 		mtstream->readTLVector<TopPeerCategoryPeers>(this->_categories, false);
 		mtstream->readTLVector<Chat>(this->_chats, false);
@@ -26,13 +26,13 @@ void ContactsTopPeers::read(MTProtoStream* mtstream)
 
 void ContactsTopPeers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsTopPeers::ctorContactsTopPeersNotModified) ||
-		 (this->_constructorid == ContactsTopPeers::ctorContactsTopPeers));
+	Q_ASSERT((this->_constructorid == ContactsTopPeers::CtorContactsTopPeersNotModified) ||
+		 (this->_constructorid == ContactsTopPeers::CtorContactsTopPeers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsTopPeers::ctorContactsTopPeers)
+	if(this->_constructorid == ContactsTopPeers::CtorContactsTopPeers)
 	{
 		mtstream->writeTLVector(this->_categories, false);
 		mtstream->writeTLVector(this->_chats, false);

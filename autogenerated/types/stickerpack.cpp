@@ -6,16 +6,16 @@
 
 StickerPack::StickerPack(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = StickerPack::ctorStickerPack;
+	this->_constructorid = StickerPack::CtorStickerPack;
 }
 
 void StickerPack::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == StickerPack::ctorStickerPack));
+	Q_ASSERT((this->_constructorid == StickerPack::CtorStickerPack));
 	
-	if(this->_constructorid == StickerPack::ctorStickerPack)
+	if(this->_constructorid == StickerPack::CtorStickerPack)
 	{
 		this->_emoticon = mtstream->readTLString();
 		mtstream->readTLVector<TLLong>(this->_documents, false);
@@ -24,12 +24,12 @@ void StickerPack::read(MTProtoStream* mtstream)
 
 void StickerPack::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == StickerPack::ctorStickerPack));
+	Q_ASSERT((this->_constructorid == StickerPack::CtorStickerPack));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == StickerPack::ctorStickerPack)
+	if(this->_constructorid == StickerPack::CtorStickerPack)
 	{
 		mtstream->writeTLString(this->_emoticon);
 		mtstream->writeTLVector(this->_documents, false);

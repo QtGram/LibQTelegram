@@ -7,16 +7,16 @@
 PhotosPhoto::PhotosPhoto(QObject* parent) : TelegramObject(parent)
 {
 	this->_photo = NULL;
-	this->_constructorid = PhotosPhoto::ctorPhotosPhoto;
+	this->_constructorid = PhotosPhoto::CtorPhotosPhoto;
 }
 
 void PhotosPhoto::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PhotosPhoto::ctorPhotosPhoto));
+	Q_ASSERT((this->_constructorid == PhotosPhoto::CtorPhotosPhoto));
 	
-	if(this->_constructorid == PhotosPhoto::ctorPhotosPhoto)
+	if(this->_constructorid == PhotosPhoto::CtorPhotosPhoto)
 	{
 		TLInt photo_ctor = mtstream->peekTLConstructor();
 		
@@ -37,12 +37,12 @@ void PhotosPhoto::read(MTProtoStream* mtstream)
 
 void PhotosPhoto::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PhotosPhoto::ctorPhotosPhoto));
+	Q_ASSERT((this->_constructorid == PhotosPhoto::CtorPhotosPhoto));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PhotosPhoto::ctorPhotosPhoto)
+	if(this->_constructorid == PhotosPhoto::CtorPhotosPhoto)
 	{
 		if(this->_photo != NULL)
 			this->_photo->write(mtstream);

@@ -8,16 +8,16 @@ FutureSalts::FutureSalts(QObject* parent) : TelegramObject(parent)
 {
 	this->_req_msg_id = 0;
 	this->_now = 0;
-	this->_constructorid = FutureSalts::ctorFutureSalts;
+	this->_constructorid = FutureSalts::CtorFutureSalts;
 }
 
 void FutureSalts::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == FutureSalts::ctorFutureSalts));
+	Q_ASSERT((this->_constructorid == FutureSalts::CtorFutureSalts));
 	
-	if(this->_constructorid == FutureSalts::ctorFutureSalts)
+	if(this->_constructorid == FutureSalts::CtorFutureSalts)
 	{
 		this->_req_msg_id = mtstream->readTLLong();
 		this->_now = mtstream->readTLInt();
@@ -27,12 +27,12 @@ void FutureSalts::read(MTProtoStream* mtstream)
 
 void FutureSalts::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == FutureSalts::ctorFutureSalts));
+	Q_ASSERT((this->_constructorid == FutureSalts::CtorFutureSalts));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == FutureSalts::ctorFutureSalts)
+	if(this->_constructorid == FutureSalts::CtorFutureSalts)
 	{
 		mtstream->writeTLLong(this->_req_msg_id);
 		mtstream->writeTLInt(this->_now);

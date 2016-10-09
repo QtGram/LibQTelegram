@@ -6,16 +6,16 @@
 
 AccountPrivacyRules::AccountPrivacyRules(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = AccountPrivacyRules::ctorAccountPrivacyRules;
+	this->_constructorid = AccountPrivacyRules::CtorAccountPrivacyRules;
 }
 
 void AccountPrivacyRules::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AccountPrivacyRules::ctorAccountPrivacyRules));
+	Q_ASSERT((this->_constructorid == AccountPrivacyRules::CtorAccountPrivacyRules));
 	
-	if(this->_constructorid == AccountPrivacyRules::ctorAccountPrivacyRules)
+	if(this->_constructorid == AccountPrivacyRules::CtorAccountPrivacyRules)
 	{
 		mtstream->readTLVector<PrivacyRule>(this->_rules, false);
 		mtstream->readTLVector<User>(this->_users, false);
@@ -24,12 +24,12 @@ void AccountPrivacyRules::read(MTProtoStream* mtstream)
 
 void AccountPrivacyRules::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AccountPrivacyRules::ctorAccountPrivacyRules));
+	Q_ASSERT((this->_constructorid == AccountPrivacyRules::CtorAccountPrivacyRules));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AccountPrivacyRules::ctorAccountPrivacyRules)
+	if(this->_constructorid == AccountPrivacyRules::CtorAccountPrivacyRules)
 	{
 		mtstream->writeTLVector(this->_rules, false);
 		mtstream->writeTLVector(this->_users, false);

@@ -21,7 +21,7 @@ class AccountPasswordInputSettings: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAccountPasswordInputSettings = 0x86916deb,
+			CtorAccountPasswordInputSettings = 0x86916deb,
 		};
 
 	public:

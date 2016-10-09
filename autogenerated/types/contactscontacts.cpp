@@ -13,10 +13,10 @@ void ContactsContacts::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ContactsContacts::ctorContactsContactsNotModified) ||
-		 (this->_constructorid == ContactsContacts::ctorContactsContacts));
+	Q_ASSERT((this->_constructorid == ContactsContacts::CtorContactsContactsNotModified) ||
+		 (this->_constructorid == ContactsContacts::CtorContactsContacts));
 	
-	if(this->_constructorid == ContactsContacts::ctorContactsContacts)
+	if(this->_constructorid == ContactsContacts::CtorContactsContacts)
 	{
 		mtstream->readTLVector<Contact>(this->_contacts, false);
 		mtstream->readTLVector<User>(this->_users, false);
@@ -25,13 +25,13 @@ void ContactsContacts::read(MTProtoStream* mtstream)
 
 void ContactsContacts::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ContactsContacts::ctorContactsContactsNotModified) ||
-		 (this->_constructorid == ContactsContacts::ctorContactsContacts));
+	Q_ASSERT((this->_constructorid == ContactsContacts::CtorContactsContactsNotModified) ||
+		 (this->_constructorid == ContactsContacts::CtorContactsContacts));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ContactsContacts::ctorContactsContacts)
+	if(this->_constructorid == ContactsContacts::CtorContactsContacts)
 	{
 		mtstream->writeTLVector(this->_contacts, false);
 		mtstream->writeTLVector(this->_users, false);

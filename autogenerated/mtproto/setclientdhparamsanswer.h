@@ -21,9 +21,9 @@ class SetClientDHParamsAnswer: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorDhGenOk = 0x3bcbf734,
-			ctorDhGenRetry = 0x46dc1fb9,
-			ctorDhGenFail = 0xa69dae02,
+			CtorDhGenOk = 0x3bcbf734,
+			CtorDhGenRetry = 0x46dc1fb9,
+			CtorDhGenFail = 0xa69dae02,
 		};
 
 	public:

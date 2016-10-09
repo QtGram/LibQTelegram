@@ -15,16 +15,16 @@ StickerSet::StickerSet(QObject* parent) : TelegramObject(parent)
 	this->_access_hash = 0;
 	this->_count = 0;
 	this->_hash = 0;
-	this->_constructorid = StickerSet::ctorStickerSet;
+	this->_constructorid = StickerSet::CtorStickerSet;
 }
 
 void StickerSet::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == StickerSet::ctorStickerSet));
+	Q_ASSERT((this->_constructorid == StickerSet::CtorStickerSet));
 	
-	if(this->_constructorid == StickerSet::ctorStickerSet)
+	if(this->_constructorid == StickerSet::CtorStickerSet)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_installed = IS_FLAG_SET(this->_flags, 0);
@@ -42,12 +42,12 @@ void StickerSet::read(MTProtoStream* mtstream)
 
 void StickerSet::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == StickerSet::ctorStickerSet));
+	Q_ASSERT((this->_constructorid == StickerSet::CtorStickerSet));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == StickerSet::ctorStickerSet)
+	if(this->_constructorid == StickerSet::CtorStickerSet)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_id);
@@ -63,7 +63,7 @@ void StickerSet::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == StickerSet::ctorStickerSet)
+	if(this->_constructorid == StickerSet::CtorStickerSet)
 	{
 		if(this->_is_installed)
 			SET_FLAG_BIT(this->_flags, 0);

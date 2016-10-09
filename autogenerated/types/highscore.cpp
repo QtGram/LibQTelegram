@@ -9,16 +9,16 @@ HighScore::HighScore(QObject* parent) : TelegramObject(parent)
 	this->_pos = 0;
 	this->_user_id = 0;
 	this->_score = 0;
-	this->_constructorid = HighScore::ctorHighScore;
+	this->_constructorid = HighScore::CtorHighScore;
 }
 
 void HighScore::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == HighScore::ctorHighScore));
+	Q_ASSERT((this->_constructorid == HighScore::CtorHighScore));
 	
-	if(this->_constructorid == HighScore::ctorHighScore)
+	if(this->_constructorid == HighScore::CtorHighScore)
 	{
 		this->_pos = mtstream->readTLInt();
 		this->_user_id = mtstream->readTLInt();
@@ -28,12 +28,12 @@ void HighScore::read(MTProtoStream* mtstream)
 
 void HighScore::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == HighScore::ctorHighScore));
+	Q_ASSERT((this->_constructorid == HighScore::CtorHighScore));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == HighScore::ctorHighScore)
+	if(this->_constructorid == HighScore::CtorHighScore)
 	{
 		mtstream->writeTLInt(this->_pos);
 		mtstream->writeTLInt(this->_user_id);

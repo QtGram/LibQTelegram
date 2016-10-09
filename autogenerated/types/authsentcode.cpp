@@ -11,16 +11,16 @@ AuthSentCode::AuthSentCode(QObject* parent) : TelegramObject(parent)
 	this->_type = NULL;
 	this->_next_type = NULL;
 	this->_timeout = 0;
-	this->_constructorid = AuthSentCode::ctorAuthSentCode;
+	this->_constructorid = AuthSentCode::CtorAuthSentCode;
 }
 
 void AuthSentCode::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == AuthSentCode::ctorAuthSentCode));
+	Q_ASSERT((this->_constructorid == AuthSentCode::CtorAuthSentCode));
 	
-	if(this->_constructorid == AuthSentCode::ctorAuthSentCode)
+	if(this->_constructorid == AuthSentCode::CtorAuthSentCode)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_phone_registered = IS_FLAG_SET(this->_flags, 0);
@@ -61,12 +61,12 @@ void AuthSentCode::read(MTProtoStream* mtstream)
 
 void AuthSentCode::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == AuthSentCode::ctorAuthSentCode));
+	Q_ASSERT((this->_constructorid == AuthSentCode::CtorAuthSentCode));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == AuthSentCode::ctorAuthSentCode)
+	if(this->_constructorid == AuthSentCode::CtorAuthSentCode)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_type != NULL)
@@ -92,7 +92,7 @@ void AuthSentCode::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == AuthSentCode::ctorAuthSentCode)
+	if(this->_constructorid == AuthSentCode::CtorAuthSentCode)
 	{
 		if(this->_is_phone_registered)
 			SET_FLAG_BIT(this->_flags, 0);

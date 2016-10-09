@@ -6,16 +6,16 @@
 
 DisabledFeature::DisabledFeature(QObject* parent) : TelegramObject(parent)
 {
-	this->_constructorid = DisabledFeature::ctorDisabledFeature;
+	this->_constructorid = DisabledFeature::CtorDisabledFeature;
 }
 
 void DisabledFeature::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == DisabledFeature::ctorDisabledFeature));
+	Q_ASSERT((this->_constructorid == DisabledFeature::CtorDisabledFeature));
 	
-	if(this->_constructorid == DisabledFeature::ctorDisabledFeature)
+	if(this->_constructorid == DisabledFeature::CtorDisabledFeature)
 	{
 		this->_feature = mtstream->readTLString();
 		this->_description = mtstream->readTLString();
@@ -24,12 +24,12 @@ void DisabledFeature::read(MTProtoStream* mtstream)
 
 void DisabledFeature::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == DisabledFeature::ctorDisabledFeature));
+	Q_ASSERT((this->_constructorid == DisabledFeature::CtorDisabledFeature));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == DisabledFeature::ctorDisabledFeature)
+	if(this->_constructorid == DisabledFeature::CtorDisabledFeature)
 	{
 		mtstream->writeTLString(this->_feature);
 		mtstream->writeTLString(this->_description);

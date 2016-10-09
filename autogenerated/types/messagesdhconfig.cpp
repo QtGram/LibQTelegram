@@ -14,12 +14,12 @@ void MessagesDhConfig::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesDhConfig::ctorMessagesDhConfigNotModified) ||
-		 (this->_constructorid == MessagesDhConfig::ctorMessagesDhConfig));
+	Q_ASSERT((this->_constructorid == MessagesDhConfig::CtorMessagesDhConfigNotModified) ||
+		 (this->_constructorid == MessagesDhConfig::CtorMessagesDhConfig));
 	
-	if(this->_constructorid == MessagesDhConfig::ctorMessagesDhConfigNotModified)
+	if(this->_constructorid == MessagesDhConfig::CtorMessagesDhConfigNotModified)
 		this->_random = mtstream->readTLBytes();
-	else if(this->_constructorid == MessagesDhConfig::ctorMessagesDhConfig)
+	else if(this->_constructorid == MessagesDhConfig::CtorMessagesDhConfig)
 	{
 		this->_g = mtstream->readTLInt();
 		this->_p = mtstream->readTLBytes();
@@ -30,15 +30,15 @@ void MessagesDhConfig::read(MTProtoStream* mtstream)
 
 void MessagesDhConfig::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesDhConfig::ctorMessagesDhConfigNotModified) ||
-		 (this->_constructorid == MessagesDhConfig::ctorMessagesDhConfig));
+	Q_ASSERT((this->_constructorid == MessagesDhConfig::CtorMessagesDhConfigNotModified) ||
+		 (this->_constructorid == MessagesDhConfig::CtorMessagesDhConfig));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesDhConfig::ctorMessagesDhConfigNotModified)
+	if(this->_constructorid == MessagesDhConfig::CtorMessagesDhConfigNotModified)
 		mtstream->writeTLBytes(this->_random);
-	else if(this->_constructorid == MessagesDhConfig::ctorMessagesDhConfig)
+	else if(this->_constructorid == MessagesDhConfig::CtorMessagesDhConfig)
 	{
 		mtstream->writeTLInt(this->_g);
 		mtstream->writeTLBytes(this->_p);

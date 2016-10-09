@@ -15,16 +15,16 @@ class StorageFileType: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorStorageFileUnknown = 0xaa963b05,
-			ctorStorageFileJpeg = 0x7efe0e,
-			ctorStorageFileGif = 0xcae1aadf,
-			ctorStorageFilePng = 0xa4f63c0,
-			ctorStorageFilePdf = 0xae1e508d,
-			ctorStorageFileMp3 = 0x528a0677,
-			ctorStorageFileMov = 0x4b09ebbc,
-			ctorStorageFilePartial = 0x40bc6f52,
-			ctorStorageFileMp4 = 0xb3cea0e4,
-			ctorStorageFileWebp = 0x1081464c,
+			CtorStorageFileUnknown = 0xaa963b05,
+			CtorStorageFileJpeg = 0x7efe0e,
+			CtorStorageFileGif = 0xcae1aadf,
+			CtorStorageFilePng = 0xa4f63c0,
+			CtorStorageFilePdf = 0xae1e508d,
+			CtorStorageFileMp3 = 0x528a0677,
+			CtorStorageFileMov = 0x4b09ebbc,
+			CtorStorageFilePartial = 0x40bc6f52,
+			CtorStorageFileMp4 = 0xb3cea0e4,
+			CtorStorageFileWebp = 0x1081464c,
 		};
 
 	public:

@@ -17,7 +17,7 @@ class HelpInviteText: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorHelpInviteText = 0x18cb9f78,
+			CtorHelpInviteText = 0x18cb9f78,
 		};
 
 	public:

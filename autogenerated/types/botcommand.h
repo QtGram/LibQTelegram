@@ -18,7 +18,7 @@ class BotCommand: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorBotCommand = 0xc27ac8c7,
+			CtorBotCommand = 0xc27ac8c7,
 		};
 
 	public:

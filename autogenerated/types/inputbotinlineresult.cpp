@@ -19,12 +19,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputBotInlineResult::ctorInputBotInlineResult) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame));
+	Q_ASSERT((this->_constructorid == InputBotInlineResult::CtorInputBotInlineResult) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultPhoto) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultDocument) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultGame));
 	
-	if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResult)
+	if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResult)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLString();
@@ -69,7 +69,7 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultPhoto)
 	{
 		this->_id = mtstream->readTLString();
 		this->_type = mtstream->readTLString();
@@ -99,7 +99,7 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultDocument)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLString();
@@ -136,7 +136,7 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultGame)
 	{
 		this->_id = mtstream->readTLString();
 		this->_short_name = mtstream->readTLString();
@@ -157,15 +157,15 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 
 void InputBotInlineResult::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputBotInlineResult::ctorInputBotInlineResult) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument) ||
-		 (this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame));
+	Q_ASSERT((this->_constructorid == InputBotInlineResult::CtorInputBotInlineResult) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultPhoto) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultDocument) ||
+		 (this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultGame));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResult)
+	if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResult)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_id);
@@ -202,7 +202,7 @@ void InputBotInlineResult::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultPhoto)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultPhoto)
 	{
 		mtstream->writeTLString(this->_id);
 		mtstream->writeTLString(this->_type);
@@ -216,7 +216,7 @@ void InputBotInlineResult::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultDocument)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_id);
@@ -237,7 +237,7 @@ void InputBotInlineResult::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultGame)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultGame)
 	{
 		mtstream->writeTLString(this->_id);
 		mtstream->writeTLString(this->_short_name);
@@ -252,7 +252,7 @@ void InputBotInlineResult::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResult)
+	if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResult)
 	{
 		if(!this->_title.isEmpty())
 			SET_FLAG_BIT(this->_flags, 1);
@@ -273,7 +273,7 @@ void InputBotInlineResult::compileFlags()
 		if(this->_duration)
 			SET_FLAG_BIT(this->_flags, 7);
 	}
-	else if(this->_constructorid == InputBotInlineResult::ctorInputBotInlineResultDocument)
+	else if(this->_constructorid == InputBotInlineResult::CtorInputBotInlineResultDocument)
 	{
 		if(!this->_title.isEmpty())
 			SET_FLAG_BIT(this->_flags, 1);

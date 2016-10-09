@@ -13,10 +13,10 @@ void MessagesAllStickers::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessagesAllStickers::ctorMessagesAllStickersNotModified) ||
-		 (this->_constructorid == MessagesAllStickers::ctorMessagesAllStickers));
+	Q_ASSERT((this->_constructorid == MessagesAllStickers::CtorMessagesAllStickersNotModified) ||
+		 (this->_constructorid == MessagesAllStickers::CtorMessagesAllStickers));
 	
-	if(this->_constructorid == MessagesAllStickers::ctorMessagesAllStickers)
+	if(this->_constructorid == MessagesAllStickers::CtorMessagesAllStickers)
 	{
 		this->_hash = mtstream->readTLInt();
 		mtstream->readTLVector<StickerSet>(this->_sets, false);
@@ -25,13 +25,13 @@ void MessagesAllStickers::read(MTProtoStream* mtstream)
 
 void MessagesAllStickers::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessagesAllStickers::ctorMessagesAllStickersNotModified) ||
-		 (this->_constructorid == MessagesAllStickers::ctorMessagesAllStickers));
+	Q_ASSERT((this->_constructorid == MessagesAllStickers::CtorMessagesAllStickersNotModified) ||
+		 (this->_constructorid == MessagesAllStickers::CtorMessagesAllStickers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessagesAllStickers::ctorMessagesAllStickers)
+	if(this->_constructorid == MessagesAllStickers::CtorMessagesAllStickers)
 	{
 		mtstream->writeTLInt(this->_hash);
 		mtstream->writeTLVector(this->_sets, false);

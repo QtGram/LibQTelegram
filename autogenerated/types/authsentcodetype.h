@@ -18,10 +18,10 @@ class AuthSentCodeType: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorAuthSentCodeTypeApp = 0x3dbb5986,
-			ctorAuthSentCodeTypeSms = 0xc000bba2,
-			ctorAuthSentCodeTypeCall = 0x5353e5a7,
-			ctorAuthSentCodeTypeFlashCall = 0xab03c6d9,
+			CtorAuthSentCodeTypeApp = 0x3dbb5986,
+			CtorAuthSentCodeTypeSms = 0xc000bba2,
+			CtorAuthSentCodeTypeCall = 0x5353e5a7,
+			CtorAuthSentCodeTypeFlashCall = 0xab03c6d9,
 		};
 
 	public:

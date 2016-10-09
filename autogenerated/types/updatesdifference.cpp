@@ -16,16 +16,16 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceEmpty) ||
-		 (this->_constructorid == UpdatesDifference::ctorUpdatesDifference) ||
-		 (this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice));
+	Q_ASSERT((this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceEmpty) ||
+		 (this->_constructorid == UpdatesDifference::CtorUpdatesDifference) ||
+		 (this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceSlice));
 	
-	if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceEmpty)
+	if(this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceEmpty)
 	{
 		this->_date = mtstream->readTLInt();
 		this->_seq = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifference)
+	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifference)
 	{
 		mtstream->readTLVector<Message>(this->_new_messages, false);
 		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false);
@@ -45,7 +45,7 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice)
+	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceSlice)
 	{
 		mtstream->readTLVector<Message>(this->_new_messages, false);
 		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false);
@@ -69,19 +69,19 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 
 void UpdatesDifference::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceEmpty) ||
-		 (this->_constructorid == UpdatesDifference::ctorUpdatesDifference) ||
-		 (this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice));
+	Q_ASSERT((this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceEmpty) ||
+		 (this->_constructorid == UpdatesDifference::CtorUpdatesDifference) ||
+		 (this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceSlice));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceEmpty)
+	if(this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceEmpty)
 	{
 		mtstream->writeTLInt(this->_date);
 		mtstream->writeTLInt(this->_seq);
 	}
-	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifference)
+	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifference)
 	{
 		mtstream->writeTLVector(this->_new_messages, false);
 		mtstream->writeTLVector(this->_new_encrypted_messages, false);
@@ -93,7 +93,7 @@ void UpdatesDifference::write(MTProtoStream* mtstream)
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == UpdatesDifference::ctorUpdatesDifferenceSlice)
+	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceSlice)
 	{
 		mtstream->writeTLVector(this->_new_messages, false);
 		mtstream->writeTLVector(this->_new_encrypted_messages, false);

@@ -14,10 +14,10 @@ void ChannelMessagesFilter::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty) ||
-		 (this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilter));
+	Q_ASSERT((this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilterEmpty) ||
+		 (this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilter));
 	
-	if(this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilter)
+	if(this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilter)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_exclude_new_messages = IS_FLAG_SET(this->_flags, 1);
@@ -27,13 +27,13 @@ void ChannelMessagesFilter::read(MTProtoStream* mtstream)
 
 void ChannelMessagesFilter::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilterEmpty) ||
-		 (this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilter));
+	Q_ASSERT((this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilterEmpty) ||
+		 (this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilter));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilter)
+	if(this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilter)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLVector(this->_ranges, false);
@@ -44,7 +44,7 @@ void ChannelMessagesFilter::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == ChannelMessagesFilter::ctorChannelMessagesFilter)
+	if(this->_constructorid == ChannelMessagesFilter::CtorChannelMessagesFilter)
 	{
 		if(this->_is_exclude_new_messages)
 			SET_FLAG_BIT(this->_flags, 1);

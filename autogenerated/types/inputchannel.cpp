@@ -14,10 +14,10 @@ void InputChannel::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == InputChannel::ctorInputChannelEmpty) ||
-		 (this->_constructorid == InputChannel::ctorInputChannel));
+	Q_ASSERT((this->_constructorid == InputChannel::CtorInputChannelEmpty) ||
+		 (this->_constructorid == InputChannel::CtorInputChannel));
 	
-	if(this->_constructorid == InputChannel::ctorInputChannel)
+	if(this->_constructorid == InputChannel::CtorInputChannel)
 	{
 		this->_channel_id = mtstream->readTLInt();
 		this->_access_hash = mtstream->readTLLong();
@@ -26,13 +26,13 @@ void InputChannel::read(MTProtoStream* mtstream)
 
 void InputChannel::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == InputChannel::ctorInputChannelEmpty) ||
-		 (this->_constructorid == InputChannel::ctorInputChannel));
+	Q_ASSERT((this->_constructorid == InputChannel::CtorInputChannelEmpty) ||
+		 (this->_constructorid == InputChannel::CtorInputChannel));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == InputChannel::ctorInputChannel)
+	if(this->_constructorid == InputChannel::CtorInputChannel)
 	{
 		mtstream->writeTLInt(this->_channel_id);
 		mtstream->writeTLLong(this->_access_hash);

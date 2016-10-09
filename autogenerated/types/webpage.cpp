@@ -20,18 +20,18 @@ void WebPage::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == WebPage::ctorWebPageEmpty) ||
-		 (this->_constructorid == WebPage::ctorWebPagePending) ||
-		 (this->_constructorid == WebPage::ctorWebPage));
+	Q_ASSERT((this->_constructorid == WebPage::CtorWebPageEmpty) ||
+		 (this->_constructorid == WebPage::CtorWebPagePending) ||
+		 (this->_constructorid == WebPage::CtorWebPage));
 	
-	if(this->_constructorid == WebPage::ctorWebPageEmpty)
+	if(this->_constructorid == WebPage::CtorWebPageEmpty)
 		this->_id = mtstream->readTLLong();
-	else if(this->_constructorid == WebPage::ctorWebPagePending)
+	else if(this->_constructorid == WebPage::CtorWebPagePending)
 	{
 		this->_id = mtstream->readTLLong();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == WebPage::ctorWebPage)
+	else if(this->_constructorid == WebPage::CtorWebPage)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_id = mtstream->readTLLong();
@@ -103,21 +103,21 @@ void WebPage::read(MTProtoStream* mtstream)
 
 void WebPage::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == WebPage::ctorWebPageEmpty) ||
-		 (this->_constructorid == WebPage::ctorWebPagePending) ||
-		 (this->_constructorid == WebPage::ctorWebPage));
+	Q_ASSERT((this->_constructorid == WebPage::CtorWebPageEmpty) ||
+		 (this->_constructorid == WebPage::CtorWebPagePending) ||
+		 (this->_constructorid == WebPage::CtorWebPage));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == WebPage::ctorWebPageEmpty)
+	if(this->_constructorid == WebPage::CtorWebPageEmpty)
 		mtstream->writeTLLong(this->_id);
-	else if(this->_constructorid == WebPage::ctorWebPagePending)
+	else if(this->_constructorid == WebPage::CtorWebPagePending)
 	{
 		mtstream->writeTLLong(this->_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == WebPage::ctorWebPage)
+	else if(this->_constructorid == WebPage::CtorWebPage)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLLong(this->_id);
@@ -175,7 +175,7 @@ void WebPage::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == WebPage::ctorWebPage)
+	if(this->_constructorid == WebPage::CtorWebPage)
 	{
 		if(!this->_type.isEmpty())
 			SET_FLAG_BIT(this->_flags, 0);

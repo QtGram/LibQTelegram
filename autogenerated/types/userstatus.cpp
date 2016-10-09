@@ -14,34 +14,34 @@ void UserStatus::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == UserStatus::ctorUserStatusEmpty) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusOnline) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusOffline) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusRecently) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusLastWeek) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusLastMonth));
+	Q_ASSERT((this->_constructorid == UserStatus::CtorUserStatusEmpty) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusOnline) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusOffline) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusRecently) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusLastWeek) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusLastMonth));
 	
-	if(this->_constructorid == UserStatus::ctorUserStatusOnline)
+	if(this->_constructorid == UserStatus::CtorUserStatusOnline)
 		this->_expires = mtstream->readTLInt();
-	else if(this->_constructorid == UserStatus::ctorUserStatusOffline)
+	else if(this->_constructorid == UserStatus::CtorUserStatusOffline)
 		this->_was_online = mtstream->readTLInt();
 }
 
 void UserStatus::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == UserStatus::ctorUserStatusEmpty) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusOnline) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusOffline) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusRecently) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusLastWeek) ||
-		 (this->_constructorid == UserStatus::ctorUserStatusLastMonth));
+	Q_ASSERT((this->_constructorid == UserStatus::CtorUserStatusEmpty) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusOnline) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusOffline) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusRecently) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusLastWeek) ||
+		 (this->_constructorid == UserStatus::CtorUserStatusLastMonth));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == UserStatus::ctorUserStatusOnline)
+	if(this->_constructorid == UserStatus::CtorUserStatusOnline)
 		mtstream->writeTLInt(this->_expires);
-	else if(this->_constructorid == UserStatus::ctorUserStatusOffline)
+	else if(this->_constructorid == UserStatus::CtorUserStatusOffline)
 		mtstream->writeTLInt(this->_was_online);
 }
 

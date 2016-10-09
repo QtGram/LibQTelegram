@@ -18,7 +18,7 @@ class MessageRange: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorMessageRange = 0xae30253,
+			CtorMessageRange = 0xae30253,
 		};
 
 	public:

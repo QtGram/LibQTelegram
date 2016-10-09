@@ -8,16 +8,16 @@ Pong::Pong(QObject* parent) : TelegramObject(parent)
 {
 	this->_msg_id = 0;
 	this->_ping_id = 0;
-	this->_constructorid = Pong::ctorPong;
+	this->_constructorid = Pong::CtorPong;
 }
 
 void Pong::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Pong::ctorPong));
+	Q_ASSERT((this->_constructorid == Pong::CtorPong));
 	
-	if(this->_constructorid == Pong::ctorPong)
+	if(this->_constructorid == Pong::CtorPong)
 	{
 		this->_msg_id = mtstream->readTLLong();
 		this->_ping_id = mtstream->readTLLong();
@@ -26,12 +26,12 @@ void Pong::read(MTProtoStream* mtstream)
 
 void Pong::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Pong::ctorPong));
+	Q_ASSERT((this->_constructorid == Pong::CtorPong));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Pong::ctorPong)
+	if(this->_constructorid == Pong::CtorPong)
 	{
 		mtstream->writeTLLong(this->_msg_id);
 		mtstream->writeTLLong(this->_ping_id);

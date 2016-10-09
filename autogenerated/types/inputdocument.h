@@ -18,8 +18,8 @@ class InputDocument: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorInputDocumentEmpty = 0x72f0eaae,
-			ctorInputDocument = 0x18798952,
+			CtorInputDocumentEmpty = 0x72f0eaae,
+			CtorInputDocument = 0x18798952,
 		};
 
 	public:

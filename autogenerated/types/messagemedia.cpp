@@ -18,17 +18,17 @@ void MessageMedia::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == MessageMedia::ctorMessageMediaEmpty) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaPhoto) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaGeo) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaContact) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaUnsupported) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaDocument) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaWebPage) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaVenue) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaGame));
+	Q_ASSERT((this->_constructorid == MessageMedia::CtorMessageMediaEmpty) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaPhoto) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaGeo) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaContact) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaUnsupported) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaDocument) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaWebPage) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaVenue) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaGame));
 	
-	if(this->_constructorid == MessageMedia::ctorMessageMediaPhoto)
+	if(this->_constructorid == MessageMedia::CtorMessageMediaPhoto)
 	{
 		TLInt photo_ctor = mtstream->peekTLConstructor();
 		
@@ -45,7 +45,7 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaGeo)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaGeo)
 	{
 		TLInt geo_ctor = mtstream->peekTLConstructor();
 		
@@ -60,14 +60,14 @@ void MessageMedia::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaContact)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaContact)
 	{
 		this->_phone_number = mtstream->readTLString();
 		this->_first_name = mtstream->readTLString();
 		this->_last_name = mtstream->readTLString();
 		this->_user_id = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaDocument)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaDocument)
 	{
 		TLInt document_ctor = mtstream->peekTLConstructor();
 		
@@ -84,7 +84,7 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		this->_caption = mtstream->readTLString();
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaWebPage)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaWebPage)
 	{
 		TLInt webpage_ctor = mtstream->peekTLConstructor();
 		
@@ -99,7 +99,7 @@ void MessageMedia::read(MTProtoStream* mtstream)
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaVenue)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaVenue)
 	{
 		TLInt geo_ctor = mtstream->peekTLConstructor();
 		
@@ -119,7 +119,7 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		this->_provider = mtstream->readTLString();
 		this->_venue_id = mtstream->readTLString();
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaGame)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaGame)
 	{
 		TLInt game_ctor = mtstream->peekTLConstructor();
 		
@@ -138,20 +138,20 @@ void MessageMedia::read(MTProtoStream* mtstream)
 
 void MessageMedia::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == MessageMedia::ctorMessageMediaEmpty) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaPhoto) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaGeo) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaContact) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaUnsupported) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaDocument) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaWebPage) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaVenue) ||
-		 (this->_constructorid == MessageMedia::ctorMessageMediaGame));
+	Q_ASSERT((this->_constructorid == MessageMedia::CtorMessageMediaEmpty) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaPhoto) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaGeo) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaContact) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaUnsupported) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaDocument) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaWebPage) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaVenue) ||
+		 (this->_constructorid == MessageMedia::CtorMessageMediaGame));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == MessageMedia::ctorMessageMediaPhoto)
+	if(this->_constructorid == MessageMedia::CtorMessageMediaPhoto)
 	{
 		if(this->_photo != NULL)
 			this->_photo->write(mtstream);
@@ -160,21 +160,21 @@ void MessageMedia::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaGeo)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaGeo)
 	{
 		if(this->_geo != NULL)
 			this->_geo->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaContact)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaContact)
 	{
 		mtstream->writeTLString(this->_phone_number);
 		mtstream->writeTLString(this->_first_name);
 		mtstream->writeTLString(this->_last_name);
 		mtstream->writeTLInt(this->_user_id);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaDocument)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaDocument)
 	{
 		if(this->_document != NULL)
 			this->_document->write(mtstream);
@@ -183,14 +183,14 @@ void MessageMedia::write(MTProtoStream* mtstream)
 		
 		mtstream->writeTLString(this->_caption);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaWebPage)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaWebPage)
 	{
 		if(this->_webpage != NULL)
 			this->_webpage->write(mtstream);
 		else
 			mtstream->writeTLConstructor(TLTypes::Null);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaVenue)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaVenue)
 	{
 		if(this->_geo != NULL)
 			this->_geo->write(mtstream);
@@ -202,7 +202,7 @@ void MessageMedia::write(MTProtoStream* mtstream)
 		mtstream->writeTLString(this->_provider);
 		mtstream->writeTLString(this->_venue_id);
 	}
-	else if(this->_constructorid == MessageMedia::ctorMessageMediaGame)
+	else if(this->_constructorid == MessageMedia::CtorMessageMediaGame)
 	{
 		if(this->_game != NULL)
 			this->_game->write(mtstream);

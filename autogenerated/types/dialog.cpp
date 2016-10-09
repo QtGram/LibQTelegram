@@ -15,16 +15,16 @@ Dialog::Dialog(QObject* parent) : TelegramObject(parent)
 	this->_notify_settings = NULL;
 	this->_pts = 0;
 	this->_draft = NULL;
-	this->_constructorid = Dialog::ctorDialog;
+	this->_constructorid = Dialog::CtorDialog;
 }
 
 void Dialog::read(MTProtoStream* mtstream) 
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == Dialog::ctorDialog));
+	Q_ASSERT((this->_constructorid == Dialog::CtorDialog));
 	
-	if(this->_constructorid == Dialog::ctorDialog)
+	if(this->_constructorid == Dialog::CtorDialog)
 	{
 		this->_flags = mtstream->readTLInt();
 		TLInt peer_ctor = mtstream->peekTLConstructor();
@@ -80,12 +80,12 @@ void Dialog::read(MTProtoStream* mtstream)
 
 void Dialog::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == Dialog::ctorDialog));
+	Q_ASSERT((this->_constructorid == Dialog::CtorDialog));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == Dialog::ctorDialog)
+	if(this->_constructorid == Dialog::CtorDialog)
 	{
 		mtstream->writeTLInt(this->_flags);
 		if(this->_peer != NULL)
@@ -119,7 +119,7 @@ void Dialog::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == Dialog::ctorDialog)
+	if(this->_constructorid == Dialog::CtorDialog)
 	{
 		if(this->_pts)
 			SET_FLAG_BIT(this->_flags, 0);

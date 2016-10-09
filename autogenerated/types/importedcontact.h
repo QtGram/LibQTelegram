@@ -18,7 +18,7 @@ class ImportedContact: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorImportedContact = 0xd0028438,
+			CtorImportedContact = 0xd0028438,
 		};
 
 	public:

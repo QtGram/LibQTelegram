@@ -13,34 +13,34 @@ void PrivacyRule::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == PrivacyRule::ctorPrivacyValueAllowContacts) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueAllowAll) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueAllowUsers) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowContacts) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowAll) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowUsers));
+	Q_ASSERT((this->_constructorid == PrivacyRule::CtorPrivacyValueAllowContacts) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueAllowAll) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueAllowUsers) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowContacts) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowAll) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowUsers));
 	
-	if(this->_constructorid == PrivacyRule::ctorPrivacyValueAllowUsers)
+	if(this->_constructorid == PrivacyRule::CtorPrivacyValueAllowUsers)
 		mtstream->readTLVector<TLInt>(this->_users, false);
-	else if(this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowUsers)
+	else if(this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowUsers)
 		mtstream->readTLVector<TLInt>(this->_users, false);
 }
 
 void PrivacyRule::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == PrivacyRule::ctorPrivacyValueAllowContacts) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueAllowAll) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueAllowUsers) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowContacts) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowAll) ||
-		 (this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowUsers));
+	Q_ASSERT((this->_constructorid == PrivacyRule::CtorPrivacyValueAllowContacts) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueAllowAll) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueAllowUsers) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowContacts) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowAll) ||
+		 (this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowUsers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == PrivacyRule::ctorPrivacyValueAllowUsers)
+	if(this->_constructorid == PrivacyRule::CtorPrivacyValueAllowUsers)
 		mtstream->writeTLVector(this->_users, false);
-	else if(this->_constructorid == PrivacyRule::ctorPrivacyValueDisallowUsers)
+	else if(this->_constructorid == PrivacyRule::CtorPrivacyValueDisallowUsers)
 		mtstream->writeTLVector(this->_users, false);
 }
 

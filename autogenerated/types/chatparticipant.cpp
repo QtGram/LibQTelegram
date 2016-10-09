@@ -15,19 +15,19 @@ void ChatParticipant::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == ChatParticipant::ctorChatParticipant) ||
-		 (this->_constructorid == ChatParticipant::ctorChatParticipantCreator) ||
-		 (this->_constructorid == ChatParticipant::ctorChatParticipantAdmin));
+	Q_ASSERT((this->_constructorid == ChatParticipant::CtorChatParticipant) ||
+		 (this->_constructorid == ChatParticipant::CtorChatParticipantCreator) ||
+		 (this->_constructorid == ChatParticipant::CtorChatParticipantAdmin));
 	
-	if(this->_constructorid == ChatParticipant::ctorChatParticipant)
+	if(this->_constructorid == ChatParticipant::CtorChatParticipant)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_inviter_id = mtstream->readTLInt();
 		this->_date = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == ChatParticipant::ctorChatParticipantCreator)
+	else if(this->_constructorid == ChatParticipant::CtorChatParticipantCreator)
 		this->_user_id = mtstream->readTLInt();
-	else if(this->_constructorid == ChatParticipant::ctorChatParticipantAdmin)
+	else if(this->_constructorid == ChatParticipant::CtorChatParticipantAdmin)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_inviter_id = mtstream->readTLInt();
@@ -37,22 +37,22 @@ void ChatParticipant::read(MTProtoStream* mtstream)
 
 void ChatParticipant::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == ChatParticipant::ctorChatParticipant) ||
-		 (this->_constructorid == ChatParticipant::ctorChatParticipantCreator) ||
-		 (this->_constructorid == ChatParticipant::ctorChatParticipantAdmin));
+	Q_ASSERT((this->_constructorid == ChatParticipant::CtorChatParticipant) ||
+		 (this->_constructorid == ChatParticipant::CtorChatParticipantCreator) ||
+		 (this->_constructorid == ChatParticipant::CtorChatParticipantAdmin));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == ChatParticipant::ctorChatParticipant)
+	if(this->_constructorid == ChatParticipant::CtorChatParticipant)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_inviter_id);
 		mtstream->writeTLInt(this->_date);
 	}
-	else if(this->_constructorid == ChatParticipant::ctorChatParticipantCreator)
+	else if(this->_constructorid == ChatParticipant::CtorChatParticipantCreator)
 		mtstream->writeTLInt(this->_user_id);
-	else if(this->_constructorid == ChatParticipant::ctorChatParticipantAdmin)
+	else if(this->_constructorid == ChatParticipant::CtorChatParticipantAdmin)
 	{
 		mtstream->writeTLInt(this->_user_id);
 		mtstream->writeTLInt(this->_inviter_id);

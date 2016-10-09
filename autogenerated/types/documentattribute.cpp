@@ -20,20 +20,20 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == DocumentAttribute::ctorDocumentAttributeImageSize) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeAnimated) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeSticker) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeAudio) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeFilename) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeHasStickers));
+	Q_ASSERT((this->_constructorid == DocumentAttribute::CtorDocumentAttributeImageSize) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeAnimated) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeSticker) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeVideo) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeAudio) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeFilename) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeHasStickers));
 	
-	if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeImageSize)
+	if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeImageSize)
 	{
 		this->_w = mtstream->readTLInt();
 		this->_h = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeSticker)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeSticker)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_mask = IS_FLAG_SET(this->_flags, 1);
@@ -67,13 +67,13 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 			}
 		}
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeVideo)
 	{
 		this->_duration = mtstream->readTLInt();
 		this->_w = mtstream->readTLInt();
 		this->_h = mtstream->readTLInt();
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeAudio)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeAudio)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_voice = IS_FLAG_SET(this->_flags, 10);
@@ -87,29 +87,29 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 2))
 			this->_waveform = mtstream->readTLBytes();
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeFilename)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeFilename)
 		this->_file_name = mtstream->readTLString();
 }
 
 void DocumentAttribute::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == DocumentAttribute::ctorDocumentAttributeImageSize) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeAnimated) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeSticker) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeAudio) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeFilename) ||
-		 (this->_constructorid == DocumentAttribute::ctorDocumentAttributeHasStickers));
+	Q_ASSERT((this->_constructorid == DocumentAttribute::CtorDocumentAttributeImageSize) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeAnimated) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeSticker) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeVideo) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeAudio) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeFilename) ||
+		 (this->_constructorid == DocumentAttribute::CtorDocumentAttributeHasStickers));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeImageSize)
+	if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeImageSize)
 	{
 		mtstream->writeTLInt(this->_w);
 		mtstream->writeTLInt(this->_h);
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeSticker)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeSticker)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_alt);
@@ -126,13 +126,13 @@ void DocumentAttribute::write(MTProtoStream* mtstream)
 				mtstream->writeTLConstructor(TLTypes::Null);
 		}
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeVideo)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeVideo)
 	{
 		mtstream->writeTLInt(this->_duration);
 		mtstream->writeTLInt(this->_w);
 		mtstream->writeTLInt(this->_h);
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeAudio)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeAudio)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLInt(this->_duration);
@@ -145,7 +145,7 @@ void DocumentAttribute::write(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 2))
 			mtstream->writeTLBytes(this->_waveform);
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeFilename)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeFilename)
 		mtstream->writeTLString(this->_file_name);
 }
 
@@ -153,14 +153,14 @@ void DocumentAttribute::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeSticker)
+	if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeSticker)
 	{
 		if(this->_is_mask)
 			SET_FLAG_BIT(this->_flags, 1);
 		if(this->_mask_coords)
 			SET_FLAG_BIT(this->_flags, 0);
 	}
-	else if(this->_constructorid == DocumentAttribute::ctorDocumentAttributeAudio)
+	else if(this->_constructorid == DocumentAttribute::CtorDocumentAttributeAudio)
 	{
 		if(this->_is_voice)
 			SET_FLAG_BIT(this->_flags, 10);

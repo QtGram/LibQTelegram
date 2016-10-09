@@ -14,77 +14,77 @@ void KeyboardButton::read(MTProtoStream* mtstream)
 {
 	this->_constructorid = mtstream->readTLConstructor();
 	
-	Q_ASSERT((this->_constructorid == KeyboardButton::ctorKeyboardButton) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonUrl) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonCallback) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestPhone) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestGeoLocation) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonSwitchInline) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonGame));
+	Q_ASSERT((this->_constructorid == KeyboardButton::CtorKeyboardButton) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonUrl) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonCallback) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestPhone) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestGeoLocation) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonSwitchInline) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonGame));
 	
-	if(this->_constructorid == KeyboardButton::ctorKeyboardButton)
+	if(this->_constructorid == KeyboardButton::CtorKeyboardButton)
 		this->_text = mtstream->readTLString();
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonUrl)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonUrl)
 	{
 		this->_text = mtstream->readTLString();
 		this->_url = mtstream->readTLString();
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonCallback)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonCallback)
 	{
 		this->_text = mtstream->readTLString();
 		this->_data = mtstream->readTLBytes();
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestPhone)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestPhone)
 		this->_text = mtstream->readTLString();
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestGeoLocation)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestGeoLocation)
 		this->_text = mtstream->readTLString();
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonSwitchInline)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonSwitchInline)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_same_peer = IS_FLAG_SET(this->_flags, 0);
 		this->_text = mtstream->readTLString();
 		this->_query = mtstream->readTLString();
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonGame)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonGame)
 		this->_text = mtstream->readTLString();
 }
 
 void KeyboardButton::write(MTProtoStream* mtstream) 
 {
-	Q_ASSERT((this->_constructorid == KeyboardButton::ctorKeyboardButton) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonUrl) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonCallback) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestPhone) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestGeoLocation) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonSwitchInline) ||
-		 (this->_constructorid == KeyboardButton::ctorKeyboardButtonGame));
+	Q_ASSERT((this->_constructorid == KeyboardButton::CtorKeyboardButton) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonUrl) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonCallback) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestPhone) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestGeoLocation) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonSwitchInline) ||
+		 (this->_constructorid == KeyboardButton::CtorKeyboardButtonGame));
 	
 	this->compileFlags();
 	mtstream->writeTLConstructor(this->_constructorid);
 	
-	if(this->_constructorid == KeyboardButton::ctorKeyboardButton)
+	if(this->_constructorid == KeyboardButton::CtorKeyboardButton)
 		mtstream->writeTLString(this->_text);
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonUrl)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonUrl)
 	{
 		mtstream->writeTLString(this->_text);
 		mtstream->writeTLString(this->_url);
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonCallback)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonCallback)
 	{
 		mtstream->writeTLString(this->_text);
 		mtstream->writeTLBytes(this->_data);
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestPhone)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestPhone)
 		mtstream->writeTLString(this->_text);
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonRequestGeoLocation)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonRequestGeoLocation)
 		mtstream->writeTLString(this->_text);
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonSwitchInline)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonSwitchInline)
 	{
 		mtstream->writeTLInt(this->_flags);
 		mtstream->writeTLString(this->_text);
 		mtstream->writeTLString(this->_query);
 	}
-	else if(this->_constructorid == KeyboardButton::ctorKeyboardButtonGame)
+	else if(this->_constructorid == KeyboardButton::CtorKeyboardButtonGame)
 		mtstream->writeTLString(this->_text);
 }
 
@@ -92,7 +92,7 @@ void KeyboardButton::compileFlags()
 {
 	this->_flags = 0;
 	
-	if(this->_constructorid == KeyboardButton::ctorKeyboardButtonSwitchInline)
+	if(this->_constructorid == KeyboardButton::CtorKeyboardButtonSwitchInline)
 	{
 		if(this->_is_same_peer)
 			SET_FLAG_BIT(this->_flags, 0);

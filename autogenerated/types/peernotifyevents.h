@@ -15,8 +15,8 @@ class PeerNotifyEvents: public TelegramObject
 
 	public:
 		enum Constructors {
-			ctorPeerNotifyEventsEmpty = 0xadd53cb3,
-			ctorPeerNotifyEventsAll = 0x6d1ded88,
+			CtorPeerNotifyEventsEmpty = 0xadd53cb3,
+			CtorPeerNotifyEventsAll = 0x6d1ded88,
 		};
 
 	public:

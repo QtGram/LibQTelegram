@@ -91,7 +91,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     BadMsgNotification badmsgnotification;
     badmsgnotification.read(mtreply);
 
-    if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadMsgNotification)
+    if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadMsgNotification)
     {
         if(badmsgnotification.errorCode() == 16)
             qWarning() << "BadMsgNotification: msg_id too low";
@@ -118,7 +118,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
         else
             qWarning("BadMsgNotification: unknown error code %d", badmsgnotification.errorCode());
     }
-    else if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadServerSalt)
+    else if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadServerSalt)
     {
         DCConfig& config = DcConfig_fromDcId(this->_dcid);
         config.setServerSalt(badmsgnotification.newServerSalt());
