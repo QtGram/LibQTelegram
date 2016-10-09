@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "encryptedfile.h"
-#include "../../types/basic.h"
 #include "../../types/telegramobject.h"
+#include "../../types/basic.h"
 
 class EncryptedMessage: public TelegramObject
 {
@@ -17,6 +17,8 @@ class EncryptedMessage: public TelegramObject
 	Q_PROPERTY(TLInt date READ date WRITE setDate NOTIFY dateChanged)
 	Q_PROPERTY(TLBytes bytes READ bytes WRITE setBytes NOTIFY bytesChanged)
 	Q_PROPERTY(EncryptedFile* file READ file WRITE setFile NOTIFY fileChanged)
+
+	Q_ENUMS(Constructors)
 
 	public:
 		enum Constructors {

@@ -77,7 +77,7 @@ void DC::handleReply(const QByteArray &message)
         qFatal("Invalid server MessageId %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
 
     TLInt servertime = mtreply.messageId() >> 32;
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DC(this);
+    DCConfig& dcconfig = DcConfig_fromDc(this);
 
     dcconfig.setServerTime(servertime);
     this->handleReply(&mtreply);
@@ -88,11 +88,11 @@ void DC::handleReply(MTProtoReply *mtreply)
     if(this->_mtservicehandler->handle(mtreply))
         return;
 
-    if(UPDATE_HANDLER->handle(mtreply))
+    if(UpdateHandler_instance->handle(mtreply))
         return;
 
     this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
 
     if(dcconfig.authorization() < DCConfig::Authorized)
     {
@@ -117,7 +117,7 @@ void DC::handleReply(MTProtoReply *mtreply)
 void DC::sendPendingRequests()
 {
     int idx = 0;
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
 
     while(idx < this->_pendingrequests.length())
     {
@@ -141,7 +141,7 @@ TLLong DC::send(MTProtoRequest *req)
     {
         if(req->encrypted())
         {
-            DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+            DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
 
             if(dcconfig.authorization() < DCConfig::Authorized)
                 return req->messageId();

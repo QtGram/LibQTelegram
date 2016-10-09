@@ -97,7 +97,7 @@ void MTProtoReply::readEncryptedMessage()
 {
     Q_ASSERT(this->_dcid > 0);
 
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
     TLInt128 msgkey = this->readTLInt128();
     TLBytes aeskey, aesiv, msgkeybytes = ByteConverter::serialize(msgkey);
     Aes::calculateAesKeys(dcconfig.authorizationKey(), msgkeybytes, true, aeskey, aesiv);

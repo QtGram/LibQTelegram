@@ -37,6 +37,9 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
 
 QString TelegramHelper::fullName(User *user)
 {
+    if(!user)
+        return QString();
+
     if(user->lastName().isEmpty())
         return user->firstName();
 

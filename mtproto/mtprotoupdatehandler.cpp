@@ -52,12 +52,12 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
     Updates updates;
     updates.read(mtreply);
 
-    UpdatesState* clientstate = CONFIG_CLIENT_STATE;
+    UpdatesState* clientstate = TelegramConfig_clientState;
     ClientSyncManager::syncUpdates(&updates, clientstate);
 
     if(updates.constructorId() == TLTypes::UpdateShortMessage)
     {
-        Message* message = TelegramHelper::createMessage(&updates, TELEGRAM_CONFIG->me());
+        Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_instance->me());
         emit newMessage(message);
     }
     else
@@ -72,7 +72,7 @@ void MTProtoUpdateHandler::handleUpdatesState(MTProtoReply *mtreply)
     UpdatesState serverstate;
     serverstate.read(mtreply);
 
-    UpdatesState* clientstate = CONFIG_CLIENT_STATE;
+    UpdatesState* clientstate = TelegramConfig_clientState;
 
     if(((serverstate.seq() - clientstate->seq()) > 0) && (serverstate.seq() != (clientstate->seq() + 1)))
         this->getDifferences();
@@ -103,7 +103,7 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 
 void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
 {
-    UpdatesState* clientstate = CONFIG_CLIENT_STATE;
+    UpdatesState* clientstate = TelegramConfig_clientState;
 
     clientstate->setPts(serverstate->pts());
     clientstate->setQts(serverstate->qts());
@@ -114,18 +114,24 @@ void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
 
 void MTProtoUpdateHandler::getDifferences()
 {
-    UpdatesState* clientstate = CONFIG_CLIENT_STATE;
+    UpdatesState* clientstate = TelegramConfig_clientState;
     TelegramAPI::updatesGetDifference(DC_MAIN_SESSION, clientstate->pts(), clientstate->date(), clientstate->qts());
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
 {
-    UpdatesState* clientstate = CONFIG_CLIENT_STATE;
+    UpdatesState* clientstate = TelegramConfig_clientState;
 
     for(int i = 0; i < updatelist.length(); i++)
     {
         Update* update = updatelist[i];
         ClientSyncManager::syncUpdate(update, clientstate);
-        emit newUpdate(update);
+        this->handleUpdate(update);
     }
+}
+
+void MTProtoUpdateHandler::handleUpdate(Update *update)
+{
+    if(update->constructorId() == TLTypes::UpdateNewMessage)
+        emit newMessage(update->messageUpdatenewmessage());
 }

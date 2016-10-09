@@ -11,7 +11,7 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     if(this->_dclist.contains(id))
         return this->_dclist[id];
 
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(id);
+    DCConfig& dcconfig = DcConfig_fromDcId(id);
     dcconfig.setHost(host);
     dcconfig.setPort(port);
 
@@ -25,7 +25,7 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
 
 DC *DCSessionManager::createDC(int id)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(id);
+    DCConfig& dcconfig = DcConfig_fromDcId(id);
     return this->createDC(dcconfig.host(), dcconfig.port(), id);
 }
 
@@ -47,7 +47,7 @@ void DCSessionManager::initSession(DCSession *dcsession)
     DC* dc = dcsession->dc();
     Q_ASSERT(dc != NULL);
 
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DC(dc);
+    DCConfig& dcconfig = DcConfig_fromDc(dc);
 
     if(dcconfig.authorization() < DCConfig::Authorized)
         this->doAuthorization(this->_mainsession);
@@ -102,7 +102,7 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
 
 DCSession *DCSessionManager::createMainSession(int dcid)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(dcid);
     return this->createMainSession(dcconfig.host(), dcconfig.port(), dcid);
 }
 
@@ -118,7 +118,7 @@ DCSession *DCSessionManager::createSession(int dcid)
 void DCSessionManager::onAuthorized(DC* dc)
 {
     Q_ASSERT(this->_dcauthorizations.contains(dc));
-    TELEGRAM_CONFIG_SAVE;
+    TelegramConfig_save;
 
     DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
     dcauthorization->deleteLater();

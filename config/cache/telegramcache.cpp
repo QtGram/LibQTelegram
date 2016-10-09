@@ -1,4 +1,5 @@
 #include "telegramcache.h"
+#include "../../mtproto/mtprotoupdatehandler.h"
 
 #define CACHE_FOLDER "cache"
 
@@ -6,6 +7,9 @@ TelegramCache* TelegramCache::_instance = NULL;
 
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
+    connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
+    connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
 }
 
 const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
@@ -90,6 +94,19 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
 void TelegramCache::cache(const TLVector<Message *>& messages)
 {
     this->cache(messages, this->_messages);
+}
+
+void TelegramCache::onNewMessage(Message *message)
+{
+    TelegramCache_store(message);
+
+    TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+
+    if(this->_dialogs.contains(dialogid))
+    {
+        this->_dialogs[dialogid]->setTopMessage(message->id());
+        emit dialogsChanged();
+    }
 }
 
 TelegramCache *TelegramCache::cache()

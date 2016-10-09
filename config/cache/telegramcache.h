@@ -1,10 +1,20 @@
 #ifndef TELEGRAMCACHE_H
 #define TELEGRAMCACHE_H
 
-#define TELEGRAM_CACHE TelegramCache::cache()
-#define TELEGRAM_CACHE_SAVE TelegramCache::cache()->save();
-#define TELEGRAM_CACHE_LOAD TelegramCache::cache()->load();
-#define TELEGRAM_CACHE_OBJECT(objs) TelegramCache::cache()->cache(objs);
+#define TelegramCache_instance TelegramCache::cache()
+#define TelegramCache_save TelegramCache::cache()->save();
+#define TelegramCache_load TelegramCache::cache()->load();
+#define TelegramCache_store(objs) TelegramCache::cache()->cache(objs);
+
+#define TelegramCache_dialogs TelegramCache::cache()->dialogs()
+#define TelegramCache_users TelegramCache::cache()->users()
+#define TelegramCache_chats TelegramCache::cache()->chats()
+#define TelegramCache_messages TelegramCache::cache()->messages()
+
+#define TelegramCache_dialog(dialogid) TelegramCache::cache()->dialog(dialogid)
+#define TelegramCache_user(userid) TelegramCache::cache()->user(userid)
+#define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
+#define TelegramCache_message(messageid) TelegramCache::cache()->message(messageid)
 
 #include <QObject>
 #include <QDir>
@@ -28,14 +38,6 @@ class TelegramCache: public QObject
         static TelegramCache* cache();
         void save() const;
         void load();
-        void cache(Dialog* dialog);
-        void cache(User* user);
-        void cache(Chat* chat);
-        void cache(Message* message);
-        void cache(const TLVector<Dialog *> &dialogs);
-        void cache(const TLVector<User *> &users);
-        void cache(const TLVector<Chat *> &chats);
-        void cache(const TLVector<Message *> &messages);
         const QHash<TLInt, Dialog *> &dialogs() const;
         const QHash<TLInt, User*>& users() const;
         const QHash<TLInt, Chat*>& chats() const;
@@ -45,8 +47,21 @@ class TelegramCache: public QObject
         Chat* chat(TLInt id) const;
         Message* message(TLInt id) const;
 
+    public slots:
+        void cache(Dialog* dialog);
+        void cache(User* user);
+        void cache(Chat* chat);
+        void cache(Message* message);
+        void cache(const TLVector<Dialog *> &dialogs);
+        void cache(const TLVector<User *> &users);
+        void cache(const TLVector<Chat *> &chats);
+        void cache(const TLVector<Message *> &messages);
+
+    private slots:
+        void onNewMessage(Message* message);
+
     signals:
-        void messagesDialogsReady();
+        void dialogsChanged();
 
     private:
         QHash<TLInt, Dialog*> _dialogs;
@@ -76,8 +91,8 @@ template<typename T> void TelegramCache::cache(const TLVector<T*>& src, QHash<TL
 
 template<typename T> void TelegramCache::loadFromFile(QHash<TLInt, T*> &container, const QString &name)
 {
-    QDir dir(TELEGRAM_CONFIG->storagePath());
-    dir.mkpath(TELEGRAM_CONFIG->storagePath());
+    QDir dir(TelegramConfig_instance->storagePath());
+    dir.mkpath(TelegramConfig_instance->storagePath());
 
     QFile f(dir.absoluteFilePath(name) + ".cache");
 
@@ -101,8 +116,8 @@ template<typename T> void TelegramCache::saveToFile(const QHash<TLInt, T*>& cont
     MTProtoStream mtstream;
     mtstream.writeTLVector<T>(container.values());
 
-    QDir dir(TELEGRAM_CONFIG->storagePath());
-    dir.mkpath(TELEGRAM_CONFIG->storagePath());
+    QDir dir(TelegramConfig_instance->storagePath());
+    dir.mkpath(TelegramConfig_instance->storagePath());
 
     QFile f(dir.absoluteFilePath(name) + ".cache");
 

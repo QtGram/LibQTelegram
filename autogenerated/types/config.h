@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "dcoption.h"
+#include "../../types/telegramobject.h"
 #include "../../types/basic.h"
 #include "disabledfeature.h"
-#include "../../types/telegramobject.h"
 
 class Config: public TelegramObject
 {
@@ -37,6 +37,8 @@ class Config: public TelegramObject
 	Q_PROPERTY(TLInt stickersRecentLimit READ stickersRecentLimit WRITE setStickersRecentLimit NOTIFY stickersRecentLimitChanged)
 	Q_PROPERTY(TLInt tmpSessions READ tmpSessions WRITE setTmpSessions NOTIFY tmpSessionsChanged)
 	Q_PROPERTY(TLVector<DisabledFeature*> disabledFeatures READ disabledFeatures WRITE setDisabledFeatures NOTIFY disabledFeaturesChanged)
+
+	Q_ENUMS(Constructors)
 
 	public:
 		enum Constructors {

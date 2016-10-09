@@ -1,9 +1,9 @@
 #include "dialogsmodel.h"
-#include "../config/telegramruntime.h"
+#include "../config/cache/telegramcache.h"
 
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
-    connect(TELEGRAM_RUNTIME, &TelegramRuntime::dialogsChanged, this, &DialogsModel::sortDialogs);
+    connect(TelegramCache_instance, &TelegramCache::dialogsChanged, this, &DialogsModel::sortDialogs);
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
@@ -28,8 +28,10 @@ void DialogsModel::sortDialogs()
 {
     this->beginResetModel();
 
-    std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](DialogObject* dlg1, DialogObject* dlg2) {
-        return dlg1->topMessage()->message()->date() > dlg2->topMessage()->message()->date();
+    std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](Dialog* dlg1, Dialog* dlg2) {
+        Message* msg1 = TelegramCache_message(dlg1->topMessage());
+        Message* msg2 = TelegramCache_message(dlg2->topMessage());
+        return msg1->date() > msg2->date();
     });
 
     this->endResetModel();
@@ -37,6 +39,6 @@ void DialogsModel::sortDialogs()
 
 void DialogsModel::telegramReady()
 {
-    this->_dialogs = TELEGRAM_RUNTIME->dialogList();
+    this->_dialogs = TelegramCache_dialogs.values();
     this->sortDialogs();
 }

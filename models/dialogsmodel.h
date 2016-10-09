@@ -2,7 +2,6 @@
 #define DIALOGSMODEL_H
 
 #include "telegrammodel.h"
-#include "objects/dialogobject.h"
 
 class DialogsModel : public TelegramModel
 {
@@ -21,7 +20,7 @@ class DialogsModel : public TelegramModel
         virtual void telegramReady();
 
     private:
-        QList<DialogObject*> _dialogs;
+        QList<Dialog*> _dialogs;
 };
 
 #endif // DIALOGSMODEL_H

@@ -17,7 +17,7 @@ void CacheInitializer::initialize()
 
     if(this->_state > CacheInitializer::Last)
     {
-        TELEGRAM_CACHE_SAVE;
+        TelegramCache_save;
         emit initialized();
     }
 }
@@ -39,7 +39,7 @@ void CacheInitializer::onRequestContactsReplied(MTProtoReply *mtreply)
     ContactsContacts contacts;
     contacts.read(mtreply);
 
-    TELEGRAM_CACHE_OBJECT(contacts.users());
+    TelegramCache_store(contacts.users());
 
     this->_state++;
     this->initialize();
@@ -50,10 +50,10 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     MessagesDialogs messagesdialogs;
     messagesdialogs.read(mtreply);
 
-    TELEGRAM_CACHE_OBJECT(messagesdialogs.dialogs());
-    TELEGRAM_CACHE_OBJECT(messagesdialogs.users());
-    TELEGRAM_CACHE_OBJECT(messagesdialogs.chats());
-    TELEGRAM_CACHE_OBJECT(messagesdialogs.messages());
+    TelegramCache_store(messagesdialogs.dialogs());
+    TelegramCache_store(messagesdialogs.users());
+    TelegramCache_store(messagesdialogs.chats());
+    TelegramCache_store(messagesdialogs.messages());
 
     this->_state++;
     this->initialize();

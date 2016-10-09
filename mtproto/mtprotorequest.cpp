@@ -77,7 +77,7 @@ TLLong MTProtoRequest::generateMessageId()
 {
     Q_ASSERT(this->_dcid > 0);
 
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
     TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) << 32) + dcconfig.deltaTime();
     TLLong ticks = 4 - (unixtime % 4);
 
@@ -152,7 +152,7 @@ QByteArray MTProtoRequest::buildEncrypted()
     Q_ASSERT(this->_sessionid != 0);
     Q_ASSERT(this->_seqno > 0);
 
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+    DCConfig& dcconfig = DcConfig_fromDcId(this->_dcid);
     MTProtoStream mtproto;
 
     mtproto.writeTLLong(dcconfig.serverSalt());

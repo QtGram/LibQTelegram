@@ -1,16 +1,15 @@
 #ifndef TELEGRAMCONFIG_H
 #define TELEGRAMCONFIG_H
 
-#define CONFIG_CLIENT_STATE TelegramConfig::config()->updateState()
-#define DC_CONFIG_SIGNED_DCID (TelegramConfig::config() ? TelegramConfig::config()->signedDcId() : -1)
+#define TelegramConfig_clientState TelegramConfig::config()->updateState()
+#define TelegramConfig_instance TelegramConfig::config()
+#define TelegramConfig_save TelegramConfig::config()->save()
 
-#define TELEGRAM_CONFIG TelegramConfig::config()
-#define TELEGRAM_CONFIG_SAVE TelegramConfig::config()->save()
-#define IS_LOGGED_IN (DC_CONFIG_SIGNED_DCID != -1)
-
-#define GET_DC_CONFIG_FROM_DCID(dcid) TelegramConfig::config()->dcConfig(dcid)
-#define GET_DC_CONFIG_FROM_DC(dc) GET_DC_CONFIG_FROM_DCID(dc->id())
-#define GET_DC_CONFIG_FROM_SESSION(dcsession) GET_DC_CONFIG_FROM_DC(dcsession->dc())
+#define DcConfig_signedDcId (TelegramConfig::config() ? TelegramConfig::config()->signedDcId() : -1)
+#define DcConfig_isLoggenIn (DcConfig_signedDcId != -1)
+#define DcConfig_fromDcId(dcid) TelegramConfig::config()->dcConfig(dcid)
+#define DcConfig_fromDc(dc) DcConfig_fromDcId(dc->id())
+#define DcConfig_fromSession(dcsession) DcConfig_fromDc(dcsession->dc())
 
 #include <QString>
 #include <QHash>

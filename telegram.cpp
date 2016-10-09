@@ -1,225 +1,66 @@
 #include "telegram.h"
-#include "mtproto/mtprotoupdatehandler.h"
-#include "config/cache/cacheinitializer.h"
 #include "config/cache/telegramcache.h"
-#include <QDebug>
+#include "types/telegramhelper.h"
 
-Telegram::Telegram(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false)
+Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
 {
 }
 
-Telegram::~Telegram()
+TelegramInitializer *Telegram::initializer() const
 {
-    if(DC_CONFIG_SIGNED_DCID == -1)
+    return this->_initializer;
+}
+
+void Telegram::setInitializer(TelegramInitializer *initializer)
+{
+    if(this->_initializer == initializer)
         return;
 
-    TELEGRAM_CONFIG_SAVE;
-    TELEGRAM_CACHE_SAVE;
+    if(this->_initializer)
+    {
+        disconnect(this->_initializer, &TelegramInitializer::signUpRequested, this, 0);
+        disconnect(this->_initializer, &TelegramInitializer::signInRequested, this, 0);
+        disconnect(this->_initializer, &TelegramInitializer::loginCompleted, this, 0);
+    }
+
+    this->_initializer = initializer;
+
+    connect(this->_initializer, &TelegramInitializer::signUpRequested, this, &Telegram::signUpRequested);
+    connect(this->_initializer, &TelegramInitializer::signInRequested, this, &Telegram::signInRequested);
+    connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
+
+    emit initializerChanged();
 }
 
-const QString &Telegram::publicKey() const
+QString Telegram::dialogTitle(Dialog *dialog)
 {
-    return this->_publickey;
+    if(!dialog)
+        return QString();
+
+    TLInt peerid = TelegramHelper::identifier(dialog->peer());
+
+    if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
+    {
+        Chat* chat = TelegramCache_chat(peerid);
+        return chat->title();
+    }
+
+    User* user = TelegramCache_user(peerid);
+    return TelegramHelper::fullName(user);
 }
 
-const QString &Telegram::host() const
+QString Telegram::messageText(TLInt messageid)
 {
-    return this->_host;
-}
-
-qint32 Telegram::apiId() const
-{
-    return this->_apiid;
-}
-
-const QString &Telegram::apiHash() const
-{
-    return this->_apihash;
-}
-
-const QString &Telegram::phoneNumber() const
-{
-    return this->_phonenumber;
-}
-
-qint32 Telegram::port() const
-{
-    return this->_port;
-}
-
-qint32 Telegram::dcId() const
-{
-    return this->_dcid;
-}
-
-bool Telegram::debugMode() const
-{
-    return this->_debugmode;
-}
-
-void Telegram::setPublicKey(const QString &publickey)
-{
-    if(this->_publickey == publickey)
-        return;
-
-    this->_publickey = publickey;
-
-    this->tryConnect();
-    emit publicKeyChanged();
-}
-
-void Telegram::setHost(const QString &host)
-{
-    if(this->_host == host)
-        return;
-
-    this->_host = host;
-
-    this->tryConnect();
-    emit hostChanged();
-}
-
-void Telegram::setApiHash(const QString &apphash)
-{
-    if(this->_apihash == apphash)
-        return;
-
-    this->_apihash = apphash;
-    this->tryConnect();
-    emit apiHashChanged();
-}
-
-void Telegram::setPhoneNumber(const QString &phonenumber)
-{
-    if(this->_phonenumber == phonenumber)
-        return;
-
-    this->_phonenumber = phonenumber;
-    this->tryConnect();
-    emit phoneNumberChanged();
-}
-
-void Telegram::setApiId(qint32 appid)
-{
-    if(this->_apiid == appid)
-        return;
-
-    this->_apiid = appid;
-    this->tryConnect();
-    emit apiIdChanged();
-}
-
-void Telegram::setPort(qint32 port)
-{
-    if(this->_port == port)
-        return;
-
-    this->_port = port;
-
-    this->tryConnect();
-    emit portChanged();
-}
-
-void Telegram::setDcId(qint32 dcid)
-{
-    if(this->_dcid == dcid)
-        return;
-
-    this->_dcid = dcid;
-
-    this->tryConnect();
-    emit dcIdChanged();
-}
-
-void Telegram::setDebugMode(bool dbgmode)
-{
-    if(this->_debugmode == dbgmode)
-        return;
-
-    this->_debugmode = dbgmode;
-    emit debugModeChanged();
+    Message* message = TelegramCache_message(messageid);
+    return message->message().toString();
 }
 
 void Telegram::signIn(const QString &phonecode)
 {
-    MTProtoRequest* req = TelegramAPI::authSignIn(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode);
-    connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);
-
-    this->_phonecodehash.clear();
+    this->_initializer->signIn(phonecode);
 }
 
 void Telegram::signUp(const QString &firstname, const QString &lastname, const QString &phonecode)
 {
-    MTProtoRequest* req = TelegramAPI::authSignUp(DC_MAIN_SESSION, this->_phonenumber, this->_phonecodehash, phonecode, firstname, lastname);
-    connect(req, &MTProtoRequest::replied, this, &Telegram::onLoginCompleted);
-
-    this->_phonecodehash.clear();
-}
-
-void Telegram::tryConnect()
-{
-    if(this->_publickey.isEmpty() || this->_host.isEmpty() || this->_phonenumber.isEmpty() || this->_apihash.isEmpty())
-        return;
-
-    if(!this->_apiid || !this->_port || !this->_dcid)
-        return;
-
-    TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
-    TelegramConfig::config()->setDebugMode(true);
-
-    int signeddcid = DC_CONFIG_SIGNED_DCID;
-
-    if(signeddcid != -1)
-    {
-        DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(signeddcid);
-        DCSessionManager::instance()->createMainSession(dcconfig);
-
-        TELEGRAM_CACHE_LOAD;
-        UPDATE_HANDLER_SYNC;
-        emit loginCompleted();
-        return;
-    }
-
-    DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
-    MTProtoRequest* req = TelegramAPI::authSendCode(DC_MAIN_SESSION, this->_phonenumber, false, this->_apiid, this->_apihash);
-    connect(req, &MTProtoRequest::replied, this, &Telegram::onAuthCheckPhoneReplied);
-}
-
-void Telegram::onAuthCheckPhoneReplied(MTProtoReply *mtreply)
-{
-    AuthSentCode sentcode;
-    sentcode.read(mtreply);
-
-    this->_phonecodehash = sentcode.phoneCodeHash();
-
-    if(sentcode.isPhoneRegistered())
-    {
-        emit signInRequested();
-        return;
-    }
-
-    emit signUpRequested();
-}
-
-void Telegram::onLoginCompleted(MTProtoReply *mtreply)
-{
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_DCID(mtreply->dcid());
-
-    AuthAuthorization authorization;
-    authorization.read(mtreply);
-
-    dcconfig.setAuthorization(DCConfig::Signed);
-
-    TELEGRAM_CACHE_OBJECT(authorization.user()); // Cache "me"
-    TELEGRAM_CONFIG->setMe(authorization.user());
-    TELEGRAM_CONFIG_SAVE;
-
-    CacheInitializer* cacheinitializer = new CacheInitializer(this);
-
-    connect(cacheinitializer, &CacheInitializer::initialized, [this, cacheinitializer] {
-        emit this->loginCompleted();
-        cacheinitializer->deleteLater();
-    });
-
-    cacheinitializer->initialize();
+    this->_initializer->signUp(firstname, lastname, phonecode);
 }

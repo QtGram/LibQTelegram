@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "tltypes.h"
+#include "types/update.h"
+#include "types/updatesstate.h"
 #include <QObject>
 #include "types/updates.h"
-#include "types/updatesstate.h"
-#include "types/update.h"
 
 class ClientSyncManager: public QObject
 {

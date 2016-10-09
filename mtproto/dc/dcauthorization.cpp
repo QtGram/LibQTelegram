@@ -35,7 +35,7 @@ void DCAuthorization::authorizeReply(MTProtoReply *mtreply)
 
 void DCAuthorization::authorize()
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_SESSION(this->_dcsession);
+    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
 
     if(dcconfig.authorization() == DCConfig::NotAuthorized)
         this->handleNotAuthorized();
@@ -143,7 +143,7 @@ void DCAuthorization::handleAuthorized()
 
 void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_SESSION(this->_dcsession);
+    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::PQReceived);
 
     this->_respq = new ResPQ(this);
@@ -154,7 +154,7 @@ void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_SESSION(this->_dcsession);
+    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::ServerDHParamsOkReceived);
 
     ServerDHParams serverdhparams;
@@ -200,7 +200,7 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_SESSION(this->_dcsession);
+    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::ServerDHParamsFailReceived);
 }
 
@@ -222,7 +222,7 @@ void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = GET_DC_CONFIG_FROM_SESSION(this->_dcsession);
+    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
 
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
@@ -255,6 +255,6 @@ void DCAuthorization::onConfigurationReceived(Config *config)
         dcconfig.setId(dcoption->id());
     }
 
-    TELEGRAM_CONFIG_SAVE;
+    TelegramConfig_save;
     emit authorized(this->_dcsession->dc());
 }

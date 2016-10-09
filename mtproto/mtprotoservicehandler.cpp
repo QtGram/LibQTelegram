@@ -120,9 +120,9 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     }
     else if(badmsgnotification.constructorId() == BadMsgNotification::ctorBadServerSalt)
     {
-        DCConfig& config = GET_DC_CONFIG_FROM_DCID(this->_dcid);
+        DCConfig& config = DcConfig_fromDcId(this->_dcid);
         config.setServerSalt(badmsgnotification.newServerSalt());
-        TELEGRAM_CONFIG_SAVE;
+        TelegramConfig_save;
 
         emit saltChanged();
     }

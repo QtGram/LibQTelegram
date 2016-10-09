@@ -1,7 +1,7 @@
 #ifndef MTPROTOUPDATEHANDLER_H
 #define MTPROTOUPDATEHANDLER_H
 
-#define UPDATE_HANDLER MTProtoUpdateHandler::instance()
+#define UpdateHandler_instance MTProtoUpdateHandler::instance()
 #define UPDATE_HANDLER_SYNC MTProtoUpdateHandler::instance()->sync()
 
 #include <QObject>
