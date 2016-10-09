@@ -39,9 +39,6 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
 QString Telegram::dialogTitle(Dialog *dialog)
 {
-    if(!dialog)
-        return QString();
-
     TLInt peerid = TelegramHelper::identifier(dialog->peer());
 
     if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
@@ -57,7 +54,7 @@ QString Telegram::dialogTitle(Dialog *dialog)
 QString Telegram::messageText(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);
-    return message->message().toString();
+    return TelegramHelper::messageText(message);
 }
 
 void Telegram::signIn(const QString &phonecode)

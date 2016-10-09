@@ -7,30 +7,42 @@ TelegramHelper::TelegramHelper()
 
 Message *TelegramHelper::createMessage(Updates *updates, User* me)
 {
-    Q_ASSERT(updates->constructorId() == TLTypes::UpdateShortMessage);
-
-    TLInt flags = updates->flags();
-
-    Peer* topeer = new Peer();
-    topeer->setConstructorId(Peer::ctorPeerUser);
-    topeer->setUserId(updates->isOut() ? updates->userId() : me->id());
+    Q_ASSERT((updates->constructorId() == TLTypes::UpdateShortMessage) ||
+             (updates->constructorId() == TLTypes::UpdateShortChatMessage));
 
     Message* message = new Message();
     message->setConstructorId(Message::ctorMessage);
-    message->setFlags(flags);
+    message->setFlags(updates->flags());
     message->setIsOut(updates->isOut());
     message->setIsMentioned(updates->isMentioned());
     message->setIsMediaUnread(updates->isMediaUnread());
     message->setIsSilent(updates->isSilent());
     message->setId(updates->id());
-    message->setFromId(updates->isOut() ? me->id() : updates->userId());
-    message->setToId(topeer);
     message->setMessage(updates->message());
     message->setDate(updates->date());
     message->setFwdFrom(updates->fwdFrom());
     message->setViaBotId(updates->viaBotId());
     message->setReplyToMsgId(updates->replyToMsgId());
     message->setEntities(updates->entities());
+
+    if(updates->constructorId() == TLTypes::UpdateShortMessage)
+    {
+        Peer* topeer = new Peer();
+        topeer->setConstructorId(Peer::ctorPeerUser);
+        topeer->setUserId(updates->isOut() ? updates->userId() : me->id());
+
+        message->setFromId(updates->isOut() ? me->id() : updates->userId());
+        message->setToId(topeer);
+    }
+    else if(updates->constructorId() == TLTypes::UpdateShortChatMessage)
+    {
+        Peer* topeer = new Peer();
+        topeer->setConstructorId(Peer::ctorPeerChat);
+        topeer->setChatId(updates->chatId());
+
+        message->setFromId(updates->fromId());
+        message->setToId(topeer);
+    }
 
     return message;
 }
@@ -44,6 +56,43 @@ QString TelegramHelper::fullName(User *user)
         return user->firstName();
 
     return user->firstName() + " " + user->lastName();
+}
+
+QString TelegramHelper::messageText(Message *message)
+{
+    if(message->media())
+    {
+        MessageMedia* messagemedia = message->media();
+        TLConstructor ctorid = messagemedia->constructorId();
+
+        if(ctorid == TLTypes::MessageMediaWebPage)
+        {
+            if(!messagemedia->caption().isEmpty())
+                return  messagemedia->caption();
+
+            return messagemedia->webpage()->url();
+        }
+
+        QString result;
+
+        if(ctorid == TLTypes::MessageMediaContact)
+            result = QObject::tr("Contact");
+        else if(ctorid == TLTypes::MessageMediaDocument)
+            result = QObject::tr("Document");
+        else if(ctorid == TLTypes::MessageMediaGame)
+            result = QObject::tr("Game");
+        else if((ctorid == TLTypes::MessageMediaGeo)  || (ctorid == TLTypes::MessageMediaVenue))
+            result = QObject::tr("Location");
+        else if(ctorid == TLTypes::MessageMediaPhoto)
+            result = QObject::tr("Photo");
+
+        if(!messagemedia->caption().isEmpty())
+            result += ", " + message->media()->caption();
+
+        return result;
+    }
+
+    return message->message();
 }
 
 bool TelegramHelper::isChat(Dialog *dialog)

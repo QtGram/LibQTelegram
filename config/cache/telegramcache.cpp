@@ -10,6 +10,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
+    connect(UpdateHandler_instance, SIGNAL(updateUserStatus(Update*)), this, SLOT(onUpdateUserStatus(Update*)));
 }
 
 const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
@@ -107,6 +108,17 @@ void TelegramCache::onNewMessage(Message *message)
         this->_dialogs[dialogid]->setTopMessage(message->id());
         emit dialogsChanged();
     }
+}
+
+void TelegramCache::onUpdateUserStatus(Update *update)
+{
+    Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);
+
+    User* user = TelegramCache_user(update->userId());
+    UserStatus* oldstatus = user->status();
+
+    user->setStatus(update->status());
+    oldstatus->deleteLater();
 }
 
 TelegramCache *TelegramCache::cache()
