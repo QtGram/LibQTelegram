@@ -33,6 +33,7 @@ class MTProtoUpdateHandler : public QObject
 
     signals:
         void newMessage(Message* message);
+        void editMessage(Message* message);
         void newUser(User* user);
         void newChat(Chat* chat);
         void updateUserStatus(Update* update);

@@ -6,6 +6,8 @@
 #include "../types/telegramhelper.h"
 #include "dc/dcsessionmanager.h"
 
+#define Nop
+
 MTProtoUpdateHandler* MTProtoUpdateHandler::_instance = NULL;
 
 MTProtoUpdateHandler::MTProtoUpdateHandler(QObject *parent) : QObject(parent)
@@ -28,17 +30,13 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
         case TLTypes::UpdateShort:
         case TLTypes::UpdateShortMessage:
         case TLTypes::UpdateShortChatMessage:
-        {
             this->handleUpdates(mtreply);
             return true;
-        }
 
         case TLTypes::UpdatesDifference:
         case TLTypes::UpdatesDifferenceSlice:
-        {
             this->handleUpdatesDifference(mtreply);
             return true;
-        }
 
         case TLTypes::UpdatesState:
             this->handleUpdatesState(mtreply);
@@ -142,12 +140,30 @@ void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
 
 void MTProtoUpdateHandler::handleUpdate(Update *update)
 {
-    if(update->constructorId() == TLTypes::UpdateNewMessage)
-        emit newMessage(update->messageUpdatenewmessage());
-    else if(update->constructorId() == TLTypes::UpdateNewChannelMessage)
-        emit newMessage(update->messageUpdatenewchannelmessage());
-    else if(update->constructorId() == TLTypes::UpdateUserStatus)
-        emit updateUserStatus(update);
-    else
-        qWarning("Unhandled update: %s#%08x", DecompilerTable::constructorName(update->constructorId()).toUtf8().constData(), update->constructorId());
+    switch(update->constructorId())
+    {
+        case TLTypes::UpdateNewMessage:
+            emit newMessage(update->messageUpdatenewmessage());
+
+        case TLTypes::UpdateNewChannelMessage:
+            emit newMessage(update->messageUpdatenewchannelmessage());
+            break;
+
+        case TLTypes::UpdateEditMessage:
+        case TLTypes::UpdateEditChannelMessage:
+            emit editMessage(update->message());
+            break;
+
+        case TLTypes::UpdateUserStatus:
+            emit updateUserStatus(update);
+            break;
+
+        case TLTypes::UpdateMessageID:
+            Nop;
+            break;
+
+        default:
+            qWarning("Unhandled update: %s#%08x", DecompilerTable::constructorName(update->constructorId()).toUtf8().constData(), update->constructorId());
+            break;
+    }
 }

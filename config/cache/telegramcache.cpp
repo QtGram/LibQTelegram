@@ -8,6 +8,7 @@ TelegramCache* TelegramCache::_instance = NULL;
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
     connect(UpdateHandler_instance, SIGNAL(updateUserStatus(Update*)), this, SLOT(onUpdateUserStatus(Update*)));
@@ -110,11 +111,35 @@ void TelegramCache::onNewMessage(Message *message)
     }
 }
 
+void TelegramCache::onEditMessage(Message *message)
+{
+    TLInt id = TelegramHelper::identifier(message);
+
+    if(!this->_messages.contains(id))
+    {
+        qWarning() << "Edited message not available";
+        return;
+    }
+
+    Message* oldmessage = this->_messages[id];
+    this->_messages[id] = message;
+    oldmessage->deleteLater();
+
+    emit dialogsChanged();
+}
+
 void TelegramCache::onUpdateUserStatus(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);
 
     User* user = TelegramCache_user(update->userId());
+
+    if(!user)
+    {
+        qWarning("User %x doesn't exist", update->userId());
+        return;
+    }
+
     UserStatus* oldstatus = user->status();
 
     user->setStatus(update->status());
