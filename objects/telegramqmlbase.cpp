@@ -17,6 +17,7 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_TYPE(TLInt);
     REGISTER_TYPE(TLBytes);
     REGISTER_TYPE(TLString);
+    REGISTER_TYPE(TLConstructor);
 
     // Main objects
     REGISTER_OBJECT(TelegramInitializer);
