@@ -51,6 +51,19 @@ QString Telegram::dialogTitle(Dialog *dialog)
     return TelegramHelper::fullName(user);
 }
 
+QString Telegram::dialogDraftMessage(Dialog *dialog)
+{
+    if(dialog->draft())
+        return dialog->draft()->message().toString();
+
+    return QString();
+}
+
+bool Telegram::dialogHasDraftMessage(Dialog *dialog)
+{
+    return dialog->draft() && (dialog->draft()->constructorId() != DraftMessage::CtorDraftMessageEmpty);
+}
+
 QString Telegram::userFullName(User *user)
 {
     return TelegramHelper::fullName(user);

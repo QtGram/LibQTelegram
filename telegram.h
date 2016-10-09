@@ -19,9 +19,17 @@ class Telegram : public QObject
 
     public slots:
         QString dialogTitle(Dialog* dialog);
+        QString dialogDraftMessage(Dialog* dialog);
+        bool dialogHasDraftMessage(Dialog* dialog);
+
+    public slots:
         QString userFullName(User* user);
         QString userStatusText(User* user);
+
+    public slots:
         QString messageText(TLInt messageid);
+
+    public slots:
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
 
