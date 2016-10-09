@@ -51,6 +51,16 @@ QString Telegram::dialogTitle(Dialog *dialog)
     return TelegramHelper::fullName(user);
 }
 
+QString Telegram::userFullName(User *user)
+{
+    return TelegramHelper::fullName(user);
+}
+
+QString Telegram::userStatusText(User *user)
+{
+    return TelegramHelper::statusText(user);
+}
+
 QString Telegram::messageText(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);

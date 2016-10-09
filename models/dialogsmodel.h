@@ -1,7 +1,7 @@
 #ifndef DIALOGSMODEL_H
 #define DIALOGSMODEL_H
 
-#include "telegrammodel.h"
+#include "abstract/telegrammodel.h"
 
 class DialogsModel : public TelegramModel
 {

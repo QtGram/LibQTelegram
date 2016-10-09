@@ -2,11 +2,7 @@
 #define TELEGRAMMODEL_H
 
 #include <QAbstractListModel>
-#include "../telegram.h"
-
-#define DELETE_DATA(data) \
-    qDeleteAll(data); \
-    data.clear();
+#include "../../telegram.h"
 
 class TelegramModel : public QAbstractListModel
 {
@@ -23,7 +19,7 @@ class TelegramModel : public QAbstractListModel
         void setTelegram(Telegram* telegram);
 
     protected:
-        QHash<int, QByteArray> initRoles() const;
+        virtual QHash<int, QByteArray> initRoles() const;
         virtual void telegramReady() = 0;
 
     signals:

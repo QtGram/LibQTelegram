@@ -2,6 +2,7 @@
 #include "telegram.h"
 #include "telegraminitializer.h"
 #include "models/dialogsmodel.h"
+#include "models/contactsmodel.h"
 
 TelegramQmlBase::TelegramQmlBase()
 {
@@ -23,4 +24,5 @@ void TelegramQmlBase::initialize(const QString &uri)
 
     // Models
     REGISTER_OBJECT(DialogsModel);
+    REGISTER_OBJECT(ContactsModel);
 }

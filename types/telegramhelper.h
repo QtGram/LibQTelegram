@@ -11,7 +11,9 @@ class TelegramHelper
 
     public:
         static Message* createMessage(Updates *updates, User *me);
+        static QString dateString(TLInt timestamp);
         static QString fullName(User* user);
+        static QString statusText(User* user);
         static QString messageText(Message* message);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);

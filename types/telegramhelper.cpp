@@ -1,4 +1,5 @@
 #include "telegramhelper.h"
+#include <QDateTime>
 
 TelegramHelper::TelegramHelper()
 {
@@ -47,6 +48,19 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     return message;
 }
 
+QString TelegramHelper::dateString(TLInt timestamp)
+{
+    QDateTime datetime = QDateTime::fromTime_t(timestamp);
+    const QDateTime& currentdatetime = QDateTime::currentDateTime();
+    qint64 seconds = datetime.secsTo(currentdatetime);
+    int days = datetime.daysTo(currentdatetime);
+
+    if(seconds < 24 * 60 * 60)
+        return QObject::tr("Yesterday %1").arg(days ? datetime.toString("HH:mm") : datetime.toString("HH:mm"));
+
+    return datetime.toString("MMM dd, HH:mm");
+}
+
 QString TelegramHelper::fullName(User *user)
 {
     if(!user)
@@ -56,6 +70,29 @@ QString TelegramHelper::fullName(User *user)
         return user->firstName();
 
     return user->firstName() + " " + user->lastName();
+}
+
+QString TelegramHelper::statusText(User *user)
+{
+    if(user->status())
+    {
+        if(user->status()->constructorId() == TLTypes::UserStatusLastMonth)
+            return QObject::tr("Last month");
+
+        if(user->status()->constructorId() == TLTypes::UserStatusLastWeek)
+            return QObject::tr("Last week");
+
+        if(user->status()->constructorId() == TLTypes::UserStatusOffline)
+            return QObject::tr("Last seen %1").arg(TelegramHelper::dateString(user->status()->wasOnline()));
+
+        if(user->status()->constructorId() == TLTypes::UserStatusOnline)
+            return QObject::tr("Online");
+
+        if(user->status()->constructorId() == TLTypes::UserStatusRecently)
+            return QObject::tr("Recently");
+    }
+
+    return QObject::tr("Long time ago");
 }
 
 QString TelegramHelper::messageText(Message *message)
