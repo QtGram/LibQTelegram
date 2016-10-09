@@ -11,6 +11,11 @@ TelegramInitializer *Telegram::initializer() const
     return this->_initializer;
 }
 
+User *Telegram::me() const
+{
+    return TelegramConfig_instance->me();
+}
+
 void Telegram::setInitializer(TelegramInitializer *initializer)
 {
     if(this->_initializer == initializer)
