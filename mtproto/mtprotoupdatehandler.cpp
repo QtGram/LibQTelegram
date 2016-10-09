@@ -155,7 +155,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             break;
 
         case TLTypes::UpdateUserStatus:
-            emit updateUserStatus(update);
+            emit newUserStatus(update);
             break;
 
         case TLTypes::UpdateMessageID:
