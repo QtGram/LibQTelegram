@@ -12,6 +12,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
 }
 
 const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
@@ -143,6 +144,25 @@ void TelegramCache::onNewUserStatus(Update *update)
     UserStatus* oldstatus = user->status();
     user->setStatus(update->status());
     oldstatus->deleteLater();
+}
+
+void TelegramCache::onNewDraftMessage(Update *update)
+{
+    Q_ASSERT(update->constructorId() == TLTypes::UpdateDraftMessage);
+
+    TLInt id = TelegramHelper::identifier(update->peer());
+
+    if(!this->_dialogs.contains(id))
+    {
+        qWarning("Cannot update draft of dialog %x", id);
+        return;
+    }
+
+    DraftMessage* olddraftmessage = update->draft();
+    this->_dialogs[id]->setDraft(update->draft());
+    olddraftmessage->deleteLater();
+
+    emit dialogsChanged();
 }
 
 TelegramCache *TelegramCache::cache()

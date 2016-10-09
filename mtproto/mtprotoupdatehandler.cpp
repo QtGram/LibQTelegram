@@ -158,6 +158,10 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit newUserStatus(update);
             break;
 
+        case TLTypes::UpdateDraftMessage:
+            emit newDraftMessage(update);
+            break;
+
         case TLTypes::UpdateMessageID:
             Nop;
             break;

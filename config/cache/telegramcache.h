@@ -61,6 +61,7 @@ class TelegramCache: public QObject
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onNewUserStatus(Update* update);
+        void onNewDraftMessage(Update* update);
 
     signals:
         void dialogsChanged();
