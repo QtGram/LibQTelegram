@@ -110,12 +110,38 @@ QString TelegramHelper::messageText(Message *message)
             return messagemedia->webpage()->url();
         }
 
+        if(ctorid == TLTypes::MessageMediaDocument)
+        {
+            Document* document = messagemedia->document();
+
+            foreach(DocumentAttribute* attribute, document->attributes())
+            {
+                if(attribute->constructorId() == TLTypes::DocumentAttributeImageSize)
+                    return QObject::tr("Photo");
+
+                if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
+                    return QObject::tr("GIF");
+
+                if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
+                    return QObject::tr("Sticker");
+
+                if(attribute->constructorId() == TLTypes::DocumentAttributeVideo)
+                    return QObject::tr("Video");
+
+                if(attribute->constructorId() == TLTypes::DocumentAttributeAudio)
+                    return QObject::tr("Audio recording");
+
+                if(attribute->constructorId() == TLTypes::DocumentAttributeHasStickers)
+                    return QObject::tr("Sticker set");
+            }
+
+            return QObject::tr("Document");
+        }
+
         QString result;
 
         if(ctorid == TLTypes::MessageMediaContact)
             result = QObject::tr("Contact");
-        else if(ctorid == TLTypes::MessageMediaDocument)
-            result = QObject::tr("Document");
         else if(ctorid == TLTypes::MessageMediaGame)
             result = QObject::tr("Game");
         else if((ctorid == TLTypes::MessageMediaGeo)  || (ctorid == TLTypes::MessageMediaVenue))
