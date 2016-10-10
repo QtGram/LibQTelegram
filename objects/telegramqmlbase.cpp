@@ -1,6 +1,7 @@
 #include "telegramqmlbase.h"
 #include "telegram.h"
 #include "telegraminitializer.h"
+#include "objects/fileobject.h"
 #include "models/dialogsmodel.h"
 #include "models/contactsmodel.h"
 
@@ -22,6 +23,9 @@ void TelegramQmlBase::initialize(const QString &uri)
     // Main objects
     REGISTER_OBJECT(TelegramInitializer);
     REGISTER_OBJECT(Telegram);
+
+    // Extra objects
+    REGISTER_OBJECT(FileObject);
 
     // Models
     REGISTER_OBJECT(DialogsModel);

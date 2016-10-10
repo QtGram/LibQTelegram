@@ -48,13 +48,13 @@ TelegramConfig *TelegramConfig::init(TLInt layernum, TLInt apiid, const QString 
     return TelegramConfig::_config;
 }
 
-int TelegramConfig::signedDcId() const
+int TelegramConfig::mainDcId() const
 {
     if(this->_ipv6)
     {
         foreach(const DCConfig& dcconfig, this->_dcconfigipv6.values())
         {
-            if(dcconfig.authorization() == DCConfig::Signed)
+            if(dcconfig.isMain())
                 return dcconfig.id();
         }
     }
@@ -62,7 +62,7 @@ int TelegramConfig::signedDcId() const
     {
         foreach(const DCConfig& dcconfig, this->_dcconfig.values())
         {
-            if(dcconfig.authorization() == DCConfig::Signed)
+            if(dcconfig.isMain())
                 return dcconfig.id();
         }
     }
@@ -102,6 +102,22 @@ DCConfig &TelegramConfig::setDcConfig(int dcid, bool ipv6)
     return this->_dcconfig[dcid];
 }
 
+void TelegramConfig::setMainDc(int maindcid)
+{
+    QList<int> dcids;
+
+    if(this->_ipv6)
+        dcids = this->_dcconfigipv6.keys();
+    else
+        dcids = this->_dcconfig.keys();
+
+    foreach(int dcid, dcids)
+    {
+        DCConfig& dcconfig = (this->_ipv6 ? this->_dcconfigipv6[dcid] : this->_dcconfig[dcid]);
+        dcconfig.setIsMain(dcid == maindcid);
+    }
+}
+
 UpdatesState *TelegramConfig::updateState()
 {
     return this->_updatesstate;
@@ -132,6 +148,29 @@ bool TelegramConfig::hasDC(int id)
         return this->_dcconfigipv6.contains(id);
 
     return this->_dcconfig.contains(id);
+}
+
+bool TelegramConfig::isLoggedIn() const
+{
+    if(this->_ipv6)
+    {
+        foreach(const DCConfig& dcconfig, this->_dcconfigipv6.values())
+        {
+            if(dcconfig.authorization() == DCConfig::Signed)
+                return true;
+        }
+    }
+    else
+    {
+        foreach(const DCConfig& dcconfig, this->_dcconfig.values())
+        {
+            if(dcconfig.authorization() == DCConfig::Signed)
+                return true;
+        }
+    }
+
+
+    return false;
 }
 
 bool TelegramConfig::debugMode() const

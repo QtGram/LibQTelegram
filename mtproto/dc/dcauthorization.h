@@ -13,7 +13,9 @@ class DCAuthorization : public QObject
 
     public:
         explicit DCAuthorization(DCSession *dcsession, QObject *parent = 0);
+        DCSession* dcSession() const;
         void authorize();
+        void importAuthorization(DCSession* fromsession);
         void authorizeReply(MTProtoReply *mtreply);
 
     private:
@@ -36,11 +38,15 @@ class DCAuthorization : public QObject
         void onServerDhGenRetry(MTProtoStream* mtstream);
         void onServerDhGenOk(MTProtoStream* mtstream);
         void onConfigurationReceived(Config* config);
+        void onAuthorizationExported(MTProtoReply* mtreply);
+        void onAuthorizationImported(MTProtoReply* mtreply);
 
     signals:
         void authorized(DC* dc);
+        void authorizationImported(DC* dc);
 
     private:
+        bool _exportauthorization;
         TLBytes _tmpaeskey;
         TLBytes _tmpaesiv;
         TLBytes _g_b;

@@ -1,5 +1,6 @@
 #include "telegram.h"
 #include "config/cache/telegramcache.h"
+#include "config/cache/filecache.h"
 #include "types/telegramhelper.h"
 
 Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
@@ -78,6 +79,11 @@ QString Telegram::messageText(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);
     return TelegramHelper::messageText(message);
+}
+
+FileObject *Telegram::fileObject(Dialog *dialog)
+{
+    return FileCache_fileObject(dialog);
 }
 
 void Telegram::signIn(const QString &phonecode)

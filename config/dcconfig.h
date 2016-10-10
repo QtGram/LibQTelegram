@@ -31,6 +31,7 @@ class DCConfig
         TLLong deltaTime() const;
         int authorization() const;
         int id() const;
+        bool isMain() const;
         void setHost(const QString& host);
         void setPort(qint16 port);
         void setServerTime(TLInt servertime);
@@ -39,6 +40,7 @@ class DCConfig
         void setServerSalt(TLLong serversalt);
         void setId(int id);
         void setIpv6(bool b);
+        void setIsMain(bool b);
 
     private:
         QString _host;
@@ -51,6 +53,7 @@ class DCConfig
         int _authorization;
         int _id;
         bool _ipv6;
+        bool _ismain;
 };
 
 #endif // DCCONFIG_H

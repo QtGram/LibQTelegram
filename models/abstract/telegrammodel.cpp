@@ -22,7 +22,7 @@ void TelegramModel::setTelegram(Telegram *telegram)
     this->_telegram = telegram;
     connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, this, [this]() { this->telegramReady(); });
 
-    if(DcConfig_isLoggenIn)
+    if(DCConfig_isLoggedIn)
         this->telegramReady();
 
     emit telegramChanged();

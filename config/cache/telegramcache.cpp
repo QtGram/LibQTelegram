@@ -1,8 +1,6 @@
 #include "telegramcache.h"
 #include "../../mtproto/mtprotoupdatehandler.h"
 
-#define CACHE_FOLDER "cache"
-
 TelegramCache* TelegramCache::_instance = NULL;
 
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)

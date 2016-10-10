@@ -5,11 +5,12 @@
 #define TelegramConfig_instance TelegramConfig::config()
 #define TelegramConfig_save TelegramConfig::config()->save()
 
-#define DcConfig_signedDcId (TelegramConfig::config() ? TelegramConfig::config()->signedDcId() : -1)
-#define DcConfig_isLoggenIn (DcConfig_signedDcId != -1)
-#define DcConfig_fromDcId(dcid) TelegramConfig::config()->dcConfig(dcid)
-#define DcConfig_fromDc(dc) DcConfig_fromDcId(dc->id())
-#define DcConfig_fromSession(dcsession) DcConfig_fromDc(dcsession->dc())
+#define DCConfig_mainDcId (TelegramConfig::config() ? TelegramConfig::config()->mainDcId() : -1)
+#define DCConfig_isLoggedIn (TelegramConfig::config() ? TelegramConfig::config()->isLoggedIn() : false)
+#define DCConfig_fromDcId(dcid) TelegramConfig::config()->dcConfig(dcid)
+#define DCConfig_fromDc(dc) DCConfig_fromDcId(dc->id())
+#define DCConfig_fromSession(dcsession) DCConfig_fromDc(dcsession->dc())
+#define DCConfig_setMainDc(dcid) TelegramConfig::config()->setMainDc(dcid)
 
 #include <QString>
 #include <QHash>
@@ -27,14 +28,16 @@ class TelegramConfig
         static TelegramConfig* init(TLInt layernum, TLInt apiid, const QString& apihash, const QString& publickey, const QString &phonenumber);
 
     public:
-        int signedDcId() const;
+        int mainDcId() const;
         DCConfig& dcConfig(int dcid);
         DCConfig& setDcConfig(int dcid, bool ipv6);
+        void setMainDc(int maindcid);
         UpdatesState* updateState();
         User* me();
         void save();
         void load();
         bool hasDC(int id);
+        bool isLoggedIn() const;
         bool debugMode() const;
         TLInt layerNum() const;
         TLInt apiId() const;

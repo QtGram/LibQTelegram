@@ -48,6 +48,18 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     return message;
 }
 
+InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
+{
+    InputFileLocation* inputfilelocation = new InputFileLocation();
+
+    inputfilelocation->setConstructorId(TLTypes::InputFileLocation);
+    inputfilelocation->setVolumeId(filelocation->volumeId());
+    inputfilelocation->setLocalId(filelocation->localId());
+    inputfilelocation->setSecret(filelocation->secret());
+
+    return inputfilelocation;
+}
+
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);

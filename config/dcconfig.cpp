@@ -3,7 +3,7 @@
 #include <QJsonObject>
 #include <QDateTime>
 
-DCConfig::DCConfig(bool ipv6): _port(0), _servertime(0), _authorizationkeyid(0), _serversalt(0), _authorization(DCConfig::NotAuthorized), _id(0), _ipv6(ipv6)
+DCConfig::DCConfig(bool ipv6): _port(0), _servertime(0), _authorizationkeyid(0), _serversalt(0), _authorization(DCConfig::NotAuthorized), _id(0), _ipv6(ipv6), _ismain(false)
 {
 
 }
@@ -20,6 +20,7 @@ DCConfig::DCConfig(const DCConfig &dcconfig)
     this->_authorization = dcconfig._authorization;
     this->_id = dcconfig._id;
     this->_ipv6 = dcconfig._ipv6;
+    this->_ismain = dcconfig._ismain;
 }
 
 QJsonObject DCConfig::toJson()
@@ -34,6 +35,7 @@ QJsonObject DCConfig::toJson()
     jsonobj["authorization"] = this->_authorization;
     jsonobj["authorizationkey"] = QString(this->_authorizationkey.toHex());
     jsonobj["ipv6"] = this->_ipv6;
+    jsonobj["main"] = this->_ismain;
 
     return jsonobj;
 }
@@ -63,6 +65,9 @@ bool DCConfig::fromJson(const QJsonObject &jsonobj)
 
     if(jsonobj.contains("ipv6"))
         this->_ipv6 = jsonobj["ipv6"].toBool();
+
+    if(jsonobj.contains("main"))
+        this->_ismain = jsonobj["main"].toBool();
 
     return true;
 }
@@ -129,6 +134,11 @@ int DCConfig::id() const
     return this->_id;
 }
 
+bool DCConfig::isMain() const
+{
+    return this->_ismain;
+}
+
 void DCConfig::setHost(const QString &host)
 {
     this->_host = host;
@@ -167,4 +177,9 @@ void DCConfig::setId(int id)
 void DCConfig::setIpv6(bool b)
 {
     this->_ipv6 = b;
+}
+
+void DCConfig::setIsMain(bool b)
+{
+    this->_ismain = b;
 }

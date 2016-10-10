@@ -50,7 +50,7 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
 
 void MTProtoUpdateHandler::sync()
 {
-    TelegramAPI::updatesGetState(DC_MAIN_SESSION);
+    TelegramAPI::updatesGetState(DC_MainSession);
 }
 
 void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
@@ -123,7 +123,7 @@ void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
 void MTProtoUpdateHandler::getDifferences()
 {
     UpdatesState* clientstate = TelegramConfig_clientState;
-    TelegramAPI::updatesGetDifference(DC_MAIN_SESSION, clientstate->pts(), clientstate->date(), clientstate->qts());
+    TelegramAPI::updatesGetDifference(DC_MainSession, clientstate->pts(), clientstate->date(), clientstate->qts());
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)

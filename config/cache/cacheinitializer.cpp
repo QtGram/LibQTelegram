@@ -24,13 +24,13 @@ void CacheInitializer::initialize()
 
 void CacheInitializer::requestContacts()
 {
-    MTProtoRequest* req = TelegramAPI::contactsGetContacts(DC_MAIN_SESSION, TLString());
+    MTProtoRequest* req = TelegramAPI::contactsGetContacts(DC_MainSession, TLString());
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestContactsReplied);
 }
 
 void CacheInitializer::requestDialogs()
 {
-    MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MAIN_SESSION, 0, 0, NULL, 0);
+    MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, NULL, 0);
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestDialogsReplied);
 }
 

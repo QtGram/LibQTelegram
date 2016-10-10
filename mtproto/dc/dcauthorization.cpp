@@ -14,6 +14,11 @@ DCAuthorization::DCAuthorization(DCSession *dcsession, QObject *parent) : QObjec
     connect(dcsession->dc(), &DC::configurationReceived, this, &DCAuthorization::onConfigurationReceived);
 }
 
+DCSession *DCAuthorization::dcSession() const
+{
+    return this->_dcsession;
+}
+
 void DCAuthorization::authorizeReply(MTProtoReply *mtreply)
 {
     TLConstructor ctor = mtreply->constructorId();
@@ -35,7 +40,7 @@ void DCAuthorization::authorizeReply(MTProtoReply *mtreply)
 
 void DCAuthorization::authorize()
 {
-    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
 
     if(dcconfig.authorization() == DCConfig::NotAuthorized)
         this->handleNotAuthorized();
@@ -49,6 +54,15 @@ void DCAuthorization::authorize()
         this->handleAuthorized();
     else
         Q_ASSERT(false);
+}
+
+void DCAuthorization::importAuthorization(DCSession* fromsession)
+{
+    Q_ASSERT(DCConfig_isLoggedIn);
+    Q_ASSERT(this->_dcsession->dc());
+
+    MTProtoRequest* req = TelegramAPI::authExportAuthorization(fromsession, this->_dcsession->dc()->id());
+    connect(req, &MTProtoRequest::replied, this, &DCAuthorization::onAuthorizationExported);
 }
 
 void DCAuthorization::encryptPQInnerData(PQInnerData *pqinnerdata, TLBytes &encinnerdata)
@@ -143,7 +157,7 @@ void DCAuthorization::handleAuthorized()
 
 void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::PQReceived);
 
     this->_respq = new ResPQ(this);
@@ -154,7 +168,7 @@ void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::ServerDHParamsOkReceived);
 
     ServerDHParams serverdhparams;
@@ -200,7 +214,7 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::ServerDHParamsFailReceived);
 }
 
@@ -222,7 +236,7 @@ void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DcConfig_fromSession(this->_dcsession);
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
 
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
@@ -257,4 +271,24 @@ void DCAuthorization::onConfigurationReceived(Config *config)
 
     TelegramConfig_save;
     emit authorized(this->_dcsession->dc());
+}
+
+void DCAuthorization::onAuthorizationExported(MTProtoReply *mtreply)
+{
+    AuthExportedAuthorization exportedauthorization;
+    exportedauthorization.read(mtreply);
+
+    MTProtoRequest* req = TelegramAPI::authImportAuthorization(this->_dcsession, exportedauthorization.id(), exportedauthorization.bytes());
+    connect(req, &MTProtoRequest::replied, this, &DCAuthorization::onAuthorizationImported);
+}
+
+void DCAuthorization::onAuthorizationImported(MTProtoReply *mtreply)
+{
+    Q_UNUSED(mtreply);
+
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    dcconfig.setAuthorization(DCConfig::Signed);
+
+    TelegramConfig_save;
+    emit authorizationImported(this->_dcsession->dc());
 }

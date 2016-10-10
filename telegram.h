@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "objects/telegraminitializer.h"
+#include "objects/fileobject.h"
 
 class Telegram : public QObject
 {
@@ -17,21 +18,24 @@ class Telegram : public QObject
         User* me() const;
         void setInitializer(TelegramInitializer* initializer);
 
-    public slots:
+    public slots: // Login
+        void signIn(const QString& phonecode);
+        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
+
+    public slots: // Dialogs
         QString dialogTitle(Dialog* dialog);
         QString dialogDraftMessage(Dialog* dialog);
         bool dialogHasDraftMessage(Dialog* dialog);
 
-    public slots:
+    public slots: // Users
         QString userFullName(User* user);
         QString userStatusText(User* user);
 
-    public slots:
+    public slots: // Messages
         QString messageText(TLInt messageid);
 
     public slots:
-        void signIn(const QString& phonecode);
-        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
+        FileObject* fileObject(Dialog* dialog);
 
     signals:
         void initializerChanged();
