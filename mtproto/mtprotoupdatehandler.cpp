@@ -144,6 +144,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
     {
         case TLTypes::UpdateNewMessage:
             emit newMessage(update->messageUpdatenewmessage());
+            break;
 
         case TLTypes::UpdateNewChannelMessage:
             emit newMessage(update->messageUpdatenewchannelmessage());
