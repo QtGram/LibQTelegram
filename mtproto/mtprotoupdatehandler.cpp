@@ -162,6 +162,13 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit newDraftMessage(update);
             break;
 
+        case TLTypes::UpdateReadHistoryInbox:
+        case TLTypes::UpdateReadHistoryOutbox:
+        case TLTypes::UpdateReadChannelInbox:
+        case TLTypes::UpdateReadChannelOutbox:
+            emit readHistory(update);
+            break;
+
         case TLTypes::UpdateMessageID:
             Nop;
             break;

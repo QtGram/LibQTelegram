@@ -38,6 +38,7 @@ class MTProtoUpdateHandler : public QObject
         void newChat(Chat* chat);
         void newUserStatus(Update* update);
         void newDraftMessage(Update* update);
+        void readHistory(Update* update);
 
     private:
         static MTProtoUpdateHandler* _instance;

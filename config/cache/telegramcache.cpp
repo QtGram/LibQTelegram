@@ -13,6 +13,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
 
 const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
@@ -162,6 +163,41 @@ void TelegramCache::onNewDraftMessage(Update *update)
     DraftMessage* olddraftmessage = dialog->draft();
     dialog->setDraft(update->draft());
     olddraftmessage->deleteLater();
+
+    emit dialogsChanged();
+}
+
+void TelegramCache::onReadHistory(Update *update)
+{
+    Q_ASSERT((update->constructorId() == TLTypes::UpdateReadHistoryInbox) ||
+             (update->constructorId() == TLTypes::UpdateReadHistoryOutbox) ||
+             (update->constructorId() == TLTypes::UpdateReadChannelInbox) ||
+             (update->constructorId() == TLTypes::UpdateReadChannelOutbox));
+
+    bool isout = (update->constructorId() == TLTypes::UpdateReadHistoryOutbox) ||
+                 (update->constructorId() == TLTypes::UpdateReadChannelOutbox);
+
+    TLInt id = 0;
+
+    if((update->constructorId() == TLTypes::UpdateReadChannelInbox) || (update->constructorId() == TLTypes::UpdateReadChannelOutbox))
+        id = update->channelId();
+    else if(update->constructorId() == TLTypes::UpdateReadHistoryInbox)
+        id = TelegramHelper::identifier(update->peerUpdatereadhistoryinbox());
+    else
+        id = TelegramHelper::identifier(update->peer());
+
+    if(!this->_dialogs.contains(id))
+    {
+        qWarning("Cannot mark dialog %x as read", id);
+        return;
+    }
+
+    Dialog* dialog = this->_dialogs[id];
+
+    if(isout)
+        dialog->setReadOutboxMaxId(update->maxId());
+    else
+        dialog->setReadInboxMaxId(update->maxId());
 
     emit dialogsChanged();
 }
