@@ -33,6 +33,7 @@ class DC : public DCConnection
 
     private slots:
         void repeatLastRequest();
+        void requestsToPending();
         void handleReply(MTProtoReply* mtreply);
         void onDCReadyRead();
 

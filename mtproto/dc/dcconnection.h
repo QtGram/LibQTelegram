@@ -22,6 +22,9 @@ class DCConnection : public QTcpSocket
         void onStateChanged(QAbstractSocket::SocketState state);
         void onError(QAbstractSocket::SocketError error);
 
+    signals:
+        void reconnecting();
+
     private:
         QString _address;
         quint16 _port;

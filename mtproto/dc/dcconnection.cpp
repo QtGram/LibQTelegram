@@ -28,6 +28,7 @@ void DCConnection::timerEvent(QTimerEvent *event)
 
 void DCConnection::reconnectToDC()
 {
+    emit reconnecting();
     this->_reconnecttimerid = QObject::startTimer(5000);
 }
 
