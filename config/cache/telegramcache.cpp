@@ -109,6 +109,8 @@ void TelegramCache::onNewMessage(Message *message)
         this->_dialogs[dialogid]->setTopMessage(message->id());
         emit dialogsChanged();
     }
+    else
+        qWarning("Cannot find dialog %x", dialogid);
 }
 
 void TelegramCache::onEditMessage(Message *message)
