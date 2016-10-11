@@ -4,7 +4,7 @@
 #include "config/cache/telegramcache.h"
 #include <QDebug>
 
-TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false)
+TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _debugmode(false)
 {
 }
 
@@ -45,11 +45,6 @@ const QString &TelegramInitializer::phoneNumber() const
 qint32 TelegramInitializer::port() const
 {
     return this->_port;
-}
-
-qint32 TelegramInitializer::dcId() const
-{
-    return this->_dcid;
 }
 
 bool TelegramInitializer::debugMode() const
@@ -120,17 +115,6 @@ void TelegramInitializer::setPort(qint32 port)
     emit portChanged();
 }
 
-void TelegramInitializer::setDcId(qint32 dcid)
-{
-    if(this->_dcid == dcid)
-        return;
-
-    this->_dcid = dcid;
-
-    this->tryConnect();
-    emit dcIdChanged();
-}
-
 void TelegramInitializer::setDebugMode(bool dbgmode)
 {
     if(this->_debugmode == dbgmode)
@@ -161,7 +145,7 @@ void TelegramInitializer::tryConnect()
     if(this->_publickey.isEmpty() || this->_host.isEmpty() || this->_phonenumber.isEmpty() || this->_apihash.isEmpty())
         return;
 
-    if(!this->_apiid || !this->_port || !this->_dcid)
+    if(!this->_apiid || !this->_port)
         return;
 
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
@@ -178,7 +162,7 @@ void TelegramInitializer::tryConnect()
         return;
     }
 
-    DCSessionManager::instance()->createMainSession(this->_host, this->_port, this->_dcid);
+    DCSessionManager::instance()->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
     MTProtoRequest* req = TelegramAPI::authSendCode(DC_MainSession, this->_phonenumber, false, this->_apiid, this->_apihash);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
 }
