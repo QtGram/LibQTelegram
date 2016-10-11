@@ -107,69 +107,6 @@ QString TelegramHelper::statusText(User *user)
     return QObject::tr("Long time ago");
 }
 
-QString TelegramHelper::messageText(Message *message)
-{
-    if(message->media())
-    {
-        MessageMedia* messagemedia = message->media();
-        TLConstructor ctorid = messagemedia->constructorId();
-
-        if(ctorid == TLTypes::MessageMediaWebPage)
-        {
-            if(!messagemedia->caption().isEmpty())
-                return  messagemedia->caption();
-
-            return messagemedia->webpage()->url();
-        }
-
-        if(ctorid == TLTypes::MessageMediaDocument)
-        {
-            Document* document = messagemedia->document();
-
-            foreach(DocumentAttribute* attribute, document->attributes())
-            {
-                if(attribute->constructorId() == TLTypes::DocumentAttributeImageSize)
-                    return QObject::tr("Photo");
-
-                if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
-                    return QObject::tr("GIF");
-
-                if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
-                    return QObject::tr("Sticker");
-
-                if(attribute->constructorId() == TLTypes::DocumentAttributeVideo)
-                    return QObject::tr("Video");
-
-                if(attribute->constructorId() == TLTypes::DocumentAttributeAudio)
-                    return QObject::tr("Audio recording");
-
-                if(attribute->constructorId() == TLTypes::DocumentAttributeHasStickers)
-                    return QObject::tr("Sticker set");
-            }
-
-            return QObject::tr("Document");
-        }
-
-        QString result;
-
-        if(ctorid == TLTypes::MessageMediaContact)
-            result = QObject::tr("Contact");
-        else if(ctorid == TLTypes::MessageMediaGame)
-            result = QObject::tr("Game");
-        else if((ctorid == TLTypes::MessageMediaGeo)  || (ctorid == TLTypes::MessageMediaVenue))
-            result = QObject::tr("Location");
-        else if(ctorid == TLTypes::MessageMediaPhoto)
-            result = QObject::tr("Photo");
-
-        if(!messagemedia->caption().isEmpty())
-            result += ", " + message->media()->caption();
-
-        return result;
-    }
-
-    return message->message();
-}
-
 bool TelegramHelper::isChat(Dialog *dialog)
 {
     return dialog->peer()->constructorId() == TLTypes::PeerChat;

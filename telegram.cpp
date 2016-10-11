@@ -38,6 +38,144 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     emit initializerChanged();
 }
 
+QString Telegram::messageMediaText(MessageMedia *messagemedia)
+{
+    TLConstructor ctorid = messagemedia->constructorId();
+
+    if(ctorid == TLTypes::MessageMediaWebPage)
+    {
+        if(!messagemedia->caption().isEmpty())
+            return  messagemedia->caption();
+
+        return messagemedia->webpage()->url();
+    }
+
+    if(ctorid == TLTypes::MessageMediaDocument)
+    {
+        Document* document = messagemedia->document();
+
+        foreach(DocumentAttribute* attribute, document->attributes())
+        {
+            if(attribute->constructorId() == TLTypes::DocumentAttributeImageSize)
+                return tr("Photo");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
+                return tr("GIF");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
+                return tr("Sticker");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeVideo)
+                return tr("Video");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeAudio)
+                return tr("Audio recording");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeHasStickers)
+                return tr("Sticker set");
+        }
+
+        return tr("Document");
+    }
+
+    QString result;
+
+    if(ctorid == TLTypes::MessageMediaContact)
+        result = tr("Contact");
+    else if(ctorid == TLTypes::MessageMediaGame)
+        result = tr("Game");
+    else if((ctorid == TLTypes::MessageMediaGeo)  || (ctorid == TLTypes::MessageMediaVenue))
+        result = tr("Location");
+    else if(ctorid == TLTypes::MessageMediaPhoto)
+        result = tr("Photo");
+
+    if(!messagemedia->caption().isEmpty())
+        result += ", " + messagemedia->caption();
+
+    return result;
+}
+
+QString Telegram::messageActionText(MessageAction *messageaction)
+{
+    User* inviteruser = NULL, *user = NULL;
+    QString fullname = "???", inviterfullname = "???";
+    TLConstructor ctorid = messageaction->constructorId();
+
+    if(messageaction->userId())
+    {
+        user = TelegramCache_user(messageaction->userId());
+
+        if(user)
+            fullname = TelegramHelper::fullName(user);
+    }
+
+    if(messageaction->inviterId())
+    {
+        inviteruser = TelegramCache_user(messageaction->inviterId());
+
+        if(inviteruser)
+            inviterfullname = TelegramHelper::fullName(inviteruser);
+    }
+
+    if(ctorid == TLTypes::MessageActionChatCreate)
+    {
+        if(messageaction->channelId())
+            return tr("Channel created by «%1»").arg(fullname);
+
+        return tr("Group created by «%1»").arg(fullname);
+    }
+
+    if(ctorid == TLTypes::MessageActionChatEditTitle)
+        return tr("Group name changed to «%1»").arg(messageaction->title().toString());
+
+    if(ctorid == TLTypes::MessageActionChatEditPhoto)
+        return tr("«%1» updated group photo").arg(fullname);
+
+    if(ctorid == TLTypes::MessageActionChatDeletePhoto)
+        return tr("«%1» deleted group photo").arg(fullname);
+
+    if(ctorid == TLTypes::MessageActionChatDeletePhoto)
+        return tr("«%1» deleted group photo").arg(fullname);
+
+    if(ctorid == TLTypes::MessageActionChatAddUser)
+    {
+        if(inviteruser)
+            return tr("«%1» added «%2» ").arg(inviterfullname, fullname);
+
+        return tr("«%1» has joined the group").arg(fullname);
+    }
+
+    if(ctorid == TLTypes::MessageActionChatDeleteUser)
+        return tr("«%1» has left the group").arg(fullname);
+
+    if(ctorid == TLTypes::MessageActionChatJoinedByLink)
+        return tr("«%1» has joined the group via invite link").arg(fullname);
+
+    if(ctorid == TLTypes::MessageActionChannelCreate)
+        return tr("Channel «%1» created").arg(messageaction->title().toString());
+
+    if(ctorid == TLTypes::MessageActionChatMigrateTo)
+    {
+        if(messageaction->channelId())
+            return tr("This group was upgraded to a supergroup");
+
+        return tr("Unhandled chat migration type");
+    }
+
+    if(ctorid == TLTypes::MessageActionChannelMigrateFrom) // NOTE: MessageActionChannelMigrateFrom, untested
+    {
+        if(messageaction->channelId())
+            return tr("This supergroup was downgraded to a group");
+
+        return tr("Unhandled channel migration type");
+    }
+
+    if(ctorid == TLTypes::MessageActionGameScore) // MessageActionGameScore, unhandled and untested
+        return tr("Unhandled MessageActionGameScore");
+
+    return QString("Unhandled action: %1").arg(ctorid, 0, 16);
+}
+
 QString Telegram::dialogTitle(Dialog *dialog)
 {
     TLInt peerid = TelegramHelper::identifier(dialog->peer());
@@ -78,7 +216,14 @@ QString Telegram::userStatusText(User *user)
 QString Telegram::messageText(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);
-    return TelegramHelper::messageText(message);
+
+    if(message->media())
+        return this->messageMediaText(message->media());
+
+    if(message->action())
+        return this->messageActionText(message->action());
+
+    return message->message();
 }
 
 FileObject *Telegram::fileObject(Dialog *dialog)

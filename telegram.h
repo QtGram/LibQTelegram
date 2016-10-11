@@ -18,6 +18,10 @@ class Telegram : public QObject
         User* me() const;
         void setInitializer(TelegramInitializer* initializer);
 
+    private:
+        QString messageMediaText(MessageMedia* messagemedia);
+        QString messageActionText(MessageAction* messageaction);
+
     public slots: // Login
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
