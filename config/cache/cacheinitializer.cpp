@@ -30,7 +30,7 @@ void CacheInitializer::requestContacts()
 
 void CacheInitializer::requestDialogs()
 {
-    MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, NULL, 0);
+    MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, NULL, 100); // NOTE: Needs investigation, DialogsSlice needs to be handled
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestDialogsReplied);
 }
 
