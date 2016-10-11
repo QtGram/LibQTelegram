@@ -190,6 +190,28 @@ QString Telegram::dialogTitle(Dialog *dialog)
     return TelegramHelper::fullName(user);
 }
 
+QString Telegram::dialogStatusText(Dialog *dialog)
+{
+    TLInt id = TelegramHelper::identifier(dialog);
+
+    if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
+    {
+        Chat* chat = TelegramCache_chat(id);
+
+        if(!chat)
+            return QString();
+
+        return tr("%1 members").arg(chat->participantsCount());
+    }
+
+    User* user = TelegramCache_user(id);
+
+    if(user)
+        return this->userStatusText(user);
+
+    return QString();
+}
+
 QString Telegram::dialogDraftMessage(Dialog *dialog)
 {
     if(dialog->draft())
