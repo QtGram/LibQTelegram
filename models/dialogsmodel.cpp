@@ -31,6 +31,10 @@ void DialogsModel::sortDialogs()
     std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](Dialog* dlg1, Dialog* dlg2) {
         Message* msg1 = TelegramCache_message(dlg1->topMessage());
         Message* msg2 = TelegramCache_message(dlg2->topMessage());
+
+        if(!msg1 || !msg2)
+            return false;
+
         return msg1->date() > msg2->date();
     });
 
