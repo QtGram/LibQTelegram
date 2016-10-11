@@ -126,7 +126,7 @@ QByteArray MTProtoRequest::buildPlain()
 
 QByteArray MTProtoRequest::buildEncrypted()
 {
-    Q_ASSERT(this->_dcid > 0);
+    Q_ASSERT(this->_dcid >= 0);
     Q_ASSERT(this->_sessionid != 0);
     Q_ASSERT(this->_seqno > 0);
 

@@ -95,7 +95,7 @@ void MTProtoReply::readPlainMessage()
 
 void MTProtoReply::readEncryptedMessage()
 {
-    Q_ASSERT(this->_dcid > 0);
+    Q_ASSERT(this->_dcid >= 0);
 
     DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
     TLInt128 msgkey = this->readTLInt128();
