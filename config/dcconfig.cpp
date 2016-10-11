@@ -180,3 +180,15 @@ void DCConfig::setIsMain(bool b)
 {
     this->_ismain = b;
 }
+
+void DCConfig::reset()
+{
+    this->_authorization = DCConfig::NotAuthorized;
+    this->_authorizationkey.clear();
+    this->_authorizationkeyauxhash.clear();
+
+    this->_authorizationkeyid = 0;
+    this->_deltatime = 0;
+    this->_serversalt = 0;
+    this->_ipv6 = false;
+}

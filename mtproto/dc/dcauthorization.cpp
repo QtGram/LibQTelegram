@@ -264,6 +264,10 @@ void DCAuthorization::onConfigurationReceived(Config *config)
             continue;
 
         DCConfig& dcconfig = TelegramConfig::config()->setDcConfig(dcoption->id(), dcoption->isIpv6());
+
+        if(!dcconfig.host().isEmpty() && (dcconfig.host() != dcoption->ipAddress())) // DC Configuration has changed
+            dcconfig.reset();
+
         dcconfig.setHost(dcoption->ipAddress());
         dcconfig.setPort(dcoption->port());
         dcconfig.setId(dcoption->id());

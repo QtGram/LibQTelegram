@@ -41,6 +41,7 @@ class DCConfig
         void setId(int id);
         void setIpv6(bool b);
         void setIsMain(bool b);
+        void reset();
 
     private:
         QString _host;
