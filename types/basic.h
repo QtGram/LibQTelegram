@@ -17,7 +17,7 @@
                            type = NULL;
 
 typedef quint32 TLConstructor;
-typedef quint8 TLTrue;
+typedef bool TLTrue;
 typedef bool TLBool;
 typedef qint32 TLInt;
 typedef qint64 TLLong;
