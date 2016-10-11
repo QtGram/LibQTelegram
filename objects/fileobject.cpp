@@ -1,6 +1,5 @@
 #include "fileobject.h"
 #include "../types/telegramhelper.h"
-#include <QCryptographicHash>
 #include <QDir>
 
 #define BLOCK_SIZE (128 * 1024)
@@ -11,7 +10,7 @@ FileObject::FileObject(QObject *parent): QObject(parent)
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
     this->_inputfilelocation = NULL;
-    this->_downloadsession = NULL;
+    this->_dcsession = NULL;
     this->_file = NULL;
 }
 
@@ -21,7 +20,7 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
     this->_inputfilelocation = NULL;
-    this->_downloadsession = NULL;
+    this->_dcsession = NULL;
     this->_file = NULL;
 }
 
@@ -45,6 +44,16 @@ void FileObject::setFileLocation(FileLocation *filelocation)
     this->_locfile = filelocation;
 }
 
+void FileObject::setFileId(const QString &fileid)
+{
+    this->_fileid = fileid;
+}
+
+void FileObject::setThumbnailId(const QString &thumbnailid)
+{
+    this->_thumbnailid = thumbnailid;
+}
+
 void FileObject::downloadThumbnail()
 {
     if(!this->_locthumbnail || (this->_locthumbnail->constructorId() == TLTypes::FileLocationUnavailable))
@@ -52,29 +61,28 @@ void FileObject::downloadThumbnail()
 
     this->_downloadmode = FileObject::DownloadThumbnail;
     this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locthumbnail);
-    this->_downloadsession = DC_CreateSession(this->_locthumbnail->dcId());
+    this->_dcsession = DC_CreateSession(this->_locthumbnail->dcId());
     this->sendDownloadRequest();
+}
+
+bool FileObject::loadCache()
+{
+    QDir dir(this->_storagepath);
+
+    if(QFile::exists(dir.absoluteFilePath(this->_thumbnailid)))
+    {
+        this->_thumbnailid = dir.absoluteFilePath(this->_thumbnailid);
+        emit thumbnailChanged();
+        emit downloadCompleted();
+        return true;
+    }
+
+    return false;
 }
 
 void FileObject::download()
 {
 
-}
-
-QString FileObject::createFileId(InputFileLocation *inputfilelocation)
-{
-    TLLong id = 0;
-    QByteArray indata, outdata;
-
-    if(inputfilelocation->constructorId() == TLTypes::InputFileLocation)
-        id = inputfilelocation->volumeId();
-    else
-        id = inputfilelocation->id();
-
-    indata.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
-    outdata = QCryptographicHash::hash(indata, QCryptographicHash::Md5);
-
-    return outdata.toHex();
 }
 
 QString FileObject::extension(const UploadFile *uploadfile)
@@ -114,19 +122,22 @@ QString FileObject::extension(const UploadFile *uploadfile)
 void FileObject::sendDownloadRequest()
 {
     TLInt offset = (this->_file ? this->_file->size() : 0);
-    MTProtoRequest* req = TelegramAPI::uploadGetFile(this->_downloadsession, this->_inputfilelocation, offset, BLOCK_SIZE);
+    MTProtoRequest* req = TelegramAPI::uploadGetFile(this->_dcsession, this->_inputfilelocation, offset, BLOCK_SIZE);
     connect(req, &MTProtoRequest::replied, this, &FileObject::onUploadFile);
 }
 
 void FileObject::onUploadFile(MTProtoReply *mtreply)
 {
+    Q_ASSERT(this->_downloadmode != FileObject::None);
+
     UploadFile uploadfile;
     uploadfile.read(mtreply);
 
     if(!this->_file)
     {
         QDir dir(this->_storagepath);
-        QString filename = this->createFileId(this->_inputfilelocation);
+        QString filename = (this->_downloadmode == FileObject::DownloadThumbnail) ?
+                           this->_thumbnailid : this->_fileid;
 
         this->_file = new QFile(dir.absoluteFilePath(filename));
 
@@ -148,11 +159,6 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
 
     this->_file->close();
 
-    if(!this->_file->rename(this->_file->fileName() + this->extension(&uploadfile)))
-        qWarning() << "Cannot rename file:" << this->_file->fileName();
-
-    Q_ASSERT(this->_downloadmode != FileObject::None);
-
     if(this->_downloadmode == FileObject::DownloadThumbnail)
     {
         this->_thumbnail = this->_file->fileName();
@@ -164,7 +170,10 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
         emit filePathChanged();
     }
 
+    DC_CloseSession(this->_dcsession);
+
     this->_file = NULL;
+    this->_dcsession = NULL;
     this->_downloadmode = FileObject::None;
     emit downloadCompleted();
 }

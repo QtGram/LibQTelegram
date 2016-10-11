@@ -14,7 +14,7 @@ class FileObject : public QObject
     Q_PROPERTY(QString thumbnail READ thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
 
-    private:
+    public:
         enum DownloadMode {
             None = 0,
             Upload = 1,
@@ -29,7 +29,10 @@ class FileObject : public QObject
         QString filePath() const;
         void setThumbnailLocation(FileLocation* filelocation);
         void setFileLocation(FileLocation* filelocation);
+        void setFileId(const QString& fileid);
+        void setThumbnailId(const QString& thumbnailid);
         void downloadThumbnail();
+        bool loadCache();
 
     public slots:
         void download();
@@ -38,7 +41,6 @@ class FileObject : public QObject
         void onUploadFile(MTProtoReply* mtreply);
 
     private:
-        QString createFileId(InputFileLocation* inputfilelocation);
         QString extension(const UploadFile* uploadfile);
         void sendDownloadRequest();
 
@@ -54,10 +56,12 @@ class FileObject : public QObject
         FileLocation* _locthumbnail;
         FileLocation* _locfile;
         InputFileLocation* _inputfilelocation;
-        DCSession* _downloadsession;
+        DCSession* _dcsession;
         QFile* _file;
         QString _thumbnail;
         QString _filepath;
+        QString _fileid;
+        QString _thumbnailid;
 };
 
 #endif // FILEOBJECT_H

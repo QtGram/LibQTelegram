@@ -9,22 +9,25 @@
 #include "../mtprotoreply.h"
 #include "../mtprotoservicehandler.h"
 
+#define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
+
 class DC : public DCConnection
 {
     Q_OBJECT
 
     public:
         explicit DC(const QString& address, qint16 port, int dcid, QObject *parent = 0);
-        int id() const;
 
     public:
         void sendPendingRequests();
-        TLLong send(MTProtoRequest *req);
-        void takeRequests(TLLong sessionid, TLLong *lastmsgid, DC* fromdc);
+        void send(MTProtoRequest *req);
+        void takeRequests(TLLong sessionid, DC* fromdc);
 
     private:
         void decompile(int direction, TLLong messageid, const QByteArray &body);
         void handleReply(const QByteArray& message);
+        void assignMessageId(MTProtoRequest *req);
+        void checkSyncronization(MTProtoReply* mtreply);
         TLInt generateContentMsgNo();
         TLInt getPacketLength();
 
@@ -47,6 +50,9 @@ class DC : public DCConnection
         TLInt _contentmsgno;
         TLLong _lastmsgid;
         int _dcid;
+
+    private:
+        static TLLong _lastclientmsgid;
 };
 
 #endif // DC_H

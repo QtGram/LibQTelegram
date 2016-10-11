@@ -17,24 +17,24 @@ class MTProtoRequest : public QObject
     Q_OBJECT
 
     public:
-        explicit MTProtoRequest(TLLong* lastmsgid, int dcid, QObject *parent = 0);
+        explicit MTProtoRequest(int dcid, QObject *parent = 0);
         TLConstructor constructorId() const;
         TLLong messageId() const;
+        TLLong sessionId() const;
         bool encrypted() const;
         const QByteArray& body() const;
         QByteArray build();
 
     public:
         void setDcId(int dcid);
-        void setLastMsgId(TLLong* lastmsgid);
         void setSessionId(TLLong sessionid);
+        void setMessageId(TLLong messageid);
         void setSeqNo(TLInt seqno);
         void setBody(MTProtoStream *body);
 
     private:
         void initConnection(MTProtoStream& mtstream) const;
         void build(QByteArray& request, const QByteArray& requestbody);
-        TLLong generateMessageId();
         QByteArray buildEncrypted();
         QByteArray buildPlain();
 
@@ -42,12 +42,11 @@ class MTProtoRequest : public QObject
         void replied(MTProtoReply* reply);
 
     private:
-        TLLong* _lastmsgid;
         int _dcid;
         TLConstructor _constructorid;
         TLLong _sessionid;
         TLLong _mainmsgid;
-        TLLong _msgid;
+        TLLong _messageid;
         TLInt _seqno;
         MTProtoStream* _body;
 

@@ -2,8 +2,11 @@
 #include "../../config/telegramconfig.h"
 #include "../mtprotoupdatehandler.h"
 #include "../mtprotoreply.h"
+#include <QDateTime>
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _dcid(dcid)
+TLLong DC::_lastclientmsgid = 0;
+
+DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
@@ -21,9 +24,36 @@ TLInt DC::generateContentMsgNo()
     return this->_contentmsgno;
 }
 
-int DC::id() const
+void DC::assignMessageId(MTProtoRequest* req)
 {
-    return this->_dcid;
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
+    TLLong msgid = 0, unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) << 32ll) + dcconfig.deltaTime();
+    TLLong ticks = 4 - (unixtime % 4);
+
+    if(!(unixtime % 4))
+        msgid = unixtime;
+    else
+        msgid = unixtime + ticks;
+
+    DC::_lastclientmsgid = this->_lastmsgid = msgid = qMax(msgid, DC::_lastclientmsgid + 4);
+
+    if((msgid % 4) != 0)
+        qFatal("Message %llx not divisible by 4 (yields %lld)", msgid, msgid % 4);
+
+    req->setMessageId(msgid);
+}
+
+void DC::checkSyncronization(MTProtoReply *mtreply)
+{
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
+
+    TLLong servertime = mtreply->messageId() >> 32LL;
+    TLLong clienttime = QDateTime::currentDateTime().toTime_t() - dcconfig.deltaTime();
+
+    if(clienttime <= (servertime - 30))
+        qWarning("DC %d Message %llx has a date at least 30 seconds in the future than current date", this->id(), mtreply->messageId());
+    else if(clienttime >= (servertime + 300))
+        qWarning("DC %d Message %llx was sent at least 300 seconds ago", this->id(), mtreply->messageId());
 }
 
 void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
@@ -34,7 +64,7 @@ void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
     if(!this->_mtdecompiler)
         this->_mtdecompiler = new MTProtoDecompiler();
 
-    this->_mtdecompiler->decompile(this->_dcid, direction, messageid, body);
+    this->_mtdecompiler->decompile(this->id(), direction, messageid, body);
 }
 
 TLInt DC::getPacketLength()
@@ -58,28 +88,33 @@ TLInt DC::getPacketLength()
 void DC::repeatLastRequest()
 {
     if(!this->_sentrequests.contains(this->_lastmsgid))
+    {
+        qWarning("Cannot repeat messageid: %llx", this->_lastmsgid);
         return;
+    }
 
     this->send(this->_sentrequests[this->_lastmsgid]);
 }
 
 void DC::handleReply(const QByteArray &message)
 {
-    MTProtoReply mtreply(message, this->_dcid);
+    MTProtoReply mtreply(message, this->id());
 
     if(mtreply.isError())
     {
-        qDebug() << "DC" << this->_dcid << "ERROR" << qAbs(mtreply.errorCode());
+        qDebug() << "DC" << this->id() << "ERROR" << qAbs(mtreply.errorCode());
         return;
     }
 
     if(((mtreply.messageId() % 4) != 1) && ((mtreply.messageId() % 4) != 3))
-        qFatal("Invalid server MessageId %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
+        qFatal("Invalid server Message %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
+
+    this->checkSyncronization(&mtreply);
 
     TLInt servertime = mtreply.messageId() >> 32;
     DCConfig& dcconfig = DCConfig_fromDc(this);
 
-    dcconfig.setServerTime(servertime);
+    dcconfig.setDeltaTime(CurrentDeltaTime(servertime));
     this->handleReply(&mtreply);
 }
 
@@ -92,7 +127,7 @@ void DC::handleReply(MTProtoReply *mtreply)
         return;
 
     this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
-    DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
 
     if(dcconfig.authorization() < DCConfig::Authorized)
     {
@@ -117,7 +152,7 @@ void DC::handleReply(MTProtoReply *mtreply)
 void DC::sendPendingRequests()
 {
     int idx = 0;
-    DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
 
     while(idx < this->_pendingrequests.length())
     {
@@ -135,33 +170,32 @@ void DC::sendPendingRequests()
     }
 }
 
-TLLong DC::send(MTProtoRequest *req)
+void DC::send(MTProtoRequest *req)
 {
+    if(this->_sentrequests.contains(req->messageId())) // This is a repeated request, remove old message_id
+        this->_sentrequests.remove(req->messageId());
+
+    this->assignMessageId(req);
+
     if(this->state() == DC::ConnectedState)
     {
         if(req->encrypted())
         {
-            DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
+            DCConfig& dcconfig = DCConfig_fromDcId(this->id());
 
             if(dcconfig.authorization() < DCConfig::Authorized)
             {
                 this->_pendingrequests << req;
-                return req->messageId();
+                return;
             }
 
             req->setSeqNo(this->generateContentMsgNo());
         }
 
-        if(this->_sentrequests.contains(req->messageId()))
-            this->_sentrequests.remove(req->messageId());
-
         QByteArray reqpayload = req->build();
 
         if(req->encrypted())
-        {
             this->_sentrequests[req->messageId()] = req;
-            this->_lastmsgid = req->messageId();
-        }
 
         this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
         this->write(reqpayload);
@@ -176,11 +210,9 @@ TLLong DC::send(MTProtoRequest *req)
         if(this->state() == DC::UnconnectedState)
             this->connectToDC();
     }
-
-    return req->messageId();
 }
 
-void DC::takeRequests(TLLong sessionid, TLLong* lastmsgid, DC *fromdc)
+void DC::takeRequests(TLLong sessionid, DC *fromdc)
 {
     QList<TLLong> messageids = fromdc->_sentrequests.keys();
     qSort(messageids); // Sort by messageid
@@ -188,8 +220,7 @@ void DC::takeRequests(TLLong sessionid, TLLong* lastmsgid, DC *fromdc)
     foreach(TLLong messageid, messageids)
     {
         MTProtoRequest* req = fromdc->_sentrequests[messageid];
-        req->setDcId(this->_dcid);
-        req->setLastMsgId(lastmsgid);
+        req->setDcId(this->id());
         req->setSessionId(sessionid);
         this->_pendingrequests << req;
     }

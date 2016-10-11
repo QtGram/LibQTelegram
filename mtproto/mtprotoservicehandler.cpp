@@ -120,6 +120,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     }
     else if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadServerSalt)
     {
+        qDebug() << "DC" << this->_dcid << "New Salt, repeating last request...";
         DCConfig& config = DCConfig_fromDcId(this->_dcid);
         config.setServerSalt(badmsgnotification.newServerSalt());
         TelegramConfig_save;
@@ -146,8 +147,10 @@ bool MTProtoServiceHandler::handleGzipPacked(MTProtoReply *mtreply)
 bool MTProtoServiceHandler::handleNewSessionCreated(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
+    NewSession newsession;
+    newsession.read(mtreply);
 
-    qDebug() << "Unhandled NewSessionCreated";
+    qDebug("DC %d New Session (first messageid: %llx)", this->_dcid, newsession.firstMsgId());
     return true;
 }
 
@@ -155,7 +158,7 @@ bool MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
 
-    qDebug() << "Unhandled MsgAck";
+    qDebug() << "DC" << this->_dcid << "Unhandled MsgAck";
     return true;
 }
 

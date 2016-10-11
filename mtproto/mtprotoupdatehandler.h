@@ -2,7 +2,7 @@
 #define MTPROTOUPDATEHANDLER_H
 
 #define UpdateHandler_instance MTProtoUpdateHandler::instance()
-#define UPDATE_HANDLER_SYNC MTProtoUpdateHandler::instance()->sync()
+#define UpdateHandler_sync MTProtoUpdateHandler::instance()->sync()
 
 #include <QObject>
 #include "mtprotoreply.h"

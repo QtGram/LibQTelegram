@@ -11,6 +11,8 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     if(this->_dclist.contains(id))
         return this->_dclist[id];
 
+    qDebug() << "DC" << id << "created";
+
     DCConfig& dcconfig = DCConfig_fromDcId(id);
     dcconfig.setHost(host);
     dcconfig.setPort(port);
@@ -59,7 +61,11 @@ void DCSessionManager::closeSession(DCSession *dcsession)
     Q_ASSERT(dc != NULL);
 
     if(dcsession->ownedDc())
+    {
+        qDebug() << "DC" << dc->id() << "closed";
         dc->close();
+        this->_dclist.remove(dc->id());
+    }
 
     dcsession->deleteLater();
 }
@@ -92,7 +98,7 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
 
     if(oldsession)
     {
-        dc->takeRequests(this->_mainsession->sessionId(), this->_mainsession->lastMsgId(), oldsession->dc());
+        dc->takeRequests(this->_mainsession->sessionId(), oldsession->dc());
         this->closeSession(oldsession);
     }
 

@@ -173,7 +173,7 @@ void TelegramInitializer::tryConnect()
         DCSessionManager::instance()->createMainSession(dcconfig);
 
         TelegramCache_load;
-        UPDATE_HANDLER_SYNC;
+        UpdateHandler_sync;
         emit loginCompleted();
         return;
     }

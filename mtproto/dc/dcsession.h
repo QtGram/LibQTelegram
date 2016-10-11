@@ -16,7 +16,6 @@ class DCSession : public QObject
         explicit DCSession(DC* dc, QObject *parent = 0);
         bool ownedDc() const;
         TLLong sessionId() const;
-        TLLong* lastMsgId();
         DC* dc() const;
         void setOwnedDC(bool b);
         MTProtoRequest* sendPlain(MTProtoStream *mtstream);
@@ -33,9 +32,7 @@ class DCSession : public QObject
         QTimer* _acktimer;
         TLVector<TLLong> _ackqueue;
         TLLong _sessionid;
-        TLLong _lastmsgid;
         DC* _dc;
-        bool _owneddc;
 };
 
 #endif // DCSESSION_H

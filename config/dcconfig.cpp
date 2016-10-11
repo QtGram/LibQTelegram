@@ -3,7 +3,7 @@
 #include <QJsonObject>
 #include <QDateTime>
 
-DCConfig::DCConfig(bool ipv6): _port(0), _servertime(0), _authorizationkeyid(0), _serversalt(0), _authorization(DCConfig::NotAuthorized), _id(0), _ipv6(ipv6), _ismain(false)
+DCConfig::DCConfig(bool ipv6): _port(0), _deltatime(0), _authorizationkeyid(0), _serversalt(0), _authorization(DCConfig::NotAuthorized), _id(0), _ipv6(ipv6), _ismain(false)
 {
 
 }
@@ -12,7 +12,7 @@ DCConfig::DCConfig(const DCConfig &dcconfig)
 {
     this->_host = dcconfig._host;
     this->_port = dcconfig._port;
-    this->_servertime = dcconfig._servertime;
+    this->_deltatime = dcconfig._deltatime;
     this->_authorizationkey = dcconfig._authorizationkey;
     this->_authorizationkeyauxhash = dcconfig._authorizationkeyauxhash;
     this->_authorizationkeyid = dcconfig._authorizationkeyid;
@@ -30,7 +30,7 @@ QJsonObject DCConfig::toJson()
     jsonobj["id"] = this->_id;
     jsonobj["host"] = this->_host;
     jsonobj["port"] = this->_port;
-    jsonobj["servertime"] = this->_servertime;
+    jsonobj["deltatime"] = this->_deltatime;
     jsonobj["serversalt"] = this->_serversalt;
     jsonobj["authorization"] = this->_authorization;
     jsonobj["authorizationkey"] = QString(this->_authorizationkey.toHex());
@@ -51,8 +51,8 @@ bool DCConfig::fromJson(const QJsonObject &jsonobj)
     if(jsonobj.contains("port"))
         this->_port = jsonobj["port"].toInt();
 
-    if(jsonobj.contains("servertime"))
-        this->_servertime = jsonobj["servertime"].toInt();
+    if(jsonobj.contains("deltatime"))
+        this->_deltatime = jsonobj["deltatime"].toInt();
 
     if(jsonobj.contains("serversalt"))
         this->_serversalt = jsonobj["serversalt"].toInt();
@@ -84,7 +84,7 @@ qint16 DCConfig::port() const
 
 TLInt DCConfig::serverTime() const
 {
-    return this->_servertime;
+    return this->_deltatime;
 }
 
 const QByteArray &DCConfig::authorizationKey() const
@@ -118,10 +118,7 @@ TLLong DCConfig::serverSalt() const
 
 TLLong DCConfig::deltaTime() const
 {
-    if(!this->_servertime)
-        return 0;
-
-    return this->_servertime - QDateTime::currentDateTime().toTime_t();
+    return this->_deltatime;
 }
 
 int DCConfig::authorization() const
@@ -149,9 +146,9 @@ void DCConfig::setPort(qint16 port)
     this->_port = port;
 }
 
-void DCConfig::setServerTime(TLInt servertime)
+void DCConfig::setDeltaTime(TLInt deltatime)
 {
-    this->_servertime = servertime;
+    this->_deltatime = deltatime;
 }
 
 void DCConfig::setAuthorizationKey(const QByteArray &authorizationkey)

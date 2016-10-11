@@ -34,7 +34,7 @@ class DCConfig
         bool isMain() const;
         void setHost(const QString& host);
         void setPort(qint16 port);
-        void setServerTime(TLInt servertime);
+        void setDeltaTime(TLInt deltatime);
         void setAuthorizationKey(const QByteArray& authorizationkey);
         void setAuthorization(int authorization);
         void setServerSalt(TLLong serversalt);
@@ -45,7 +45,7 @@ class DCConfig
     private:
         QString _host;
         qint16 _port;
-        TLInt _servertime;
+        TLInt _deltatime;
         QByteArray _authorizationkey;
         QByteArray _authorizationkeyauxhash;
         TLLong _authorizationkeyid;

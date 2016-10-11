@@ -206,7 +206,7 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
     qToBigEndian(serverdhinnerdata.g(), reinterpret_cast<uchar*>(this->_g_b.data()));
     this->_g_b = Math::modExp(this->_g_b, serverdhinnerdata.dhPrime(), b);
 
-    dcconfig.setServerTime(serverdhinnerdata.serverTime());
+    dcconfig.setDeltaTime(CurrentDeltaTime(serverdhinnerdata.serverTime()));
     dcconfig.setAuthorizationKey(Math::modExp(serverdhinnerdata.gA(), serverdhinnerdata.dhPrime(), b));
 
     this->authorize();

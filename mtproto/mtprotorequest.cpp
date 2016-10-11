@@ -6,10 +6,9 @@
 
 QHash<int, bool> MTProtoRequest::_firstmap;
 
-MTProtoRequest::MTProtoRequest(TLLong *lastmsgid, int dcid, QObject *parent) : QObject(parent), _lastmsgid(lastmsgid), _dcid(dcid), _constructorid(0), _sessionid(0), _msgid(0), _seqno(0), _body(NULL)
+MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _dcid(dcid), _constructorid(0), _sessionid(0), _messageid(0), _seqno(0), _body(NULL)
 {
     TRY_INIT_FIRST(dcid);
-    this->generateMessageId(); // Preparate a messageId
 }
 
 TLConstructor MTProtoRequest::constructorId() const
@@ -19,7 +18,12 @@ TLConstructor MTProtoRequest::constructorId() const
 
 TLLong MTProtoRequest::messageId() const
 {
-    return this->_msgid;
+    return this->_messageid;
+}
+
+TLLong MTProtoRequest::sessionId() const
+{
+    return this->_sessionid;
 }
 
 bool MTProtoRequest::encrypted() const
@@ -35,6 +39,11 @@ const QByteArray &MTProtoRequest::body() const
 void MTProtoRequest::setSessionId(TLLong sessionid)
 {
     this->_sessionid = sessionid;
+}
+
+void MTProtoRequest::setMessageId(TLLong messageid)
+{
+    this->_messageid = messageid;
 }
 
 void MTProtoRequest::setSeqNo(TLInt seqno)
@@ -66,37 +75,6 @@ QByteArray MTProtoRequest::build()
 void MTProtoRequest::setDcId(int dcid)
 {
     this->_dcid = dcid;
-}
-
-void MTProtoRequest::setLastMsgId(TLLong *lastmsgid)
-{
-    this->_lastmsgid = lastmsgid;
-}
-
-TLLong MTProtoRequest::generateMessageId()
-{
-    Q_ASSERT(this->_dcid > 0);
-
-    DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
-    TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) << 32) + dcconfig.deltaTime();
-    TLLong ticks = 4 - (unixtime % 4);
-
-    if(!(unixtime % 4))
-        this->_msgid = unixtime;
-    else
-        this->_msgid = unixtime + ticks;
-
-    this->_msgid += 0x1238;
-
-    if((this->_msgid % 2) != 0)
-        this->_msgid++;
-
-    *this->_lastmsgid = this->_msgid = qMax(this->_msgid, (*this->_lastmsgid) + 4);
-
-    if((this->_msgid % 4) != 0)
-        qFatal("MessageId %llx not divisible by 4 (yields %lld)", this->_msgid, this->_msgid % 4);
-
-    return this->_msgid;
 }
 
 void MTProtoRequest::initConnection(MTProtoStream &mtstream) const
@@ -140,7 +118,7 @@ QByteArray MTProtoRequest::buildPlain()
     MTProtoStream mtstream;
 
     mtstream.writeTLLong(0);
-    mtstream.writeTLLong(this->generateMessageId());
+    mtstream.writeTLLong(this->_messageid);
     mtstream.writeRaw(this->_body);
 
     return mtstream.data();
@@ -157,7 +135,7 @@ QByteArray MTProtoRequest::buildEncrypted()
 
     mtproto.writeTLLong(dcconfig.serverSalt());
     mtproto.writeTLLong(this->_sessionid);
-    mtproto.writeTLLong(this->generateMessageId());
+    mtproto.writeTLLong(this->_messageid);
     mtproto.writeTLInt(this->_seqno);
 
     if(this->_seqno == 1)

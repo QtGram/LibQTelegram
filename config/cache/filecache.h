@@ -22,6 +22,7 @@ class FileCache : public QObject
         FileObject* fileObject(Chat* chat);
 
     private:
+        QString createFileId(FileLocation* filelocation);
         FileObject* fileObject(FileLocation* locthumbnail, FileLocation* locfile);
 
     private slots:
@@ -29,7 +30,9 @@ class FileCache : public QObject
 
     private:
         QString _storagepath;
+        QHash<QString, FileObject*> _filemap;
         QList<FileObject*> _queue;
+        FileObject* _currentobject;
 
     private:
         static FileCache* _instance;
