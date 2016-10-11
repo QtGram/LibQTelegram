@@ -198,6 +198,29 @@ QString Telegram::dialogDraftMessage(Dialog *dialog)
     return QString();
 }
 
+bool Telegram::dialogIsChat(Dialog *dialog)
+{
+    return TelegramHelper::isChat(dialog);
+}
+
+bool Telegram::dialogIsChannel(Dialog *dialog)
+{
+    return TelegramHelper::isChannel(dialog);
+}
+
+bool Telegram::dialogIsBroadcast(Dialog *dialog)
+{
+    if(!TelegramHelper::isChannel(dialog))
+        return false;
+
+    Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog->peer()));
+
+    if(chat)
+        return chat->isBroadcast();
+
+    return false;
+}
+
 bool Telegram::dialogHasDraftMessage(Dialog *dialog)
 {
     return dialog->draft() && (dialog->draft()->constructorId() != DraftMessage::CtorDraftMessageEmpty);
@@ -213,9 +236,32 @@ QString Telegram::userStatusText(User *user)
     return TelegramHelper::statusText(user);
 }
 
+Message *Telegram::message(TLInt messageid)
+{
+    return TelegramCache_message(messageid);
+}
+
+QString Telegram::messageFrom(TLInt messageid)
+{
+    Message* message = TelegramCache_message(messageid);
+
+    if(message)
+    {
+        User* user = TelegramCache_user(message->fromId());
+
+        if(user)
+            return TelegramHelper::fullName(user);
+    }
+
+    return "???";
+}
+
 QString Telegram::messageText(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);
+
+    if(!message)
+        return QString();
 
     if(message->media())
         return this->messageMediaText(message->media());

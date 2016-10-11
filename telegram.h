@@ -29,6 +29,9 @@ class Telegram : public QObject
     public slots: // Dialogs
         QString dialogTitle(Dialog* dialog);
         QString dialogDraftMessage(Dialog* dialog);
+        bool dialogIsChat(Dialog* dialog);
+        bool dialogIsChannel(Dialog* dialog);
+        bool dialogIsBroadcast(Dialog* dialog);
         bool dialogHasDraftMessage(Dialog* dialog);
 
     public slots: // Users
@@ -36,6 +39,8 @@ class Telegram : public QObject
         QString userStatusText(User* user);
 
     public slots: // Messages
+        Message* message(TLInt messageid);
+        QString messageFrom(TLInt messageid);
         QString messageText(TLInt messageid);
 
     public slots:
