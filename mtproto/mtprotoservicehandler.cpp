@@ -72,18 +72,18 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
     {
         QRegularExpression regexp("_MIGRATE_([0-9]+)");
         QRegularExpressionMatch match = regexp.match(re.errorMessage());
-        QStringRef dcnum = match.capturedRef(1);
+        QString dcnum = match.captured(1);
 
         if(dcnum.isNull())
         {
-            qFatal("Unknown destination DC: %s", dcnum.toUtf8().constData());
+            qFatal("Unknown destination DC: %s", qUtf8Printable(dcnum));
             return true;
         }
 
         emit migrateDC(this->_dcid, dcnum.toInt());
     }
     else
-        qWarning() << "DC" << this->_dcid << "RPC Error:" << re.errorMessage();
+        qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
 
     return true;
 }

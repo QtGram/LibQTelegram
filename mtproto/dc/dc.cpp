@@ -27,8 +27,8 @@ TLInt DC::generateContentMsgNo()
 void DC::assignMessageId(MTProtoRequest* req)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-    TLLong msgid = 0, unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) << 32ll) + dcconfig.deltaTime();
-    TLLong ticks = 4 - (unixtime % 4);
+    TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) + dcconfig.deltaTime()) << 32LL;
+    TLLong msgid = 0, ticks = 4 - (unixtime % 4);
 
     if(!(unixtime % 4))
         msgid = unixtime;
