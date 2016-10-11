@@ -71,9 +71,8 @@ bool FileObject::loadCache()
 
     if(QFile::exists(dir.absoluteFilePath(this->_thumbnailid)))
     {
-        this->_thumbnailid = dir.absoluteFilePath(this->_thumbnailid);
+        this->_thumbnail = dir.absoluteFilePath(this->_thumbnailid);
         emit thumbnailChanged();
-        emit downloadCompleted();
         return true;
     }
 
