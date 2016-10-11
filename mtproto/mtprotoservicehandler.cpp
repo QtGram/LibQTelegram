@@ -82,6 +82,8 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
 
         emit migrateDC(this->_dcid, dcnum.toInt());
     }
+    else
+        qWarning() << "DC" << this->_dcid << "RPC Error:" << re.errorMessage();
 
     return true;
 }
