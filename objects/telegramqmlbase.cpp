@@ -3,6 +3,7 @@
 #include "telegraminitializer.h"
 #include "objects/fileobject.h"
 #include "models/dialogsmodel.h"
+#include "models/dialogmodel.h"
 #include "models/contactsmodel.h"
 
 TelegramQmlBase::TelegramQmlBase()
@@ -29,5 +30,6 @@ void TelegramQmlBase::initialize(const QString &uri)
 
     // Models
     REGISTER_OBJECT(DialogsModel);
+    REGISTER_OBJECT(DialogModel);
     REGISTER_OBJECT(ContactsModel);
 }

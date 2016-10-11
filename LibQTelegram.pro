@@ -237,7 +237,9 @@ SOURCES += \
     models/abstract/telegrammodel.cpp \
     models/abstract/telegramsortfilterproxymodel.cpp \
     config/cache/filecache.cpp \
-    objects/fileobject.cpp
+    objects/fileobject.cpp \
+    models/messagesmodel.cpp \
+    models/dialogmodel.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -468,7 +470,9 @@ HEADERS +=\
     models/abstract/telegrammodel.h \
     models/abstract/telegramsortfilterproxymodel.h \
     config/cache/filecache.h \
-    objects/fileobject.h
+    objects/fileobject.h \
+    models/messagesmodel.h \
+    models/dialogmodel.h
 
 unix {
     target.path = /usr/lib
