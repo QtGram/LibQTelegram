@@ -68,7 +68,7 @@ QString TelegramHelper::dateString(TLInt timestamp)
     int days = datetime.daysTo(currentdatetime);
 
     if(seconds < 24 * 60 * 60)
-        return QObject::tr("Yesterday %1").arg(days ? datetime.toString("HH:mm") : datetime.toString("HH:mm"));
+        return days ? QObject::tr("Yesterday %1").arg(datetime.toString("HH:mm")) : datetime.toString("HH:mm");
 
     return datetime.toString("MMM dd, HH:mm");
 }
