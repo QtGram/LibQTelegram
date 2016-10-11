@@ -247,10 +247,20 @@ QString Telegram::messageFrom(TLInt messageid)
 
     if(message)
     {
-        User* user = TelegramCache_user(message->fromId());
+        if(message->isPost()) // Post = messages from channels
+        {
+            Chat* chat = TelegramCache_chat(TelegramHelper::identifier(message->toId()));
 
-        if(user)
-            return TelegramHelper::fullName(user);
+            if(chat)
+                return chat->title();
+        }
+        else
+        {
+            User* user = TelegramCache_user(message->fromId());
+
+            if(user)
+                return TelegramHelper::fullName(user);
+        }
     }
 
     return "???";
