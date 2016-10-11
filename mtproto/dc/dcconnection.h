@@ -12,6 +12,12 @@ class DCConnection : public QTcpSocket
         int id() const;
         void connectToDC();
 
+    protected:
+        virtual void timerEvent(QTimerEvent *event);
+
+    private:
+        void reconnectToDC();
+
     private slots:
         void onStateChanged(QAbstractSocket::SocketState state);
         void onError(QAbstractSocket::SocketError error);
@@ -20,6 +26,7 @@ class DCConnection : public QTcpSocket
         QString _address;
         quint16 _port;
         int _dcid;
+        int _reconnecttimerid;
 };
 
 #endif // DCCONNECTION_H

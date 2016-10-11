@@ -1,6 +1,7 @@
 #include "dcconnection.h"
+#include <QTimerEvent>
 
-DCConnection::DCConnection(const QString &address, quint16 port, int dcid, QObject *parent): QTcpSocket(parent), _address(address), _port(port), _dcid(dcid)
+DCConnection::DCConnection(const QString &address, quint16 port, int dcid, QObject *parent): QTcpSocket(parent), _address(address), _port(port), _dcid(dcid), _reconnecttimerid(-1)
 {
     connect(this, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
@@ -14,6 +15,20 @@ int DCConnection::id() const
 void DCConnection::connectToDC()
 {
     this->connectToHost(this->_address, this->_port);
+}
+
+void DCConnection::timerEvent(QTimerEvent *event)
+{
+    if(event->timerId() == this->_reconnecttimerid)
+    {
+        this->connectToDC();
+        this->_reconnecttimerid = -1;
+    }
+}
+
+void DCConnection::reconnectToDC()
+{
+    this->_reconnecttimerid = QObject::startTimer(5000);
 }
 
 void DCConnection::onStateChanged(SocketState state)
@@ -62,7 +77,8 @@ void DCConnection::onError(QAbstractSocket::SocketError error)
             break;
 
         case QAbstractSocket::RemoteHostClosedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Remote host closed";
+            qWarning() << "DC" << this->_dcid << "ERROR: Remote host closed, reconnecting in 5 seconds...";
+            this->reconnectToDC();
             break;
 
         case QAbstractSocket::HostNotFoundError:
