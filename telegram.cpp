@@ -266,7 +266,17 @@ Message *Telegram::message(TLInt messageid)
 QString Telegram::messageFrom(TLInt messageid)
 {
     Message* message = TelegramCache_message(messageid);
+    return this->messageFrom(message);
+}
 
+QString Telegram::messageText(TLInt messageid)
+{
+    Message* message = TelegramCache_message(messageid);
+    return this->messageText(message);
+}
+
+QString Telegram::messageFrom(Message *message)
+{
     if(message)
     {
         if(message->isPost()) // Post = messages from channels
@@ -288,10 +298,8 @@ QString Telegram::messageFrom(TLInt messageid)
     return "???";
 }
 
-QString Telegram::messageText(TLInt messageid)
+QString Telegram::messageText(Message *message)
 {
-    Message* message = TelegramCache_message(messageid);
-
     if(!message)
         return QString();
 

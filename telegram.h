@@ -43,6 +43,8 @@ class Telegram : public QObject
         Message* message(TLInt messageid);
         QString messageFrom(TLInt messageid);
         QString messageText(TLInt messageid);
+        QString messageFrom(Message* message);
+        QString messageText(Message* message);
 
     public slots:
         FileObject* fileObject(Dialog* dialog);
