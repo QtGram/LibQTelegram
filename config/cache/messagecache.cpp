@@ -17,7 +17,7 @@ const MessageCache::MessageList &MessageCache::messages(Dialog* dialog)
 {
     TLInt dialogid = TelegramHelper::identifier(dialog);
 
-    if(!this->_dialogmessages.contains(dialogid))
+    if(!this->_cacheloaded.contains(dialogid))
         this->load(dialogid);
 
     return this->_dialogmessages[dialogid];
@@ -91,6 +91,8 @@ void MessageCache::load(TLInt dialogid)
     TLVector<Message*> messages;
     mtstream.readTLVector<Message>(messages);
     this->cache(messages);
+
+    this->_cacheloaded << dialogid;
 }
 
 void MessageCache::load()

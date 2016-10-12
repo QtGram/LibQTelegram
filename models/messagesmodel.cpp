@@ -83,7 +83,7 @@ void MessagesModel::loadMore()
     int limit = this->_loadcount;
 
     if(this->_messages.length() < this->_loadcount)
-        limit = this->_loadcount - this->_messages.length();
+        limit = (this->_loadcount - this->_messages.length()) + 1;
 
     MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, 0, limit, this->maxId(), 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
@@ -107,7 +107,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 
 TLInt MessagesModel::maxId() const
 {
-    TLInt maxid = INT_MAX;
+    TLInt maxid = 0;
 
     foreach(Message* message, this->_messages)
     {
