@@ -17,6 +17,8 @@ class TelegramHelper
         static QString statusText(User* user);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);
+        static bool isChat(Peer* peer);
+        static bool isChannel(Peer* peer);
         static TLInt identifier(User* user);
         static TLInt identifier(Chat* chat);
         static TLInt identifier(Peer* peer);

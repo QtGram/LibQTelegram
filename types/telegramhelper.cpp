@@ -109,12 +109,22 @@ QString TelegramHelper::statusText(User *user)
 
 bool TelegramHelper::isChat(Dialog *dialog)
 {
-    return dialog->peer()->constructorId() == TLTypes::PeerChat;
+    return TelegramHelper::isChat(dialog->peer());
 }
 
 bool TelegramHelper::isChannel(Dialog *dialog)
 {
-    return dialog->peer()->constructorId() == TLTypes::PeerChannel;
+    return TelegramHelper::isChannel(dialog->peer());
+}
+
+bool TelegramHelper::isChat(Peer *peer)
+{
+    return peer->constructorId() == TLTypes::PeerChat;
+}
+
+bool TelegramHelper::isChannel(Peer *peer)
+{
+    return peer->constructorId() == TLTypes::PeerChannel;
 }
 
 TLInt TelegramHelper::identifier(User *user)
@@ -154,7 +164,7 @@ TLInt TelegramHelper::identifier(Message *message)
 
 TLInt TelegramHelper::dialogIdentifier(Message *message)
 {
-    if(message->isOut())
+    if(message->isOut() || TelegramHelper::isChat(message->toId()) || TelegramHelper::isChannel(message->toId()))
         return TelegramHelper::identifier(message->toId());
 
     return message->fromId();
