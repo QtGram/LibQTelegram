@@ -19,6 +19,11 @@ int MessagesModel::rowCount(const QModelIndex &) const
     return this->_messages.length();
 }
 
+QHash<int, QByteArray> MessagesModel::roleNames() const
+{
+    return this->initRoles();
+}
+
 void MessagesModel::sortMessages()
 {
     this->beginResetModel();

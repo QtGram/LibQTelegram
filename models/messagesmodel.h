@@ -11,10 +11,11 @@ class MessagesModel : public TelegramModel
         explicit MessagesModel(QObject *parent = 0);
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
+        virtual QHash<int, QByteArray> roleNames() const;
 
     private:
         void sortMessages();
-        void telegramReady();
+        virtual void telegramReady();
 
     private:
         QList<Message*> _messages;
