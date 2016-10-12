@@ -60,6 +60,32 @@ InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
     return inputfilelocation;
 }
 
+InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash)
+{
+    InputPeer* inputpeer = new InputPeer();
+    inputpeer->setAccessHash(accesshash);
+
+    if(peer->constructorId() == TLTypes::PeerUser)
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerUser);
+        inputpeer->setUserId(peer->userId());
+    }
+    else if(peer->constructorId() == TLTypes::PeerChat)
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerChat);
+        inputpeer->setChatId(peer->chatId());
+    }
+    else if(peer->constructorId() == TLTypes::PeerChannel)
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerChannel);
+        inputpeer->setChannelId(peer->channelId());
+    }
+    else
+        Q_ASSERT(false);
+
+    return inputpeer;
+}
+
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);

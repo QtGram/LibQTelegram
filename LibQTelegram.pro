@@ -239,7 +239,7 @@ SOURCES += \
     config/cache/filecache.cpp \
     objects/fileobject.cpp \
     models/messagesmodel.cpp \
-    models/dialogmodel.cpp
+    config/cache/messagecache.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -472,7 +472,7 @@ HEADERS +=\
     config/cache/filecache.h \
     objects/fileobject.h \
     models/messagesmodel.h \
-    models/dialogmodel.h
+    config/cache/messagecache.h
 
 unix {
     target.path = /usr/lib

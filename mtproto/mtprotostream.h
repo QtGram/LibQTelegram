@@ -33,6 +33,8 @@ class MTProtoStream : public QObject
         TLInt length() const;
         bool atEnd() const;
         TLInt bytesAvailable() const;
+        void save(const QString& filepath) const;
+        void load(const QString& filepath);
 
     public: // Peek
         TLConstructor peekTLConstructor();

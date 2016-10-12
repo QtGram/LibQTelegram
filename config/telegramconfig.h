@@ -2,8 +2,9 @@
 #define TELEGRAMCONFIG_H
 
 #define TelegramConfig_clientState TelegramConfig::config()->updateState()
-#define TelegramConfig_instance TelegramConfig::config()
+#define TelegramConfig_storagePath TelegramConfig::config()->storagePath()
 #define TelegramConfig_save TelegramConfig::config()->save()
+#define TelegramConfig_instance TelegramConfig::config()
 
 #define DCConfig_mainDcId (TelegramConfig::config() ? TelegramConfig::config()->mainDcId() : -1)
 #define DCConfig_isLoggedIn (TelegramConfig::config() ? TelegramConfig::config()->isLoggedIn() : false)

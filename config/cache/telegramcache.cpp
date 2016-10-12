@@ -5,8 +5,11 @@ TelegramCache* TelegramCache::_instance = NULL;
 
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
+    this->_messagecache = new MessageCache(this);
+
+    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this->_messagecache, SLOT(edit(Message*)));
+
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
-    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
@@ -29,9 +32,9 @@ const QHash<TLInt, Chat *> &TelegramCache::chats() const
     return this->_chats;
 }
 
-const QHash<TLInt, Message *> &TelegramCache::messages() const
+const MessageCache::MessageList &TelegramCache::messages(Dialog *dialog) const
 {
-    return this->_messages;
+    return this->_messagecache->messages(dialog);
 }
 
 Dialog *TelegramCache::dialog(TLInt id) const
@@ -67,15 +70,9 @@ Chat *TelegramCache::chat(TLInt id) const
     return this->_chats[id];
 }
 
-Message *TelegramCache::message(TLInt id) const
+Message *TelegramCache::message(TLInt messageid) const
 {
-    if(!this->_messages.contains(id))
-    {
-        qWarning("Cannot recover message %x from cache", id);
-        return NULL;
-    }
-
-    return this->_messages[id];
+    return this->_messagecache->message(messageid);
 }
 
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
@@ -95,13 +92,12 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
 
 void TelegramCache::cache(const TLVector<Message *>& messages)
 {
-    this->cache(messages, this->_messages);
+    this->_messagecache->cache(messages);
 }
 
 void TelegramCache::onNewMessage(Message *message)
 {
     TelegramCache_store(message);
-
     TLInt dialogid = TelegramHelper::dialogIdentifier(message);
 
     if(this->_dialogs.contains(dialogid))
@@ -111,23 +107,6 @@ void TelegramCache::onNewMessage(Message *message)
     }
     else
         qWarning("Cannot find dialog %x", dialogid);
-}
-
-void TelegramCache::onEditMessage(Message *message)
-{
-    TLInt id = TelegramHelper::identifier(message);
-
-    if(!this->_messages.contains(id))
-    {
-        qWarning("Edited message %x not available", id);
-        return;
-    }
-
-    Message* oldmessage = this->_messages[id];
-    this->_messages[id] = message;
-    oldmessage->deleteLater();
-
-    emit dialogsChanged();
 }
 
 void TelegramCache::onNewUserStatus(Update *update)
@@ -215,12 +194,12 @@ void TelegramCache::save() const
     this->saveToFile<Dialog>(this->_dialogs, "dialogs");
     this->saveToFile<User>(this->_users, "users");
     this->saveToFile<Chat>(this->_chats, "chats");
-    this->saveToFile<Message>(this->_messages, "messages");
+    this->_messagecache->save(this->_dialogs.values());
 }
 
 void TelegramCache::load()
 {
-    this->loadFromFile<Message>(this->_messages, "messages");
+    this->_messagecache->load();
     this->loadFromFile<Chat>(this->_chats, "chats");
     this->loadFromFile<User>(this->_users, "users");
     this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
@@ -243,5 +222,5 @@ void TelegramCache::cache(Chat *chat)
 
 void TelegramCache::cache(Message *message)
 {
-    this->cache(message, this->_messages);
+    this->_messagecache->cache(message);
 }
