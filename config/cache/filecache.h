@@ -17,9 +17,7 @@ class FileCache : public QObject
 
     public:
         static FileCache* instance();
-        FileObject* fileObject(Dialog* dialog);
-        FileObject* fileObject(User* user);
-        FileObject* fileObject(Chat* chat);
+        FileObject* fileObject(TelegramObject* telegramobject);
 
     private:
         QString createFileId(FileLocation* filelocation);

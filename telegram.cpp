@@ -312,9 +312,42 @@ QString Telegram::messageText(Message *message)
     return message->message();
 }
 
-FileObject *Telegram::fileObject(Dialog *dialog)
+bool Telegram::messageHasImage(Message *message)
 {
-    return FileCache_fileObject(dialog);
+    if(!message || !message->media())
+        return false;
+
+    MessageMedia* messagemedia = message->media();
+
+    if(messagemedia->constructorId() == TLTypes::MessageMediaPhoto)
+        return true;
+
+    /*
+    if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
+    {
+        WebPage* webpage = messagemedia->webpage();
+        return webpage->photo()->constructorId() != TLTypes::PhotoEmpty;
+    }
+    */
+
+    return false;
+}
+
+FileObject *Telegram::fileObject(TelegramObject *telegramobject)
+{
+    switch(telegramobject->constructorId())
+    {
+        case TLTypes::Dialog:
+            return FileCache_fileObject(qobject_cast<Dialog*>(telegramobject));
+
+        case TLTypes::Message:
+            return FileCache_fileObject(qobject_cast<Message*>(telegramobject));
+
+        default:
+            break;
+    }
+
+    return NULL;
 }
 
 void Telegram::signIn(const QString &phonecode)

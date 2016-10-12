@@ -45,9 +45,10 @@ class Telegram : public QObject
         QString messageText(TLInt messageid);
         QString messageFrom(Message* message);
         QString messageText(Message* message);
+        bool messageHasImage(Message* message);
 
     public slots:
-        FileObject* fileObject(Dialog* dialog);
+        FileObject* fileObject(TelegramObject* telegramobject);
 
     signals:
         void initializerChanged();

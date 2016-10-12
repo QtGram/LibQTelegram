@@ -26,44 +26,51 @@ FileCache *FileCache::instance()
     return FileCache::_instance;
 }
 
-FileObject *FileCache::fileObject(Dialog *dialog)
+FileObject *FileCache::fileObject(TelegramObject *tgobj)
 {
-    TLInt id = TelegramHelper::identifier(dialog);
+    if(!tgobj)
+        return NULL;
 
-    if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
+    if(tgobj->constructorId() == TLTypes::Dialog)
     {
-        Chat* chat = TelegramCache_chat(id);
+        Dialog* dialog = qobject_cast<Dialog*>(tgobj);
+        TLInt id = TelegramHelper::identifier(dialog);
 
-        if(chat)
-            return this->fileObject(chat);
+        if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
+            return this->fileObject(TelegramCache_chat(id));
 
-        return NULL;
+        return this->fileObject(TelegramCache_user(id));
     }
+    else if(tgobj->constructorId() == TLTypes::Photo)
+    {
+        Photo* photo = qobject_cast<Photo*>(tgobj);
+        PhotoSize* thumbnailphoto = photo->sizes().first();
+        PhotoSize* fullphoto = photo->sizes().last();
+        FileObject* fileobj = this->fileObject(thumbnailphoto->location(), fullphoto->location());
 
-    User* user = TelegramCache_user(id);
+        fileobj->setImageSize(QSize(fullphoto->w(), fullphoto->h()));
+        return fileobj;
+    }
+    else if(tgobj->constructorId() == TLTypes::ChatPhoto)
+    {
+        ChatPhoto* chatphoto = qobject_cast<ChatPhoto*>(tgobj);
+        return this->fileObject(chatphoto->photoSmall(), chatphoto->photoBig());
+    }
+    else if(tgobj->constructorId() == TLTypes::UserProfilePhoto)
+    {
+        UserProfilePhoto* userprofilephoto = qobject_cast<UserProfilePhoto*>(tgobj);
+        return this->fileObject(userprofilephoto->photoSmall(), userprofilephoto->photoBig());
+    }
+    else if((tgobj->constructorId() == TLTypes::Chat) || (tgobj->constructorId() == TLTypes::Channel))
+        return this->fileObject(qobject_cast<Chat*>(tgobj)->photo());
+    else if((tgobj->constructorId() == TLTypes::User))
+        return this->fileObject(qobject_cast<User*>(tgobj)->photo());
+    else if(tgobj->constructorId() == TLTypes::Message)
+        return this->fileObject(qobject_cast<Message*>(tgobj)->media());
+    else if(tgobj->constructorId() == TLTypes::MessageMediaPhoto)
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo());
 
-    if(!user)
-        return NULL;
-
-    return this->fileObject(user);
-}
-
-FileObject *FileCache::fileObject(User *user)
-{
-    if(!user->photo() || (user->photo()->constructorId() == TLTypes::UserProfilePhotoEmpty))
-        return NULL;
-
-    UserProfilePhoto* userprofilephoto = user->photo();
-    return this->fileObject(userprofilephoto->photoSmall(), userprofilephoto->photoBig());
-}
-
-FileObject *FileCache::fileObject(Chat *chat)
-{
-    if(!chat->photo() || (chat->photo()->constructorId() == TLTypes::ChatPhotoEmpty))
-        return NULL;
-
-    ChatPhoto* chatphoto = chat->photo();
-    return this->fileObject(chatphoto->photoSmall(), chatphoto->photoBig());
+    return NULL;
 }
 
 QString FileCache::createFileId(FileLocation *filelocation)
