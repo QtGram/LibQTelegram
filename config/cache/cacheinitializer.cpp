@@ -10,6 +10,8 @@ CacheInitializer::CacheInitializer(QObject *parent) : QObject(parent), _state(Ca
 
 void CacheInitializer::initialize()
 {
+    if(this->_state == CacheInitializer::RequestState)
+        this->requestState();
     if(this->_state == CacheInitializer::RequestContacts)
         this->requestContacts();
     else if(this->_state == CacheInitializer::RequestDialogs)
@@ -22,6 +24,12 @@ void CacheInitializer::initialize()
     }
 }
 
+void CacheInitializer::requestState()
+{
+    MTProtoRequest* req = TelegramAPI::updatesGetState(DC_MainSession);
+    connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestStateReplied);
+}
+
 void CacheInitializer::requestContacts()
 {
     MTProtoRequest* req = TelegramAPI::contactsGetContacts(DC_MainSession, TLString());
@@ -32,6 +40,14 @@ void CacheInitializer::requestDialogs()
 {
     MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, NULL, 100); // NOTE: Needs investigation, DialogsSlice needs to be handled
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestDialogsReplied);
+}
+
+void CacheInitializer::onRequestStateReplied(MTProtoReply *mtreply)
+{
+    TelegramConfig_clientState->read(mtreply);
+
+    this->_state++;
+    this->initialize();
 }
 
 void CacheInitializer::onRequestContactsReplied(MTProtoReply *mtreply)

@@ -11,7 +11,8 @@ class CacheInitializer : public QObject
     private:
         enum State {
             First = 0,
-            RequestContacts = First,
+            RequestState = First,
+            RequestContacts,
             RequestDialogs,
             Last = RequestDialogs,
         };
@@ -21,10 +22,12 @@ class CacheInitializer : public QObject
         void initialize();
 
     private:
+        void requestState();
         void requestContacts();
         void requestDialogs();
 
     private:
+        void onRequestStateReplied(MTProtoReply* mtreply);
         void onRequestContactsReplied(MTProtoReply* mtreply);
         void onRequestDialogsReplied(MTProtoReply* mtreply);
 
