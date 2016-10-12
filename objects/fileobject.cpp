@@ -12,6 +12,7 @@ FileObject::FileObject(QObject *parent): QObject(parent)
     this->_inputfilelocation = NULL;
     this->_dcsession = NULL;
     this->_file = NULL;
+
 }
 
 FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath)
@@ -22,6 +23,18 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_inputfilelocation = NULL;
     this->_dcsession = NULL;
     this->_file = NULL;
+
+    connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
+}
+
+bool FileObject::downloaded() const
+{
+    return !this->_filepath.isEmpty();
+}
+
+QSize FileObject::imageSize() const
+{
+    return this->_imagesize;
 }
 
 QString FileObject::thumbnail() const
@@ -32,6 +45,15 @@ QString FileObject::thumbnail() const
 QString FileObject::filePath() const
 {
     return this->_filepath;
+}
+
+void FileObject::setImageSize(const QSize &imagesize)
+{
+    if(this->_imagesize == imagesize)
+        return;
+
+    this->_imagesize = imagesize;
+    emit imageSizeChanged();
 }
 
 void FileObject::setThumbnailLocation(FileLocation *filelocation)
