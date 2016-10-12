@@ -3,7 +3,8 @@
 
 DialogModel::DialogModel(QObject *parent) : TelegramSortFilterProxyModel(parent), _dialog(NULL), _messagesmodel(NULL)
 {
-
+    this->_messagesmodel = new MessagesModel(this);
+    this->setSourceModel(this->_messagesmodel);
 }
 
 Dialog *DialogModel::dialog() const
@@ -17,20 +18,6 @@ void DialogModel::setDialog(Dialog *dialog)
         return;
 
     this->_dialog = dialog;
-
-    MessagesModel* oldmessagesmodel = this->_messagesmodel;
-
-    this->_messagesmodel = new MessagesModel(this);
-    this->_messagesmodel->setTelegram(this->_telegram);
-
-    this->setSourceModel(this->_messagesmodel);
-
-    if(oldmessagesmodel)
-    {
-        oldmessagesmodel->deleteLater();
-        this->invalidate();
-    }
-
     emit dialogChanged();
 }
 
@@ -49,8 +36,5 @@ bool DialogModel::filterAcceptsRow(int sourcerow, const QModelIndex&) const
 
 void DialogModel::updateTelegram(Telegram *telegram)
 {
-    if(!this->_messagesmodel)
-        return;
-
     this->_messagesmodel->setTelegram(telegram);
 }
