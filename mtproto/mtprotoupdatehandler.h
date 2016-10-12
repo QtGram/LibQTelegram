@@ -22,12 +22,10 @@ class MTProtoUpdateHandler : public QObject
 
     private:
         void handleUpdates(MTProtoReply* mtreply);
-        void handleUpdatesState(MTProtoReply* mtreply);
         void handleUpdatesDifference(MTProtoReply* mtreply);
 
     private:
         void syncState(UpdatesState* serverstate);
-        void getDifferences();
         void handleUpdates(TLVector<Update*> updatelist);
         void handleUpdate(Update* update);
 

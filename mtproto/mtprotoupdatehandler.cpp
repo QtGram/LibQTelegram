@@ -38,9 +38,6 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
             this->handleUpdatesDifference(mtreply);
             return true;
 
-        case TLTypes::UpdatesState:
-            this->handleUpdatesState(mtreply);
-
         default:
             break;
     }
@@ -50,7 +47,8 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
 
 void MTProtoUpdateHandler::sync()
 {
-    TelegramAPI::updatesGetState(DC_MainSession);
+    UpdatesState* clientstate = TelegramConfig_clientState;
+    TelegramAPI::updatesGetDifference(DC_MainSession, clientstate->pts(), clientstate->date(), clientstate->qts());
 }
 
 void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
@@ -75,17 +73,6 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
     }
 }
 
-void MTProtoUpdateHandler::handleUpdatesState(MTProtoReply *mtreply)
-{
-    UpdatesState serverstate;
-    serverstate.read(mtreply);
-
-    UpdatesState* clientstate = TelegramConfig_clientState;
-
-    if(((serverstate.seq() - clientstate->seq()) > 0) && (serverstate.seq() != (clientstate->seq() + 1)))
-        this->getDifferences();
-}
-
 void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 {
     UpdatesDifference updatedifference;
@@ -105,7 +92,7 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
         this->syncState(updatedifference.intermediateState());
-        this->getDifferences();
+        this->sync();
     }
 }
 
@@ -118,12 +105,6 @@ void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
     clientstate->setDate(serverstate->date());
     clientstate->setSeq(serverstate->seq());
     clientstate->setUnreadCount(serverstate->unreadCount());
-}
-
-void MTProtoUpdateHandler::getDifferences()
-{
-    UpdatesState* clientstate = TelegramConfig_clientState;
-    TelegramAPI::updatesGetDifference(DC_MainSession, clientstate->pts(), clientstate->date(), clientstate->qts());
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
