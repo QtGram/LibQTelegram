@@ -1,5 +1,6 @@
 #include "messagesmodel.h"
 #include "../config/cache/telegramcache.h"
+#include "../crypto/math.h"
 
 #define DEFAULT_LOAD_COUNT 50
 
@@ -57,28 +58,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::loadMore()
 {
-    if(!this->_inputpeer)
-    {
-        TLLong accesshash = 0;
-
-        if(TelegramHelper::isChannel(this->_dialog) || TelegramHelper::isChat(this->_dialog))
-        {
-            Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
-
-            if(chat)
-                accesshash = chat->accessHash();
-        }
-        else
-        {
-            User* user = TelegramCache_user(TelegramHelper::identifier(this->_dialog));
-
-            if(user)
-                accesshash = user->accessHash();
-        }
-
-        this->_inputpeer = TelegramHelper::inputPeer(this->_dialog->peer(), accesshash);
-        this->_inputpeer->setParent(this);
-    }
+    this->createInputPeer();
 
     int limit = this->_loadcount;
 
@@ -87,6 +67,18 @@ void MessagesModel::loadMore()
 
     MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, 0, limit, this->maxId(), 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
+}
+
+void MessagesModel::sendMessage(const QString &text)
+{
+    if(!this->_dialog || text.trimmed().isEmpty())
+        return;
+
+    this->createInputPeer();
+
+    TLLong randomid = 0;
+    Math::randomize(&randomid);
+    TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, 0, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
 }
 
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
@@ -129,6 +121,32 @@ void MessagesModel::sortMessages(bool reset)
 
     if(reset)
         this->endResetModel();
+}
+
+void MessagesModel::createInputPeer()
+{
+    if(this->_inputpeer)
+        return;
+
+    TLLong accesshash = 0;
+
+    if(TelegramHelper::isChannel(this->_dialog) || TelegramHelper::isChat(this->_dialog))
+    {
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
+
+        if(chat)
+            accesshash = chat->accessHash();
+    }
+    else
+    {
+        User* user = TelegramCache_user(TelegramHelper::identifier(this->_dialog));
+
+        if(user)
+            accesshash = user->accessHash();
+    }
+
+    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog->peer(), accesshash);
+    this->_inputpeer->setParent(this);
 }
 
 void MessagesModel::telegramReady()

@@ -22,6 +22,7 @@ class MessagesModel : public TelegramModel
 
     public slots:
         void loadMore();
+        void sendMessage(const QString& text);
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
@@ -29,6 +30,7 @@ class MessagesModel : public TelegramModel
     private:
         TLInt maxId() const;
         void sortMessages(bool reset);
+        void createInputPeer();
         virtual void telegramReady();
 
     signals:
