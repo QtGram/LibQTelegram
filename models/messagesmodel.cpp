@@ -113,19 +113,6 @@ TLInt MessagesModel::maxId() const
     return maxid;
 }
 
-void MessagesModel::sortMessages(bool reset)
-{
-    if(reset)
-        this->beginResetModel();
-
-    std::sort(this->_messages.begin(), this->_messages.end(), [](Message* msg1, Message* msg2) {
-        return msg1->date() > msg2->date();
-    });
-
-    if(reset)
-        this->endResetModel();
-}
-
 void MessagesModel::createInputPeer()
 {
     if(this->_inputpeer)
@@ -156,7 +143,12 @@ void MessagesModel::telegramReady()
     if(!this->_dialog)
         return;
 
-    this->_messages = TelegramCache_messages(this->_dialog).mid(0, this->_loadcount);
+    const MessageCache::MessageList& cachemessages = TelegramCache_messages(this->_dialog);
+
+    if(cachemessages.count() > this->_loadcount)
+        this->_messages = cachemessages.mid(cachemessages.count() - this->_loadcount);
+    else
+        this->_messages << cachemessages;
 
     if(this->_messages.length() < this->_loadcount)
     {
@@ -165,5 +157,4 @@ void MessagesModel::telegramReady()
     }
 
     this->resetInternalData();
-    //this->sortMessages(true);
 }

@@ -29,7 +29,6 @@ class MessagesModel : public TelegramModel
 
     private:
         TLInt maxId() const;
-        void sortMessages(bool reset);
         void createInputPeer();
         virtual void telegramReady();
 
