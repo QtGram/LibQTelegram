@@ -101,12 +101,12 @@ void MessageEntity::read(MTProtoStream* mtstream)
 		
 		if(user_id_inputmessageentitymentionname_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputUser, this->_user_id_inputmessageentitymentionname);
+			this->resetTLType<InputUser>(&this->_user_id_inputmessageentitymentionname);
 			this->_user_id_inputmessageentitymentionname->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_user_id_inputmessageentitymentionname);
+			this->nullTLType<InputUser>(&this->_user_id_inputmessageentitymentionname);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -290,7 +290,12 @@ void MessageEntity::setUserIdInputmessageentitymentionname(InputUser* user_id_in
 	if(this->_user_id_inputmessageentitymentionname == user_id_inputmessageentitymentionname)
 		return;
 
+	this->deleteChild(this->_user_id_inputmessageentitymentionname);
 	this->_user_id_inputmessageentitymentionname = user_id_inputmessageentitymentionname;
+
+	if(this->_user_id_inputmessageentitymentionname)
+		this->_user_id_inputmessageentitymentionname->setParent(this);
+
 	emit userIdInputmessageentitymentionnameChanged();
 }
 

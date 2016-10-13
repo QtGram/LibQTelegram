@@ -17,8 +17,8 @@ void MessagesHighScores::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesHighScores::CtorMessagesHighScores)
 	{
-		mtstream->readTLVector<HighScore>(this->_scores, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<HighScore>(this->_scores, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

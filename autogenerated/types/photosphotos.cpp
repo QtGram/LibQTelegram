@@ -18,14 +18,14 @@ void PhotosPhotos::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == PhotosPhotos::CtorPhotosPhotos)
 	{
-		mtstream->readTLVector<Photo>(this->_photos, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Photo>(this->_photos, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 	else if(this->_constructorid == PhotosPhotos::CtorPhotosPhotosSlice)
 	{
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<Photo>(this->_photos, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Photo>(this->_photos, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

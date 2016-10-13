@@ -58,12 +58,12 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(BotInlineMessage, this->_send_message);
+			this->resetTLType<BotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<BotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -78,12 +78,12 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 			
 			if(photo_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(Photo, this->_photo);
+				this->resetTLType<Photo>(&this->_photo);
 				this->_photo->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_photo);
+				this->nullTLType<Photo>(&this->_photo);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -94,12 +94,12 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 			
 			if(document_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(Document, this->_document);
+				this->resetTLType<Document>(&this->_document);
 				this->_document->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_document);
+				this->nullTLType<Document>(&this->_document);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -114,12 +114,12 @@ void BotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(BotInlineMessage, this->_send_message);
+			this->resetTLType<BotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<BotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -420,7 +420,12 @@ void BotInlineResult::setSendMessage(BotInlineMessage* send_message)
 	if(this->_send_message == send_message)
 		return;
 
+	this->deleteChild(this->_send_message);
 	this->_send_message = send_message;
+
+	if(this->_send_message)
+		this->_send_message->setParent(this);
+
 	emit sendMessageChanged();
 }
 
@@ -434,7 +439,12 @@ void BotInlineResult::setPhoto(Photo* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -448,7 +458,12 @@ void BotInlineResult::setDocument(Document* document)
 	if(this->_document == document)
 		return;
 
+	this->deleteChild(this->_document);
 	this->_document = document;
+
+	if(this->_document)
+		this->_document->setParent(this);
+
 	emit documentChanged();
 }
 

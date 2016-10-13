@@ -34,12 +34,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Photo, this->_photo);
+			this->resetTLType<Photo>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<Photo>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -51,12 +51,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(geo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->resetTLType<GeoPoint>(&this->_geo);
 			this->_geo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo);
+			this->nullTLType<GeoPoint>(&this->_geo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -73,12 +73,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(document_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Document, this->_document);
+			this->resetTLType<Document>(&this->_document);
 			this->_document->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_document);
+			this->nullTLType<Document>(&this->_document);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -90,12 +90,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(webpage_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(WebPage, this->_webpage);
+			this->resetTLType<WebPage>(&this->_webpage);
 			this->_webpage->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_webpage);
+			this->nullTLType<WebPage>(&this->_webpage);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -105,12 +105,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(geo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(GeoPoint, this->_geo);
+			this->resetTLType<GeoPoint>(&this->_geo);
 			this->_geo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo);
+			this->nullTLType<GeoPoint>(&this->_geo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -125,12 +125,12 @@ void MessageMedia::read(MTProtoStream* mtstream)
 		
 		if(game_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Game, this->_game);
+			this->resetTLType<Game>(&this->_game);
 			this->_game->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_game);
+			this->nullTLType<Game>(&this->_game);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -226,7 +226,12 @@ void MessageMedia::setPhoto(Photo* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -254,7 +259,12 @@ void MessageMedia::setGeo(GeoPoint* geo)
 	if(this->_geo == geo)
 		return;
 
+	this->deleteChild(this->_geo);
 	this->_geo = geo;
+
+	if(this->_geo)
+		this->_geo->setParent(this);
+
 	emit geoChanged();
 }
 
@@ -324,7 +334,12 @@ void MessageMedia::setDocument(Document* document)
 	if(this->_document == document)
 		return;
 
+	this->deleteChild(this->_document);
 	this->_document = document;
+
+	if(this->_document)
+		this->_document->setParent(this);
+
 	emit documentChanged();
 }
 
@@ -338,7 +353,12 @@ void MessageMedia::setWebpage(WebPage* webpage)
 	if(this->_webpage == webpage)
 		return;
 
+	this->deleteChild(this->_webpage);
 	this->_webpage = webpage;
+
+	if(this->_webpage)
+		this->_webpage->setParent(this);
+
 	emit webpageChanged();
 }
 
@@ -408,7 +428,12 @@ void MessageMedia::setGame(Game* game)
 	if(this->_game == game)
 		return;
 
+	this->deleteChild(this->_game);
 	this->_game = game;
+
+	if(this->_game)
+		this->_game->setParent(this);
+
 	emit gameChanged();
 }
 

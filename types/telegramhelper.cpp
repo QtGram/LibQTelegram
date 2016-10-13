@@ -60,9 +60,9 @@ InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
     return inputfilelocation;
 }
 
-InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash)
+InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *parent)
 {
-    InputPeer* inputpeer = new InputPeer();
+    InputPeer* inputpeer = new InputPeer(parent);
     inputpeer->setAccessHash(accesshash);
 
     if(peer->constructorId() == TLTypes::PeerUser)

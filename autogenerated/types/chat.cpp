@@ -58,12 +58,12 @@ void Chat::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->resetTLType<ChatPhoto>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<ChatPhoto>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -76,12 +76,12 @@ void Chat::read(MTProtoStream* mtstream)
 			
 			if(migrated_to_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(InputChannel, this->_migrated_to);
+				this->resetTLType<InputChannel>(&this->_migrated_to);
 				this->_migrated_to->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_migrated_to);
+				this->nullTLType<InputChannel>(&this->_migrated_to);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -118,12 +118,12 @@ void Chat::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->resetTLType<ChatPhoto>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<ChatPhoto>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -411,7 +411,12 @@ void Chat::setPhoto(ChatPhoto* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -467,7 +472,12 @@ void Chat::setMigratedTo(InputChannel* migrated_to)
 	if(this->_migrated_to == migrated_to)
 		return;
 
+	this->deleteChild(this->_migrated_to);
 	this->_migrated_to = migrated_to;
+
+	if(this->_migrated_to)
+		this->_migrated_to->setParent(this);
+
 	emit migratedToChanged();
 }
 

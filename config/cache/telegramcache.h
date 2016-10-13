@@ -85,6 +85,7 @@ template<typename T> void TelegramCache::cache(T *t, QHash<TLInt, T*> &dest)
     if(dest.contains(id))
         return;
 
+    t->setParent(this);
     dest[id] = t;
 }
 
@@ -103,7 +104,7 @@ template<typename T> void TelegramCache::loadFromFile(QHash<TLInt, T*> &containe
     mtstream.load(dir.absoluteFilePath(name) + ".cache");
 
     TLVector<T*> elements;
-    mtstream.readTLVector<T>(elements);
+    mtstream.readTLVector<T>(elements, false, this);
 
     foreach(T* t, elements)
         container[TelegramHelper::identifier(t)] = t;

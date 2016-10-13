@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "stickersetcovered.h"
-#include "../../types/telegramobject.h"
 #include "../../types/basic.h"
+#include "../../types/telegramobject.h"
 
 class MessagesStickerSetInstallResult: public TelegramObject
 {

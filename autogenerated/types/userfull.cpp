@@ -30,12 +30,12 @@ void UserFull::read(MTProtoStream* mtstream)
 		
 		if(user_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(User, this->_user);
+			this->resetTLType<User>(&this->_user);
 			this->_user->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_user);
+			this->nullTLType<User>(&this->_user);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -46,12 +46,12 @@ void UserFull::read(MTProtoStream* mtstream)
 		
 		if(link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ContactsLink, this->_link);
+			this->resetTLType<ContactsLink>(&this->_link);
 			this->_link->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_link);
+			this->nullTLType<ContactsLink>(&this->_link);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -61,12 +61,12 @@ void UserFull::read(MTProtoStream* mtstream)
 			
 			if(profile_photo_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(Photo, this->_profile_photo);
+				this->resetTLType<Photo>(&this->_profile_photo);
 				this->_profile_photo->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_profile_photo);
+				this->nullTLType<Photo>(&this->_profile_photo);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -75,12 +75,12 @@ void UserFull::read(MTProtoStream* mtstream)
 		
 		if(notify_settings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->resetTLType<PeerNotifySettings>(&this->_notify_settings);
 			this->_notify_settings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_notify_settings);
+			this->nullTLType<PeerNotifySettings>(&this->_notify_settings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -90,12 +90,12 @@ void UserFull::read(MTProtoStream* mtstream)
 			
 			if(bot_info_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(BotInfo, this->_bot_info);
+				this->resetTLType<BotInfo>(&this->_bot_info);
 				this->_bot_info->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_bot_info);
+				this->nullTLType<BotInfo>(&this->_bot_info);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -203,7 +203,12 @@ void UserFull::setUser(User* user)
 	if(this->_user == user)
 		return;
 
+	this->deleteChild(this->_user);
 	this->_user = user;
+
+	if(this->_user)
+		this->_user->setParent(this);
+
 	emit userChanged();
 }
 
@@ -231,7 +236,12 @@ void UserFull::setLink(ContactsLink* link)
 	if(this->_link == link)
 		return;
 
+	this->deleteChild(this->_link);
 	this->_link = link;
+
+	if(this->_link)
+		this->_link->setParent(this);
+
 	emit linkChanged();
 }
 
@@ -245,7 +255,12 @@ void UserFull::setProfilePhoto(Photo* profile_photo)
 	if(this->_profile_photo == profile_photo)
 		return;
 
+	this->deleteChild(this->_profile_photo);
 	this->_profile_photo = profile_photo;
+
+	if(this->_profile_photo)
+		this->_profile_photo->setParent(this);
+
 	emit profilePhotoChanged();
 }
 
@@ -259,7 +274,12 @@ void UserFull::setNotifySettings(PeerNotifySettings* notify_settings)
 	if(this->_notify_settings == notify_settings)
 		return;
 
+	this->deleteChild(this->_notify_settings);
 	this->_notify_settings = notify_settings;
+
+	if(this->_notify_settings)
+		this->_notify_settings->setParent(this);
+
 	emit notifySettingsChanged();
 }
 
@@ -273,7 +293,12 @@ void UserFull::setBotInfo(BotInfo* bot_info)
 	if(this->_bot_info == bot_info)
 		return;
 
+	this->deleteChild(this->_bot_info);
 	this->_bot_info = bot_info;
+
+	if(this->_bot_info)
+		this->_bot_info->setParent(this);
+
 	emit botInfoChanged();
 }
 

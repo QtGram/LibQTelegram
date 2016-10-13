@@ -17,9 +17,9 @@ void ContactsImportedContacts::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsImportedContacts::CtorContactsImportedContacts)
 	{
-		mtstream->readTLVector<ImportedContact>(this->_imported, false);
+		mtstream->readTLVector<ImportedContact>(this->_imported, false, this);
 		mtstream->readTLVector<TLLong>(this->_retry_contacts, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

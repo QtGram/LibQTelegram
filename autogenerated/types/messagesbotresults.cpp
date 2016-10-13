@@ -33,17 +33,17 @@ void MessagesBotResults::read(MTProtoStream* mtstream)
 			
 			if(switch_pm_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(InlineBotSwitchPM, this->_switch_pm);
+				this->resetTLType<InlineBotSwitchPM>(&this->_switch_pm);
 				this->_switch_pm->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_switch_pm);
+				this->nullTLType<InlineBotSwitchPM>(&this->_switch_pm);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
 		
-		mtstream->readTLVector<BotInlineResult>(this->_results, false);
+		mtstream->readTLVector<BotInlineResult>(this->_results, false, this);
 	}
 }
 
@@ -154,7 +154,12 @@ void MessagesBotResults::setSwitchPm(InlineBotSwitchPM* switch_pm)
 	if(this->_switch_pm == switch_pm)
 		return;
 
+	this->deleteChild(this->_switch_pm);
 	this->_switch_pm = switch_pm;
+
+	if(this->_switch_pm)
+		this->_switch_pm->setParent(this);
+
 	emit switchPmChanged();
 }
 

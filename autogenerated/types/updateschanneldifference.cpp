@@ -44,9 +44,9 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 		this->_read_inbox_max_id = mtstream->readTLInt();
 		this->_read_outbox_max_id = mtstream->readTLInt();
 		this->_unread_count = mtstream->readTLInt();
-		mtstream->readTLVector<Message>(this->_messages, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Message>(this->_messages, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 	else if(this->_constructorid == UpdatesChannelDifference::CtorUpdatesChannelDifference)
 	{
@@ -56,10 +56,10 @@ void UpdatesChannelDifference::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 1))
 			this->_timeout = mtstream->readTLInt();
 		
-		mtstream->readTLVector<Message>(this->_new_messages, false);
-		mtstream->readTLVector<Update>(this->_other_updates, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Message>(this->_new_messages, false, this);
+		mtstream->readTLVector<Update>(this->_other_updates, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

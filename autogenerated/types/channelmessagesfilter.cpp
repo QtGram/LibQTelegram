@@ -21,7 +21,7 @@ void ChannelMessagesFilter::read(MTProtoStream* mtstream)
 	{
 		this->_flags = mtstream->readTLInt();
 		this->_is_exclude_new_messages = IS_FLAG_SET(this->_flags, 1);
-		mtstream->readTLVector<MessageRange>(this->_ranges, false);
+		mtstream->readTLVector<MessageRange>(this->_ranges, false, this);
 	}
 }
 

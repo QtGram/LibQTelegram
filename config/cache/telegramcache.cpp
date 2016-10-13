@@ -121,9 +121,7 @@ void TelegramCache::onNewUserStatus(Update *update)
         return;
     }
 
-    UserStatus* oldstatus = user->status();
     user->setStatus(update->status());
-    oldstatus->deleteLater();
 }
 
 void TelegramCache::onNewDraftMessage(Update *update)
@@ -139,9 +137,7 @@ void TelegramCache::onNewDraftMessage(Update *update)
     }
 
     Dialog* dialog = this->_dialogs[id];
-    DraftMessage* olddraftmessage = dialog->draft();
     dialog->setDraft(update->draft());
-    olddraftmessage->deleteLater();
 
     emit dialogsChanged();
 }

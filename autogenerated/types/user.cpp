@@ -70,12 +70,12 @@ void User::read(MTProtoStream* mtstream)
 			
 			if(photo_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(UserProfilePhoto, this->_photo);
+				this->resetTLType<UserProfilePhoto>(&this->_photo);
 				this->_photo->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_photo);
+				this->nullTLType<UserProfilePhoto>(&this->_photo);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -86,12 +86,12 @@ void User::read(MTProtoStream* mtstream)
 			
 			if(status_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(UserStatus, this->_status);
+				this->resetTLType<UserStatus>(&this->_status);
 				this->_status->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_status);
+				this->nullTLType<UserStatus>(&this->_status);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -476,7 +476,12 @@ void User::setPhoto(UserProfilePhoto* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -490,7 +495,12 @@ void User::setStatus(UserStatus* status)
 	if(this->_status == status)
 		return;
 
+	this->deleteChild(this->_status);
 	this->_status = status;
+
+	if(this->_status)
+		this->_status->setParent(this);
+
 	emit statusChanged();
 }
 

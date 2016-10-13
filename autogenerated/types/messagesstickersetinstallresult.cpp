@@ -17,7 +17,7 @@ void MessagesStickerSetInstallResult::read(MTProtoStream* mtstream)
 		 (this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive));
 	
 	if(this->_constructorid == MessagesStickerSetInstallResult::CtorMessagesStickerSetInstallResultArchive)
-		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
+		mtstream->readTLVector<StickerSetCovered>(this->_sets, false, this);
 }
 
 void MessagesStickerSetInstallResult::write(MTProtoStream* mtstream) 

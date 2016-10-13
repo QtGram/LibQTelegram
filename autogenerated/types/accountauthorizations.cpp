@@ -16,7 +16,7 @@ void AccountAuthorizations::read(MTProtoStream* mtstream)
 	Q_ASSERT((this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations));
 	
 	if(this->_constructorid == AccountAuthorizations::CtorAccountAuthorizations)
-		mtstream->readTLVector<Authorization>(this->_authorizations, false);
+		mtstream->readTLVector<Authorization>(this->_authorizations, false, this);
 }
 
 void AccountAuthorizations::write(MTProtoStream* mtstream) 

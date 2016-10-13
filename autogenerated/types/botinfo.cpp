@@ -20,7 +20,7 @@ void BotInfo::read(MTProtoStream* mtstream)
 	{
 		this->_user_id = mtstream->readTLInt();
 		this->_description = mtstream->readTLString();
-		mtstream->readTLVector<BotCommand>(this->_commands, false);
+		mtstream->readTLVector<BotCommand>(this->_commands, false, this);
 	}
 }
 

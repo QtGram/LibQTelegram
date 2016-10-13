@@ -18,20 +18,20 @@ void MessagesPeerDialogs::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesPeerDialogs::CtorMessagesPeerDialogs)
 	{
-		mtstream->readTLVector<Dialog>(this->_dialogs, false);
-		mtstream->readTLVector<Message>(this->_messages, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Dialog>(this->_dialogs, false, this);
+		mtstream->readTLVector<Message>(this->_messages, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 		TLInt state_ctor = mtstream->peekTLConstructor();
 		
 		if(state_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UpdatesState, this->_state);
+			this->resetTLType<UpdatesState>(&this->_state);
 			this->_state->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_state);
+			this->nullTLType<UpdatesState>(&this->_state);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -128,7 +128,12 @@ void MessagesPeerDialogs::setState(UpdatesState* state)
 	if(this->_state == state)
 		return;
 
+	this->deleteChild(this->_state);
 	this->_state = state;
+
+	if(this->_state)
+		this->_state->setParent(this);
+
 	emit stateChanged();
 }
 

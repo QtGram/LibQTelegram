@@ -25,12 +25,12 @@ void UserProfilePhoto::read(MTProtoStream* mtstream)
 		
 		if(photo_small_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(FileLocation, this->_photo_small);
+			this->resetTLType<FileLocation>(&this->_photo_small);
 			this->_photo_small->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo_small);
+			this->nullTLType<FileLocation>(&this->_photo_small);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -38,12 +38,12 @@ void UserProfilePhoto::read(MTProtoStream* mtstream)
 		
 		if(photo_big_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(FileLocation, this->_photo_big);
+			this->resetTLType<FileLocation>(&this->_photo_big);
 			this->_photo_big->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo_big);
+			this->nullTLType<FileLocation>(&this->_photo_big);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -101,7 +101,12 @@ void UserProfilePhoto::setPhotoSmall(FileLocation* photo_small)
 	if(this->_photo_small == photo_small)
 		return;
 
+	this->deleteChild(this->_photo_small);
 	this->_photo_small = photo_small;
+
+	if(this->_photo_small)
+		this->_photo_small->setParent(this);
+
 	emit photoSmallChanged();
 }
 
@@ -115,7 +120,12 @@ void UserProfilePhoto::setPhotoBig(FileLocation* photo_big)
 	if(this->_photo_big == photo_big)
 		return;
 
+	this->deleteChild(this->_photo_big);
 	this->_photo_big = photo_big;
+
+	if(this->_photo_big)
+		this->_photo_big->setParent(this);
+
 	emit photoBigChanged();
 }
 

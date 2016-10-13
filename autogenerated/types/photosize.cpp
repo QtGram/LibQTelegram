@@ -29,12 +29,12 @@ void PhotoSize::read(MTProtoStream* mtstream)
 		
 		if(location_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(FileLocation, this->_location);
+			this->resetTLType<FileLocation>(&this->_location);
 			this->_location->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_location);
+			this->nullTLType<FileLocation>(&this->_location);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -49,12 +49,12 @@ void PhotoSize::read(MTProtoStream* mtstream)
 		
 		if(location_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(FileLocation, this->_location);
+			this->resetTLType<FileLocation>(&this->_location);
 			this->_location->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_location);
+			this->nullTLType<FileLocation>(&this->_location);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -130,7 +130,12 @@ void PhotoSize::setLocation(FileLocation* location)
 	if(this->_location == location)
 		return;
 
+	this->deleteChild(this->_location);
 	this->_location = location;
+
+	if(this->_location)
+		this->_location->setParent(this);
+
 	emit locationChanged();
 }
 

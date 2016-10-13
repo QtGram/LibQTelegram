@@ -27,41 +27,41 @@ void UpdatesDifference::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifference)
 	{
-		mtstream->readTLVector<Message>(this->_new_messages, false);
-		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false);
-		mtstream->readTLVector<Update>(this->_other_updates, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Message>(this->_new_messages, false, this);
+		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false, this);
+		mtstream->readTLVector<Update>(this->_other_updates, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 		TLInt state_ctor = mtstream->peekTLConstructor();
 		
 		if(state_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UpdatesState, this->_state);
+			this->resetTLType<UpdatesState>(&this->_state);
 			this->_state->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_state);
+			this->nullTLType<UpdatesState>(&this->_state);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
 	else if(this->_constructorid == UpdatesDifference::CtorUpdatesDifferenceSlice)
 	{
-		mtstream->readTLVector<Message>(this->_new_messages, false);
-		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false);
-		mtstream->readTLVector<Update>(this->_other_updates, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Message>(this->_new_messages, false, this);
+		mtstream->readTLVector<EncryptedMessage>(this->_new_encrypted_messages, false, this);
+		mtstream->readTLVector<Update>(this->_other_updates, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 		TLInt intermediate_state_ctor = mtstream->peekTLConstructor();
 		
 		if(intermediate_state_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UpdatesState, this->_intermediate_state);
+			this->resetTLType<UpdatesState>(&this->_intermediate_state);
 			this->_intermediate_state->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_intermediate_state);
+			this->nullTLType<UpdatesState>(&this->_intermediate_state);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -220,7 +220,12 @@ void UpdatesDifference::setState(UpdatesState* state)
 	if(this->_state == state)
 		return;
 
+	this->deleteChild(this->_state);
 	this->_state = state;
+
+	if(this->_state)
+		this->_state->setParent(this);
+
 	emit stateChanged();
 }
 
@@ -234,7 +239,12 @@ void UpdatesDifference::setIntermediateState(UpdatesState* intermediate_state)
 	if(this->_intermediate_state == intermediate_state)
 		return;
 
+	this->deleteChild(this->_intermediate_state);
 	this->_intermediate_state = intermediate_state;
+
+	if(this->_intermediate_state)
+		this->_intermediate_state->setParent(this);
+
 	emit intermediateStateChanged();
 }
 

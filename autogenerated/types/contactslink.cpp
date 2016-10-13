@@ -24,12 +24,12 @@ void ContactsLink::read(MTProtoStream* mtstream)
 		
 		if(my_link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ContactLink, this->_my_link);
+			this->resetTLType<ContactLink>(&this->_my_link);
 			this->_my_link->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_my_link);
+			this->nullTLType<ContactLink>(&this->_my_link);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -37,12 +37,12 @@ void ContactsLink::read(MTProtoStream* mtstream)
 		
 		if(foreign_link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ContactLink, this->_foreign_link);
+			this->resetTLType<ContactLink>(&this->_foreign_link);
 			this->_foreign_link->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_foreign_link);
+			this->nullTLType<ContactLink>(&this->_foreign_link);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -50,12 +50,12 @@ void ContactsLink::read(MTProtoStream* mtstream)
 		
 		if(user_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(User, this->_user);
+			this->resetTLType<User>(&this->_user);
 			this->_user->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_user);
+			this->nullTLType<User>(&this->_user);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -102,7 +102,12 @@ void ContactsLink::setMyLink(ContactLink* my_link)
 	if(this->_my_link == my_link)
 		return;
 
+	this->deleteChild(this->_my_link);
 	this->_my_link = my_link;
+
+	if(this->_my_link)
+		this->_my_link->setParent(this);
+
 	emit myLinkChanged();
 }
 
@@ -116,7 +121,12 @@ void ContactsLink::setForeignLink(ContactLink* foreign_link)
 	if(this->_foreign_link == foreign_link)
 		return;
 
+	this->deleteChild(this->_foreign_link);
 	this->_foreign_link = foreign_link;
+
+	if(this->_foreign_link)
+		this->_foreign_link->setParent(this);
+
 	emit foreignLinkChanged();
 }
 
@@ -130,7 +140,12 @@ void ContactsLink::setUser(User* user)
 	if(this->_user == user)
 		return;
 
+	this->deleteChild(this->_user);
 	this->_user = user;
+
+	if(this->_user)
+		this->_user->setParent(this);
+
 	emit userChanged();
 }
 

@@ -60,12 +60,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->resetTLType<InputBotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<InputBotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -77,12 +77,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputPhoto, this->_photo);
+			this->resetTLType<InputPhoto>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<InputPhoto>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -90,12 +90,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->resetTLType<InputBotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<InputBotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -114,12 +114,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(document_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputDocument, this->_document);
+			this->resetTLType<InputDocument>(&this->_document);
 			this->_document->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_document);
+			this->nullTLType<InputDocument>(&this->_document);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -127,12 +127,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->resetTLType<InputBotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<InputBotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -144,12 +144,12 @@ void InputBotInlineResult::read(MTProtoStream* mtstream)
 		
 		if(send_message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputBotInlineMessage, this->_send_message);
+			this->resetTLType<InputBotInlineMessage>(&this->_send_message);
 			this->_send_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_send_message);
+			this->nullTLType<InputBotInlineMessage>(&this->_send_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -460,7 +460,12 @@ void InputBotInlineResult::setSendMessage(InputBotInlineMessage* send_message)
 	if(this->_send_message == send_message)
 		return;
 
+	this->deleteChild(this->_send_message);
 	this->_send_message = send_message;
+
+	if(this->_send_message)
+		this->_send_message->setParent(this);
+
 	emit sendMessageChanged();
 }
 
@@ -474,7 +479,12 @@ void InputBotInlineResult::setPhoto(InputPhoto* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -488,7 +498,12 @@ void InputBotInlineResult::setDocument(InputDocument* document)
 	if(this->_document == document)
 		return;
 
+	this->deleteChild(this->_document);
 	this->_document = document;
+
+	if(this->_document)
+		this->_document->setParent(this);
+
 	emit documentChanged();
 }
 

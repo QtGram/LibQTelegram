@@ -22,16 +22,16 @@ void PhotosPhoto::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Photo, this->_photo);
+			this->resetTLType<Photo>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<Photo>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 
@@ -68,7 +68,12 @@ void PhotosPhoto::setPhoto(Photo* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 

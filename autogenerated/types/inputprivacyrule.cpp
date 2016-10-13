@@ -21,9 +21,9 @@ void InputPrivacyRule::read(MTProtoStream* mtstream)
 		 (this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers));
 	
 	if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueAllowUsers)
-		mtstream->readTLVector<InputUser>(this->_users, false);
+		mtstream->readTLVector<InputUser>(this->_users, false, this);
 	else if(this->_constructorid == InputPrivacyRule::CtorInputPrivacyValueDisallowUsers)
-		mtstream->readTLVector<InputUser>(this->_users, false);
+		mtstream->readTLVector<InputUser>(this->_users, false, this);
 }
 
 void InputPrivacyRule::write(MTProtoStream* mtstream) 

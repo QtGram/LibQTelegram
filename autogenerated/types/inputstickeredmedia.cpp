@@ -23,12 +23,12 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 		
 		if(id_inputstickeredmediaphoto_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputPhoto, this->_id_inputstickeredmediaphoto);
+			this->resetTLType<InputPhoto>(&this->_id_inputstickeredmediaphoto);
 			this->_id_inputstickeredmediaphoto->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id_inputstickeredmediaphoto);
+			this->nullTLType<InputPhoto>(&this->_id_inputstickeredmediaphoto);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -38,12 +38,12 @@ void InputStickeredMedia::read(MTProtoStream* mtstream)
 		
 		if(id_inputstickeredmediadocument_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputDocument, this->_id_inputstickeredmediadocument);
+			this->resetTLType<InputDocument>(&this->_id_inputstickeredmediadocument);
 			this->_id_inputstickeredmediadocument->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id_inputstickeredmediadocument);
+			this->nullTLType<InputDocument>(&this->_id_inputstickeredmediadocument);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -88,7 +88,12 @@ void InputStickeredMedia::setIdInputstickeredmediaphoto(InputPhoto* id_inputstic
 	if(this->_id_inputstickeredmediaphoto == id_inputstickeredmediaphoto)
 		return;
 
+	this->deleteChild(this->_id_inputstickeredmediaphoto);
 	this->_id_inputstickeredmediaphoto = id_inputstickeredmediaphoto;
+
+	if(this->_id_inputstickeredmediaphoto)
+		this->_id_inputstickeredmediaphoto->setParent(this);
+
 	emit idInputstickeredmediaphotoChanged();
 }
 
@@ -102,7 +107,12 @@ void InputStickeredMedia::setIdInputstickeredmediadocument(InputDocument* id_inp
 	if(this->_id_inputstickeredmediadocument == id_inputstickeredmediadocument)
 		return;
 
+	this->deleteChild(this->_id_inputstickeredmediadocument);
 	this->_id_inputstickeredmediadocument = id_inputstickeredmediadocument;
+
+	if(this->_id_inputstickeredmediadocument)
+		this->_id_inputstickeredmediadocument->setParent(this);
+
 	emit idInputstickeredmediadocumentChanged();
 }
 

@@ -22,17 +22,17 @@ void MessagesStickerSet::read(MTProtoStream* mtstream)
 		
 		if(set_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(StickerSet, this->_set);
+			this->resetTLType<StickerSet>(&this->_set);
 			this->_set->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_set);
+			this->nullTLType<StickerSet>(&this->_set);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<StickerPack>(this->_packs, false);
-		mtstream->readTLVector<Document>(this->_documents, false);
+		mtstream->readTLVector<StickerPack>(this->_packs, false, this);
+		mtstream->readTLVector<Document>(this->_documents, false, this);
 	}
 }
 
@@ -70,7 +70,12 @@ void MessagesStickerSet::setSet(StickerSet* set)
 	if(this->_set == set)
 		return;
 
+	this->deleteChild(this->_set);
 	this->_set = set;
+
+	if(this->_set)
+		this->_set->setParent(this);
+
 	emit setChanged();
 }
 

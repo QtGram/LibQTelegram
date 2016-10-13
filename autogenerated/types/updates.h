@@ -5,13 +5,13 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "messagemedia.h"
-#include "../../types/telegramobject.h"
-#include "update.h"
-#include "user.h"
 #include "../../types/basic.h"
+#include "../../types/telegramobject.h"
 #include "messageentity.h"
+#include "user.h"
 #include "messagefwdheader.h"
+#include "update.h"
+#include "messagemedia.h"
 
 class Updates: public TelegramObject
 {

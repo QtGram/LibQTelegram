@@ -19,7 +19,7 @@ void MessagesRecentStickers::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesRecentStickers::CtorMessagesRecentStickers)
 	{
 		this->_hash = mtstream->readTLInt();
-		mtstream->readTLVector<Document>(this->_stickers, false);
+		mtstream->readTLVector<Document>(this->_stickers, false, this);
 	}
 }
 

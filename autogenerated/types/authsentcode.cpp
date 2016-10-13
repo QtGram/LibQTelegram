@@ -28,12 +28,12 @@ void AuthSentCode::read(MTProtoStream* mtstream)
 		
 		if(type_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(AuthSentCodeType, this->_type);
+			this->resetTLType<AuthSentCodeType>(&this->_type);
 			this->_type->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_type);
+			this->nullTLType<AuthSentCodeType>(&this->_type);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -44,12 +44,12 @@ void AuthSentCode::read(MTProtoStream* mtstream)
 			
 			if(next_type_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(AuthCodeType, this->_next_type);
+				this->resetTLType<AuthCodeType>(&this->_next_type);
 				this->_next_type->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_next_type);
+				this->nullTLType<AuthCodeType>(&this->_next_type);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -141,7 +141,12 @@ void AuthSentCode::setType(AuthSentCodeType* type)
 	if(this->_type == type)
 		return;
 
+	this->deleteChild(this->_type);
 	this->_type = type;
+
+	if(this->_type)
+		this->_type->setParent(this);
+
 	emit typeChanged();
 }
 
@@ -169,7 +174,12 @@ void AuthSentCode::setNextType(AuthCodeType* next_type)
 	if(this->_next_type == next_type)
 		return;
 
+	this->deleteChild(this->_next_type);
 	this->_next_type = next_type;
+
+	if(this->_next_type)
+		this->_next_type->setParent(this);
+
 	emit nextTypeChanged();
 }
 

@@ -10,12 +10,6 @@
 #define UNSET_FLAG_BIT(flags, bitno) flags & ~(1 << bitno)
 #define SET_FLAG_BIT_VALUE(flags, bitno, v) flags |= ((v ? 1 : 0) << bitno)
 
-#define RESET_TLTYPE(classtype, type) if(type) type->deleteLater(); \
-                                      type = new classtype();
-
-#define NULL_TLTYPE(type) if(type) type->deleteLater(); \
-                           type = NULL;
-
 typedef quint32 TLConstructor;
 typedef bool TLTrue;
 typedef bool TLBool;

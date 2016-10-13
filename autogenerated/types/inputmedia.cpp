@@ -40,18 +40,18 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(file_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputFile, this->_file);
+			this->resetTLType<InputFile>(&this->_file);
 			this->_file->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_file);
+			this->nullTLType<InputFile>(&this->_file);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_caption = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
-			mtstream->readTLVector<InputDocument>(this->_stickers, false);
+			mtstream->readTLVector<InputDocument>(this->_stickers, false, this);
 	}
 	else if(this->_constructorid == InputMedia::CtorInputMediaPhoto)
 	{
@@ -59,12 +59,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(id_inputmediaphoto_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputPhoto, this->_id_inputmediaphoto);
+			this->resetTLType<InputPhoto>(&this->_id_inputmediaphoto);
 			this->_id_inputmediaphoto->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id_inputmediaphoto);
+			this->nullTLType<InputPhoto>(&this->_id_inputmediaphoto);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -76,12 +76,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(geo_point_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->resetTLType<InputGeoPoint>(&this->_geo_point);
 			this->_geo_point->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo_point);
+			this->nullTLType<InputGeoPoint>(&this->_geo_point);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -98,20 +98,20 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(file_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputFile, this->_file);
+			this->resetTLType<InputFile>(&this->_file);
 			this->_file->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_file);
+			this->nullTLType<InputFile>(&this->_file);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_mime_type = mtstream->readTLString();
-		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
+		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false, this);
 		this->_caption = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
-			mtstream->readTLVector<InputDocument>(this->_stickers, false);
+			mtstream->readTLVector<InputDocument>(this->_stickers, false, this);
 	}
 	else if(this->_constructorid == InputMedia::CtorInputMediaUploadedThumbDocument)
 	{
@@ -120,12 +120,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(file_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputFile, this->_file);
+			this->resetTLType<InputFile>(&this->_file);
 			this->_file->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_file);
+			this->nullTLType<InputFile>(&this->_file);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -133,20 +133,20 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(thumb_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputFile, this->_thumb);
+			this->resetTLType<InputFile>(&this->_thumb);
 			this->_thumb->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_thumb);
+			this->nullTLType<InputFile>(&this->_thumb);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_mime_type = mtstream->readTLString();
-		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
+		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false, this);
 		this->_caption = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 0))
-			mtstream->readTLVector<InputDocument>(this->_stickers, false);
+			mtstream->readTLVector<InputDocument>(this->_stickers, false, this);
 	}
 	else if(this->_constructorid == InputMedia::CtorInputMediaDocument)
 	{
@@ -154,12 +154,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(id_inputmediadocument_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputDocument, this->_id_inputmediadocument);
+			this->resetTLType<InputDocument>(&this->_id_inputmediadocument);
 			this->_id_inputmediadocument->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id_inputmediadocument);
+			this->nullTLType<InputDocument>(&this->_id_inputmediadocument);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -171,12 +171,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(geo_point_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->resetTLType<InputGeoPoint>(&this->_geo_point);
 			this->_geo_point->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo_point);
+			this->nullTLType<InputGeoPoint>(&this->_geo_point);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -206,12 +206,12 @@ void InputMedia::read(MTProtoStream* mtstream)
 		
 		if(id_inputmediagame_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputGame, this->_id_inputmediagame);
+			this->resetTLType<InputGame>(&this->_id_inputmediagame);
 			this->_id_inputmediagame->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id_inputmediagame);
+			this->nullTLType<InputGame>(&this->_id_inputmediagame);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -393,7 +393,12 @@ void InputMedia::setFile(InputFile* file)
 	if(this->_file == file)
 		return;
 
+	this->deleteChild(this->_file);
 	this->_file = file;
+
+	if(this->_file)
+		this->_file->setParent(this);
+
 	emit fileChanged();
 }
 
@@ -435,7 +440,12 @@ void InputMedia::setIdInputmediaphoto(InputPhoto* id_inputmediaphoto)
 	if(this->_id_inputmediaphoto == id_inputmediaphoto)
 		return;
 
+	this->deleteChild(this->_id_inputmediaphoto);
 	this->_id_inputmediaphoto = id_inputmediaphoto;
+
+	if(this->_id_inputmediaphoto)
+		this->_id_inputmediaphoto->setParent(this);
+
 	emit idInputmediaphotoChanged();
 }
 
@@ -449,7 +459,12 @@ void InputMedia::setGeoPoint(InputGeoPoint* geo_point)
 	if(this->_geo_point == geo_point)
 		return;
 
+	this->deleteChild(this->_geo_point);
 	this->_geo_point = geo_point;
+
+	if(this->_geo_point)
+		this->_geo_point->setParent(this);
+
 	emit geoPointChanged();
 }
 
@@ -533,7 +548,12 @@ void InputMedia::setThumb(InputFile* thumb)
 	if(this->_thumb == thumb)
 		return;
 
+	this->deleteChild(this->_thumb);
 	this->_thumb = thumb;
+
+	if(this->_thumb)
+		this->_thumb->setParent(this);
+
 	emit thumbChanged();
 }
 
@@ -547,7 +567,12 @@ void InputMedia::setIdInputmediadocument(InputDocument* id_inputmediadocument)
 	if(this->_id_inputmediadocument == id_inputmediadocument)
 		return;
 
+	this->deleteChild(this->_id_inputmediadocument);
 	this->_id_inputmediadocument = id_inputmediadocument;
+
+	if(this->_id_inputmediadocument)
+		this->_id_inputmediadocument->setParent(this);
+
 	emit idInputmediadocumentChanged();
 }
 
@@ -645,7 +670,12 @@ void InputMedia::setIdInputmediagame(InputGame* id_inputmediagame)
 	if(this->_id_inputmediagame == id_inputmediagame)
 		return;
 
+	this->deleteChild(this->_id_inputmediagame);
 	this->_id_inputmediagame = id_inputmediagame;
+
+	if(this->_id_inputmediagame)
+		this->_id_inputmediagame->setParent(this);
+
 	emit idInputmediagameChanged();
 }
 

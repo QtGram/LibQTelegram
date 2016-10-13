@@ -35,18 +35,18 @@ void Document::read(MTProtoStream* mtstream)
 		
 		if(thumb_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PhotoSize, this->_thumb);
+			this->resetTLType<PhotoSize>(&this->_thumb);
 			this->_thumb->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_thumb);
+			this->nullTLType<PhotoSize>(&this->_thumb);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_dc_id = mtstream->readTLInt();
 		this->_version = mtstream->readTLInt();
-		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false);
+		mtstream->readTLVector<DocumentAttribute>(this->_attributes, false, this);
 	}
 }
 
@@ -163,7 +163,12 @@ void Document::setThumb(PhotoSize* thumb)
 	if(this->_thumb == thumb)
 		return;
 
+	this->deleteChild(this->_thumb);
 	this->_thumb = thumb;
+
+	if(this->_thumb)
+		this->_thumb->setParent(this);
+
 	emit thumbChanged();
 }
 

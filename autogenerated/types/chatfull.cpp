@@ -39,12 +39,12 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(participants_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatParticipants, this->_participants);
+			this->resetTLType<ChatParticipants>(&this->_participants);
 			this->_participants->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_participants);
+			this->nullTLType<ChatParticipants>(&this->_participants);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -52,12 +52,12 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(chat_photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Photo, this->_chat_photo);
+			this->resetTLType<Photo>(&this->_chat_photo);
 			this->_chat_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_chat_photo);
+			this->nullTLType<Photo>(&this->_chat_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -65,12 +65,12 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(notify_settings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->resetTLType<PeerNotifySettings>(&this->_notify_settings);
 			this->_notify_settings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_notify_settings);
+			this->nullTLType<PeerNotifySettings>(&this->_notify_settings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -78,16 +78,16 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(exported_invite_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
+			this->resetTLType<ExportedChatInvite>(&this->_exported_invite);
 			this->_exported_invite->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_exported_invite);
+			this->nullTLType<ExportedChatInvite>(&this->_exported_invite);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<BotInfo>(this->_bot_info, false);
+		mtstream->readTLVector<BotInfo>(this->_bot_info, false, this);
 	}
 	else if(this->_constructorid == ChatFull::CtorChannelFull)
 	{
@@ -112,12 +112,12 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(chat_photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Photo, this->_chat_photo);
+			this->resetTLType<Photo>(&this->_chat_photo);
 			this->_chat_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_chat_photo);
+			this->nullTLType<Photo>(&this->_chat_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -125,12 +125,12 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(notify_settings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->resetTLType<PeerNotifySettings>(&this->_notify_settings);
 			this->_notify_settings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_notify_settings);
+			this->nullTLType<PeerNotifySettings>(&this->_notify_settings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -138,16 +138,16 @@ void ChatFull::read(MTProtoStream* mtstream)
 		
 		if(exported_invite_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ExportedChatInvite, this->_exported_invite);
+			this->resetTLType<ExportedChatInvite>(&this->_exported_invite);
 			this->_exported_invite->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_exported_invite);
+			this->nullTLType<ExportedChatInvite>(&this->_exported_invite);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<BotInfo>(this->_bot_info, false);
+		mtstream->readTLVector<BotInfo>(this->_bot_info, false, this);
 		if(IS_FLAG_SET(this->_flags, 4))
 			this->_migrated_from_chat_id = mtstream->readTLInt();
 		
@@ -285,7 +285,12 @@ void ChatFull::setParticipants(ChatParticipants* participants)
 	if(this->_participants == participants)
 		return;
 
+	this->deleteChild(this->_participants);
 	this->_participants = participants;
+
+	if(this->_participants)
+		this->_participants->setParent(this);
+
 	emit participantsChanged();
 }
 
@@ -299,7 +304,12 @@ void ChatFull::setChatPhoto(Photo* chat_photo)
 	if(this->_chat_photo == chat_photo)
 		return;
 
+	this->deleteChild(this->_chat_photo);
 	this->_chat_photo = chat_photo;
+
+	if(this->_chat_photo)
+		this->_chat_photo->setParent(this);
+
 	emit chatPhotoChanged();
 }
 
@@ -313,7 +323,12 @@ void ChatFull::setNotifySettings(PeerNotifySettings* notify_settings)
 	if(this->_notify_settings == notify_settings)
 		return;
 
+	this->deleteChild(this->_notify_settings);
 	this->_notify_settings = notify_settings;
+
+	if(this->_notify_settings)
+		this->_notify_settings->setParent(this);
+
 	emit notifySettingsChanged();
 }
 
@@ -327,7 +342,12 @@ void ChatFull::setExportedInvite(ExportedChatInvite* exported_invite)
 	if(this->_exported_invite == exported_invite)
 		return;
 
+	this->deleteChild(this->_exported_invite);
 	this->_exported_invite = exported_invite;
+
+	if(this->_exported_invite)
+		this->_exported_invite->setParent(this);
+
 	emit exportedInviteChanged();
 }
 

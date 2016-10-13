@@ -23,12 +23,12 @@ void UploadFile::read(MTProtoStream* mtstream)
 		
 		if(type_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(StorageFileType, this->_type);
+			this->resetTLType<StorageFileType>(&this->_type);
 			this->_type->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_type);
+			this->nullTLType<StorageFileType>(&this->_type);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -71,7 +71,12 @@ void UploadFile::setType(StorageFileType* type)
 	if(this->_type == type)
 		return;
 
+	this->deleteChild(this->_type);
 	this->_type = type;
+
+	if(this->_type)
+		this->_type->setParent(this);
+
 	emit typeChanged();
 }
 

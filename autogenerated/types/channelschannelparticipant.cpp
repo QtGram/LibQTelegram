@@ -22,16 +22,16 @@ void ChannelsChannelParticipant::read(MTProtoStream* mtstream)
 		
 		if(participant_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChannelParticipant, this->_participant);
+			this->resetTLType<ChannelParticipant>(&this->_participant);
 			this->_participant->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_participant);
+			this->nullTLType<ChannelParticipant>(&this->_participant);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 
@@ -68,7 +68,12 @@ void ChannelsChannelParticipant::setParticipant(ChannelParticipant* participant)
 	if(this->_participant == participant)
 		return;
 
+	this->deleteChild(this->_participant);
 	this->_participant = participant;
+
+	if(this->_participant)
+		this->_participant->setParent(this);
+
 	emit participantChanged();
 }
 

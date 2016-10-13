@@ -29,12 +29,12 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 			
 			if(self_participant_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ChatParticipant, this->_self_participant);
+				this->resetTLType<ChatParticipant>(&this->_self_participant);
 				this->_self_participant->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_self_participant);
+				this->nullTLType<ChatParticipant>(&this->_self_participant);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -42,7 +42,7 @@ void ChatParticipants::read(MTProtoStream* mtstream)
 	else if(this->_constructorid == ChatParticipants::CtorChatParticipants)
 	{
 		this->_chat_id = mtstream->readTLInt();
-		mtstream->readTLVector<ChatParticipant>(this->_participants, false);
+		mtstream->readTLVector<ChatParticipant>(this->_participants, false, this);
 		this->_version = mtstream->readTLInt();
 	}
 }
@@ -124,7 +124,12 @@ void ChatParticipants::setSelfParticipant(ChatParticipant* self_participant)
 	if(this->_self_participant == self_participant)
 		return;
 
+	this->deleteChild(this->_self_participant);
 	this->_self_participant = self_participant;
+
+	if(this->_self_participant)
+		this->_self_participant->setParent(this);
+
 	emit selfParticipantChanged();
 }
 

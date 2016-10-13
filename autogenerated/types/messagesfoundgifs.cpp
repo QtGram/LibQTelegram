@@ -19,7 +19,7 @@ void MessagesFoundGifs::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesFoundGifs::CtorMessagesFoundGifs)
 	{
 		this->_next_offset = mtstream->readTLInt();
-		mtstream->readTLVector<FoundGif>(this->_results, false);
+		mtstream->readTLVector<FoundGif>(this->_results, false, this);
 	}
 }
 

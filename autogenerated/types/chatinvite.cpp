@@ -29,12 +29,12 @@ void ChatInvite::read(MTProtoStream* mtstream)
 		
 		if(chat_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Chat, this->_chat);
+			this->resetTLType<Chat>(&this->_chat);
 			this->_chat->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_chat);
+			this->nullTLType<Chat>(&this->_chat);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -50,18 +50,18 @@ void ChatInvite::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatPhoto, this->_photo);
+			this->resetTLType<ChatPhoto>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<ChatPhoto>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_participants_count = mtstream->readTLInt();
 		if(IS_FLAG_SET(this->_flags, 4))
-			mtstream->readTLVector<User>(this->_participants, false);
+			mtstream->readTLVector<User>(this->_participants, false, this);
 	}
 }
 
@@ -124,7 +124,12 @@ void ChatInvite::setChat(Chat* chat)
 	if(this->_chat == chat)
 		return;
 
+	this->deleteChild(this->_chat);
 	this->_chat = chat;
+
+	if(this->_chat)
+		this->_chat->setParent(this);
+
 	emit chatChanged();
 }
 
@@ -222,7 +227,12 @@ void ChatInvite::setPhoto(ChatPhoto* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 

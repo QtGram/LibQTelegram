@@ -28,7 +28,7 @@ void DraftMessage::read(MTProtoStream* mtstream)
 		
 		this->_message = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 3))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 		
 		this->_date = mtstream->readTLInt();
 	}

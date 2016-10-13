@@ -29,12 +29,12 @@ void EncryptedMessage::read(MTProtoStream* mtstream)
 		
 		if(file_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(EncryptedFile, this->_file);
+			this->resetTLType<EncryptedFile>(&this->_file);
 			this->_file->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_file);
+			this->nullTLType<EncryptedFile>(&this->_file);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -146,7 +146,12 @@ void EncryptedMessage::setFile(EncryptedFile* file)
 	if(this->_file == file)
 		return;
 
+	this->deleteChild(this->_file);
 	this->_file = file;
+
+	if(this->_file)
+		this->_file->setParent(this);
+
 	emit fileChanged();
 }
 

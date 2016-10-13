@@ -67,7 +67,7 @@ class MTProtoStream : public QObject
         void writeRaw(const MTProtoStream* mtprotostream, bool prependlength = true);
 
     public:
-        template<typename T> void readTLVector(TLVector<T*>& val, bool isbaretype = false);
+        template<typename T> void readTLVector(TLVector<T*>& val, bool isbaretype = false, QObject* parent = 0);
         template<typename T> void readTLVector(TLVector<T>& val, bool isbaretype = false);
         template<typename T> void writeTLVector(const TLVector<T*>& val, bool isbaretype = false);
         template<typename T> void writeTLVector(const TLVector<T>& val, bool isbaretype = false);
@@ -85,7 +85,7 @@ class MTProtoStream : public QObject
         QBuffer _buffer;
 };
 
-template<typename T> void MTProtoStream::readTLVector(TLVector<T*> &val, bool isbaretype)
+template<typename T> void MTProtoStream::readTLVector(TLVector<T*> &val, bool isbaretype, QObject *parent)
 {
     if(!isbaretype)
     {
@@ -98,7 +98,7 @@ template<typename T> void MTProtoStream::readTLVector(TLVector<T*> &val, bool is
 
     for(TLInt i = 0; i < length; i++)
     {
-        T* t = new T();
+        T* t = new T(parent);
         t->read(this);
 
         val << t;

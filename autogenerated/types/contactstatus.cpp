@@ -24,12 +24,12 @@ void ContactStatus::read(MTProtoStream* mtstream)
 		
 		if(status_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UserStatus, this->_status);
+			this->resetTLType<UserStatus>(&this->_status);
 			this->_status->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_status);
+			this->nullTLType<UserStatus>(&this->_status);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -81,7 +81,12 @@ void ContactStatus::setStatus(UserStatus* status)
 	if(this->_status == status)
 		return;
 
+	this->deleteChild(this->_status);
 	this->_status = status;
+
+	if(this->_status)
+		this->_status->setParent(this);
+
 	emit statusChanged();
 }
 

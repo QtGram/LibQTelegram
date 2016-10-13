@@ -31,12 +31,12 @@ void Dialog::read(MTProtoStream* mtstream)
 		
 		if(peer_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer);
+			this->resetTLType<Peer>(&this->_peer);
 			this->_peer->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer);
+			this->nullTLType<Peer>(&this->_peer);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -48,12 +48,12 @@ void Dialog::read(MTProtoStream* mtstream)
 		
 		if(notify_settings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->resetTLType<PeerNotifySettings>(&this->_notify_settings);
 			this->_notify_settings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_notify_settings);
+			this->nullTLType<PeerNotifySettings>(&this->_notify_settings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -66,12 +66,12 @@ void Dialog::read(MTProtoStream* mtstream)
 			
 			if(draft_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(DraftMessage, this->_draft);
+				this->resetTLType<DraftMessage>(&this->_draft);
 				this->_draft->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_draft);
+				this->nullTLType<DraftMessage>(&this->_draft);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -152,7 +152,12 @@ void Dialog::setPeer(Peer* peer)
 	if(this->_peer == peer)
 		return;
 
+	this->deleteChild(this->_peer);
 	this->_peer = peer;
+
+	if(this->_peer)
+		this->_peer->setParent(this);
+
 	emit peerChanged();
 }
 
@@ -222,7 +227,12 @@ void Dialog::setNotifySettings(PeerNotifySettings* notify_settings)
 	if(this->_notify_settings == notify_settings)
 		return;
 
+	this->deleteChild(this->_notify_settings);
 	this->_notify_settings = notify_settings;
+
+	if(this->_notify_settings)
+		this->_notify_settings->setParent(this);
+
 	emit notifySettingsChanged();
 }
 
@@ -250,7 +260,12 @@ void Dialog::setDraft(DraftMessage* draft)
 	if(this->_draft == draft)
 		return;
 
+	this->deleteChild(this->_draft);
 	this->_draft = draft;
+
+	if(this->_draft)
+		this->_draft->setParent(this);
+
 	emit draftChanged();
 }
 

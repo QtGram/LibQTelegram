@@ -22,7 +22,7 @@ void WallPaper::read(MTProtoStream* mtstream)
 	{
 		this->_id = mtstream->readTLInt();
 		this->_title = mtstream->readTLString();
-		mtstream->readTLVector<PhotoSize>(this->_sizes, false);
+		mtstream->readTLVector<PhotoSize>(this->_sizes, false, this);
 		this->_color = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == WallPaper::CtorWallPaperSolid)

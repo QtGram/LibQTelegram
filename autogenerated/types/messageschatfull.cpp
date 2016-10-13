@@ -22,17 +22,17 @@ void MessagesChatFull::read(MTProtoStream* mtstream)
 		
 		if(full_chat_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatFull, this->_full_chat);
+			this->resetTLType<ChatFull>(&this->_full_chat);
 			this->_full_chat->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_full_chat);
+			this->nullTLType<ChatFull>(&this->_full_chat);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 
@@ -70,7 +70,12 @@ void MessagesChatFull::setFullChat(ChatFull* full_chat)
 	if(this->_full_chat == full_chat)
 		return;
 
+	this->deleteChild(this->_full_chat);
 	this->_full_chat = full_chat;
+
+	if(this->_full_chat)
+		this->_full_chat->setParent(this);
+
 	emit fullChatChanged();
 }
 

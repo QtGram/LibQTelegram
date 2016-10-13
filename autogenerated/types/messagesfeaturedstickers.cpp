@@ -19,7 +19,7 @@ void MessagesFeaturedStickers::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesFeaturedStickers::CtorMessagesFeaturedStickers)
 	{
 		this->_hash = mtstream->readTLInt();
-		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
+		mtstream->readTLVector<StickerSetCovered>(this->_sets, false, this);
 		mtstream->readTLVector<TLLong>(this->_unread, false);
 	}
 }

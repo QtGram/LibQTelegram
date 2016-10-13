@@ -17,9 +17,9 @@ void ContactsFound::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsFound::CtorContactsFound)
 	{
-		mtstream->readTLVector<Peer>(this->_results, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Peer>(this->_results, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

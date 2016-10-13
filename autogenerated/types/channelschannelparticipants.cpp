@@ -19,8 +19,8 @@ void ChannelsChannelParticipants::read(MTProtoStream* mtstream)
 	if(this->_constructorid == ChannelsChannelParticipants::CtorChannelsChannelParticipants)
 	{
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<ChannelParticipant>(this->_participants, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<ChannelParticipant>(this->_participants, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

@@ -19,7 +19,7 @@ void MessagesAllStickers::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesAllStickers::CtorMessagesAllStickers)
 	{
 		this->_hash = mtstream->readTLInt();
-		mtstream->readTLVector<StickerSet>(this->_sets, false);
+		mtstream->readTLVector<StickerSet>(this->_sets, false, this);
 	}
 }
 

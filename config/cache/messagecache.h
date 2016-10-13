@@ -24,10 +24,11 @@ class MessageCache : public QObject
         void load();
         void save(const QList<Dialog*>& dialogs) const;
 
-     public slots:
+    public slots:
         void edit(Message* message);
 
     private:
+        void sortMessages(TLInt dialogid);
         void save(TLInt dialogid) const;
         void saveTop(const QList<Dialog*>& dialogs) const;
         void loadTop();

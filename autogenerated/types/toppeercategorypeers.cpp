@@ -23,17 +23,17 @@ void TopPeerCategoryPeers::read(MTProtoStream* mtstream)
 		
 		if(category_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(TopPeerCategory, this->_category);
+			this->resetTLType<TopPeerCategory>(&this->_category);
 			this->_category->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_category);
+			this->nullTLType<TopPeerCategory>(&this->_category);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<TopPeer>(this->_peers, false);
+		mtstream->readTLVector<TopPeer>(this->_peers, false, this);
 	}
 }
 
@@ -71,7 +71,12 @@ void TopPeerCategoryPeers::setCategory(TopPeerCategory* category)
 	if(this->_category == category)
 		return;
 
+	this->deleteChild(this->_category);
 	this->_category = category;
+
+	if(this->_category)
+		this->_category->setParent(this);
+
 	emit categoryChanged();
 }
 

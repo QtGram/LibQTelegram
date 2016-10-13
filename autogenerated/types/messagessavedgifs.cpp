@@ -19,7 +19,7 @@ void MessagesSavedGifs::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesSavedGifs::CtorMessagesSavedGifs)
 	{
 		this->_hash = mtstream->readTLInt();
-		mtstream->readTLVector<Document>(this->_gifs, false);
+		mtstream->readTLVector<Document>(this->_gifs, false, this);
 	}
 }
 

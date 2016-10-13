@@ -29,7 +29,7 @@ void Photo::read(MTProtoStream* mtstream)
 		this->_id = mtstream->readTLLong();
 		this->_access_hash = mtstream->readTLLong();
 		this->_date = mtstream->readTLInt();
-		mtstream->readTLVector<PhotoSize>(this->_sizes, false);
+		mtstream->readTLVector<PhotoSize>(this->_sizes, false, this);
 	}
 }
 

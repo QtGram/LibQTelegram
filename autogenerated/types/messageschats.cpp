@@ -16,7 +16,7 @@ void MessagesChats::read(MTProtoStream* mtstream)
 	Q_ASSERT((this->_constructorid == MessagesChats::CtorMessagesChats));
 	
 	if(this->_constructorid == MessagesChats::CtorMessagesChats)
-		mtstream->readTLVector<Chat>(this->_chats, false);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
 }
 
 void MessagesChats::write(MTProtoStream* mtstream) 

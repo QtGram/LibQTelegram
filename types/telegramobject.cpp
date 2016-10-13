@@ -19,6 +19,14 @@ void TelegramObject::setConstructorId(TLConstructor constructorid)
     emit constructorIdChanged();
 }
 
+void TelegramObject::deleteChild(TelegramObject *telegramobject)
+{
+    if(!telegramobject || (telegramobject->parent() != this))
+        return;
+
+    telegramobject->deleteLater();
+}
+
 void TelegramObject::compileFlags()
 {
     /* NOP */

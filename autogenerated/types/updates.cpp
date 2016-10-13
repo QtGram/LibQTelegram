@@ -58,12 +58,12 @@ void Updates::read(MTProtoStream* mtstream)
 			
 			if(fwd_from_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->resetTLType<MessageFwdHeader>(&this->_fwd_from);
 				this->_fwd_from->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_fwd_from);
+				this->nullTLType<MessageFwdHeader>(&this->_fwd_from);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -75,7 +75,7 @@ void Updates::read(MTProtoStream* mtstream)
 			this->_reply_to_msg_id = mtstream->readTLInt();
 		
 		if(IS_FLAG_SET(this->_flags, 7))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 	}
 	else if(this->_constructorid == Updates::CtorUpdateShortChatMessage)
 	{
@@ -97,12 +97,12 @@ void Updates::read(MTProtoStream* mtstream)
 			
 			if(fwd_from_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->resetTLType<MessageFwdHeader>(&this->_fwd_from);
 				this->_fwd_from->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_fwd_from);
+				this->nullTLType<MessageFwdHeader>(&this->_fwd_from);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -114,7 +114,7 @@ void Updates::read(MTProtoStream* mtstream)
 			this->_reply_to_msg_id = mtstream->readTLInt();
 		
 		if(IS_FLAG_SET(this->_flags, 7))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 	}
 	else if(this->_constructorid == Updates::CtorUpdateShort)
 	{
@@ -122,12 +122,12 @@ void Updates::read(MTProtoStream* mtstream)
 		
 		if(update_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Update, this->_update);
+			this->resetTLType<Update>(&this->_update);
 			this->_update->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_update);
+			this->nullTLType<Update>(&this->_update);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -135,18 +135,18 @@ void Updates::read(MTProtoStream* mtstream)
 	}
 	else if(this->_constructorid == Updates::CtorUpdatesCombined)
 	{
-		mtstream->readTLVector<Update>(this->_updates, false);
-		mtstream->readTLVector<User>(this->_users, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
+		mtstream->readTLVector<Update>(this->_updates, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
 		this->_date = mtstream->readTLInt();
 		this->_seq_start = mtstream->readTLInt();
 		this->_seq = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Updates::CtorUpdates)
 	{
-		mtstream->readTLVector<Update>(this->_updates, false);
-		mtstream->readTLVector<User>(this->_users, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
+		mtstream->readTLVector<Update>(this->_updates, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
 		this->_date = mtstream->readTLInt();
 		this->_seq = mtstream->readTLInt();
 	}
@@ -164,18 +164,18 @@ void Updates::read(MTProtoStream* mtstream)
 			
 			if(media_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MessageMedia, this->_media);
+				this->resetTLType<MessageMedia>(&this->_media);
 				this->_media->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_media);
+				this->nullTLType<MessageMedia>(&this->_media);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 	}
 }
 
@@ -508,7 +508,12 @@ void Updates::setFwdFrom(MessageFwdHeader* fwd_from)
 	if(this->_fwd_from == fwd_from)
 		return;
 
+	this->deleteChild(this->_fwd_from);
 	this->_fwd_from = fwd_from;
+
+	if(this->_fwd_from)
+		this->_fwd_from->setParent(this);
+
 	emit fwdFromChanged();
 }
 
@@ -592,7 +597,12 @@ void Updates::setUpdate(Update* update)
 	if(this->_update == update)
 		return;
 
+	this->deleteChild(this->_update);
 	this->_update = update;
+
+	if(this->_update)
+		this->_update->setParent(this);
+
 	emit updateChanged();
 }
 
@@ -676,7 +686,12 @@ void Updates::setMedia(MessageMedia* media)
 	if(this->_media == media)
 		return;
 
+	this->deleteChild(this->_media);
 	this->_media = media;
+
+	if(this->_media)
+		this->_media->setParent(this);
+
 	emit mediaChanged();
 }
 

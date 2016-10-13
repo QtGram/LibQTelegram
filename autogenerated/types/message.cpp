@@ -52,12 +52,12 @@ void Message::read(MTProtoStream* mtstream)
 		
 		if(to_id_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_to_id);
+			this->resetTLType<Peer>(&this->_to_id);
 			this->_to_id->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_to_id);
+			this->nullTLType<Peer>(&this->_to_id);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -67,12 +67,12 @@ void Message::read(MTProtoStream* mtstream)
 			
 			if(fwd_from_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MessageFwdHeader, this->_fwd_from);
+				this->resetTLType<MessageFwdHeader>(&this->_fwd_from);
 				this->_fwd_from->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_fwd_from);
+				this->nullTLType<MessageFwdHeader>(&this->_fwd_from);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -91,12 +91,12 @@ void Message::read(MTProtoStream* mtstream)
 			
 			if(media_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MessageMedia, this->_media);
+				this->resetTLType<MessageMedia>(&this->_media);
 				this->_media->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_media);
+				this->nullTLType<MessageMedia>(&this->_media);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -107,18 +107,18 @@ void Message::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
 		
 		if(IS_FLAG_SET(this->_flags, 7))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 		
 		if(IS_FLAG_SET(this->_flags, 10))
 			this->_views = mtstream->readTLInt();
@@ -142,12 +142,12 @@ void Message::read(MTProtoStream* mtstream)
 		
 		if(to_id_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_to_id);
+			this->resetTLType<Peer>(&this->_to_id);
 			this->_to_id->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_to_id);
+			this->nullTLType<Peer>(&this->_to_id);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -159,12 +159,12 @@ void Message::read(MTProtoStream* mtstream)
 		
 		if(action_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(MessageAction, this->_action);
+			this->resetTLType<MessageAction>(&this->_action);
 			this->_action->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_action);
+			this->nullTLType<MessageAction>(&this->_action);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -433,7 +433,12 @@ void Message::setToId(Peer* to_id)
 	if(this->_to_id == to_id)
 		return;
 
+	this->deleteChild(this->_to_id);
 	this->_to_id = to_id;
+
+	if(this->_to_id)
+		this->_to_id->setParent(this);
+
 	emit toIdChanged();
 }
 
@@ -447,7 +452,12 @@ void Message::setFwdFrom(MessageFwdHeader* fwd_from)
 	if(this->_fwd_from == fwd_from)
 		return;
 
+	this->deleteChild(this->_fwd_from);
 	this->_fwd_from = fwd_from;
+
+	if(this->_fwd_from)
+		this->_fwd_from->setParent(this);
+
 	emit fwdFromChanged();
 }
 
@@ -517,7 +527,12 @@ void Message::setMedia(MessageMedia* media)
 	if(this->_media == media)
 		return;
 
+	this->deleteChild(this->_media);
 	this->_media = media;
+
+	if(this->_media)
+		this->_media->setParent(this);
+
 	emit mediaChanged();
 }
 
@@ -531,7 +546,12 @@ void Message::setReplyMarkup(ReplyMarkup* reply_markup)
 	if(this->_reply_markup == reply_markup)
 		return;
 
+	this->deleteChild(this->_reply_markup);
 	this->_reply_markup = reply_markup;
+
+	if(this->_reply_markup)
+		this->_reply_markup->setParent(this);
+
 	emit replyMarkupChanged();
 }
 
@@ -587,7 +607,12 @@ void Message::setAction(MessageAction* action)
 	if(this->_action == action)
 		return;
 
+	this->deleteChild(this->_action);
 	this->_action = action;
+
+	if(this->_action)
+		this->_action->setParent(this);
+
 	emit actionChanged();
 }
 

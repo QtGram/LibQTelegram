@@ -86,14 +86,17 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     MessagesMessages messages;
     messages.read(mtreply);
 
-    this->beginInsertRows(QModelIndex(), 0, messages.messages().length() - 1);
-    this->_messages.append(messages.messages());
+    this->beginInsertRows(QModelIndex(), 0, messages.count() - 1);
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
-    this->sortMessages(false);
+    const MessageCache::MessageList& newmessages = TelegramCache_messages(this->_dialog).mid(0, messages.count());
+
+    for(int i = newmessages.count() - 1; i >= 0; i--)
+        this->_messages.prepend(newmessages[i]);
+
     this->endInsertRows();
 }
 
@@ -145,8 +148,7 @@ void MessagesModel::createInputPeer()
             accesshash = user->accessHash();
     }
 
-    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog->peer(), accesshash);
-    this->_inputpeer->setParent(this);
+    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog->peer(), accesshash, this);
 }
 
 void MessagesModel::telegramReady()
@@ -154,7 +156,7 @@ void MessagesModel::telegramReady()
     if(!this->_dialog)
         return;
 
-    this->_messages = TelegramCache_messages(this->_dialog);
+    this->_messages = TelegramCache_messages(this->_dialog).mid(0, this->_loadcount);
 
     if(this->_messages.length() < this->_loadcount)
     {
@@ -162,5 +164,6 @@ void MessagesModel::telegramReady()
         return;
     }
 
-    this->sortMessages(true);
+    this->resetInternalData();
+    //this->sortMessages(true);
 }

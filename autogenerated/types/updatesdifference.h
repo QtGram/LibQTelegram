@@ -5,13 +5,13 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "encryptedmessage.h"
-#include "../../types/telegramobject.h"
-#include "message.h"
-#include "update.h"
-#include "updatesstate.h"
-#include "user.h"
 #include "../../types/basic.h"
+#include "../../types/telegramobject.h"
+#include "user.h"
+#include "encryptedmessage.h"
+#include "update.h"
+#include "message.h"
+#include "updatesstate.h"
 
 class UpdatesDifference: public TelegramObject
 {

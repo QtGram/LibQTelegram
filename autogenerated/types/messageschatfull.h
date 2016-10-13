@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "chatfull.h"
+#include "../../types/basic.h"
 #include "../../types/telegramobject.h"
 #include "user.h"
-#include "../../types/basic.h"
+#include "chatfull.h"
 
 class MessagesChatFull: public TelegramObject
 {

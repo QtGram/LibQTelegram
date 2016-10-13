@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "peer.h"
+#include "../../types/basic.h"
 #include "../../types/telegramobject.h"
 #include "user.h"
-#include "../../types/basic.h"
+#include "peer.h"
 
 class ContactsResolvedPeer: public TelegramObject
 {

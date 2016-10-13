@@ -16,7 +16,7 @@ void KeyboardButtonRow::read(MTProtoStream* mtstream)
 	Q_ASSERT((this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow));
 	
 	if(this->_constructorid == KeyboardButtonRow::CtorKeyboardButtonRow)
-		mtstream->readTLVector<KeyboardButton>(this->_buttons, false);
+		mtstream->readTLVector<KeyboardButton>(this->_buttons, false, this);
 }
 
 void KeyboardButtonRow::write(MTProtoStream* mtstream) 

@@ -18,8 +18,8 @@ void ContactsContacts::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsContacts::CtorContactsContacts)
 	{
-		mtstream->readTLVector<Contact>(this->_contacts, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Contact>(this->_contacts, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

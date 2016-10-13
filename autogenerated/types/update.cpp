@@ -122,12 +122,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(message_updatenewmessage_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Message, this->_message_updatenewmessage);
+			this->resetTLType<Message>(&this->_message_updatenewmessage);
 			this->_message_updatenewmessage->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_message_updatenewmessage);
+			this->nullTLType<Message>(&this->_message_updatenewmessage);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -152,12 +152,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(action_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(SendMessageAction, this->_action);
+			this->resetTLType<SendMessageAction>(&this->_action);
 			this->_action->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_action);
+			this->nullTLType<SendMessageAction>(&this->_action);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -169,12 +169,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(action_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(SendMessageAction, this->_action);
+			this->resetTLType<SendMessageAction>(&this->_action);
 			this->_action->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_action);
+			this->nullTLType<SendMessageAction>(&this->_action);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -184,12 +184,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(participants_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ChatParticipants, this->_participants);
+			this->resetTLType<ChatParticipants>(&this->_participants);
 			this->_participants->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_participants);
+			this->nullTLType<ChatParticipants>(&this->_participants);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -200,12 +200,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(status_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UserStatus, this->_status);
+			this->resetTLType<UserStatus>(&this->_status);
 			this->_status->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_status);
+			this->nullTLType<UserStatus>(&this->_status);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -224,12 +224,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(photo_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(UserProfilePhoto, this->_photo);
+			this->resetTLType<UserProfilePhoto>(&this->_photo);
 			this->_photo->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_photo);
+			this->nullTLType<UserProfilePhoto>(&this->_photo);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -247,12 +247,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(my_link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ContactLink, this->_my_link);
+			this->resetTLType<ContactLink>(&this->_my_link);
 			this->_my_link->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_my_link);
+			this->nullTLType<ContactLink>(&this->_my_link);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -260,12 +260,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(foreign_link_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(ContactLink, this->_foreign_link);
+			this->resetTLType<ContactLink>(&this->_foreign_link);
 			this->_foreign_link->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_foreign_link);
+			this->nullTLType<ContactLink>(&this->_foreign_link);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -282,12 +282,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(message_updatenewencryptedmessage_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(EncryptedMessage, this->_message_updatenewencryptedmessage);
+			this->resetTLType<EncryptedMessage>(&this->_message_updatenewencryptedmessage);
 			this->_message_updatenewencryptedmessage->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_message_updatenewencryptedmessage);
+			this->nullTLType<EncryptedMessage>(&this->_message_updatenewencryptedmessage);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -301,12 +301,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(chat_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(EncryptedChat, this->_chat);
+			this->resetTLType<EncryptedChat>(&this->_chat);
 			this->_chat->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_chat);
+			this->nullTLType<EncryptedChat>(&this->_chat);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -333,7 +333,7 @@ void Update::read(MTProtoStream* mtstream)
 		this->_version = mtstream->readTLInt();
 	}
 	else if(this->_constructorid == Update::CtorUpdateDcOptions)
-		mtstream->readTLVector<DcOption>(this->_dc_options, false);
+		mtstream->readTLVector<DcOption>(this->_dc_options, false, this);
 	else if(this->_constructorid == Update::CtorUpdateUserBlocked)
 	{
 		this->_user_id = mtstream->readTLInt();
@@ -345,12 +345,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(peer_updatenotifysettings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(NotifyPeer, this->_peer_updatenotifysettings);
+			this->resetTLType<NotifyPeer>(&this->_peer_updatenotifysettings);
 			this->_peer_updatenotifysettings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer_updatenotifysettings);
+			this->nullTLType<NotifyPeer>(&this->_peer_updatenotifysettings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -358,12 +358,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(notify_settings_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PeerNotifySettings, this->_notify_settings);
+			this->resetTLType<PeerNotifySettings>(&this->_notify_settings);
 			this->_notify_settings->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_notify_settings);
+			this->nullTLType<PeerNotifySettings>(&this->_notify_settings);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -375,12 +375,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(media_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(MessageMedia, this->_media);
+			this->resetTLType<MessageMedia>(&this->_media);
 			this->_media->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_media);
+			this->nullTLType<MessageMedia>(&this->_media);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -392,16 +392,16 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(key_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(PrivacyKey, this->_key);
+			this->resetTLType<PrivacyKey>(&this->_key);
 			this->_key->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_key);
+			this->nullTLType<PrivacyKey>(&this->_key);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<PrivacyRule>(this->_rules, false);
+		mtstream->readTLVector<PrivacyRule>(this->_rules, false, this);
 	}
 	else if(this->_constructorid == Update::CtorUpdateUserPhone)
 	{
@@ -414,12 +414,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(peer_updatereadhistoryinbox_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer_updatereadhistoryinbox);
+			this->resetTLType<Peer>(&this->_peer_updatereadhistoryinbox);
 			this->_peer_updatereadhistoryinbox->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer_updatereadhistoryinbox);
+			this->nullTLType<Peer>(&this->_peer_updatereadhistoryinbox);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -433,12 +433,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(peer_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer);
+			this->resetTLType<Peer>(&this->_peer);
 			this->_peer->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer);
+			this->nullTLType<Peer>(&this->_peer);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -452,12 +452,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(webpage_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(WebPage, this->_webpage);
+			this->resetTLType<WebPage>(&this->_webpage);
 			this->_webpage->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_webpage);
+			this->nullTLType<WebPage>(&this->_webpage);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -485,12 +485,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(message_updatenewchannelmessage_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Message, this->_message_updatenewchannelmessage);
+			this->resetTLType<Message>(&this->_message_updatenewchannelmessage);
 			this->_message_updatenewchannelmessage->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_message_updatenewchannelmessage);
+			this->nullTLType<Message>(&this->_message_updatenewchannelmessage);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -534,12 +534,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(stickerset_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(MessagesStickerSet, this->_stickerset);
+			this->resetTLType<MessagesStickerSet>(&this->_stickerset);
 			this->_stickerset->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_stickerset);
+			this->nullTLType<MessagesStickerSet>(&this->_stickerset);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -561,12 +561,12 @@ void Update::read(MTProtoStream* mtstream)
 			
 			if(geo_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(GeoPoint, this->_geo);
+				this->resetTLType<GeoPoint>(&this->_geo);
 				this->_geo->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_geo);
+				this->nullTLType<GeoPoint>(&this->_geo);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -584,12 +584,12 @@ void Update::read(MTProtoStream* mtstream)
 			
 			if(geo_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(GeoPoint, this->_geo);
+				this->resetTLType<GeoPoint>(&this->_geo);
 				this->_geo->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_geo);
+				this->nullTLType<GeoPoint>(&this->_geo);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -601,12 +601,12 @@ void Update::read(MTProtoStream* mtstream)
 			
 			if(msg_id_updatebotinlinesend_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updatebotinlinesend);
+				this->resetTLType<InputBotInlineMessageID>(&this->_msg_id_updatebotinlinesend);
 				this->_msg_id_updatebotinlinesend->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_msg_id_updatebotinlinesend);
+				this->nullTLType<InputBotInlineMessageID>(&this->_msg_id_updatebotinlinesend);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -617,12 +617,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Message, this->_message);
+			this->resetTLType<Message>(&this->_message);
 			this->_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_message);
+			this->nullTLType<Message>(&this->_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -643,12 +643,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(peer_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer);
+			this->resetTLType<Peer>(&this->_peer);
 			this->_peer->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer);
+			this->nullTLType<Peer>(&this->_peer);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -666,12 +666,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(message_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Message, this->_message);
+			this->resetTLType<Message>(&this->_message);
 			this->_message->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_message);
+			this->nullTLType<Message>(&this->_message);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -687,12 +687,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(msg_id_updateinlinebotcallbackquery_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputBotInlineMessageID, this->_msg_id_updateinlinebotcallbackquery);
+			this->resetTLType<InputBotInlineMessageID>(&this->_msg_id_updateinlinebotcallbackquery);
 			this->_msg_id_updateinlinebotcallbackquery->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_msg_id_updateinlinebotcallbackquery);
+			this->nullTLType<InputBotInlineMessageID>(&this->_msg_id_updateinlinebotcallbackquery);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -714,12 +714,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(peer_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer);
+			this->resetTLType<Peer>(&this->_peer);
 			this->_peer->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer);
+			this->nullTLType<Peer>(&this->_peer);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -727,12 +727,12 @@ void Update::read(MTProtoStream* mtstream)
 		
 		if(draft_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(DraftMessage, this->_draft);
+			this->resetTLType<DraftMessage>(&this->_draft);
 			this->_draft->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_draft);
+			this->nullTLType<DraftMessage>(&this->_draft);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -1246,7 +1246,12 @@ void Update::setMessageUpdatenewmessage(Message* message_updatenewmessage)
 	if(this->_message_updatenewmessage == message_updatenewmessage)
 		return;
 
+	this->deleteChild(this->_message_updatenewmessage);
 	this->_message_updatenewmessage = message_updatenewmessage;
+
+	if(this->_message_updatenewmessage)
+		this->_message_updatenewmessage->setParent(this);
+
 	emit messageUpdatenewmessageChanged();
 }
 
@@ -1344,7 +1349,12 @@ void Update::setAction(SendMessageAction* action)
 	if(this->_action == action)
 		return;
 
+	this->deleteChild(this->_action);
 	this->_action = action;
+
+	if(this->_action)
+		this->_action->setParent(this);
+
 	emit actionChanged();
 }
 
@@ -1372,7 +1382,12 @@ void Update::setParticipants(ChatParticipants* participants)
 	if(this->_participants == participants)
 		return;
 
+	this->deleteChild(this->_participants);
 	this->_participants = participants;
+
+	if(this->_participants)
+		this->_participants->setParent(this);
+
 	emit participantsChanged();
 }
 
@@ -1386,7 +1401,12 @@ void Update::setStatus(UserStatus* status)
 	if(this->_status == status)
 		return;
 
+	this->deleteChild(this->_status);
 	this->_status = status;
+
+	if(this->_status)
+		this->_status->setParent(this);
+
 	emit statusChanged();
 }
 
@@ -1456,7 +1476,12 @@ void Update::setPhoto(UserProfilePhoto* photo)
 	if(this->_photo == photo)
 		return;
 
+	this->deleteChild(this->_photo);
 	this->_photo = photo;
+
+	if(this->_photo)
+		this->_photo->setParent(this);
+
 	emit photoChanged();
 }
 
@@ -1484,7 +1509,12 @@ void Update::setMyLink(ContactLink* my_link)
 	if(this->_my_link == my_link)
 		return;
 
+	this->deleteChild(this->_my_link);
 	this->_my_link = my_link;
+
+	if(this->_my_link)
+		this->_my_link->setParent(this);
+
 	emit myLinkChanged();
 }
 
@@ -1498,7 +1528,12 @@ void Update::setForeignLink(ContactLink* foreign_link)
 	if(this->_foreign_link == foreign_link)
 		return;
 
+	this->deleteChild(this->_foreign_link);
 	this->_foreign_link = foreign_link;
+
+	if(this->_foreign_link)
+		this->_foreign_link->setParent(this);
+
 	emit foreignLinkChanged();
 }
 
@@ -1554,7 +1589,12 @@ void Update::setMessageUpdatenewencryptedmessage(EncryptedMessage* message_updat
 	if(this->_message_updatenewencryptedmessage == message_updatenewencryptedmessage)
 		return;
 
+	this->deleteChild(this->_message_updatenewencryptedmessage);
 	this->_message_updatenewencryptedmessage = message_updatenewencryptedmessage;
+
+	if(this->_message_updatenewencryptedmessage)
+		this->_message_updatenewencryptedmessage->setParent(this);
+
 	emit messageUpdatenewencryptedmessageChanged();
 }
 
@@ -1582,7 +1622,12 @@ void Update::setChat(EncryptedChat* chat)
 	if(this->_chat == chat)
 		return;
 
+	this->deleteChild(this->_chat);
 	this->_chat = chat;
+
+	if(this->_chat)
+		this->_chat->setParent(this);
+
 	emit chatChanged();
 }
 
@@ -1666,7 +1711,12 @@ void Update::setPeerUpdatenotifysettings(NotifyPeer* peer_updatenotifysettings)
 	if(this->_peer_updatenotifysettings == peer_updatenotifysettings)
 		return;
 
+	this->deleteChild(this->_peer_updatenotifysettings);
 	this->_peer_updatenotifysettings = peer_updatenotifysettings;
+
+	if(this->_peer_updatenotifysettings)
+		this->_peer_updatenotifysettings->setParent(this);
+
 	emit peerUpdatenotifysettingsChanged();
 }
 
@@ -1680,7 +1730,12 @@ void Update::setNotifySettings(PeerNotifySettings* notify_settings)
 	if(this->_notify_settings == notify_settings)
 		return;
 
+	this->deleteChild(this->_notify_settings);
 	this->_notify_settings = notify_settings;
+
+	if(this->_notify_settings)
+		this->_notify_settings->setParent(this);
+
 	emit notifySettingsChanged();
 }
 
@@ -1722,7 +1777,12 @@ void Update::setMedia(MessageMedia* media)
 	if(this->_media == media)
 		return;
 
+	this->deleteChild(this->_media);
 	this->_media = media;
+
+	if(this->_media)
+		this->_media->setParent(this);
+
 	emit mediaChanged();
 }
 
@@ -1750,7 +1810,12 @@ void Update::setKey(PrivacyKey* key)
 	if(this->_key == key)
 		return;
 
+	this->deleteChild(this->_key);
 	this->_key = key;
+
+	if(this->_key)
+		this->_key->setParent(this);
+
 	emit keyChanged();
 }
 
@@ -1792,7 +1857,12 @@ void Update::setPeerUpdatereadhistoryinbox(Peer* peer_updatereadhistoryinbox)
 	if(this->_peer_updatereadhistoryinbox == peer_updatereadhistoryinbox)
 		return;
 
+	this->deleteChild(this->_peer_updatereadhistoryinbox);
 	this->_peer_updatereadhistoryinbox = peer_updatereadhistoryinbox;
+
+	if(this->_peer_updatereadhistoryinbox)
+		this->_peer_updatereadhistoryinbox->setParent(this);
+
 	emit peerUpdatereadhistoryinboxChanged();
 }
 
@@ -1820,7 +1890,12 @@ void Update::setPeer(Peer* peer)
 	if(this->_peer == peer)
 		return;
 
+	this->deleteChild(this->_peer);
 	this->_peer = peer;
+
+	if(this->_peer)
+		this->_peer->setParent(this);
+
 	emit peerChanged();
 }
 
@@ -1834,7 +1909,12 @@ void Update::setWebpage(WebPage* webpage)
 	if(this->_webpage == webpage)
 		return;
 
+	this->deleteChild(this->_webpage);
 	this->_webpage = webpage;
+
+	if(this->_webpage)
+		this->_webpage->setParent(this);
+
 	emit webpageChanged();
 }
 
@@ -1876,7 +1956,12 @@ void Update::setMessageUpdatenewchannelmessage(Message* message_updatenewchannel
 	if(this->_message_updatenewchannelmessage == message_updatenewchannelmessage)
 		return;
 
+	this->deleteChild(this->_message_updatenewchannelmessage);
 	this->_message_updatenewchannelmessage = message_updatenewchannelmessage;
+
+	if(this->_message_updatenewchannelmessage)
+		this->_message_updatenewchannelmessage->setParent(this);
+
 	emit messageUpdatenewchannelmessageChanged();
 }
 
@@ -1946,7 +2031,12 @@ void Update::setStickerset(MessagesStickerSet* stickerset)
 	if(this->_stickerset == stickerset)
 		return;
 
+	this->deleteChild(this->_stickerset);
 	this->_stickerset = stickerset;
+
+	if(this->_stickerset)
+		this->_stickerset->setParent(this);
+
 	emit stickersetChanged();
 }
 
@@ -2016,7 +2106,12 @@ void Update::setGeo(GeoPoint* geo)
 	if(this->_geo == geo)
 		return;
 
+	this->deleteChild(this->_geo);
 	this->_geo = geo;
+
+	if(this->_geo)
+		this->_geo->setParent(this);
+
 	emit geoChanged();
 }
 
@@ -2058,7 +2153,12 @@ void Update::setMsgIdUpdatebotinlinesend(InputBotInlineMessageID* msg_id_updateb
 	if(this->_msg_id_updatebotinlinesend == msg_id_updatebotinlinesend)
 		return;
 
+	this->deleteChild(this->_msg_id_updatebotinlinesend);
 	this->_msg_id_updatebotinlinesend = msg_id_updatebotinlinesend;
+
+	if(this->_msg_id_updatebotinlinesend)
+		this->_msg_id_updatebotinlinesend->setParent(this);
+
 	emit msgIdUpdatebotinlinesendChanged();
 }
 
@@ -2072,7 +2172,12 @@ void Update::setMessage(Message* message)
 	if(this->_message == message)
 		return;
 
+	this->deleteChild(this->_message);
 	this->_message = message;
+
+	if(this->_message)
+		this->_message->setParent(this);
+
 	emit messageChanged();
 }
 
@@ -2156,7 +2261,12 @@ void Update::setMsgIdUpdateinlinebotcallbackquery(InputBotInlineMessageID* msg_i
 	if(this->_msg_id_updateinlinebotcallbackquery == msg_id_updateinlinebotcallbackquery)
 		return;
 
+	this->deleteChild(this->_msg_id_updateinlinebotcallbackquery);
 	this->_msg_id_updateinlinebotcallbackquery = msg_id_updateinlinebotcallbackquery;
+
+	if(this->_msg_id_updateinlinebotcallbackquery)
+		this->_msg_id_updateinlinebotcallbackquery->setParent(this);
+
 	emit msgIdUpdateinlinebotcallbackqueryChanged();
 }
 
@@ -2170,7 +2280,12 @@ void Update::setDraft(DraftMessage* draft)
 	if(this->_draft == draft)
 		return;
 
+	this->deleteChild(this->_draft);
 	this->_draft = draft;
+
+	if(this->_draft)
+		this->_draft->setParent(this);
+
 	emit draftChanged();
 }
 

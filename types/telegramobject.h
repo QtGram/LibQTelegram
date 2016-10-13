@@ -17,6 +17,9 @@ class TelegramObject : public QObject
         void setConstructorId(TLConstructor constructorid);
 
     protected:
+        template<typename T> void resetTLType(T** t);
+        template<typename T> void nullTLType(T** t);
+        void deleteChild(TelegramObject* telegramobject);
         virtual void compileFlags();
 
     public:
@@ -29,5 +32,21 @@ class TelegramObject : public QObject
     protected:
         TLConstructor _constructorid;
 };
+
+template<typename T> void TelegramObject::resetTLType(T** t)
+{
+    if(*t)
+        (*t)->deleteLater();
+
+    *t = new T(this);
+}
+
+template<typename T> void TelegramObject::nullTLType(T** t)
+{
+    if(*t)
+        (*t)->deleteLater();
+
+    *t = NULL;
+}
 
 #endif // TELEGRAMOBJECT_H

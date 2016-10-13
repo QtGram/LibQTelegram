@@ -23,12 +23,12 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 		
 		if(set_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(StickerSet, this->_set);
+			this->resetTLType<StickerSet>(&this->_set);
 			this->_set->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_set);
+			this->nullTLType<StickerSet>(&this->_set);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -36,12 +36,12 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 		
 		if(cover_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Document, this->_cover);
+			this->resetTLType<Document>(&this->_cover);
 			this->_cover->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_cover);
+			this->nullTLType<Document>(&this->_cover);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -51,16 +51,16 @@ void StickerSetCovered::read(MTProtoStream* mtstream)
 		
 		if(set_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(StickerSet, this->_set);
+			this->resetTLType<StickerSet>(&this->_set);
 			this->_set->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_set);
+			this->nullTLType<StickerSet>(&this->_set);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<Document>(this->_covers, false);
+		mtstream->readTLVector<Document>(this->_covers, false, this);
 	}
 }
 
@@ -110,7 +110,12 @@ void StickerSetCovered::setSet(StickerSet* set)
 	if(this->_set == set)
 		return;
 
+	this->deleteChild(this->_set);
 	this->_set = set;
+
+	if(this->_set)
+		this->_set->setParent(this);
+
 	emit setChanged();
 }
 
@@ -124,7 +129,12 @@ void StickerSetCovered::setCover(Document* cover)
 	if(this->_cover == cover)
 		return;
 
+	this->deleteChild(this->_cover);
 	this->_cover = cover;
+
+	if(this->_cover)
+		this->_cover->setParent(this);
+
 	emit coverChanged();
 }
 

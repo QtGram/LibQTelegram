@@ -18,18 +18,18 @@ void MessagesDialogs::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessagesDialogs::CtorMessagesDialogs)
 	{
-		mtstream->readTLVector<Dialog>(this->_dialogs, false);
-		mtstream->readTLVector<Message>(this->_messages, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Dialog>(this->_dialogs, false, this);
+		mtstream->readTLVector<Message>(this->_messages, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 	else if(this->_constructorid == MessagesDialogs::CtorMessagesDialogsSlice)
 	{
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<Dialog>(this->_dialogs, false);
-		mtstream->readTLVector<Message>(this->_messages, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Dialog>(this->_dialogs, false, this);
+		mtstream->readTLVector<Message>(this->_messages, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

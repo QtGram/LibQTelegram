@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "../../types/telegramobject.h"
-#include "message.h"
-#include "user.h"
 #include "../../types/basic.h"
+#include "../../types/telegramobject.h"
+#include "user.h"
+#include "message.h"
 
 class MessagesMessages: public TelegramObject
 {

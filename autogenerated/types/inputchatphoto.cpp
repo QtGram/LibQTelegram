@@ -24,12 +24,12 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 		
 		if(file_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputFile, this->_file);
+			this->resetTLType<InputFile>(&this->_file);
 			this->_file->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_file);
+			this->nullTLType<InputFile>(&this->_file);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -39,12 +39,12 @@ void InputChatPhoto::read(MTProtoStream* mtstream)
 		
 		if(id_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputPhoto, this->_id);
+			this->resetTLType<InputPhoto>(&this->_id);
 			this->_id->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_id);
+			this->nullTLType<InputPhoto>(&this->_id);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -90,7 +90,12 @@ void InputChatPhoto::setFile(InputFile* file)
 	if(this->_file == file)
 		return;
 
+	this->deleteChild(this->_file);
 	this->_file = file;
+
+	if(this->_file)
+		this->_file->setParent(this);
+
 	emit fileChanged();
 }
 
@@ -104,7 +109,12 @@ void InputChatPhoto::setId(InputPhoto* id)
 	if(this->_id == id)
 		return;
 
+	this->deleteChild(this->_id);
 	this->_id = id;
+
+	if(this->_id)
+		this->_id->setParent(this);
+
 	emit idChanged();
 }
 

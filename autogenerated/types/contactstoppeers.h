@@ -5,10 +5,10 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "toppeercategorypeers.h"
+#include "../../types/basic.h"
 #include "../../types/telegramobject.h"
 #include "user.h"
-#include "../../types/basic.h"
+#include "toppeercategorypeers.h"
 
 class ContactsTopPeers: public TelegramObject
 {

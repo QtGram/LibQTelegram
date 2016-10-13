@@ -38,10 +38,10 @@ void ReplyMarkup::read(MTProtoStream* mtstream)
 		this->_is_resize = IS_FLAG_SET(this->_flags, 0);
 		this->_is_single_use = IS_FLAG_SET(this->_flags, 1);
 		this->_is_selective = IS_FLAG_SET(this->_flags, 2);
-		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false);
+		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false, this);
 	}
 	else if(this->_constructorid == ReplyMarkup::CtorReplyInlineMarkup)
-		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false);
+		mtstream->readTLVector<KeyboardButtonRow>(this->_rows, false, this);
 }
 
 void ReplyMarkup::write(MTProtoStream* mtstream) 

@@ -15,7 +15,7 @@ void MessageCopy::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == MessageCopy::ctorMsgCopy)
 	{
-		RESET_TLTYPE(MTProtoMessage, this->_orig_message);
+        this->resetTLType<MTProtoMessage>(&this->_orig_message);
 		this->_orig_message->read(mtstream);
 	}
 }

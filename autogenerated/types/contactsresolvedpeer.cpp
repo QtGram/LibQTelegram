@@ -22,17 +22,17 @@ void ContactsResolvedPeer::read(MTProtoStream* mtstream)
 		
 		if(peer_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(Peer, this->_peer);
+			this->resetTLType<Peer>(&this->_peer);
 			this->_peer->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_peer);
+			this->nullTLType<Peer>(&this->_peer);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 
@@ -70,7 +70,12 @@ void ContactsResolvedPeer::setPeer(Peer* peer)
 	if(this->_peer == peer)
 		return;
 
+	this->deleteChild(this->_peer);
 	this->_peer = peer;
+
+	if(this->_peer)
+		this->_peer->setParent(this);
+
 	emit peerChanged();
 }
 

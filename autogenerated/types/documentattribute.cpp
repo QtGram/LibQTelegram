@@ -42,12 +42,12 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 		
 		if(stickerset_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputStickerSet, this->_stickerset);
+			this->resetTLType<InputStickerSet>(&this->_stickerset);
 			this->_stickerset->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_stickerset);
+			this->nullTLType<InputStickerSet>(&this->_stickerset);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -57,12 +57,12 @@ void DocumentAttribute::read(MTProtoStream* mtstream)
 			
 			if(mask_coords_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(MaskCoords, this->_mask_coords);
+				this->resetTLType<MaskCoords>(&this->_mask_coords);
 				this->_mask_coords->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_mask_coords);
+				this->nullTLType<MaskCoords>(&this->_mask_coords);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -253,7 +253,12 @@ void DocumentAttribute::setStickerset(InputStickerSet* stickerset)
 	if(this->_stickerset == stickerset)
 		return;
 
+	this->deleteChild(this->_stickerset);
 	this->_stickerset = stickerset;
+
+	if(this->_stickerset)
+		this->_stickerset->setParent(this);
+
 	emit stickersetChanged();
 }
 
@@ -267,7 +272,12 @@ void DocumentAttribute::setMaskCoords(MaskCoords* mask_coords)
 	if(this->_mask_coords == mask_coords)
 		return;
 
+	this->deleteChild(this->_mask_coords);
 	this->_mask_coords = mask_coords;
+
+	if(this->_mask_coords)
+		this->_mask_coords->setParent(this);
+
 	emit maskCoordsChanged();
 }
 

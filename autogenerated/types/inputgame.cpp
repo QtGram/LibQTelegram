@@ -29,12 +29,12 @@ void InputGame::read(MTProtoStream* mtstream)
 		
 		if(bot_id_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputUser, this->_bot_id);
+			this->resetTLType<InputUser>(&this->_bot_id);
 			this->_bot_id->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_bot_id);
+			this->nullTLType<InputUser>(&this->_bot_id);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -109,7 +109,12 @@ void InputGame::setBotId(InputUser* bot_id)
 	if(this->_bot_id == bot_id)
 		return;
 
+	this->deleteChild(this->_bot_id);
 	this->_bot_id = bot_id;
+
+	if(this->_bot_id)
+		this->_bot_id->setParent(this);
+
 	emit botIdChanged();
 }
 

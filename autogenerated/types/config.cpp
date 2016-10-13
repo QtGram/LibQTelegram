@@ -44,7 +44,7 @@ void Config::read(MTProtoStream* mtstream)
 		this->_expires = mtstream->readTLInt();
 		this->_is_test_mode = mtstream->readTLBool();
 		this->_this_dc = mtstream->readTLInt();
-		mtstream->readTLVector<DcOption>(this->_dc_options, false);
+		mtstream->readTLVector<DcOption>(this->_dc_options, false, this);
 		this->_chat_size_max = mtstream->readTLInt();
 		this->_megagroup_size_max = mtstream->readTLInt();
 		this->_forwarded_count_max = mtstream->readTLInt();
@@ -64,7 +64,7 @@ void Config::read(MTProtoStream* mtstream)
 		if(IS_FLAG_SET(this->_flags, 0))
 			this->_tmp_sessions = mtstream->readTLInt();
 		
-		mtstream->readTLVector<DisabledFeature>(this->_disabled_features, false);
+		mtstream->readTLVector<DisabledFeature>(this->_disabled_features, false, this);
 	}
 }
 

@@ -21,7 +21,7 @@ void FutureSalts::read(MTProtoStream* mtstream)
 	{
 		this->_req_msg_id = mtstream->readTLLong();
 		this->_now = mtstream->readTLInt();
-		mtstream->readTLVector<FutureSalt>(this->_salts, false);
+		mtstream->readTLVector<FutureSalt>(this->_salts, false, this);
 	}
 }
 

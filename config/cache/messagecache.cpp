@@ -55,7 +55,22 @@ void MessageCache::edit(Message *message)
     }
 
     this->_dialogmessages[dialogid].replace(idx, message);
+    this->sortMessages(dialogid);
+
+    message->setParent(this);
     oldmessage->deleteLater();
+}
+
+void MessageCache::sortMessages(TLInt dialogid)
+{
+    if(!this->_dialogmessages.contains(dialogid))
+        return;
+
+    MessageList& messagelist = this->_dialogmessages[dialogid];
+
+    std::sort(messagelist.begin(), messagelist.end(), [](Message* msg1, Message* msg2) {
+        return msg1->date() > msg2->date();
+    });
 }
 
 void MessageCache::cache(Message *message)
@@ -66,6 +81,7 @@ void MessageCache::cache(Message *message)
         return;
 
     TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+    message->setParent(this);
 
     this->_messages[id] = message;
 
@@ -73,6 +89,7 @@ void MessageCache::cache(Message *message)
         this->_dialogmessages[dialogid] = MessageList();
 
     this->_dialogmessages[dialogid] << message;
+    this->sortMessages(dialogid);
 }
 
 void MessageCache::cache(const TLVector<Message *> &messages)
@@ -149,6 +166,6 @@ void MessageCache::loadTop()
     mtstream.load(dir.absoluteFilePath("topmessages.cache"));
 
     TLVector<Message*> messages;
-    mtstream.readTLVector<Message>(messages);
+    mtstream.readTLVector<Message>(messages, false, this);
     this->cache(messages);
 }

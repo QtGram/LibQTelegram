@@ -17,8 +17,8 @@ void AccountPrivacyRules::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == AccountPrivacyRules::CtorAccountPrivacyRules)
 	{
-		mtstream->readTLVector<PrivacyRule>(this->_rules, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<PrivacyRule>(this->_rules, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

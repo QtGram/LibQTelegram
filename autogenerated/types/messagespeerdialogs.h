@@ -5,12 +5,12 @@
 // DO NOT EDIT!!!
 
 #include "chat.h"
-#include "dialog.h"
+#include "../../types/basic.h"
 #include "../../types/telegramobject.h"
+#include "user.h"
+#include "dialog.h"
 #include "message.h"
 #include "updatesstate.h"
-#include "user.h"
-#include "../../types/basic.h"
 
 class MessagesPeerDialogs: public TelegramObject
 {

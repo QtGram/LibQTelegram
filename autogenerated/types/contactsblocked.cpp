@@ -18,14 +18,14 @@ void ContactsBlocked::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsBlocked::CtorContactsBlocked)
 	{
-		mtstream->readTLVector<ContactBlocked>(this->_blocked, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<ContactBlocked>(this->_blocked, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 	else if(this->_constructorid == ContactsBlocked::CtorContactsBlockedSlice)
 	{
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<ContactBlocked>(this->_blocked, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<ContactBlocked>(this->_blocked, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

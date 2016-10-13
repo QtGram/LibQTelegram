@@ -33,12 +33,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -49,7 +49,7 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 		this->_is_no_webpage = IS_FLAG_SET(this->_flags, 0);
 		this->_message = mtstream->readTLString();
 		if(IS_FLAG_SET(this->_flags, 1))
-			mtstream->readTLVector<MessageEntity>(this->_entities, false);
+			mtstream->readTLVector<MessageEntity>(this->_entities, false, this);
 		
 		if(IS_FLAG_SET(this->_flags, 2))
 		{
@@ -57,12 +57,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -74,12 +74,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 		
 		if(geo_point_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->resetTLType<InputGeoPoint>(&this->_geo_point);
 			this->_geo_point->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo_point);
+			this->nullTLType<InputGeoPoint>(&this->_geo_point);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -89,12 +89,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -106,12 +106,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 		
 		if(geo_point_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(InputGeoPoint, this->_geo_point);
+			this->resetTLType<InputGeoPoint>(&this->_geo_point);
 			this->_geo_point->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_geo_point);
+			this->nullTLType<InputGeoPoint>(&this->_geo_point);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 		
@@ -125,12 +125,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -147,12 +147,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -166,12 +166,12 @@ void InputBotInlineMessage::read(MTProtoStream* mtstream)
 			
 			if(reply_markup_ctor != TLTypes::Null)
 			{
-				RESET_TLTYPE(ReplyMarkup, this->_reply_markup);
+				this->resetTLType<ReplyMarkup>(&this->_reply_markup);
 				this->_reply_markup->read(mtstream);
 			}
 			else
 			{
-				NULL_TLTYPE(this->_reply_markup);
+				this->nullTLType<ReplyMarkup>(&this->_reply_markup);
 				mtstream->readTLConstructor(); // Skip Null
 			}
 		}
@@ -358,7 +358,12 @@ void InputBotInlineMessage::setReplyMarkup(ReplyMarkup* reply_markup)
 	if(this->_reply_markup == reply_markup)
 		return;
 
+	this->deleteChild(this->_reply_markup);
 	this->_reply_markup = reply_markup;
+
+	if(this->_reply_markup)
+		this->_reply_markup->setParent(this);
+
 	emit replyMarkupChanged();
 }
 
@@ -414,7 +419,12 @@ void InputBotInlineMessage::setGeoPoint(InputGeoPoint* geo_point)
 	if(this->_geo_point == geo_point)
 		return;
 
+	this->deleteChild(this->_geo_point);
 	this->_geo_point = geo_point;
+
+	if(this->_geo_point)
+		this->_geo_point->setParent(this);
+
 	emit geoPointChanged();
 }
 

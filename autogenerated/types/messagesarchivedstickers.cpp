@@ -19,7 +19,7 @@ void MessagesArchivedStickers::read(MTProtoStream* mtstream)
 	if(this->_constructorid == MessagesArchivedStickers::CtorMessagesArchivedStickers)
 	{
 		this->_count = mtstream->readTLInt();
-		mtstream->readTLVector<StickerSetCovered>(this->_sets, false);
+		mtstream->readTLVector<StickerSetCovered>(this->_sets, false, this);
 	}
 }
 

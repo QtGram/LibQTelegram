@@ -18,9 +18,9 @@ void ContactsTopPeers::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == ContactsTopPeers::CtorContactsTopPeers)
 	{
-		mtstream->readTLVector<TopPeerCategoryPeers>(this->_categories, false);
-		mtstream->readTLVector<Chat>(this->_chats, false);
-		mtstream->readTLVector<User>(this->_users, false);
+		mtstream->readTLVector<TopPeerCategoryPeers>(this->_categories, false, this);
+		mtstream->readTLVector<Chat>(this->_chats, false, this);
+		mtstream->readTLVector<User>(this->_users, false, this);
 	}
 }
 

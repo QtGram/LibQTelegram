@@ -28,12 +28,12 @@ void AuthAuthorization::read(MTProtoStream* mtstream)
 		
 		if(user_ctor != TLTypes::Null)
 		{
-			RESET_TLTYPE(User, this->_user);
+			this->resetTLType<User>(&this->_user);
 			this->_user->read(mtstream);
 		}
 		else
 		{
-			NULL_TLTYPE(this->_user);
+			this->nullTLType<User>(&this->_user);
 			mtstream->readTLConstructor(); // Skip Null
 		}
 	}
@@ -108,7 +108,12 @@ void AuthAuthorization::setUser(User* user)
 	if(this->_user == user)
 		return;
 
+	this->deleteChild(this->_user);
 	this->_user = user;
+
+	if(this->_user)
+		this->_user->setParent(this);
+
 	emit userChanged();
 }
 
