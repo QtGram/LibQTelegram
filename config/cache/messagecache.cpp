@@ -20,6 +20,7 @@ const MessageCache::MessageList &MessageCache::messages(Dialog* dialog)
     if(!this->_cacheloaded.contains(dialogid))
         this->load(dialogid);
 
+    this->sortMessages(dialogid);
     return this->_dialogmessages[dialogid];
 }
 
@@ -55,8 +56,6 @@ void MessageCache::edit(Message *message)
     }
 
     this->_dialogmessages[dialogid].replace(idx, message);
-    this->sortMessages(dialogid);
-
     message->setParent(this);
     oldmessage->deleteLater();
 }
@@ -89,7 +88,6 @@ void MessageCache::cache(Message *message)
         this->_dialogmessages[dialogid] = MessageList();
 
     this->_dialogmessages[dialogid] << message;
-    this->sortMessages(dialogid);
 }
 
 void MessageCache::cache(const TLVector<Message *> &messages)
