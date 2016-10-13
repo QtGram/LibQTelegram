@@ -239,7 +239,9 @@ SOURCES += \
     config/cache/filecache.cpp \
     objects/fileobject.cpp \
     models/messagesmodel.cpp \
-    config/cache/messagecache.cpp
+    config/cache/objects/abstractcache.cpp \
+    config/cache/objects/messagecache.cpp \
+    config/cache/objects/usercache.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -472,7 +474,9 @@ HEADERS +=\
     config/cache/filecache.h \
     objects/fileobject.h \
     models/messagesmodel.h \
-    config/cache/messagecache.h
+    config/cache/objects/abstractcache.h \
+    config/cache/objects/messagecache.h \
+    config/cache/objects/usercache.h
 
 unix {
     target.path = /usr/lib

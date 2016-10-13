@@ -6,13 +6,15 @@ TelegramCache* TelegramCache::_instance = NULL;
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
     this->_messagecache = new MessageCache(this);
+    this->_usercache = new UserCache(this);
 
     connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this->_messagecache, SLOT(edit(Message*)));
 
+    connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
+
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
-    connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
-    connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
@@ -24,7 +26,7 @@ const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
 
 const QHash<TLInt, User *> &TelegramCache::users() const
 {
-    return this->_users;
+    return this->_usercache->users();
 }
 
 const QHash<TLInt, Chat *> &TelegramCache::chats() const
@@ -50,13 +52,7 @@ Dialog *TelegramCache::dialog(TLInt id) const
 
 User *TelegramCache::user(TLInt id) const
 {
-    if(!this->_users.contains(id))
-    {
-        qWarning("Cannot recover user %x from cache", id);
-        return NULL;
-    }
-
-    return this->_users[id];
+    return this->_usercache->user(id);
 }
 
 Chat *TelegramCache::chat(TLInt id) const
@@ -82,7 +78,7 @@ void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 
 void TelegramCache::cache(const TLVector<User *>& users)
 {
-    this->cache(users, this->_users);
+    this->_usercache->cache(users);
 }
 
 void TelegramCache::cache(const TLVector<Chat *>& chats)
@@ -187,8 +183,8 @@ TelegramCache *TelegramCache::cache()
 void TelegramCache::save() const
 {
     this->saveToFile<Dialog>(this->_dialogs, "dialogs");
-    this->saveToFile<User>(this->_users, "users");
     this->saveToFile<Chat>(this->_chats, "chats");
+    this->_usercache->save();
     this->_messagecache->save(this->_dialogs.values());
 }
 
@@ -196,7 +192,6 @@ void TelegramCache::load()
 {
     this->_messagecache->load();
     this->loadFromFile<Chat>(this->_chats, "chats");
-    this->loadFromFile<User>(this->_users, "users");
     this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
 }
 
@@ -207,7 +202,7 @@ void TelegramCache::cache(Dialog *dialog)
 
 void TelegramCache::cache(User *user)
 {
-    this->cache(user, this->_users);
+    this->_usercache->cache(user);
 }
 
 void TelegramCache::cache(Chat *chat)

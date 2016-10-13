@@ -22,7 +22,8 @@
 #include "../../mtproto/mtprotoreply.h"
 #include "../../types/telegramhelper.h"
 #include "../telegramconfig.h"
-#include "messagecache.h"
+#include "objects/usercache.h"
+#include "objects/messagecache.h"
 
 class TelegramCache: public QObject
 {
@@ -70,9 +71,9 @@ class TelegramCache: public QObject
 
     private:
         QHash<TLInt, Dialog*> _dialogs;
-        QHash<TLInt, User*> _users;
         QHash<TLInt, Chat*> _chats;
         MessageCache* _messagecache;
+        UserCache* _usercache;
 
     private:
         static TelegramCache* _instance;

@@ -1,16 +1,10 @@
 #include "messagecache.h"
-#include "../telegramconfig.h"
-#include "../../types/telegramhelper.h"
-#include "../../mtproto/mtprotostream.h"
 #include <QFile>
 #include <QDir>
+#include "../../../types/telegramhelper.h"
 
-MessageCache::MessageCache(QObject *parent) : QObject(parent)
+MessageCache::MessageCache(QObject *parent) : AbstractCache("messages", parent)
 {
-    this->_msgsstoragepath = TelegramConfig_storagePath + QDir::separator() + "dialogs";
-
-    QDir dir;
-    dir.mkpath(this->_msgsstoragepath);
 }
 
 const MessageCache::MessageList &MessageCache::messages(Dialog* dialog)
@@ -18,7 +12,7 @@ const MessageCache::MessageList &MessageCache::messages(Dialog* dialog)
     TLInt dialogid = TelegramHelper::identifier(dialog);
 
     if(!this->_cacheloaded.contains(dialogid))
-        this->load(dialogid);
+        this->loadId(dialogid);
 
     this->sortMessages(dialogid);
     return this->_dialogmessages[dialogid];
@@ -60,6 +54,23 @@ void MessageCache::edit(Message *message)
     oldmessage->deleteLater();
 }
 
+void MessageCache::doLoadId(TLInt id, MTProtoStream *mtstream)
+{
+    TLVector<Message*> messages;
+    mtstream->readTLVector<Message>(messages);
+
+    this->cache(messages);
+    this->_cacheloaded << id;
+}
+
+void MessageCache::doSaveId(TLInt id, MTProtoStream *mtstream) const
+{
+    if(!this->_dialogmessages.contains(id))
+        return;
+
+    mtstream->writeTLVector<Message>(this->_dialogmessages[id]);
+}
+
 void MessageCache::sortMessages(TLInt dialogid)
 {
     if(!this->_dialogmessages.contains(dialogid))
@@ -96,20 +107,6 @@ void MessageCache::cache(const TLVector<Message *> &messages)
         this->cache(message);
 }
 
-void MessageCache::load(TLInt dialogid)
-{
-    QDir dir(this->_msgsstoragepath);
-    MTProtoStream mtstream;
-
-    mtstream.load(dir.absoluteFilePath(QString::number(dialogid) + ".cache"));
-
-    TLVector<Message*> messages;
-    mtstream.readTLVector<Message>(messages);
-    this->cache(messages);
-
-    this->_cacheloaded << dialogid;
-}
-
 void MessageCache::load()
 {
     this->loadTop();
@@ -120,20 +117,9 @@ void MessageCache::save(const QList<Dialog *> &dialogs) const
     QList<TLInt> dialogids = this->_dialogmessages.keys();
 
     foreach(TLInt dialogid, dialogids)
-        this->save(dialogid);
+        this->saveId(dialogid);
 
     this->saveTop(dialogs);
-}
-
-void MessageCache::save(TLInt dialogid) const
-{
-    QDir dir(this->_msgsstoragepath);
-    MTProtoStream mtstream;
-
-    if(this->_dialogmessages.contains(dialogid))
-        mtstream.writeTLVector<Message>(this->_dialogmessages[dialogid]);
-
-    mtstream.save(dir.absoluteFilePath(QString::number(dialogid) + ".cache"));
 }
 
 void MessageCache::saveTop(const QList<Dialog *> &dialogs) const
@@ -151,19 +137,16 @@ void MessageCache::saveTop(const QList<Dialog *> &dialogs) const
         topmessages << this->_messages[dialog->topMessage()];
     }
 
-    QDir dir(this->_msgsstoragepath);
-    MTProtoStream mtstream;
-    mtstream.writeTLVector<Message>(topmessages);
-    mtstream.save(dir.absoluteFilePath("topmessages.cache"));
+    this->saveFile("topmessages", [topmessages](MTProtoStream* mtstream) {
+        mtstream->writeTLVector<Message>(topmessages);
+    });
 }
 
 void MessageCache::loadTop()
 {
-    QDir dir(this->_msgsstoragepath);
-    MTProtoStream mtstream;
-    mtstream.load(dir.absoluteFilePath("topmessages.cache"));
-
-    TLVector<Message*> messages;
-    mtstream.readTLVector<Message>(messages, false, this);
-    this->cache(messages);
+    this->loadFile("topmessages", [this](MTProtoStream* mtstream) {
+        TLVector<Message*> messages;
+        mtstream->readTLVector<Message>(messages, false, this);
+        this->cache(messages);
+    });
 }
