@@ -45,7 +45,7 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia)
     if(ctorid == TLTypes::MessageMediaWebPage)
     {
         if(!messagemedia->caption().isEmpty())
-            return  messagemedia->caption();
+            return messagemedia->caption();
 
         return messagemedia->webpage()->url();
     }
@@ -304,7 +304,12 @@ QString Telegram::messageText(Message *message)
         return QString();
 
     if(message->media())
-        return this->messageMediaText(message->media());
+    {
+        QString mediatext = this->messageMediaText(message->media());
+
+        if(!mediatext.isEmpty())
+            return mediatext;
+    }
 
     if(message->action())
         return this->messageActionText(message->action());
