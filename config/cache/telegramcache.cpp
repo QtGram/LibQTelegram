@@ -103,6 +103,8 @@ void TelegramCache::onNewMessage(Message *message)
     if(this->_dialogs.contains(dialogid))
     {
         this->_dialogs[dialogid]->setTopMessage(message->id());
+
+        emit newMessage(message);
         emit dialogsChanged();
     }
     else
@@ -116,10 +118,7 @@ void TelegramCache::onNewUserStatus(Update *update)
     User* user = TelegramCache_user(update->userId());
 
     if(!user)
-    {
-        qWarning("User %x doesn't exist", update->userId());
         return;
-    }
 
     user->setStatus(update->status());
 }

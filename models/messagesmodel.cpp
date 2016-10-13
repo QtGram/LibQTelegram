@@ -7,6 +7,8 @@
 MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL)
 {
     this->_loadcount = DEFAULT_LOAD_COUNT;
+
+    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
 }
 
 Dialog *MessagesModel::dialog() const
@@ -97,6 +99,16 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     for(int i = newmessages.count() - 1; i >= 0; i--)
         this->_messages.prepend(newmessages[i]);
 
+    this->endInsertRows();
+}
+
+void MessagesModel::onNewMessage(Message *message)
+{
+    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::dialogIdentifier(message)))
+        return;
+
+    this->beginInsertRows(QModelIndex(), this->_messages.count(), this->_messages.count());
+    this->_messages << message;
     this->endInsertRows();
 }
 
