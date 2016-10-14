@@ -15,7 +15,7 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
     connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatLastRequest);
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
     connect(this, &DC::connected, this, &DC::sendPendingRequests);
-    connect(this, &DC::reconnecting, this, &DC::requestsToPending);
+    connect(this, &DC::reconnecting, this, &DC::onReconnecting);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
 }
 
@@ -97,8 +97,10 @@ void DC::repeatLastRequest()
     this->send(this->_sentrequests[this->_lastmsgid]);
 }
 
-void DC::requestsToPending()
+void DC::onReconnecting()
 {
+    this->_contentmsgno = -1; // Reinit connection too
+
     QList<TLLong> messageids = this->_sentrequests.keys();
 
     foreach(TLLong messageid, messageids)
