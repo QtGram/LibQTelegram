@@ -30,6 +30,7 @@ class MTProtoUpdateHandler : public QObject
         void handleUpdate(Update* update);
 
     signals:
+        void newMessages(const TLVector<Message*>& messages);
         void newMessage(Message* message);
         void editMessage(Message* message);
         void newUser(User* user);

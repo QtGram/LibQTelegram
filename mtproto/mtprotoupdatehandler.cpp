@@ -84,8 +84,7 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     foreach(Chat* chat, updatedifference.chats())
         emit newChat(chat);
 
-    foreach(Message* message, updatedifference.newMessages())
-        emit newMessage(message);
+    emit newMessages(updatedifference.newMessages());
 
     this->handleUpdates(updatedifference.otherUpdates());
 

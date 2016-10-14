@@ -13,6 +13,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
 
+    connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
@@ -91,20 +92,32 @@ void TelegramCache::cache(const TLVector<Message *>& messages)
     this->_messagecache->cache(messages);
 }
 
+void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
+{
+    TelegramCache_store(messages);
+
+    foreach(Message* message, messages)
+    {
+        TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+
+        if(this->_dialogs.contains(dialogid))
+        {
+            this->_dialogs[dialogid]->setTopMessage(message->id());
+            emit newMessage(message);
+        }
+        else
+            qWarning("Cannot find dialog %x", dialogid);
+    }
+
+    emit dialogsChanged();
+}
+
 void TelegramCache::onNewMessage(Message *message)
 {
-    TelegramCache_store(message);
-    TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+    TLVector<Message*> messages;
+    messages << message;
 
-    if(this->_dialogs.contains(dialogid))
-    {
-        this->_dialogs[dialogid]->setTopMessage(message->id());
-
-        emit newMessage(message);
-        emit dialogsChanged();
-    }
-    else
-        qWarning("Cannot find dialog %x", dialogid);
+    this->onNewMessages(messages);
 }
 
 void TelegramCache::onNewUserStatus(Update *update)
