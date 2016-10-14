@@ -107,8 +107,8 @@ void MessagesModel::onNewMessage(Message *message)
     if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::dialogIdentifier(message)))
         return;
 
-    this->beginInsertRows(QModelIndex(), this->_messages.count(), this->_messages.count());
-    this->_messages << message;
+    this->beginInsertRows(QModelIndex(), 0, 0);
+    this->_messages.prepend(message);
     this->endInsertRows();
 }
 
