@@ -101,10 +101,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         TLInt dialogid = TelegramHelper::dialogIdentifier(message);
 
         if(this->_dialogs.contains(dialogid))
-        {
             this->_dialogs[dialogid]->setTopMessage(message->id());
-            emit newMessage(message);
-        }
         else
             qWarning("Cannot find dialog %x", dialogid);
     }
@@ -118,6 +115,7 @@ void TelegramCache::onNewMessage(Message *message)
     messages << message;
 
     this->onNewMessages(messages);
+    emit newMessage(message);
 }
 
 void TelegramCache::onNewUserStatus(Update *update)
