@@ -15,6 +15,7 @@ class AbstractCache : public QObject
     protected:
         void loadId(TLInt id);
         void saveId(TLInt id) const;
+        void deleteId(TLInt id) const;
         void loadFile(const QString& filename, std::function<void(MTProtoStream*)> loadproc);
         void saveFile(const QString& filename, std::function<void(MTProtoStream*)> saveproc) const;
         virtual void doLoadId(TLInt id, MTProtoStream* mtstream) = 0;

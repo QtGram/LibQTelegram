@@ -27,6 +27,7 @@ class MessagesModel : public TelegramModel
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onNewMessage(Message* message);
+        void onDeleteMessage(Message *message);
 
     private:
         TLInt maxId() const;

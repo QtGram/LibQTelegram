@@ -143,6 +143,10 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit newDraftMessage(update);
             break;
 
+        case TLTypes::UpdateDeleteMessages:
+            emit deleteMessages(update->messages());
+            break;
+
         case TLTypes::UpdateReadHistoryInbox:
         case TLTypes::UpdateReadHistoryOutbox:
         case TLTypes::UpdateReadChannelInbox:

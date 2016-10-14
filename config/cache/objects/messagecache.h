@@ -18,9 +18,11 @@ class MessageCache : public AbstractCache
     public:
         explicit MessageCache(QObject *parent = 0);
         const MessageList& messages(Dialog* dialog);
+        Message* previousMessage(Dialog *dialog, Message* message);
         Message* message(TLInt messageid);
         void cache(const TLVector<Message*>& messages);
         void cache(Message* message);
+        bool uncache(TLInt messageid);
         void load();
         void save(const QList<Dialog*>& dialogs) const;
 

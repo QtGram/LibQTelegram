@@ -9,6 +9,7 @@ MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpee
     this->_loadcount = DEFAULT_LOAD_COUNT;
 
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
+    connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
 }
 
 Dialog *MessagesModel::dialog() const
@@ -110,6 +111,23 @@ void MessagesModel::onNewMessage(Message *message)
     this->beginInsertRows(QModelIndex(), 0, 0);
     this->_messages.prepend(message);
     this->endInsertRows();
+}
+
+void MessagesModel::onDeleteMessage(Message* message)
+{
+    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::dialogIdentifier(message)))
+        return;
+
+    for(int i = 0; i < this->_messages.length(); i++)
+    {
+        if(this->_messages[i]->id() != message->id())
+            continue;
+
+        this->beginRemoveRows(QModelIndex(), i, i);
+        this->_messages.removeAt(i);
+        this->endRemoveRows();
+        break;
+    }
 }
 
 TLInt MessagesModel::maxId() const

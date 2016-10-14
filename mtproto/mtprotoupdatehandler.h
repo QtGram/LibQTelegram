@@ -33,6 +33,7 @@ class MTProtoUpdateHandler : public QObject
         void newMessages(const TLVector<Message*>& messages);
         void newMessage(Message* message);
         void editMessage(Message* message);
+        void deleteMessages(const TLVector<TLInt>& messageids);
         void newUser(User* user);
         void newChat(Chat* chat);
         void newUserStatus(Update* update);

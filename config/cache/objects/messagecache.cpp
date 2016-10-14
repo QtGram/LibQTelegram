@@ -18,6 +18,24 @@ const MessageCache::MessageList &MessageCache::messages(Dialog* dialog)
     return this->_dialogmessages[dialogid];
 }
 
+Message *MessageCache::previousMessage(Dialog *dialog, Message *message)
+{
+     // Load and sort messages, if needed
+    const MessageList& messages = this->messages(dialog);
+    int idx = messages.indexOf(message);
+
+    if(idx == -1)
+    {
+        qWarning("Cannot find previous message of %x", message->id());
+        return NULL;
+    }
+
+    if(idx < (messages.count() - 1))
+        return messages[idx + 1];
+
+    return NULL;
+}
+
 Message *MessageCache::message(TLInt messageid)
 {
     if(!this->_messages.contains(messageid))
@@ -99,6 +117,17 @@ void MessageCache::cache(Message *message)
         this->_dialogmessages[dialogid] = MessageList();
 
     this->_dialogmessages[dialogid] << message;
+}
+
+bool MessageCache::uncache(TLInt messageid)
+{
+    if(!this->_messages.contains(messageid))
+        return false;
+
+    Message* message = this->_messages.take(messageid);
+    this->deleteId(messageid);
+    message->deleteLater();
+    return true;
 }
 
 void MessageCache::cache(const TLVector<Message *> &messages)

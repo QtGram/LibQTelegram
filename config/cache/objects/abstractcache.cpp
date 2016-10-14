@@ -26,6 +26,12 @@ void AbstractCache::saveId(TLInt id) const
     });
 }
 
+void AbstractCache::deleteId(TLInt id) const
+{
+    QDir dir(this->_storagepath);
+    QFile::remove(dir.absoluteFilePath(QString::number(id) + ".cache"));
+}
+
 void AbstractCache::loadFile(const QString &filename, std::function<void (MTProtoStream *)> loadproc)
 {
     QDir dir(this->_storagepath);

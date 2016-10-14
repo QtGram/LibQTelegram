@@ -16,6 +16,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
+    connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
@@ -146,6 +147,45 @@ void TelegramCache::onNewDraftMessage(Update *update)
     dialog->setDraft(update->draft());
 
     emit dialogsChanged();
+}
+
+void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
+{
+    bool updatedialogs = false;
+
+    foreach(TLInt messageid, messageids)
+    {
+        Message* message = this->_messagecache->message(messageid);
+
+        if(!message)
+            continue;
+
+        TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+
+        if(this->_dialogs.contains(dialogid))
+        {
+            Dialog* dialog = this->_dialogs[dialogid];
+
+            if(dialog->topMessage() == message->id())
+            {
+                Message* prevmessage = this->_messagecache->previousMessage(dialog, message);
+
+                if(prevmessage)
+                {
+                    dialog->setTopMessage(prevmessage->id());
+                    updatedialogs = true;
+                }
+            }
+        }
+        else
+            qWarning("Cannot find dialog %x", dialogid);
+
+        emit deleteMessage(message);
+        this->_messagecache->uncache(messageid);
+    }
+
+    if(updatedialogs)
+        emit dialogsChanged();
 }
 
 void TelegramCache::onReadHistory(Update *update)
