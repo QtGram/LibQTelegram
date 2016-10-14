@@ -178,6 +178,9 @@ QString Telegram::messageActionText(MessageAction *messageaction)
 
 QString Telegram::dialogTitle(Dialog *dialog)
 {
+    if(!dialog)
+        return QString();
+
     TLInt peerid = TelegramHelper::identifier(dialog->peer());
 
     if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
@@ -192,6 +195,9 @@ QString Telegram::dialogTitle(Dialog *dialog)
 
 QString Telegram::dialogStatusText(Dialog *dialog)
 {
+    if(!dialog)
+        return QString();
+
     TLInt id = TelegramHelper::identifier(dialog);
 
     if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
@@ -222,17 +228,23 @@ QString Telegram::dialogDraftMessage(Dialog *dialog)
 
 bool Telegram::dialogIsChat(Dialog *dialog)
 {
+    if(!dialog)
+        return false;
+
     return TelegramHelper::isChat(dialog);
 }
 
 bool Telegram::dialogIsChannel(Dialog *dialog)
 {
+    if(!dialog)
+        return false;
+
     return TelegramHelper::isChannel(dialog);
 }
 
 bool Telegram::dialogIsBroadcast(Dialog *dialog)
 {
-    if(!TelegramHelper::isChannel(dialog))
+    if(!dialog || !TelegramHelper::isChannel(dialog))
         return false;
 
     Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog->peer()));
@@ -245,6 +257,9 @@ bool Telegram::dialogIsBroadcast(Dialog *dialog)
 
 bool Telegram::dialogHasDraftMessage(Dialog *dialog)
 {
+    if(!dialog)
+        return false;
+
     return dialog->draft() && (dialog->draft()->constructorId() != DraftMessage::CtorDraftMessageEmpty);
 }
 
@@ -340,6 +355,9 @@ bool Telegram::messageHasImage(Message *message)
 
 FileObject *Telegram::fileObject(TelegramObject *telegramobject)
 {
+    if(!telegramobject)
+        return NULL;
+
     switch(telegramobject->constructorId())
     {
         case TLTypes::Dialog:
