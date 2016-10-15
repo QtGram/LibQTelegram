@@ -31,8 +31,6 @@ User *TelegramCache::user(TLInt id)
 
         if(user)
             this->_users[id] = user;
-        else
-            qWarning("Cannot find user %d", id);
 
         return user;
     }
@@ -48,8 +46,6 @@ Chat *TelegramCache::chat(TLInt id)
 
         if(chat)
             this->_chats[chat->id()] = chat;
-        else
-            qWarning("Cannot find chat %d", id);
 
         return chat;
     }
@@ -65,8 +61,6 @@ Message *TelegramCache::message(TLInt id)
 
         if(message)
             this->_messages[message->id()] = message;
-        else
-            qWarning("Cannot find message %d", id);
 
         return message;
     }
