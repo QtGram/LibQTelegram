@@ -20,7 +20,7 @@ class Telegram : public QObject
 
     private:
         QString messageMediaText(MessageMedia* messagemedia);
-        QString messageActionText(MessageAction* messageaction);
+        QString messageActionText(Message *message);
 
     public slots: // Login
         void signIn(const QString& phonecode);

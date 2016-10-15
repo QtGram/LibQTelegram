@@ -95,11 +95,20 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia)
     return result;
 }
 
-QString Telegram::messageActionText(MessageAction *messageaction)
+QString Telegram::messageActionText(Message* message)
 {
-    User* inviteruser = NULL, *user = NULL;
-    QString fullname = "???", inviterfullname = "???";
+    User *fromuser = NULL, *inviteruser = NULL, *user = NULL;
+    QString fromfullname, fullname, inviterfullname;
+    MessageAction* messageaction = message->action();
     TLConstructor ctorid = messageaction->constructorId();
+
+    if(message->fromId())
+    {
+        fromuser = TelegramCache_user(message->fromId());
+
+        if(fromuser)
+            fromfullname = TelegramHelper::fullName(fromuser);
+    }
 
     if(messageaction->userId())
     {
@@ -149,7 +158,7 @@ QString Telegram::messageActionText(MessageAction *messageaction)
         return tr("«%1» has left the group").arg(fullname);
 
     if(ctorid == TLTypes::MessageActionChatJoinedByLink)
-        return tr("«%1» has joined the group via invite link").arg(fullname);
+        return tr("«%1» has joined the group via invite link").arg(fromfullname);
 
     if(ctorid == TLTypes::MessageActionChannelCreate)
         return tr("Channel «%1» created").arg(messageaction->title().toString());
@@ -327,7 +336,7 @@ QString Telegram::messageText(Message *message)
     }
 
     if(message->action())
-        return this->messageActionText(message->action());
+        return this->messageActionText(message);
 
     return message->message();
 }
