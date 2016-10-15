@@ -28,10 +28,6 @@ class TelegramCache: public QObject
 
     private:
         TelegramCache(QObject *parent = NULL);
-        template<typename T> void loadFromFile(QHash<TLInt, T *> &container, const QString& name);
-        template<typename T> void saveToFile(const QHash<TLInt, T*>& container, const QString& name) const;
-        template<typename T> void cache(const TLVector<T*>& src, QHash<TLInt, T*>& dest);
-        template<typename T> void cache(T* t, QHash<TLInt, T*>& dest);
 
     public:
         static TelegramCache* cache();
@@ -79,47 +75,5 @@ class TelegramCache: public QObject
     private:
         static TelegramCache* _instance;
 };
-
-template<typename T> void TelegramCache::cache(T *t, QHash<TLInt, T*> &dest)
-{
-    TLInt id = TelegramHelper::identifier(t);
-
-    if(dest.contains(id))
-        return;
-
-    t->setParent(this);
-    dest[id] = t;
-}
-
-template<typename T> void TelegramCache::cache(const TLVector<T*>& src, QHash<TLInt, T*>& dest)
-{
-    foreach(T* t, src)
-        this->cache(t, dest);
-}
-
-template<typename T> void TelegramCache::loadFromFile(QHash<TLInt, T*> &container, const QString &name)
-{
-    QDir dir(TelegramConfig_storagePath);
-    dir.mkpath(TelegramConfig_storagePath);
-
-    MTProtoStream mtstream;
-    mtstream.load(dir.absoluteFilePath(name) + ".cache");
-
-    TLVector<T*> elements;
-    mtstream.readTLVector<T>(elements, false, this);
-
-    foreach(T* t, elements)
-        container[TelegramHelper::identifier(t)] = t;
-}
-
-template<typename T> void TelegramCache::saveToFile(const QHash<TLInt, T*>& container, const QString& name) const
-{
-    QDir dir(TelegramConfig_storagePath);
-    dir.mkpath(TelegramConfig_storagePath);
-
-    MTProtoStream mtstream;
-    mtstream.writeTLVector<T>(container.values());
-    mtstream.save(dir.absoluteFilePath(name) + ".cache");
-}
 
 #endif // TELEGRAMCACHE_H
