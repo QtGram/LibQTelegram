@@ -56,9 +56,6 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia)
 
         foreach(DocumentAttribute* attribute, document->attributes())
         {
-            if(attribute->constructorId() == TLTypes::DocumentAttributeImageSize)
-                return tr("Photo");
-
             if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
                 return tr("GIF");
 
@@ -188,6 +185,14 @@ QString Telegram::messageActionText(Message* message)
         return tr("Unhandled MessageActionGameScore");
 
     return QString("Unhandled action: %1").arg(ctorid, 0, 16);
+}
+
+bool Telegram::constructorIs(TelegramObject *telegramobject, TLConstructor constructor)
+{
+    if(!telegramobject)
+        return false;
+
+    return telegramobject->constructorId() == constructor;
 }
 
 QString Telegram::dialogTitle(Dialog *dialog)

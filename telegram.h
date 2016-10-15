@@ -22,6 +22,9 @@ class Telegram : public QObject
         QString messageMediaText(MessageMedia* messagemedia);
         QString messageActionText(Message *message);
 
+    public slots: // Objects
+        bool constructorIs(TelegramObject* telegramobject, TLConstructor constructor);
+
     public slots: // Login
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
