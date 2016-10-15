@@ -135,16 +135,16 @@ QString Telegram::messageActionText(Message* message)
     }
 
     if(ctorid == TLTypes::MessageActionChatEditTitle)
-        return tr("Group name changed to «%1»").arg(messageaction->title().toString());
+        return tr("«%1» changed group name to «%2»").arg(fromfullname, messageaction->title().toString());
 
     if(ctorid == TLTypes::MessageActionChatEditPhoto)
-        return tr("«%1» updated group photo").arg(fullname);
+        return tr("«%1» updated group photo").arg(fromfullname);
 
     if(ctorid == TLTypes::MessageActionChatDeletePhoto)
-        return tr("«%1» deleted group photo").arg(fullname);
+        return tr("«%1» deleted group photo").arg(fromfullname);
 
     if(ctorid == TLTypes::MessageActionChatDeletePhoto)
-        return tr("«%1» deleted group photo").arg(fullname);
+        return tr("«%1» deleted group photo").arg(fromfullname);
 
     if(ctorid == TLTypes::MessageActionChatAddUser)
     {
@@ -155,7 +155,12 @@ QString Telegram::messageActionText(Message* message)
     }
 
     if(ctorid == TLTypes::MessageActionChatDeleteUser)
+    {
+        if(messageaction->userId() && (message->fromId() != messageaction->userId()))
+            return tr("«%1» removed «%2»").arg(fromfullname, fullname);
+
         return tr("«%1» has left the group").arg(fullname);
+    }
 
     if(ctorid == TLTypes::MessageActionChatJoinedByLink)
         return tr("«%1» has joined the group via invite link").arg(fromfullname);
