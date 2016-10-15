@@ -79,7 +79,7 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<TLInt, M
             continue;
         }
 
-        QByteArray data = queryobj.value("data").toByteArray();
+        QByteArray data = queryobj.value("message").toByteArray();
         Message* message = new Message(parent);
         message->unserialize(data);
 
