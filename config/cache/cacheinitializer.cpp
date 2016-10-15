@@ -18,10 +18,7 @@ void CacheInitializer::initialize()
         this->requestDialogs();
 
     if(this->_state > CacheInitializer::Last)
-    {
-        TelegramCache_save;
         emit initialized();
-    }
 }
 
 void CacheInitializer::requestState()

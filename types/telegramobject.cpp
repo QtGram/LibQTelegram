@@ -19,6 +19,20 @@ void TelegramObject::setConstructorId(TLConstructor constructorid)
     emit constructorIdChanged();
 }
 
+void TelegramObject::serialize(QByteArray &serializeddata)
+{
+    MTProtoStream mtstream;
+
+    this->write(&mtstream);
+    serializeddata = mtstream.data();
+}
+
+void TelegramObject::unserialize(QByteArray &serializeddata)
+{
+    MTProtoStream mtstream(serializeddata);
+    this->read(&mtstream);
+}
+
 void TelegramObject::deleteChild(TelegramObject *telegramobject)
 {
     if(!telegramobject || (telegramobject->parent() != this))

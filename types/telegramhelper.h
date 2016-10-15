@@ -25,7 +25,7 @@ class TelegramHelper
         static TLInt identifier(Peer* peer);
         static TLInt identifier(Dialog* dialog);
         static TLInt identifier(Message* message);
-        static TLInt dialogIdentifier(Message* message);
+        static TLInt messageToDialog(Message* message);
 };
 
 #endif // TELEGRAMHELPER_H

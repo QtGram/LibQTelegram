@@ -95,7 +95,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
-    const MessageCache::MessageList& newmessages = TelegramCache_messages(this->_dialog).mid(0, messages.count());
+    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, messages.count());
 
     for(int i = newmessages.count() - 1; i >= 0; i--)
         this->_messages.prepend(newmessages[i]);
@@ -105,7 +105,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 
 void MessagesModel::onNewMessage(Message *message)
 {
-    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::dialogIdentifier(message)))
+    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::messageToDialog(message)))
         return;
 
     this->beginInsertRows(QModelIndex(), 0, 0);
@@ -115,7 +115,7 @@ void MessagesModel::onNewMessage(Message *message)
 
 void MessagesModel::onDeleteMessage(Message* message)
 {
-    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::dialogIdentifier(message)))
+    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::messageToDialog(message)))
         return;
 
     for(int i = 0; i < this->_messages.length(); i++)
@@ -173,12 +173,7 @@ void MessagesModel::telegramReady()
     if(!this->_dialog)
         return;
 
-    const MessageCache::MessageList& cachemessages = TelegramCache_messages(this->_dialog);
-
-    if(cachemessages.count() > this->_loadcount)
-        this->_messages = cachemessages.mid(cachemessages.count() - this->_loadcount);
-    else
-        this->_messages << cachemessages;
+    this->_messages = TelegramCache_messages(this->_dialog, this->_loadcount);
 
     if(this->_messages.length() < this->_loadcount)
     {

@@ -308,10 +308,10 @@ void TelegramConfig::loadDCConfig()
 
 void TelegramConfig::saveState()
 {
-    MTProtoStream mtstream;
-    this->_updatesstate->write(&mtstream);
+    QByteArray data;
 
-    this->write(TelegramConfig::STATE_FILE, mtstream.data());
+    this->_updatesstate->serialize(data);
+    this->write(TelegramConfig::STATE_FILE, data);
 }
 
 void TelegramConfig::loadState()
@@ -320,8 +320,7 @@ void TelegramConfig::loadState()
         return;
 
     QByteArray data = this->read(TelegramConfig::STATE_FILE);
-    MTProtoStream mtstream(data);
-    this->_updatesstate->read(&mtstream);
+    this->_updatesstate->unserialize(data);
 }
 
 void TelegramConfig::saveMe()
@@ -329,10 +328,9 @@ void TelegramConfig::saveMe()
     if(!this->_me)
         return;
 
-    MTProtoStream mtstream;
-    this->_me->write(&mtstream);
-
-    this->write(TelegramConfig::ME_FILE, mtstream.data());
+    QByteArray data;
+    this->_me->serialize(data);
+    this->write(TelegramConfig::ME_FILE, data);
 }
 
 void TelegramConfig::loadMe()
@@ -340,13 +338,11 @@ void TelegramConfig::loadMe()
     if(!this->configExists(TelegramConfig::ME_FILE))
         return;
 
-    QByteArray data = this->read(TelegramConfig::ME_FILE);
-    MTProtoStream mtstream(data);
-
     if(!this->_me)
         this->_me = new User();
 
-    this->_me->read(&mtstream);
+    QByteArray data = this->read(TelegramConfig::ME_FILE);
+    this->_me->unserialize(data);
 }
 
 void TelegramConfig::updateStoragePath(const QString &storagepath, const QString &phonenumber)

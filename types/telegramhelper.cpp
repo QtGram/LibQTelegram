@@ -188,7 +188,7 @@ TLInt TelegramHelper::identifier(Message *message)
     return message->id();
 }
 
-TLInt TelegramHelper::dialogIdentifier(Message *message)
+TLInt TelegramHelper::messageToDialog(Message *message)
 {
     if(message->isOut() || TelegramHelper::isChat(message->toId()) || TelegramHelper::isChannel(message->toId()))
         return TelegramHelper::identifier(message->toId());

@@ -14,7 +14,6 @@ TelegramInitializer::~TelegramInitializer()
         return;
 
     TelegramConfig_save;
-    TelegramCache_save;
 }
 
 const QString &TelegramInitializer::publicKey() const
@@ -192,8 +191,11 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
 
     dcconfig.setAuthorization(DCConfig::Signed);
 
-    TelegramCache_store(authorization.user()); // Cache "me"
-    TelegramConfig_instance->setMe(authorization.user());
+    User* me = authorization.user();
+    me->setParent(this);
+
+    TelegramCache_store(me); // Cache "me"
+    TelegramConfig_instance->setMe(me);
     TelegramConfig_save;
 
     CacheInitializer* cacheinitializer = new CacheInitializer(this);

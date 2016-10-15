@@ -15,6 +15,8 @@ class TelegramObject : public QObject
         explicit TelegramObject(QObject *parent = 0);
         TLConstructor constructorId() const;
         void setConstructorId(TLConstructor constructorid);
+        void serialize(QByteArray& serializeddata);
+        void unserialize(QByteArray& serializeddata);
 
     protected:
         template<typename T> void resetTLType(T** t);

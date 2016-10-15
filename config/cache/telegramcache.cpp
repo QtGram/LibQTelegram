@@ -5,104 +5,154 @@ TelegramCache* TelegramCache::_instance = NULL;
 
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
-    this->_messagecache = new MessageCache(this);
-    this->_usercache = new UserCache(this);
-
-    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this->_messagecache, SLOT(edit(Message*)));
+    this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
-
     connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
+    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
 
-const QHash<TLInt, Dialog *> &TelegramCache::dialogs() const
+QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int limit)
 {
-    return this->_dialogs;
+    return this->_database->messages()->messagesForDialog(dialog, this->_messages, limit, this);
 }
 
-const QHash<TLInt, User *> &TelegramCache::users() const
+User *TelegramCache::user(TLInt id)
 {
-    return this->_usercache->users();
-}
-
-const QHash<TLInt, Chat *> &TelegramCache::chats() const
-{
-    return this->_chats;
-}
-
-const MessageCache::MessageList &TelegramCache::messages(Dialog *dialog) const
-{
-    return this->_messagecache->messages(dialog);
-}
-
-Dialog *TelegramCache::dialog(TLInt id) const
-{
-    if(!this->_dialogs.contains(id))
+    if(!this->_users.contains(id))
     {
-        qWarning("Cannot recover dialog %x from cache", id);
-        return NULL;
+        User* user = this->_database->users()->get<User>(id, this);
+
+        if(user)
+            this->_users[id] = user;
+        else
+            qWarning("Cannot find user %d", id);
+
+        return user;
     }
 
-    return this->_dialogs[id];
+    return this->_users[id];
 }
 
-User *TelegramCache::user(TLInt id) const
-{
-    return this->_usercache->user(id);
-}
-
-Chat *TelegramCache::chat(TLInt id) const
+Chat *TelegramCache::chat(TLInt id)
 {
     if(!this->_chats.contains(id))
     {
-        qWarning("Cannot recover chat %x from cache", id);
-        return NULL;
+        Chat* chat = this->_database->chats()->get<Chat>(id, this);
+
+        if(chat)
+            this->_chats[chat->id()] = chat;
+        else
+            qWarning("Cannot find chat %d", id);
+
+        return chat;
     }
 
     return this->_chats[id];
 }
 
-Message *TelegramCache::message(TLInt messageid) const
+Message *TelegramCache::message(TLInt id)
 {
-    return this->_messagecache->message(messageid);
+    if(!this->_messages.contains(id))
+    {
+        Message* message = this->_database->messages()->get<Message>(id, this);
+
+        if(message)
+            this->_messages[message->id()] = message;
+        else
+            qWarning("Cannot find message %d", id);
+
+        return message;
+    }
+
+    return this->_messages[id];
+}
+
+Dialog *TelegramCache::dialog(TLInt id)
+{
+    foreach(Dialog* dialog, this->_dialogs)
+    {
+        if(TelegramHelper::identifier(dialog) == id)
+            return dialog;
+    }
+
+    qWarning("Cannot find dialog %d", id);
+    return NULL;
 }
 
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 {
-    this->cache(dialogs, this->_dialogs);
+    this->_database->transaction([this, dialogs](QSqlQuery& queryobj) {
+        foreach(Dialog* dialog, dialogs) {
+            dialog->setParent(this);
+            this->_dialogs << dialog;
+            this->_database->dialogs()->insertQuery(queryobj, dialog);
+        }
+    });
 }
 
 void TelegramCache::cache(const TLVector<User *>& users)
 {
-    this->_usercache->cache(users);
+    this->_database->transaction([this, users](QSqlQuery& queryobj) {
+        foreach(User* user, users) {
+            if(this->_users.contains(user->id()))
+                continue;
+
+            user->setParent(this);
+            this->_users[user->id()] = user;
+            this->_database->users()->insertQuery(queryobj, user);
+        }
+    });
 }
 
 void TelegramCache::cache(const TLVector<Chat *>& chats)
 {
-    this->cache(chats, this->_chats);
+    this->_database->transaction([this, chats](QSqlQuery& queryobj) {
+        foreach(Chat* chat, chats) {
+            if(this->_chats.contains(chat->id()))
+                continue;
+
+            chat->setParent(this);
+            this->_chats[chat->id()] = chat;
+            this->_database->chats()->insertQuery(queryobj, chat);
+        }
+    });
 }
 
 void TelegramCache::cache(const TLVector<Message *>& messages)
 {
-    this->_messagecache->cache(messages);
+    this->_database->transaction([this, messages](QSqlQuery& queryobj) {
+        foreach(Message* message, messages) {
+            if(this->_messages.contains(message->id()))
+                continue;
+
+            message->setParent(this);
+            this->_messages[message->id()] = message;
+            this->_database->messages()->insertQuery(queryobj, message);
+        }
+    });
 }
 
 void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 {
-    TelegramCache_store(messages);
+    this->cache(messages);
 
     foreach(Message* message, messages)
     {
-        TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+        TLInt dialogid = TelegramHelper::messageToDialog(message);
+        Dialog* dialog = this->dialog(dialogid);
 
-        if(this->_dialogs.contains(dialogid))
-            this->_dialogs[dialogid]->setTopMessage(message->id());
+        if(dialog)
+        {
+            dialog->setTopMessage(message->id());
+            this->cache(dialog);
+        }
         else
             qWarning("Cannot find dialog %x", dialogid);
     }
@@ -122,31 +172,45 @@ void TelegramCache::onNewMessage(Message *message)
 void TelegramCache::onNewUserStatus(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);
-
-    User* user = TelegramCache_user(update->userId());
+    User* user = this->user(update->userId());
 
     if(!user)
         return;
 
     user->setStatus(update->status());
+    this->cache(user);
 }
 
 void TelegramCache::onNewDraftMessage(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateDraftMessage);
+    Dialog* dialog = this->dialog(TelegramHelper::identifier(update->peer()));
 
-    TLInt id = TelegramHelper::identifier(update->peer());
+    if(!dialog)
+        return;
 
-    if(!this->_dialogs.contains(id))
+    dialog->setDraft(update->draft());
+    this->cache(dialog);
+    emit dialogsChanged();
+}
+
+void TelegramCache::onEditMessage(Message *message)
+{
+    Message* oldmessage = this->message(message->id());
+
+    if(!oldmessage)
     {
-        qWarning("Cannot update draft of dialog %x", id);
+        qWarning("Edited message %x not available", message->id());
         return;
     }
 
-    Dialog* dialog = this->_dialogs[id];
-    dialog->setDraft(update->draft());
+    this->cache(message);
+    Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
 
-    emit dialogsChanged();
+    if(dialog && (dialog->topMessage() == message->id()))
+        emit dialogsChanged();
+
+    oldmessage->deleteLater();
 }
 
 void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
@@ -155,33 +219,26 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 
     foreach(TLInt messageid, messageids)
     {
-        Message* message = this->_messagecache->message(messageid);
+        Message* message = this->message(messageid);
 
         if(!message)
             continue;
 
-        TLInt dialogid = TelegramHelper::dialogIdentifier(message);
+        Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
 
-        if(this->_dialogs.contains(dialogid))
+        if(dialog && (dialog->topMessage() == message->id()))
         {
-            Dialog* dialog = this->_dialogs[dialogid];
+            Message* prevmessage = this->_database->messages()->previousMessage(message, this->_messages, this);
 
-            if(dialog->topMessage() == message->id())
+            if(prevmessage)
             {
-                Message* prevmessage = this->_messagecache->previousMessage(dialog, message);
-
-                if(prevmessage)
-                {
-                    dialog->setTopMessage(prevmessage->id());
-                    updatedialogs = true;
-                }
+                dialog->setTopMessage(prevmessage->id());
+                updatedialogs = true;
             }
         }
-        else
-            qWarning("Cannot find dialog %x", dialogid);
 
         emit deleteMessage(message);
-        this->_messagecache->uncache(messageid);
+        this->_database->messages()->remove(messageid);
     }
 
     if(updatedialogs)
@@ -190,9 +247,9 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 
 void TelegramCache::onReadHistory(Update *update)
 {
-    Q_ASSERT((update->constructorId() == TLTypes::UpdateReadHistoryInbox) ||
+    Q_ASSERT((update->constructorId() == TLTypes::UpdateReadHistoryInbox)  ||
              (update->constructorId() == TLTypes::UpdateReadHistoryOutbox) ||
-             (update->constructorId() == TLTypes::UpdateReadChannelInbox) ||
+             (update->constructorId() == TLTypes::UpdateReadChannelInbox)  ||
              (update->constructorId() == TLTypes::UpdateReadChannelOutbox));
 
     bool isout = (update->constructorId() == TLTypes::UpdateReadHistoryOutbox) ||
@@ -207,19 +264,17 @@ void TelegramCache::onReadHistory(Update *update)
     else
         id = TelegramHelper::identifier(update->peer());
 
-    if(!this->_dialogs.contains(id))
-    {
-        qWarning("Cannot mark dialog %x as read", id);
-        return;
-    }
+    Dialog* dialog = this->dialog(id);
 
-    Dialog* dialog = this->_dialogs[id];
+    if(!dialog)
+        return;
 
     if(isout)
         dialog->setReadOutboxMaxId(update->maxId());
     else
         dialog->setReadInboxMaxId(update->maxId());
 
+    this->cache(dialog);
     emit dialogsChanged();
 }
 
@@ -231,37 +286,59 @@ TelegramCache *TelegramCache::cache()
     return TelegramCache::_instance;
 }
 
-void TelegramCache::save() const
-{
-    this->saveToFile<Dialog>(this->_dialogs, "dialogs");
-    this->saveToFile<Chat>(this->_chats, "chats");
-    this->_usercache->save();
-    this->_messagecache->save(this->_dialogs.values());
-}
-
 void TelegramCache::load()
 {
-    this->_messagecache->load();
-    this->loadFromFile<Chat>(this->_chats, "chats");
-    this->loadFromFile<Dialog>(this->_dialogs, "dialogs");
+    this->_database->dialogs()->populate(this->_dialogs, this);
+    this->_database->users()->populateContacts(this->_contacts, this);
+}
+
+const QList<Dialog *>& TelegramCache::dialogs() const
+{
+    return this->_dialogs;
+}
+
+const QList<User *> &TelegramCache::contacts() const
+{
+    return this->_contacts;
 }
 
 void TelegramCache::cache(Dialog *dialog)
 {
-    this->cache(dialog, this->_dialogs);
+    dialog->setParent(this);
+
+    this->_dialogs << dialog;
+    this->_database->dialogs()->insert(dialog);
 }
 
 void TelegramCache::cache(User *user)
 {
-    this->_usercache->cache(user);
+    if(!this->_users.contains(user->id()))
+        return;
+
+    user->setParent(this);
+
+    this->_users[user->id()] = user;
+    this->_database->users()->insert(user);
 }
 
 void TelegramCache::cache(Chat *chat)
 {
-    this->cache(chat, this->_chats);
+    if(!this->_chats.contains(chat->id()))
+        return;
+
+    chat->setParent(this);
+
+    this->_chats[chat->id()] = chat;
+    this->_database->chats()->insert(chat);
 }
 
 void TelegramCache::cache(Message *message)
 {
-    this->_messagecache->cache(message);
+    if(this->_messages.contains(message->id()))
+        return;
+
+    message->setParent(this);
+
+    this->_messages[message->id()] = message;
+    this->_database->messages()->insert(message);
 }

@@ -43,6 +43,6 @@ void DialogsModel::sortDialogs()
 
 void DialogsModel::telegramReady()
 {
-    this->_dialogs = TelegramCache_dialogs.values();
+    this->_dialogs = TelegramCache_dialogs;
     this->sortDialogs();
 }
