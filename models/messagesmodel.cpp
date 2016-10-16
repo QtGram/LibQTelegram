@@ -81,7 +81,10 @@ void MessagesModel::sendMessage(const QString &text)
 
     TLLong randomid = 0;
     Math::randomize(&randomid);
-    TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, 0, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
+
+    this->_pendingmessages << TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
+    MTProtoRequest* req = TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, 0, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMessageReplied);
 }
 
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
@@ -101,6 +104,25 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
         this->_messages.prepend(newmessages[i]);
 
     this->endInsertRows();
+}
+
+void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
+{
+    if(this->_pendingmessages.isEmpty())
+        return;
+
+    Updates updates;
+    updates.read(mtreply);
+
+    Q_ASSERT(updates.constructorId() == TLTypes::UpdateShortSentMessage);
+
+    Message* message = this->_pendingmessages.takeFirst();
+    message->setId(updates.id());
+    message->setFlags(updates.flags());
+    message->setMedia(updates.media());
+
+    TelegramCache_store(message);
+    this->onNewMessage(message);
 }
 
 void MessagesModel::onNewMessage(Message *message)

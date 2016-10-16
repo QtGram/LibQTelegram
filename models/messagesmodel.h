@@ -26,6 +26,7 @@ class MessagesModel : public TelegramModel
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
+        void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onNewMessage(Message* message);
         void onDeleteMessage(Message *message);
 
@@ -40,6 +41,7 @@ class MessagesModel : public TelegramModel
 
     private:
         TLVector<Message*> _messages;
+        QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
         Dialog* _dialog;
         int _loadcount;
