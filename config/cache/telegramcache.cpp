@@ -27,7 +27,7 @@ User *TelegramCache::user(TLInt id)
 {
     if(!this->_users.contains(id))
     {
-        User* user = this->_database->users()->get<User>(id, this);
+        User* user = this->_database->users()->get<User>(id, "user", this);
 
         if(user)
             this->_users[id] = user;
@@ -42,7 +42,7 @@ Chat *TelegramCache::chat(TLInt id)
 {
     if(!this->_chats.contains(id))
     {
-        Chat* chat = this->_database->chats()->get<Chat>(id, this);
+        Chat* chat = this->_database->chats()->get<Chat>(id, "chat", this);
 
         if(chat)
             this->_chats[chat->id()] = chat;
@@ -57,7 +57,7 @@ Message *TelegramCache::message(TLInt id)
 {
     if(!this->_messages.contains(id))
     {
-        Message* message = this->_database->messages()->get<Message>(id, this);
+        Message* message = this->_database->messages()->get<Message>(id, "message", this);
 
         if(message)
             this->_messages[message->id()] = message;
@@ -76,7 +76,7 @@ Dialog *TelegramCache::dialog(TLInt id)
             return dialog;
     }
 
-    qWarning("Cannot find dialog %d", id);
+    qWarning("Cannot get dialog with id %d", id);
     return NULL;
 }
 

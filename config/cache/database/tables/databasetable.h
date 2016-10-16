@@ -21,7 +21,7 @@ class DatabaseTable : public QObject
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
         void insert(TelegramObject* telegramobject);
         void remove(TLInt id);
-        template<typename T> T* get(TLInt id, QObject* parent) const;
+        template<typename T> T* get(TLInt id, const char* type, QObject* parent) const;
 
     private:
         void parseFields(const QString& fields);
@@ -41,7 +41,7 @@ class DatabaseTable : public QObject
         QStringList _values;
 };
 
-template<typename T> T* DatabaseTable::get(TLInt id, QObject* parent) const
+template<typename T> T* DatabaseTable::get(TLInt id, const char* type, QObject* parent) const
 {
     CreateQuery(queryobj);
 
@@ -51,7 +51,7 @@ template<typename T> T* DatabaseTable::get(TLInt id, QObject* parent) const
 
     if(!queryobj.first())
     {
-        qWarning("Cannot get object with id %d", id);
+        qWarning("Cannot get %s with id %d", type, id);
         return NULL;
     }
 
