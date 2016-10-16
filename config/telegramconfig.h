@@ -4,6 +4,7 @@
 #define TelegramConfig_clientState TelegramConfig::config()->updateState()
 #define TelegramConfig_storagePath TelegramConfig::config()->storagePath()
 #define TelegramConfig_save TelegramConfig::config()->save()
+#define TelegramConfig_me TelegramConfig::config()->me()
 #define TelegramConfig_instance TelegramConfig::config()
 
 #define DCConfig_mainDcId (TelegramConfig::config() ? TelegramConfig::config()->mainDcId() : -1)
