@@ -294,18 +294,6 @@ Message *Telegram::message(TLInt messageid)
     return TelegramCache_message(messageid);
 }
 
-QString Telegram::messageFrom(TLInt messageid)
-{
-    Message* message = TelegramCache_message(messageid);
-    return this->messageFrom(message);
-}
-
-QString Telegram::messageText(TLInt messageid)
-{
-    Message* message = TelegramCache_message(messageid);
-    return this->messageText(message);
-}
-
 QString Telegram::messageFrom(Message *message)
 {
     if(message)
