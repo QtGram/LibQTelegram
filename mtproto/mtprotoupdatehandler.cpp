@@ -60,17 +60,26 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
     UpdatesState* clientstate = TelegramConfig_clientState;
     ClientSyncManager::syncUpdates(&updates, clientstate);
 
-    if((updates.constructorId() == TLTypes::UpdateShortMessage) || (updates.constructorId() == TLTypes::UpdateShortChatMessage))
+    switch(updates.constructorId())
     {
-        Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_instance->me());
-        emit newMessage(message);
-    }
-    else if(updates.constructorId() == TLTypes::UpdateShort)
-        this->handleUpdate(updates.update());
-    else
-    {
-        const TLVector<Update*>& updatelist = updates.updates();
-        this->handleUpdates(updatelist);
+        case TLTypes::UpdateShortMessage:
+        case TLTypes::UpdateShortChatMessage:
+        {
+            Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_instance->me());
+            emit newMessage(message);
+            break;
+        }
+
+        case TLTypes::UpdateShort:
+            this->handleUpdate(updates.update());
+            break;
+
+        default:
+        {
+            const TLVector<Update*>& updatelist = updates.updates();
+            this->handleUpdates(updatelist);
+            break;
+        }
     }
 }
 
@@ -100,6 +109,8 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
         this->syncState(updatedifference.intermediateState());
         this->sync();
     }
+    else
+        TelegramConfig_save; // Update state
 }
 
 void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
