@@ -14,6 +14,9 @@ int DCConnection::id() const
 
 void DCConnection::connectToDC()
 {
+    if(this->state() != DCConnection::UnconnectedState)
+        return;
+
     this->connectToHost(this->_address, this->_port);
 }
 
