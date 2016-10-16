@@ -11,6 +11,10 @@ CacheDatabase::CacheDatabase(const QString &configpath, QObject *parent) : QObje
     db.setDatabaseName(QDir(configpath).absoluteFilePath(DatabaseFile));
     db.open();
 
+    // NOTE: Why I need those two pragmas?
+    db.exec("PRAGMA synchronous = OFF");
+    db.exec("PRAGMA journal_mode = MEMORY");
+
     this->loadTables();
 }
 
@@ -36,7 +40,9 @@ UsersTable *CacheDatabase::users() const
 
 void CacheDatabase::transaction(std::function<void (QSqlQuery &)> transactionproc)
 {
-    GetCurrentDatabase.transaction();
+    if(!GetCurrentDatabase.transaction())
+        qWarning() << "Database doesn't support transactions";
+
     CreateQuery(queryobj);
 
     transactionproc(queryobj);
