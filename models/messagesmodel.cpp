@@ -4,7 +4,7 @@
 
 #define DEFAULT_LOAD_COUNT 50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _athistoryend(false)
 {
     this->_loadcount = DEFAULT_LOAD_COUNT;
 
@@ -61,6 +61,9 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::loadMore()
 {
+    if(this->_athistoryend)
+        return;
+
     this->createInputPeer();
 
     int limit = this->_loadcount;
@@ -91,6 +94,8 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 {
     MessagesMessages messages;
     messages.read(mtreply);
+
+    this->_athistoryend = (messages.constructorId() == TLTypes::MessagesMessages);
 
     this->beginInsertRows(QModelIndex(), 0, messages.count() - 1);
 

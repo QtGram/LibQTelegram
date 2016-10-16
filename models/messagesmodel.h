@@ -44,6 +44,7 @@ class MessagesModel : public TelegramModel
         QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
         Dialog* _dialog;
+        bool _athistoryend;
         int _loadcount;
 };
 
