@@ -46,6 +46,7 @@ class Telegram : public QObject
         Message* message(TLInt messageid);
         QString messageFrom(Message* message);
         QString messageText(Message* message);
+        QString messagePreview(Message* message);
         bool messageHasImage(Message* message);
 
     public slots:

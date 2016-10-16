@@ -324,14 +324,36 @@ QString Telegram::messageText(Message *message)
 
     if(message->media())
     {
+        MessageMedia* messagemedia = message->media();
+
+        if(!messagemedia->caption().isEmpty())
+            return messagemedia->caption();
+
+        if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
+            return messagemedia->webpage()->url();
+    }
+
+    if(message->action())
+        return this->messageActionText(message);
+
+    return message->message();
+}
+
+QString Telegram::messagePreview(Message *message)
+{
+    if(!message)
+        return QString();
+
+    if(message->action())
+        return this->messageActionText(message);
+
+    if(message->media())
+    {
         QString mediatext = this->messageMediaText(message->media());
 
         if(!mediatext.isEmpty())
             return mediatext;
     }
-
-    if(message->action())
-        return this->messageActionText(message);
 
     return message->message();
 }
