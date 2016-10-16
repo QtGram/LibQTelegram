@@ -12,6 +12,7 @@ class FileObject : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool downloaded READ downloaded NOTIFY downloadedChanged)
     Q_PROPERTY(QSize imageSize READ imageSize NOTIFY imageSizeChanged)
     Q_PROPERTY(QString thumbnail READ thumbnail NOTIFY thumbnailChanged)
@@ -28,6 +29,7 @@ class FileObject : public QObject
     public:
         explicit FileObject(QObject *parent = 0);
         FileObject(const QString& storagepath, QObject *parent = 0);
+        bool downloading() const;
         bool downloaded() const;
         QSize imageSize() const;
         QString thumbnail() const;
@@ -48,7 +50,8 @@ class FileObject : public QObject
         void onUploadFile(MTProtoReply* mtreply);
 
     private:
-        bool autoDownloadDocument(Document* document);
+        void setDownloadMode(int downloadmode);
+        bool isAutoDownloadDocument(Document* document);
         DocumentAttribute *documentAttribute(Document* document, TLConstructor attribute);
         QString extension(const UploadFile* uploadfile);
         void sendDownloadRequest();
@@ -58,6 +61,7 @@ class FileObject : public QObject
         void thumbnailChanged();
         void filePathChanged();
         void downloadedChanged();
+        void downloadingChanged();
         void downloadCompleted();
         void uploadCompleted();
 

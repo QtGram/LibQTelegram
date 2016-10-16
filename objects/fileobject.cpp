@@ -29,6 +29,11 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
 }
 
+bool FileObject::downloading() const
+{
+    return (this->_downloadmode == FileObject::DownloadThumbnail) || (this->_downloadmode == FileObject::Download);
+}
+
 bool FileObject::downloaded() const
 {
     return !this->_filepath.isEmpty();
@@ -101,23 +106,16 @@ void FileObject::setThumbnailId(const QString &thumbnailid)
 
 void FileObject::downloadThumbnail()
 {
-    if(!this->_locthumbnail || (this->_locthumbnail->constructorId() == TLTypes::FileLocationUnavailable))
-        return;
-
-    if(this->_document && this->autoDownloadDocument(this->_document))
+    if(this->isAutoDownloadDocument(this->_document))
     {
-        this->_downloadmode = FileObject::Download;
-        this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_document);
-        this->_dcsession = DC_CreateSession(this->_document->dcId());
-        this->sendDownloadRequest();
+        this->download();
         return;
     }
 
-    this->_downloadmode = FileObject::DownloadThumbnail;
-
-    if(!this->_locthumbnail)
+    if(!this->_locthumbnail || (this->_locthumbnail->constructorId() == TLTypes::FileLocationUnavailable))
         return;
 
+    this->setDownloadMode(FileObject::DownloadThumbnail);
     this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locthumbnail);
     this->_dcsession = DC_CreateSession(this->_locthumbnail->dcId());
     this->sendDownloadRequest();
@@ -146,7 +144,22 @@ bool FileObject::loadCache()
 
 void FileObject::download()
 {
+    if(this->_document)
+    {
+        this->setDownloadMode(FileObject::Download);
+        this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_document);
+        this->_dcsession = DC_CreateSession(this->_document->dcId());
+        this->sendDownloadRequest();
+        return;
+    }
 
+    if(!this->_locfile || (this->_locfile->constructorId() == TLTypes::FileLocationUnavailable))
+        return;
+
+    this->setDownloadMode(FileObject::Download);
+    this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locfile);
+    this->_dcsession = DC_CreateSession(this->_locfile->dcId());
+    this->sendDownloadRequest();
 }
 
 QString FileObject::extension(const UploadFile *uploadfile)
@@ -238,12 +251,31 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
 
     this->_file = NULL;
     this->_dcsession = NULL;
-    this->_downloadmode = FileObject::None;
+
+    if(this->_inputfilelocation)
+    {
+        this->_inputfilelocation->deleteLater();
+        this->_inputfilelocation = NULL;
+    }
+
+    this->setDownloadMode(FileObject::None);
     emit downloadCompleted();
 }
 
-bool FileObject::autoDownloadDocument(Document *document)
+void FileObject::setDownloadMode(int downloadmode)
 {
+    if(this->_downloadmode == downloadmode)
+        return;
+
+    this->_downloadmode = downloadmode;
+    emit downloadingChanged();
+}
+
+bool FileObject::isAutoDownloadDocument(Document *document)
+{
+    if(!document)
+        return false;
+
     DocumentAttribute* attribute = this->documentAttribute(document, TLTypes::DocumentAttributeAnimated);
 
     if(attribute)
