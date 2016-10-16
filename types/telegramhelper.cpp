@@ -73,6 +73,18 @@ InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
     return inputfilelocation;
 }
 
+InputFileLocation *TelegramHelper::inputFileLocation(Document *document)
+{
+    InputFileLocation* inputfilelocation = new InputFileLocation();
+
+    inputfilelocation->setConstructorId(TLTypes::InputDocumentFileLocation);
+    inputfilelocation->setId(document->id());
+    inputfilelocation->setAccessHash(document->accessHash());
+    inputfilelocation->setVersion(document->version());
+
+    return inputfilelocation;
+}
+
 InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *parent)
 {
     InputPeer* inputpeer = new InputPeer(parent);

@@ -48,6 +48,7 @@ class Telegram : public QObject
         QString messageText(Message* message);
         QString messagePreview(Message* message);
         bool messageHasImage(Message* message);
+        bool messageIsAnimated(Message* message);
 
     public slots:
         FileObject* fileObject(TelegramObject* telegramobject);

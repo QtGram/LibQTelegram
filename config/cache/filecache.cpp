@@ -61,6 +61,8 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
         UserProfilePhoto* userprofilephoto = qobject_cast<UserProfilePhoto*>(tgobj);
         return this->fileObject(userprofilephoto->photoSmall(), userprofilephoto->photoBig());
     }
+    else if(tgobj->constructorId() == TLTypes::Document)
+        return this->fileObject(qobject_cast<Document*>(tgobj));
     else if((tgobj->constructorId() == TLTypes::Chat) || (tgobj->constructorId() == TLTypes::Channel))
         return this->fileObject(qobject_cast<Chat*>(tgobj)->photo());
     else if((tgobj->constructorId() == TLTypes::User))
@@ -69,6 +71,8 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
         return this->fileObject(qobject_cast<Message*>(tgobj)->media());
     else if(tgobj->constructorId() == TLTypes::MessageMediaPhoto)
         return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo());
+    else if(tgobj->constructorId() == TLTypes::MessageMediaDocument)
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->document());
 
     return NULL;
 }
@@ -77,6 +81,16 @@ QString FileCache::createFileId(FileLocation *filelocation)
 {
     QByteArray indata, outdata;
     TLLong id = filelocation->localId();
+
+    indata.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
+    outdata = QCryptographicHash::hash(indata, QCryptographicHash::Md5);
+    return outdata.toHex();
+}
+
+QString FileCache::createFileId(Document *document)
+{
+    QByteArray indata, outdata;
+    TLLong id = document->id();
 
     indata.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
     outdata = QCryptographicHash::hash(indata, QCryptographicHash::Md5);
@@ -96,6 +110,35 @@ FileObject *FileCache::fileObject(FileLocation *locthumbnail, FileLocation *locf
     fileobject->setThumbnailLocation(locthumbnail);
     fileobject->setFileLocation(locfile);
     fileobject->setThumbnailId(this->createFileId(locthumbnail));
+    fileobject->setFileId(fileid);
+
+    this->_filemap[fileid] = fileobject;
+
+    if(fileobject->loadCache())
+        return fileobject;
+
+    this->_queue << fileobject;
+
+    if(!this->_currentobject)
+        this->processQueue();
+
+    return fileobject;
+}
+
+FileObject *FileCache::fileObject(Document *document)
+{
+    QString fileid = this->createFileId(document);
+
+    if(this->_filemap.contains(fileid))
+        return this->_filemap[fileid];
+
+    FileObject* fileobject = new FileObject(this->_storagepath, this);
+    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
+
+    if(document->thumb())
+        fileobject->setThumbnailId(this->createFileId(document->thumb()->location()));
+
+    fileobject->setDocument(document);
     fileobject->setFileId(fileid);
 
     this->_filemap[fileid] = fileobject;

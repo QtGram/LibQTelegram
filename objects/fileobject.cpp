@@ -7,6 +7,7 @@
 FileObject::FileObject(QObject *parent): QObject(parent)
 {
     this->_downloadmode = FileObject::None;
+    this->_document = NULL;
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
     this->_inputfilelocation = NULL;
@@ -18,6 +19,7 @@ FileObject::FileObject(QObject *parent): QObject(parent)
 FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath)
 {
     this->_downloadmode = FileObject::None;
+    this->_document = NULL;
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
     this->_inputfilelocation = NULL;
@@ -45,6 +47,27 @@ QString FileObject::thumbnail() const
 QString FileObject::filePath() const
 {
     return this->_filepath;
+}
+
+void FileObject::setDocument(Document *document)
+{
+    if(this->_document == document)
+        return;
+
+    this->_document = document;
+
+    if(document->thumb())
+        this->_locthumbnail = document->thumb()->location();
+
+    DocumentAttribute* attribute =  this->documentAttribute(document, TLTypes::DocumentAttributeImageSize);
+
+    if(attribute)
+        this->setImageSize(QSize(attribute->w(), attribute->h()));
+
+    attribute =  this->documentAttribute(document, TLTypes::DocumentAttributeVideo);
+
+    if(attribute)
+        this->setImageSize(QSize(attribute->w(), attribute->h()));
 }
 
 void FileObject::setImageSize(const QSize &imagesize)
@@ -81,7 +104,20 @@ void FileObject::downloadThumbnail()
     if(!this->_locthumbnail || (this->_locthumbnail->constructorId() == TLTypes::FileLocationUnavailable))
         return;
 
+    if(this->_document && this->autoDownloadDocument(this->_document))
+    {
+        this->_downloadmode = FileObject::Download;
+        this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_document);
+        this->_dcsession = DC_CreateSession(this->_document->dcId());
+        this->sendDownloadRequest();
+        return;
+    }
+
     this->_downloadmode = FileObject::DownloadThumbnail;
+
+    if(!this->_locthumbnail)
+        return;
+
     this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locthumbnail);
     this->_dcsession = DC_CreateSession(this->_locthumbnail->dcId());
     this->sendDownloadRequest();
@@ -95,6 +131,13 @@ bool FileObject::loadCache()
     {
         this->_thumbnail = dir.absoluteFilePath(this->_thumbnailid);
         emit thumbnailChanged();
+        return true;
+    }
+
+    if(QFile::exists(dir.absoluteFilePath(this->_fileid)))
+    {
+        this->_filepath = dir.absoluteFilePath(this->_fileid);
+        emit filePathChanged();
         return true;
     }
 
@@ -168,11 +211,11 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
             this->_file->deleteLater();
             return;
         }
-
-        this->_file->write(uploadfile.bytes());
     }
 
-    if(uploadfile.type()->constructorId() == TLTypes::StorageFilePartial)
+    this->_file->write(uploadfile.bytes());
+
+    if(uploadfile.bytes().length() == BLOCK_SIZE) // NOTE: We need more data... (needs investigation)
     {
         this->sendDownloadRequest();
         return;
@@ -197,4 +240,30 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
     this->_dcsession = NULL;
     this->_downloadmode = FileObject::None;
     emit downloadCompleted();
+}
+
+bool FileObject::autoDownloadDocument(Document *document)
+{
+    DocumentAttribute* attribute = this->documentAttribute(document, TLTypes::DocumentAttributeAnimated);
+
+    if(attribute)
+        return true;
+
+    attribute = this->documentAttribute(document, TLTypes::DocumentAttributeSticker);
+
+    if(attribute)
+        return true;
+
+    return false;
+}
+
+DocumentAttribute* FileObject::documentAttribute(Document *document, TLConstructor attributector)
+{
+    foreach(DocumentAttribute* attribute, document->attributes())
+    {
+        if(attribute->constructorId() == attributector)
+            return attribute;
+    }
+
+    return NULL;
 }

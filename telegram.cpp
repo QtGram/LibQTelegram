@@ -368,6 +368,20 @@ bool Telegram::messageHasImage(Message *message)
     if(messagemedia->constructorId() == TLTypes::MessageMediaPhoto)
         return true;
 
+    if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
+    {
+        Document* document = messagemedia->document();
+
+        foreach(DocumentAttribute* attribute, document->attributes())
+        {
+            if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
+                return true;
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
+                return true;
+        }
+    }
+
     /*
     if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
     {
@@ -379,24 +393,33 @@ bool Telegram::messageHasImage(Message *message)
     return false;
 }
 
+bool Telegram::messageIsAnimated(Message *message)
+{
+    if(!message || !message->media())
+        return false;
+
+    MessageMedia* messagemedia = message->media();
+
+    if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
+    {
+        Document* document = messagemedia->document();
+
+        foreach(DocumentAttribute* attribute, document->attributes())
+        {
+            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
+                return true;
+        }
+    }
+
+    return false;
+}
+
 FileObject *Telegram::fileObject(TelegramObject *telegramobject)
 {
     if(!telegramobject)
         return NULL;
 
-    switch(telegramobject->constructorId())
-    {
-        case TLTypes::Dialog:
-            return FileCache_fileObject(qobject_cast<Dialog*>(telegramobject));
-
-        case TLTypes::Message:
-            return FileCache_fileObject(qobject_cast<Message*>(telegramobject));
-
-        default:
-            break;
-    }
-
-    return NULL;
+    return FileCache_fileObject(telegramobject);
 }
 
 void Telegram::signIn(const QString &phonecode)
