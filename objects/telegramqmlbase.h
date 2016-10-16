@@ -12,6 +12,9 @@
 #define REGISTER_OBJECT(objectname) \
     qmlRegisterType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, #objectname)
 
+#define REGISTER_OBJECT_AS(objectname, name) \
+    qmlRegisterType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, name)
+
 #include <QtQml>
 #include <QObject>
 #include <QString>
