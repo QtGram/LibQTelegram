@@ -48,6 +48,19 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     return message;
 }
 
+Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer)
+{
+    Message* message = new Message();
+    message->setConstructorId(Message::CtorMessage);;
+    message->setMessage(text);
+    message->setDate(QDateTime::currentDateTime().toTime_t());
+    message->setFromId(me->id());
+    message->setIsOut(true);
+    message->setToId(peer);
+
+    return message;
+}
+
 InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
 {
     InputFileLocation* inputfilelocation = new InputFileLocation();

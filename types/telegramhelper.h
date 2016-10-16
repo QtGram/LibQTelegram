@@ -11,6 +11,7 @@ class TelegramHelper
 
     public:
         static Message* createMessage(Updates *updates, User *me);
+        static Message* createMessage(const QString& text, User *me, Peer *peer);
         static InputFileLocation* inputFileLocation(FileLocation *filelocation);
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash, QObject* parent = 0);
         static QString dateString(TLInt timestamp);
