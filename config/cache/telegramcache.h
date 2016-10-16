@@ -7,11 +7,13 @@
 
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
-#define TelegramCache_messages(dialogid, limit) TelegramCache::cache()->dialogMessages(dialogid, limit)
 
 #define TelegramCache_user(userid) TelegramCache::cache()->user(userid)
 #define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
+
+#define TelegramCache_cacheNotify(message) TelegramCache::cache()->cacheNotify(message)
 #define TelegramCache_message(messageid) TelegramCache::cache()->message(messageid)
+#define TelegramCache_messages(dialogid, limit) TelegramCache::cache()->dialogMessages(dialogid, limit)
 
 #include <QObject>
 #include <QList>
@@ -49,13 +51,13 @@ class TelegramCache: public QObject
         void cache(const TLVector<User *> &users);
         void cache(const TLVector<Chat *> &chats);
         void cache(const TLVector<Message *> &messages);
+        void cacheNotify(Message* message);
+        void editMessage(Message* message);
 
     private slots:
         void onNewMessages(const TLVector<Message*>& messages);
-        void onNewMessage(Message* message);
         void onNewUserStatus(Update* update);
         void onNewDraftMessage(Update* update);
-        void onEditMessage(Message* message);
         void onDeleteMessages(const TLVector<TLInt>& messageids);
         void onReadHistory(Update* update);
 

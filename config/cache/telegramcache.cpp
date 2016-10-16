@@ -9,7 +9,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
-    connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(cacheNotify(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
 
     connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
@@ -17,7 +17,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newChats(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
 
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
-    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(editMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
@@ -166,7 +166,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
     emit dialogsChanged();
 }
 
-void TelegramCache::onNewMessage(Message *message)
+void TelegramCache::cacheNotify(Message *message)
 {
     TLVector<Message*> messages;
     messages << message;
@@ -200,7 +200,7 @@ void TelegramCache::onNewDraftMessage(Update *update)
     emit dialogsChanged();
 }
 
-void TelegramCache::onEditMessage(Message *message)
+void TelegramCache::editMessage(Message *message)
 {
     Message* oldmessage = this->message(message->id());
 
@@ -239,6 +239,7 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
             if(prevmessage)
             {
                 dialog->setTopMessage(prevmessage->id());
+                this->_database->dialogs()->insert(dialog);
                 updatedialogs = true;
             }
         }
