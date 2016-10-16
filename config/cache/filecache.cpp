@@ -62,7 +62,10 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
         return this->fileObject(userprofilephoto->photoSmall(), userprofilephoto->photoBig());
     }
     else if(tgobj->constructorId() == TLTypes::Document)
-        return this->fileObject(qobject_cast<Document*>(tgobj));
+    {
+        Document* document = qobject_cast<Document*>(tgobj);
+        return this->fileObject(document, document->thumb()->location());
+    }
     else if((tgobj->constructorId() == TLTypes::Chat) || (tgobj->constructorId() == TLTypes::Channel))
         return this->fileObject(qobject_cast<Chat*>(tgobj)->photo());
     else if((tgobj->constructorId() == TLTypes::User))
@@ -97,9 +100,18 @@ QString FileCache::createFileId(Document *document)
     return outdata.toHex();
 }
 
-FileObject *FileCache::fileObject(FileLocation *locthumbnail, FileLocation *locfile)
+FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* locthumbnail)
 {
-    QString fileid = this->createFileId(locfile);
+    Q_ASSERT((locationobj->constructorId() == TLTypes::FileLocation) ||
+             (locationobj->constructorId() == TLTypes::FileLocationUnavailable) ||
+             (locationobj->constructorId() == TLTypes::Document));
+
+    QString fileid;
+
+    if(locationobj->constructorId() == TLTypes::Document)
+         fileid = this->createFileId(qobject_cast<Document*>(locationobj));
+    else
+         fileid = this->createFileId(qobject_cast<FileLocation*>(locationobj));
 
     if(this->_filemap.contains(fileid))
         return this->_filemap[fileid];
@@ -107,39 +119,24 @@ FileObject *FileCache::fileObject(FileLocation *locthumbnail, FileLocation *locf
     FileObject* fileobject = new FileObject(this->_storagepath, this);
     connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
 
-    fileobject->setThumbnailLocation(locthumbnail);
-    fileobject->setFileLocation(locfile);
-    fileobject->setThumbnailId(this->createFileId(locthumbnail));
-    fileobject->setFileId(fileid);
+    if(locationobj->constructorId() == TLTypes::Document)
+    {
+        Document* document = qobject_cast<Document*>(locationobj);
+        fileobject->setFileId(fileid);
+        fileobject->setDocument(document);
+    }
+    else
+    {
+        FileLocation* filelocation = qobject_cast<FileLocation*>(locationobj);
+        fileobject->setFileId(fileid);
+        fileobject->setFileLocation(filelocation);
+    }
 
-    this->_filemap[fileid] = fileobject;
-
-    if(fileobject->loadCache())
-        return fileobject;
-
-    this->_queue << fileobject;
-
-    if(!this->_currentobject)
-        this->processQueue();
-
-    return fileobject;
-}
-
-FileObject *FileCache::fileObject(Document *document)
-{
-    QString fileid = this->createFileId(document);
-
-    if(this->_filemap.contains(fileid))
-        return this->_filemap[fileid];
-
-    FileObject* fileobject = new FileObject(this->_storagepath, this);
-    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
-
-    if(document->thumb())
-        fileobject->setThumbnailId(this->createFileId(document->thumb()->location()));
-
-    fileobject->setDocument(document);
-    fileobject->setFileId(fileid);
+    if(locthumbnail)
+    {
+        fileobject->setThumbnailId(this->createFileId(locthumbnail));
+        fileobject->setThumbnailLocation(locthumbnail);
+    }
 
     this->_filemap[fileid] = fileobject;
 
