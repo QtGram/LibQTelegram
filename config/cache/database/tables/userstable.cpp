@@ -13,7 +13,6 @@ void UsersTable::createSchema()
 void UsersTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
 {
     User* user = qobject_cast<User*>(telegramobject);
-    this->prepareInsert(queryobj);
 
     QByteArray data;
     telegramobject->serialize(data);

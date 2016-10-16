@@ -9,12 +9,16 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
-    connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
     connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(onNewMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
+
+    connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
+    connect(UpdateHandler_instance, SIGNAL(newUsers(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
+    connect(UpdateHandler_instance, SIGNAL(newChats(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
+
+    connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
-    connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
 
@@ -83,6 +87,8 @@ Dialog *TelegramCache::dialog(TLInt id)
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 {
     this->_database->transaction([this, dialogs](QSqlQuery& queryobj) {
+        this->_database->dialogs()->prepareInsert(queryobj);
+
         foreach(Dialog* dialog, dialogs) {
             dialog->setParent(this);
             this->_dialogs << dialog;
@@ -94,6 +100,8 @@ void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 void TelegramCache::cache(const TLVector<User *>& users)
 {
     this->_database->transaction([this, users](QSqlQuery& queryobj) {
+        this->_database->users()->prepareInsert(queryobj);
+
         foreach(User* user, users) {
             if(this->_users.contains(user->id()))
                 continue;
@@ -108,6 +116,8 @@ void TelegramCache::cache(const TLVector<User *>& users)
 void TelegramCache::cache(const TLVector<Chat *>& chats)
 {
     this->_database->transaction([this, chats](QSqlQuery& queryobj) {
+        this->_database->chats()->prepareInsert(queryobj);
+
         foreach(Chat* chat, chats) {
             if(this->_chats.contains(chat->id()))
                 continue;
@@ -122,6 +132,8 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
 void TelegramCache::cache(const TLVector<Message *>& messages)
 {
     this->_database->transaction([this, messages](QSqlQuery& queryobj) {
+        this->_database->messages()->prepareInsert(queryobj);
+
         foreach(Message* message, messages) {
             if(this->_messages.contains(message->id()))
                 continue;

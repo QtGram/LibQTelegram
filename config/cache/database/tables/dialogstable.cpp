@@ -12,8 +12,6 @@ void DialogsTable::createSchema()
 
 void DialogsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
 {
-    this->prepareInsert(queryobj);
-
     QByteArray data;
     telegramobject->serialize(data);
 

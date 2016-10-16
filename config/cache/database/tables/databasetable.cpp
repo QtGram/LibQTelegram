@@ -18,6 +18,7 @@ const QString &DatabaseTable::defaultField() const
 void DatabaseTable::insert(TelegramObject *telegramobject)
 {
     CreateQuery(queryobj);
+    this->prepareInsert(queryobj);
     this->insertQuery(queryobj, telegramobject);
 }
 
@@ -25,7 +26,7 @@ void DatabaseTable::remove(TLInt id)
 {
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "DELETE FROM " + this->name() + "WHERE id = :id"))
+    if(!this->prepare(queryobj, "DELETE FROM " + this->name() + " WHERE id = :id"))
         return;
 
     queryobj.bindValue(":id", id);
@@ -82,12 +83,13 @@ void DatabaseTable::createTable(const QString& fields, const QString& defaultfie
                 "(" + fields + ")");
 }
 
-void DatabaseTable::prepareInsert(QSqlQuery &queryobj)
+void DatabaseTable::prepareInsert(QSqlQuery &insertquery)
 {
-    this->prepare(queryobj, "INSERT OR REPLACE INTO " + this->_name +
-                            " (" + this->_fields.join(",") + ") " +
-                  "VALUES (" + this->_values.join(",") + ")");
+    this->prepare(insertquery, "INSERT OR REPLACE INTO " + this->_name +
+                               " (" + this->_fields.join(",") + ") " +
+                               "VALUES (" + this->_values.join(",") + ")");
 }
+
 
 bool DatabaseTable::query(QSqlQuery &queryobj, const QString &query)
 {

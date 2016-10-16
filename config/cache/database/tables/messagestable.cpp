@@ -13,7 +13,6 @@ void MessagesTable::createSchema()
 void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
 {
     Message* message = qobject_cast<Message*>(telegramobject);
-    this->prepareInsert(queryobj);
 
     QByteArray data;
     message->serialize(data);

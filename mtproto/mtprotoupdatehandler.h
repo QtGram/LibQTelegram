@@ -31,6 +31,8 @@ class MTProtoUpdateHandler : public QObject
 
     signals:
         void newMessages(const TLVector<Message*>& messages);
+        void newUsers(const TLVector<User*>& users);
+        void newChats(const TLVector<Chat*>& chats);
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessages(const TLVector<TLInt>& messageids);

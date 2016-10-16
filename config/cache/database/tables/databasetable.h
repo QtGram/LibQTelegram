@@ -18,17 +18,19 @@ class DatabaseTable : public QObject
         const QString& name() const;
         const QString& defaultField() const;
         virtual void createSchema() = 0;
+
+    public:
+        template<typename T> T* get(TLInt id, const char* type, QObject* parent) const;
+        void prepareInsert(QSqlQuery& insertquery);
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
         void insert(TelegramObject* telegramobject);
         void remove(TLInt id);
-        template<typename T> T* get(TLInt id, const char* type, QObject* parent) const;
 
     private:
         void parseFields(const QString& fields);
 
     protected:
         void createTable(const QString &fields, const QString& defaultfield);
-        void prepareInsert(QSqlQuery& queryobj);
         bool query(QSqlQuery& queryobj, const QString& query);
         bool query(const QString& query);
         bool prepare(QSqlQuery &queryobj, const QString& query) const;

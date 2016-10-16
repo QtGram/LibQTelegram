@@ -5,6 +5,7 @@
 #include "../config/telegramconfig.h"
 #include "../types/telegramhelper.h"
 #include "dc/dcsessionmanager.h"
+#include <QDateTime>
 
 #define Nop
 
@@ -78,12 +79,18 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     UpdatesDifference updatedifference;
     updatedifference.read(mtreply);
 
-    foreach(User* user, updatedifference.users())
-        emit newUser(user);
+    if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
+    {
+        qDebug("DC %d differences %s: %d users, %d chats, %d messages",
+               mtreply->dcid(),
+               qUtf8Printable(QDateTime::fromTime_t(updatedifference.intermediateState()->date()).toString()),
+               updatedifference.users().length(),
+               updatedifference.chats().length(),
+               updatedifference.newMessages().length());
+    }
 
-    foreach(Chat* chat, updatedifference.chats())
-        emit newChat(chat);
-
+    emit newUsers(updatedifference.users());
+    emit newChats(updatedifference.chats());
     emit newMessages(updatedifference.newMessages());
 
     this->handleUpdates(updatedifference.otherUpdates());
