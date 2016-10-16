@@ -44,6 +44,9 @@ Message *MessagesTable::previousMessage(Message* message, QHash<TLInt, Message *
     if(messages.contains(prevmessageid))
         return messages[prevmessageid];
 
+    if(!queryobj.first())
+        return NULL;
+
     QByteArray data = queryobj.value("message").toByteArray();
 
     Message* prevmessage = new Message(parent);
