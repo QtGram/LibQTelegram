@@ -62,9 +62,6 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia)
             if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
                 return tr("Sticker");
 
-            if(attribute->constructorId() == TLTypes::DocumentAttributeVideo)
-                return tr("Video");
-
             if(attribute->constructorId() == TLTypes::DocumentAttributeAudio)
                 return tr("Audio recording");
 
