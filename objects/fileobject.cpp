@@ -27,6 +27,7 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_file = NULL;
 
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
+    connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
 }
 
 bool FileObject::downloading() const
@@ -37,6 +38,11 @@ bool FileObject::downloading() const
 bool FileObject::downloaded() const
 {
     return !this->_filepath.isEmpty();
+}
+
+bool FileObject::hasThumbnail() const
+{
+    return !this->_thumbnail.isEmpty();
 }
 
 QSize FileObject::imageSize() const

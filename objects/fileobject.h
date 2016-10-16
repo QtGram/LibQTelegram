@@ -14,6 +14,7 @@ class FileObject : public QObject
 
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
     Q_PROPERTY(bool downloaded READ downloaded NOTIFY downloadedChanged)
+    Q_PROPERTY(bool hasThumbnail READ hasThumbnail NOTIFY hasThumbnailChanged)
     Q_PROPERTY(QSize imageSize READ imageSize NOTIFY imageSizeChanged)
     Q_PROPERTY(QString thumbnail READ thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
@@ -31,6 +32,7 @@ class FileObject : public QObject
         FileObject(const QString& storagepath, QObject *parent = 0);
         bool downloading() const;
         bool downloaded() const;
+        bool hasThumbnail() const;
         QSize imageSize() const;
         QString thumbnail() const;
         QString filePath() const;
@@ -62,6 +64,7 @@ class FileObject : public QObject
         void filePathChanged();
         void downloadedChanged();
         void downloadingChanged();
+        void hasThumbnailChanged();
         void downloadCompleted();
         void uploadCompleted();
 
