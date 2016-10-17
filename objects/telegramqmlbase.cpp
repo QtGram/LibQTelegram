@@ -5,6 +5,7 @@
 #include "models/dialogsmodel.h"
 #include "models/messagesmodel.h"
 #include "models/contactsmodel.h"
+#include "quick/qquickpeerimage.h"
 #include "quick/qquickmediamessageitem.h"
 
 TelegramQmlBase::TelegramQmlBase()
@@ -35,5 +36,6 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_OBJECT(MessagesModel);
 
     // Components
+    REGISTER_OBJECT_AS(QQuickPeerImage, "PeerImage");
     REGISTER_OBJECT_AS(QQuickMediaMessageItem, "MediaMessageItem");
 }
