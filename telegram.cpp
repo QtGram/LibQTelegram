@@ -358,62 +358,6 @@ QString Telegram::messagePreview(Message *message)
     return message->message();
 }
 
-bool Telegram::messageHasImage(Message *message)
-{
-    if(!message || !message->media())
-        return false;
-
-    MessageMedia* messagemedia = message->media();
-
-    if(messagemedia->constructorId() == TLTypes::MessageMediaPhoto)
-        return true;
-
-    if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
-    {
-        Document* document = messagemedia->document();
-
-        foreach(DocumentAttribute* attribute, document->attributes())
-        {
-            if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
-                return true;
-
-            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
-                return true;
-        }
-    }
-
-    /*
-    if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
-    {
-        WebPage* webpage = messagemedia->webpage();
-        return webpage->photo()->constructorId() != TLTypes::PhotoEmpty;
-    }
-    */
-
-    return false;
-}
-
-bool Telegram::messageIsAnimated(Message *message)
-{
-    if(!message || !message->media())
-        return false;
-
-    MessageMedia* messagemedia = message->media();
-
-    if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
-    {
-        Document* document = messagemedia->document();
-
-        foreach(DocumentAttribute* attribute, document->attributes())
-        {
-            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
-                return true;
-        }
-    }
-
-    return false;
-}
-
 void Telegram::signIn(const QString &phonecode)
 {
     this->_initializer->signIn(phonecode);

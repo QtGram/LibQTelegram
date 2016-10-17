@@ -46,8 +46,6 @@ class Telegram : public QObject
         QString messageFrom(Message* message);
         QString messageText(Message* message);
         QString messagePreview(Message* message);
-        bool messageHasImage(Message* message);
-        bool messageIsAnimated(Message* message);
 
     signals:
         void initializerChanged();
