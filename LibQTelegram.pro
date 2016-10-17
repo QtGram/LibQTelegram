@@ -245,7 +245,7 @@ SOURCES += \
     config/cache/database/tables/databasetable.cpp \
     config/cache/database/databasedata.cpp \
     config/cache/database/tables/messagestable.cpp \
-    objects/qquickmediamessageitem.cpp
+    quick/qquickmediamessageitem.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -484,7 +484,7 @@ HEADERS +=\
     config/cache/database/tables/chatstable.h \
     config/cache/database/tables/databasetable.h \
     config/cache/database/tables/messagestable.h \
-    objects/qquickmediamessageitem.h
+    quick/qquickmediamessageitem.h
 
 unix {
     target.path = /usr/lib

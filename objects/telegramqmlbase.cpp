@@ -2,10 +2,10 @@
 #include "telegram.h"
 #include "telegraminitializer.h"
 #include "objects/fileobject.h"
-#include "objects/qquickmediamessageitem.h"
 #include "models/dialogsmodel.h"
 #include "models/messagesmodel.h"
 #include "models/contactsmodel.h"
+#include "quick/qquickmediamessageitem.h"
 
 TelegramQmlBase::TelegramQmlBase()
 {
