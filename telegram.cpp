@@ -414,14 +414,6 @@ bool Telegram::messageIsAnimated(Message *message)
     return false;
 }
 
-FileObject *Telegram::fileObject(TelegramObject *telegramobject)
-{
-    if(!telegramobject)
-        return NULL;
-
-    return FileCache_fileObject(telegramobject);
-}
-
 void Telegram::signIn(const QString &phonecode)
 {
     this->_initializer->signIn(phonecode);

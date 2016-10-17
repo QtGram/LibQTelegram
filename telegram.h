@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "objects/telegraminitializer.h"
-#include "objects/fileobject.h"
 
 class Telegram : public QObject
 {
@@ -49,9 +48,6 @@ class Telegram : public QObject
         QString messagePreview(Message* message);
         bool messageHasImage(Message* message);
         bool messageIsAnimated(Message* message);
-
-    public slots:
-        FileObject* fileObject(TelegramObject* telegramobject);
 
     signals:
         void initializerChanged();
