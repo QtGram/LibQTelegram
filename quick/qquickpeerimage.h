@@ -12,22 +12,13 @@ class QQuickPeerImage : public QQuickBaseItem
 
     Q_PROPERTY(TelegramObject* peer READ peer WRITE setPeer NOTIFY peerChanged)
     Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
-    Q_PROPERTY(qreal fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
 
     public:
         QQuickPeerImage(QQuickItem* parent = 0);
         TelegramObject* peer() const;
         int size() const;
-        QColor backgroundColor() const;
-        QColor foregroundColor() const;
-        qreal fontPixelSize() const;
         void setPeer(TelegramObject* peer);
         void setSize(int size);
-        void setBackgroundColor(const QColor& color);
-        void setForegroundColor(const QColor& color);
-        void setFontPixelSize(qreal pixelsize);
 
     private:
         void initialize();
@@ -43,16 +34,10 @@ class QQuickPeerImage : public QQuickBaseItem
     signals:
         void peerChanged();
         void sizeChanged();
-        void backgroundColorChanged();
-        void foregroundColorChanged();
-        void fontPixelSizeChanged();
 
     private:
         TelegramObject* _peer;
         int _size;
-        QColor _backcolor;
-        QColor _forecolor;
-        qreal _pixelsize;
 };
 
 #endif // QQUICKPEERIMAGE_H

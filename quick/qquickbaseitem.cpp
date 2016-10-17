@@ -6,6 +6,9 @@ QHash<QByteArray, QQmlComponent*> QQuickBaseItem::_components;
 QQuickBaseItem::QQuickBaseItem(QQuickItem *parent) : QQuickItem(parent), _fileobject(NULL), _mediaelement(NULL)
 {
     this->_version = "2.0"; // Target base version by default
+    this->_backcolor = qApp->palette().color(QPalette::Base);
+    this->_forecolor = qApp->palette().color(QPalette::WindowText);
+    this->_pixelsize = qApp->font().pointSize();
 }
 
 QString QQuickBaseItem::version() const
@@ -16,9 +19,24 @@ QString QQuickBaseItem::version() const
 QSize QQuickBaseItem::imageSize() const
 {
     if(!this->_fileobject)
-        return QSize();
+        return QSize(this->width(), this->height());
 
     return this->_fileobject->imageSize();
+}
+
+QColor QQuickBaseItem::backgroundColor() const
+{
+    return this->_backcolor;
+}
+
+QColor QQuickBaseItem::foregroundColor() const
+{
+    return this->_forecolor;
+}
+
+qreal QQuickBaseItem::fontPixelSize() const
+{
+    return this->_pixelsize;
 }
 
 bool QQuickBaseItem::downloaded() const
@@ -45,6 +63,51 @@ bool QQuickBaseItem::hasThumbnail() const
     return this->_fileobject->hasThumbnail();
 }
 
+void QQuickBaseItem::setBackgroundColor(const QColor &color)
+{
+    if(this->_backcolor == color)
+        return;
+
+    this->_backcolor = color;
+    emit backgroundColorChanged();
+}
+
+void QQuickBaseItem::setForegroundColor(const QColor &color)
+{
+    if(this->_forecolor == color)
+        return;
+
+    this->_forecolor = color;
+    emit foregroundColorChanged();
+}
+
+void QQuickBaseItem::setFontPixelSize(qreal pixelsize)
+{
+    if(this->_pixelsize == pixelsize)
+        return;
+
+    this->_pixelsize = pixelsize;
+    emit fontPixelSizeChanged();
+}
+
+void QQuickBaseItem::onMediaElementWidthChanged()
+{
+    if(this->_fileobject)
+        return;
+
+    this->setWidth(this->_mediaelement->width());
+    emit imageSizeChanged();
+}
+
+void QQuickBaseItem::onMediaElementHeightChanged()
+{
+    if(this->_fileobject)
+        return;
+
+    this->setHeight(this->_mediaelement->height());
+    emit imageSizeChanged();
+}
+
 void QQuickBaseItem::setVersion(const QString &version)
 {
     if(this->_version == version)
@@ -62,7 +125,7 @@ void QQuickBaseItem::download()
     this->_fileobject->download();
 }
 
-QQuickItem *QQuickBaseItem::createComponent(const QString &componentcode)
+void QQuickBaseItem::createComponent(const QString &componentcode)
 {
     QQmlComponent* component = NULL;
     QByteArray hash = QCryptographicHash::hash(componentcode.toUtf8(), QCryptographicHash::Md5);
@@ -74,7 +137,7 @@ QQuickItem *QQuickBaseItem::createComponent(const QString &componentcode)
         if(!engine)
         {
             qFatal("Cannot get QML engine instance");
-            return NULL;
+            return;
         }
 
         component = new QQmlComponent(engine); // TODO: When I need to deallocate these?
@@ -94,20 +157,22 @@ QQuickItem *QQuickBaseItem::createComponent(const QString &componentcode)
     if(!context)
     {
         qFatal("Cannot get QML context");
-        return NULL;
+        return;
     }
 
-    QQuickItem* item = qobject_cast<QQuickItem*>(component->create(context));
+    this->_mediaelement = qobject_cast<QQuickItem*>(component->create(context));
 
-    if(!item)
+    if(!this->_mediaelement)
     {
         qWarning() << component->errorString();
-        return NULL;
+        return;
     }
 
-    item->setParent(this);
-    item->setParentItem(this);
-    return item;
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickBaseItem::onMediaElementWidthChanged);
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickBaseItem::onMediaElementHeightChanged);
+
+    this->_mediaelement->setParent(this);
+    this->_mediaelement->setParentItem(this);
 }
 
 FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
@@ -135,10 +200,10 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
 
 void QQuickBaseItem::createImageElement()
 {
-    this->_mediaelement = this->createComponent("Image {\n"
-                                                     "anchors.fill: parent\n"
-                                                     "asynchronous: true\n"
-                                                "}");
+    this->createComponent("Image {\n"
+                              "anchors.fill: parent\n"
+                              "asynchronous: true\n"
+                          "}");
 }
 
 void QQuickBaseItem::createAnimatedElement()
@@ -160,7 +225,7 @@ void QQuickBaseItem::createAnimatedElement()
                                   "}\n"
                               "}";
 
-    this->_mediaelement = this->createComponent(componentsource);
+    this->createComponent(componentsource);
 }
 
 QString QQuickBaseItem::thumbnail() const
@@ -193,5 +258,10 @@ void QQuickBaseItem::bindToElement()
     else
         return;
 
-    this->_mediaelement->setProperty("source", mediaurl);
+    this->updateSource(mediaurl);
+}
+
+void QQuickBaseItem::updateSource(QVariant sourcevalue)
+{
+    this->_mediaelement->setProperty("source", sourcevalue);
 }

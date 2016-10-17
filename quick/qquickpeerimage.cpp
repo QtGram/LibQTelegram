@@ -3,9 +3,6 @@
 
 QQuickPeerImage::QQuickPeerImage(QQuickItem* parent): QQuickBaseItem(parent), _peer(NULL), _size(0)
 {
-    this->_backcolor = qApp->palette().color(QPalette::Base);
-    this->_forecolor = qApp->palette().color(QPalette::WindowText);
-    this->_pixelsize = qApp->font().pointSize();
 }
 
 TelegramObject *QQuickPeerImage::peer() const
@@ -16,21 +13,6 @@ TelegramObject *QQuickPeerImage::peer() const
 int QQuickPeerImage::size() const
 {
     return this->_size;
-}
-
-QColor QQuickPeerImage::backgroundColor() const
-{
-    return this->_backcolor;
-}
-
-QColor QQuickPeerImage::foregroundColor() const
-{
-    return this->_forecolor;
-}
-
-qreal QQuickPeerImage::fontPixelSize() const
-{
-    return this->_pixelsize;
 }
 
 void QQuickPeerImage::setPeer(TelegramObject *peer)
@@ -51,33 +33,6 @@ void QQuickPeerImage::setSize(int size)
     this->_size = size;
     this->updateMetrics();
     emit sizeChanged();
-}
-
-void QQuickPeerImage::setBackgroundColor(const QColor &color)
-{
-    if(this->_backcolor == color)
-        return;
-
-    this->_backcolor = color;
-    emit backgroundColorChanged();
-}
-
-void QQuickPeerImage::setForegroundColor(const QColor &color)
-{
-    if(this->_forecolor == color)
-        return;
-
-    this->_forecolor = color;
-    emit foregroundColorChanged();
-}
-
-void QQuickPeerImage::setFontPixelSize(qreal pixelsize)
-{
-    if(this->_pixelsize == pixelsize)
-        return;
-
-    this->_pixelsize = pixelsize;
-    emit fontPixelSizeChanged();
 }
 
 void QQuickPeerImage::initialize()
@@ -136,7 +91,7 @@ void QQuickPeerImage::createRoundImageElement()
                                   "}"
                               "}";
 
-    this->_mediaelement = this->createComponent(componentsource);
+    this->createComponent(componentsource);
 }
 
 void QQuickPeerImage::createPlaceHolderImageElement()
@@ -156,9 +111,9 @@ void QQuickPeerImage::createPlaceHolderImageElement()
                                   "}\n"
                               "}";
 
-    this->createComponent(componentsource.arg(this->_backcolor.name())
-                                         .arg(this->_pixelsize)
-                                         .arg(this->_forecolor.name())
+    this->createComponent(componentsource.arg(this->backgroundColor().name())
+                                         .arg(this->fontPixelSize())
+                                         .arg(this->foregroundColor().name())
                                          .arg(this->fallbackText(this->_peer)));
 }
 
