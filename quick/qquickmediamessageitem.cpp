@@ -3,11 +3,39 @@
 
 QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseItem(parent), _message(NULL), _size(0)
 {
+    connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
+    connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
 }
 
 Message *QQuickMediaMessageItem::message() const
 {
     return this->_message;
+}
+
+bool QQuickMediaMessageItem::isSticker() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
+        return false;
+
+    return this->documentIsSticker(messagemedia->document());
+}
+
+bool QQuickMediaMessageItem::isAnimated() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
+        return false;
+
+    return this->documentIsAnimated(messagemedia->document());
 }
 
 int QQuickMediaMessageItem::size() const
@@ -35,7 +63,7 @@ void QQuickMediaMessageItem::setSize(int size)
     emit sizeChanged();
 }
 
-bool QQuickMediaMessageItem::documentIsSticker(Document *document)
+bool QQuickMediaMessageItem::documentIsSticker(Document *document) const
 {
     foreach(DocumentAttribute* attribute, document->attributes())
     {
@@ -46,7 +74,7 @@ bool QQuickMediaMessageItem::documentIsSticker(Document *document)
     return false;
 }
 
-bool QQuickMediaMessageItem::documentIsAnimated(Document *document)
+bool QQuickMediaMessageItem::documentIsAnimated(Document *document) const
 {
     foreach(DocumentAttribute* attribute, document->attributes())
     {
