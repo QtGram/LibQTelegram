@@ -24,7 +24,7 @@ QString MTProtoDecompilerBase::printableString(const QByteArray &ba)
         return QString::fromUtf8(ba);
 
     if(ba.length() > ELIDE_LENGTH)
-        return QString(ba.mid(0, ELIDE_LENGTH).toHex()).append("...");
+        return QString(ba.left(ELIDE_LENGTH).toHex()).append("...");
 
     return QString(ba.toHex());
 }
