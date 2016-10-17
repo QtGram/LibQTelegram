@@ -111,9 +111,6 @@ void DC::onReconnecting()
 
 void DC::handleReply(const QByteArray &message)
 {
-    if(this->_dcid == 2)
-        qDebug() << "DC 2 REPLY!!!";
-
     MTProtoReply mtreply(message, this->id());
 
     if(mtreply.isError())
