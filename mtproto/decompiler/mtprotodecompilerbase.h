@@ -6,6 +6,7 @@
 #include "../../types/basic.h"
 
 #define BIT_FIELD_VALUE(flag, bitno) QString((flag & bitno) ? "true" : "false")
+#define ELIDE_LENGTH 50
 
 class MTProtoDecompilerBase : public QObject
 {
@@ -54,8 +55,12 @@ template<> inline void MTProtoDecompilerBase::decompileTLVectorImpl<TLBool>(QStr
         if(i > 0)
             result.append(", ");
 
-        TLBool val = mtstream.readTLBool();
-        result.append(QString::number(i) + ":" + (val ? "true" : "false"));
+        TLBool val = mtstream.readTLBool(); // Eat other elements
+
+        if(i == ELIDE_LENGTH)
+            result.append("...");
+        else if(i < ELIDE_LENGTH)
+            result.append(QString::number(i) + ":" + (val ? "true" : "false"));
     }
 
     result.append("]");
@@ -70,8 +75,12 @@ template<> inline void MTProtoDecompilerBase::decompileTLVectorImpl<TLInt>(QStri
         if(i > 0)
             result.append(", ");
 
-        TLInt val = mtstream.readTLInt();
-        result.append(QString::number(i) + ":" + QString::number(val, 16));
+        TLInt val = mtstream.readTLInt(); // Eat other elements
+
+        if(i == ELIDE_LENGTH)
+            result.append("...");
+        else if(i < ELIDE_LENGTH)
+            result.append(QString::number(i) + ":" + QString::number(val, 16));
     }
 
     result.append("]");
@@ -86,8 +95,12 @@ template<> inline void MTProtoDecompilerBase::decompileTLVectorImpl<TLLong>(QStr
         if(i > 0)
             result.append(", ");
 
-        TLLong val = mtstream.readTLLong();
-        result.append(QString::number(i) + ":" + QString::number(val, 16));
+        TLLong val = mtstream.readTLLong(); // Eat other elements
+
+        if(i == ELIDE_LENGTH)
+            result.append("...");
+        else if(i < ELIDE_LENGTH)
+            result.append(QString::number(i) + ":" + QString::number(val, 16));
     }
 
     result.append("]");
@@ -102,8 +115,12 @@ template<> inline void MTProtoDecompilerBase::decompileTLVectorImpl<TLBytes>(QSt
         if(i > 0)
             result.append(", ");
 
-        TLBytes val = mtstream.readTLBytes();
-        result.append(QString::number(i) + ":" + QString::fromUtf8(val.toHex()));
+        TLBytes val = mtstream.readTLBytes(); // Eat other elements
+
+        if(i == ELIDE_LENGTH)
+            result.append("...");
+        else if(i < ELIDE_LENGTH)
+            result.append(QString::number(i) + ":" + QString::fromUtf8(val.toHex()));
     }
 
     result.append("]");
