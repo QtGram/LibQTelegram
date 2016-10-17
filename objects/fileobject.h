@@ -28,8 +28,7 @@ class FileObject : public QObject
         };
 
     public:
-        explicit FileObject(QObject *parent = 0);
-        FileObject(const QString& storagepath, QObject *parent = 0);
+        explicit FileObject(const QString& storagepath, QObject *parent = 0);
         bool downloading() const;
         bool downloaded() const;
         bool hasThumbnail() const;

@@ -4,18 +4,6 @@
 
 #define BLOCK_SIZE (128 * 1024)
 
-FileObject::FileObject(QObject *parent): QObject(parent)
-{
-    this->_downloadmode = FileObject::None;
-    this->_document = NULL;
-    this->_locthumbnail = NULL;
-    this->_locfile = NULL;
-    this->_inputfilelocation = NULL;
-    this->_dcsession = NULL;
-    this->_file = NULL;
-
-}
-
 FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath)
 {
     this->_downloadmode = FileObject::None;
