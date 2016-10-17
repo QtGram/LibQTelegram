@@ -216,6 +216,9 @@ void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 {
     DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
     dcconfig.setAuthorization(DCConfig::ServerDHParamsFailReceived);
+
+    Q_UNUSED(mtstream);
+    qDebug() << "DHParams Fail not implemented";
 }
 
 void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
@@ -224,6 +227,7 @@ void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
     clientdhparamsanswer.read(mtstream);
 
     Q_ASSERT(clientdhparamsanswer.constructorId() == TLTypes::DhGenFail);
+    qDebug() << "DHGen Fail not implemented";
 }
 
 void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
@@ -232,6 +236,7 @@ void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
     clientdhparamsanswer.read(mtstream);
 
     Q_ASSERT(clientdhparamsanswer.constructorId() == TLTypes::DhGenRetry);
+    qDebug() << "DHGen Retry not implemented";
 }
 
 void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
