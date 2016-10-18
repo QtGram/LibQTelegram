@@ -3,74 +3,122 @@
 
 #include "clientsyncmanager.h"
 
-void ClientSyncManager::syncUpdate(Update* u, UpdatesState* updatestate) 
+void ClientSyncManager::syncUpdate(Update* u, UpdatesState* clientstate) 
 {
 	if(u->constructorId() == TLTypes::UpdateNewMessage)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateDeleteMessages)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateUserPhoto)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateContactRegistered)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateNewAuthorization)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateNewEncryptedMessage)
-		updatestate->setQts(u->qts());
+		ClientSyncManager::syncQts(u->qts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateEncryption)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateEncryptedMessagesRead)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateChatParticipantAdd)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateReadHistoryInbox)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateReadHistoryOutbox)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateWebPage)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateReadMessagesContents)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateChannelTooLong)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateNewChannelMessage)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateDeleteChannelMessages)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateEditChannelMessage)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdateEditMessage)
-		updatestate->setPts(u->pts());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
 }
 
-void ClientSyncManager::syncUpdates(Updates* u, UpdatesState* updatestate) 
+void ClientSyncManager::syncUpdates(Updates* u, UpdatesState* clientstate) 
 {
 	if(u->constructorId() == TLTypes::UpdateShortMessage)
 	{
-		updatestate->setPts(u->pts());
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	}
 	else if(u->constructorId() == TLTypes::UpdateShortChatMessage)
 	{
-		updatestate->setPts(u->pts());
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	}
 	else if(u->constructorId() == TLTypes::UpdateShort)
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	else if(u->constructorId() == TLTypes::UpdatesCombined)
 	{
-		updatestate->setDate(u->date());
-		updatestate->setSeq(u->seq());
+		ClientSyncManager::syncDate(u->date(), clientstate);
+		ClientSyncManager::syncSeq(u->seq(), clientstate);
 	}
 	else if(u->constructorId() == TLTypes::Updates)
 	{
-		updatestate->setDate(u->date());
-		updatestate->setSeq(u->seq());
+		ClientSyncManager::syncDate(u->date(), clientstate);
+		ClientSyncManager::syncSeq(u->seq(), clientstate);
 	}
 	else if(u->constructorId() == TLTypes::UpdateShortSentMessage)
 	{
-		updatestate->setPts(u->pts());
-		updatestate->setDate(u->date());
+		ClientSyncManager::syncPts(u->pts(), clientstate);
+		ClientSyncManager::syncDate(u->date(), clientstate);
 	}
+}
+
+void ClientSyncManager::syncState(UpdatesState* serverstate) 
+{
+	UpdatesState* clientstate = TelegramConfig_clientState;
+	
+	ClientSyncManager::syncPts(serverstate->pts(), clientstate);
+	ClientSyncManager::syncQts(serverstate->qts(), clientstate);
+	ClientSyncManager::syncDate(serverstate->date(), clientstate);
+	ClientSyncManager::syncSeq(serverstate->seq(), clientstate);
+	ClientSyncManager::syncUnreadCount(serverstate->unreadCount(), clientstate);
+}
+
+void ClientSyncManager::syncPts(TLInt pts, UpdatesState* clientstate) 
+{
+	if(pts <= clientstate->pts())
+		return;
+	
+	clientstate->setPts(pts);
+}
+
+void ClientSyncManager::syncQts(TLInt qts, UpdatesState* clientstate) 
+{
+	if(qts <= clientstate->qts())
+		return;
+	
+	clientstate->setQts(qts);
+}
+
+void ClientSyncManager::syncDate(TLInt date, UpdatesState* clientstate) 
+{
+	if(date <= clientstate->date())
+		return;
+	
+	clientstate->setDate(date);
+}
+
+void ClientSyncManager::syncSeq(TLInt seq, UpdatesState* clientstate) 
+{
+	clientstate->setSeq(seq); // NOTE: How to handle 'seq'?
+}
+
+void ClientSyncManager::syncUnreadCount(TLInt unreadcount, UpdatesState* clientstate) 
+{
+	if(unreadcount <= clientstate->unreadCount())
+		return;
+	
+	clientstate->setUnreadCount(unreadcount);
 }
 

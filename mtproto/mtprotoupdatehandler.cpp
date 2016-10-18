@@ -106,22 +106,11 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
-        this->syncState(updatedifference.intermediateState());
+        ClientSyncManager::syncState(updatedifference.intermediateState());
         this->sync();
     }
     else
         TelegramConfig_save; // Update state
-}
-
-void MTProtoUpdateHandler::syncState(UpdatesState *serverstate)
-{
-    UpdatesState* clientstate = TelegramConfig_clientState;
-
-    clientstate->setPts(serverstate->pts());
-    clientstate->setQts(serverstate->qts());
-    clientstate->setDate(serverstate->date());
-    clientstate->setSeq(serverstate->seq());
-    clientstate->setUnreadCount(serverstate->unreadCount());
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
