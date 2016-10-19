@@ -107,6 +107,11 @@ void QQuickBaseItem::download()
     this->_fileobject->download();
 }
 
+QString QQuickBaseItem::escape(const TLString &s)
+{
+    return s.toString().replace("\"", "\\\"");
+}
+
 void QQuickBaseItem::createComponent(const QString &componentcode)
 {
     QQmlComponent* component = NULL;

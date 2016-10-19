@@ -180,7 +180,7 @@ void QQuickMediaMessageItem::createLocationElement()
 
     this->createComponent(componentstring.arg(this->foregroundColor().name())
                                          .arg(this->fontPixelSize())
-                                         .arg(venue));
+                                         .arg(this->escape(venue)));
 
     connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToImage);
     connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToImage);
@@ -221,7 +221,11 @@ void QQuickMediaMessageItem::createWebPagePhotoElement()
                             "}";
 
     WebPage* webpage = this->_message->media()->webpage();
-    this->createComponent(componentstring.arg(webpage->url().toString(), webpage->title().toString(), webpage->description().toString()));
+
+    this->createComponent(componentstring.arg(this->escape(webpage->url()),
+                                              this->escape(webpage->title()),
+                                              this->escape(webpage->description())));
+
     connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
     this->scaleToColumn();

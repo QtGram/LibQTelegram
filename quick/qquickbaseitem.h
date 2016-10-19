@@ -36,6 +36,7 @@ class QQuickBaseItem : public QQuickItem
         void download();
 
     protected:
+        QString escape(const TLString& s);
         void createComponent(const QString& componentcode);
         FileObject* createFileObject(TelegramObject* telegramobject);
         QString thumbnail() const;
