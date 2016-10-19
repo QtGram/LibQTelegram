@@ -4,7 +4,7 @@
 
 #define BLOCK_SIZE (128 * 1024)
 
-FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath)
+FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath), _autodownload(false)
 {
     this->_downloadmode = FileObject::None;
     this->_document = NULL;
@@ -48,6 +48,11 @@ QString FileObject::filePath() const
     return this->_filepath;
 }
 
+void FileObject::setAutoDownload(bool autodownload)
+{
+    this->_autodownload = autodownload;
+}
+
 void FileObject::setDocument(Document *document)
 {
     if(this->_document == document)
@@ -58,12 +63,12 @@ void FileObject::setDocument(Document *document)
     if(document->thumb())
         this->_locthumbnail = document->thumb()->location();
 
-    DocumentAttribute* attribute =  this->documentAttribute(document, TLTypes::DocumentAttributeImageSize);
+    DocumentAttribute* attribute =  TelegramHelper::documentHas(document, TLTypes::DocumentAttributeImageSize);
 
     if(attribute)
         this->setImageSize(QSize(attribute->w(), attribute->h()));
 
-    attribute =  this->documentAttribute(document, TLTypes::DocumentAttributeVideo);
+    attribute =  TelegramHelper::documentHas(document, TLTypes::DocumentAttributeVideo);
 
     if(attribute)
         this->setImageSize(QSize(attribute->w(), attribute->h()));
@@ -100,7 +105,7 @@ void FileObject::setThumbnailId(const QString &thumbnailid)
 
 void FileObject::downloadThumbnail()
 {
-    if(this->isAutoDownloadDocument(this->_document))
+    if(this->_autodownload)
     {
         this->download();
         return;
@@ -263,33 +268,4 @@ void FileObject::setDownloadMode(int downloadmode)
 
     this->_downloadmode = downloadmode;
     emit downloadingChanged();
-}
-
-bool FileObject::isAutoDownloadDocument(Document *document)
-{
-    if(!document)
-        return false;
-
-    DocumentAttribute* attribute = this->documentAttribute(document, TLTypes::DocumentAttributeAnimated);
-
-    if(attribute)
-        return true;
-
-    attribute = this->documentAttribute(document, TLTypes::DocumentAttributeSticker);
-
-    if(attribute)
-        return true;
-
-    return false;
-}
-
-DocumentAttribute* FileObject::documentAttribute(Document *document, TLConstructor attributector)
-{
-    foreach(DocumentAttribute* attribute, document->attributes())
-    {
-        if(attribute->constructorId() == attributector)
-            return attribute;
-    }
-
-    return NULL;
 }

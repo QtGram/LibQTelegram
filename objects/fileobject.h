@@ -35,6 +35,7 @@ class FileObject : public QObject
         QSize imageSize() const;
         QString thumbnail() const;
         QString filePath() const;
+        void setAutoDownload(bool autodownload);
         void setDocument(Document* document);
         void setImageSize(const QSize& imagesize);
         void setThumbnailLocation(FileLocation* filelocation);
@@ -52,8 +53,6 @@ class FileObject : public QObject
 
     private:
         void setDownloadMode(int downloadmode);
-        bool isAutoDownloadDocument(Document* document);
-        DocumentAttribute *documentAttribute(Document* document, TLConstructor attribute);
         QString extension(const UploadFile* uploadfile);
         void sendDownloadRequest();
 
@@ -69,6 +68,7 @@ class FileObject : public QObject
 
     private:
         QString _storagepath;
+        bool _autodownload;
         int _downloadmode;
         Document* _document;
         FileLocation* _locthumbnail;
