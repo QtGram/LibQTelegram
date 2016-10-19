@@ -95,7 +95,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     MessagesMessages messages;
     messages.read(mtreply);
 
-    this->_athistoryend = (messages.constructorId() == TLTypes::MessagesMessages);
+    this->_athistoryend = (messages.constructorId() != TLTypes::MessagesMessagesSlice);
 
     this->beginInsertRows(QModelIndex(), 0, messages.count() - 1);
 
