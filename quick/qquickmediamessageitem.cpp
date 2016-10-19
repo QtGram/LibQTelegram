@@ -302,7 +302,6 @@ void QQuickMediaMessageItem::scaleToImageSize()
         return;
 
     qreal aspectratio = this->calcAspectRatio(imagesize);
-    qDebug() << imagesize;
     this->setWidth(this->_size);
     this->setHeight(this->_size / aspectratio);
 }
