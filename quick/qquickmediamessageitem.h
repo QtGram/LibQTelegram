@@ -10,7 +10,8 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(Message* message READ message WRITE setMessage NOTIFY messageChanged)
     Q_PROPERTY(bool isSticker READ isSticker NOTIFY isStickerChanged)
     Q_PROPERTY(bool isAnimated READ isAnimated NOTIFY isAnimatedChanged)
-    Q_PROPERTY(int size READ size WRITE setSize NOTIFY sizeChanged)
+    Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged)
+    Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(QJSValue locationDelegate READ locationDelegate WRITE setLocationDelegate NOTIFY locationDelegateChanged)
 
     public:
@@ -18,20 +19,27 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         Message* message() const;
         bool isSticker() const;
         bool isAnimated() const;
-        int size() const;
+        qreal size() const;
+        qreal contentWidth() const;
         const QJSValue& locationDelegate() const;
         void setMessage(Message* message);
-        void setSize(int size);
+        void setSize(qreal size);
         void setLocationDelegate(const QJSValue& locationdelegate);
 
     private slots:
-        void updateMetrics();
+        void updateContentWidth(qreal contentwidth);
+        void updateContentWidth();
+        void scaleToImageSize();
+        void scaleToImage();
+        void scaleToColumn();
 
     private:
+        qreal calcAspectRatio(const QSize &imagesize) const;
         void callLocationDelegate();
-        bool documentIsSticker(Document* document) const;
-        bool documentIsAnimated(Document* document) const;
+        void createImageElement();
+        void createAnimatedElement();
         void createLocationElement();
+        void createWebPagePhotoElement();
         void initialize();
 
     signals:
@@ -39,11 +47,13 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void isStickerChanged();
         void isAnimatedChanged();
         void sizeChanged();
+        void contentWidthChanged();
         void locationDelegateChanged();
 
     private:
         Message* _message;
-        int _size;
+        qreal _size;
+        qreal _contentwidth;
         QJSValue _locationdelegate;
 };
 

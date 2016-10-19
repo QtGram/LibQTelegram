@@ -10,7 +10,6 @@ class QQuickBaseItem : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
-    Q_PROPERTY(QSize imageSize READ imageSize NOTIFY imageSizeChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(qreal fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
@@ -33,22 +32,18 @@ class QQuickBaseItem : public QQuickItem
         void setForegroundColor(const QColor& color);
         void setFontPixelSize(qreal pixelsize);
 
-    private:
-        void onMediaElementWidthChanged();
-        void onMediaElementHeightChanged();
-
     public slots:
         void download();
 
     protected:
         void createComponent(const QString& componentcode);
         FileObject* createFileObject(TelegramObject* telegramobject);
-        void createImageElement();
-        void createAnimatedElement();
         QString thumbnail() const;
         QString filePath() const;
-        void bindToElement();
         void updateSource(QVariant sourcevalue);
+
+    protected slots:
+        void bindToElement();
 
     signals:
         void backgroundColorChanged();

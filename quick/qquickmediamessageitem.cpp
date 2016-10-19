@@ -1,7 +1,8 @@
 #include "qquickmediamessageitem.h"
+#include "../types/telegramhelper.h"
 #include <QDateTime>
 
-QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseItem(parent), _message(NULL), _size(0)
+QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseItem(parent), _message(NULL), _size(0), _contentwidth(0)
 {
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
@@ -22,7 +23,7 @@ bool QQuickMediaMessageItem::isSticker() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return this->documentIsSticker(messagemedia->document());
+    return TelegramHelper::isSticker(messagemedia->document());
 }
 
 bool QQuickMediaMessageItem::isAnimated() const
@@ -35,12 +36,17 @@ bool QQuickMediaMessageItem::isAnimated() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return this->documentIsAnimated(messagemedia->document());
+    return TelegramHelper::isAnimated(messagemedia->document());
 }
 
-int QQuickMediaMessageItem::size() const
+qreal QQuickMediaMessageItem::size() const
 {
     return this->_size;
+}
+
+qreal QQuickMediaMessageItem::contentWidth() const
+{
+    return this->_contentwidth;
 }
 
 const QJSValue &QQuickMediaMessageItem::locationDelegate() const
@@ -58,13 +64,12 @@ void QQuickMediaMessageItem::setMessage(Message *message)
     emit messageChanged();
 }
 
-void QQuickMediaMessageItem::setSize(int size)
+void QQuickMediaMessageItem::setSize(qreal size)
 {
     if(this->_size == size)
         return;
 
     this->_size = size;
-    this->updateMetrics();
     emit sizeChanged();
 }
 
@@ -78,38 +83,79 @@ void QQuickMediaMessageItem::setLocationDelegate(const QJSValue &locationdelegat
     emit locationDelegateChanged();
 }
 
-bool QQuickMediaMessageItem::documentIsSticker(Document *document) const
+void QQuickMediaMessageItem::updateContentWidth(qreal contentwidth)
 {
-    foreach(DocumentAttribute* attribute, document->attributes())
-    {
-        if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
-            return true;
-    }
+    if(this->_contentwidth == contentwidth)
+        return;
 
-    return false;
+    this->_contentwidth = contentwidth;
+    emit contentWidthChanged();
 }
 
-bool QQuickMediaMessageItem::documentIsAnimated(Document *document) const
+void QQuickMediaMessageItem::updateContentWidth()
 {
-    foreach(DocumentAttribute* attribute, document->attributes())
-    {
-        if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
-            return true;
-    }
+    QSize imagesize = this->imageSize();
 
-    return false;
+    if(!imagesize.isValid() || (this->_contentwidth == imagesize.width()))
+        return;
+
+    this->_contentwidth = imagesize.width();
+    emit contentWidthChanged();
+}
+
+qreal QQuickMediaMessageItem::calcAspectRatio(const QSize& imagesize) const
+{
+    if(!imagesize.isValid() || !imagesize.height())
+        return 1.0;
+
+    return imagesize.width() / static_cast<qreal>(imagesize.height());
+}
+
+void QQuickMediaMessageItem::createImageElement()
+{
+    this->createComponent("Image {\n"
+                              "id: image\n"
+                              "anchors.fill: parent\n"
+                              "asynchronous: true\n"
+                          "}");
+
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
+    this->scaleToImageSize();
+}
+
+void QQuickMediaMessageItem::createAnimatedElement()
+{
+    QString componentsource = "Item {\n"
+                                  "property url source\n"
+                                  "id: animatedelement\n"
+                                  "anchors.fill: parent\n"
+                                  "MediaPlayer {\n"
+                                      "id: mediaplayer\n"
+                                      "loops: MediaPlayer.Infinite\n"
+                                      "autoPlay: true\n"
+                                      "source: animatedelement.source\n"
+                                  "}\n"
+                                  "VideoOutput {\n"
+                                      "id: videooutput\n"
+                                      "anchors.fill: parent\n"
+                                      "source: mediaplayer\n"
+                                  "}\n"
+                              "}";
+
+    this->createComponent(componentsource);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
+    this->scaleToImageSize();
 }
 
 void QQuickMediaMessageItem::createLocationElement()
 {
-    QString componentstring = "Item {\n"
+    QString componentstring = "Column {\n"
                                   "property url source\n"
                                   "id: locationelement\n"
                                   "width: imgmap.width\n"
-                                  "height: imgmap.height + (txtvenue.visible ? txtvenue.contentHeight : 0)\n"
                                   "Text {\n"
                                       "id: txtvenue\n"
-                                      "anchors { left: parent.left; top: parent.top; right: parent.right }\n"
+                                      "width: parent.width\n"
                                       "color: \"%1\"\n"
                                       "wrapMode: Text.Wrap\n"
                                       "font.pixelSize: %2\n"
@@ -118,7 +164,6 @@ void QQuickMediaMessageItem::createLocationElement()
                                   "}\n"
                                   "Image {\n"
                                       "id: imgmap\n"
-                                      "anchors { left: parent.left; top: txtvenue.bottom }\n"
                                       "asynchronous: true\n"
                                       "fillMode: Image.PreserveAspectFit\n"
                                       "source: locationelement.source\n"
@@ -136,6 +181,50 @@ void QQuickMediaMessageItem::createLocationElement()
     this->createComponent(componentstring.arg(this->foregroundColor().name())
                                          .arg(this->fontPixelSize())
                                          .arg(venue));
+
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToImage);
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToImage);
+    this->scaleToImage();
+}
+
+void QQuickMediaMessageItem::createWebPagePhotoElement()
+{
+    QString componentstring = "Column {\n"
+                                  "property url source\n"
+                                  "id: webpagephotoelement\n"
+                                  "width: parent.width\n"
+                              "Text {\n"
+                                  "id: wpurl\n"
+                                  "width: parent.width\n"
+                                  "wrapMode: Text.Wrap\n"
+                                  "text: \"%1\"\n"
+                              "}\n"
+                              "Text {\n"
+                                  "id: wptitle\n"
+                                  "width: parent.width\n"
+                                  "wrapMode: Text.NoWrap\n"
+                                  "elide: Text.ElideRight\n"
+                                  "text: \"%2\"\n"
+                              "}\n"
+                              "Text {\n"
+                                  "id: wpdescription\n"
+                                  "width: parent.width\n"
+                                  "wrapMode: Text.Wrap\n"
+                                  "text: \"%3\"\n"
+                              "}\n"
+                              "Image {\n"
+                                  "width: parent.width\n"
+                                  "asynchronous: true\n"
+                                  "fillMode: Image.PreserveAspectFit\n"
+                                  "source: webpagephotoelement.source\n"
+                              "}\n"
+                            "}";
+
+    WebPage* webpage = this->_message->media()->webpage();
+    this->createComponent(componentstring.arg(webpage->url().toString(), webpage->title().toString(), webpage->description().toString()));
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    this->scaleToColumn();
 }
 
 void QQuickMediaMessageItem::initialize()
@@ -151,51 +240,80 @@ void QQuickMediaMessageItem::initialize()
         return;
     }
 
-    if(messagemedia->constructorId() == TLTypes::MessageMediaPhoto)
+    switch(messagemedia->constructorId())
     {
-        this->createImageElement();
-    }
-    else if((messagemedia->constructorId() == TLTypes::MessageMediaGeo) || (messagemedia->constructorId() == TLTypes::MessageMediaVenue))
-    {
-        this->createLocationElement();
-        this->callLocationDelegate();
-    }
-    else if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
-    {
-        Document* document = messagemedia->document();
-
-        if(this->documentIsSticker(document))
+        case TLTypes::MessageMediaPhoto:
             this->createImageElement();
-        else if(this->documentIsAnimated(document))
-            this->createAnimatedElement();
+            break;
+
+        case TLTypes::MessageMediaGeo:
+        case TLTypes::MessageMediaVenue:
+            this->createLocationElement();
+            this->callLocationDelegate();
+            break;
+
+        case TLTypes::MessageMediaDocument:
+        {
+            Document* document = messagemedia->document();
+
+            if(TelegramHelper::isSticker(document))
+                this->createImageElement();
+            else if(TelegramHelper::isAnimated(document))
+                this->createAnimatedElement();
+
+            break;
+        }
+
+        case TLTypes::MessageMediaWebPage:
+        {
+            WebPage* webpage = messagemedia->webpage();
+
+            if(webpage->photo())
+                this->createWebPagePhotoElement();
+            else
+                return;
+
+            break;
+        }
+
+        default:
+            return;
     }
-    else
-        return;
 
     FileObject* fileobject = this->createFileObject(this->_message);
 
     if(!fileobject)
         return;
 
-    connect(fileobject, &FileObject::imageSizeChanged, this, &QQuickMediaMessageItem::updateMetrics);
-    this->updateMetrics();
+    connect(fileobject, SIGNAL(imageSizeChanged()), this, SLOT(updateContentWidth()));
+    this->updateContentWidth();
     this->bindToElement();
 }
 
-void QQuickMediaMessageItem::updateMetrics()
+void QQuickMediaMessageItem::scaleToImageSize()
 {
-    if(!this->_size)
-        return;
-
     QSize imagesize = this->imageSize();
 
     if(!imagesize.isValid())
         return;
 
-    qreal aspectratio = imagesize.width() / static_cast<qreal>(imagesize.height());
-
+    qreal aspectratio = this->calcAspectRatio(imagesize);
+    qDebug() << imagesize;
     this->setWidth(this->_size);
-    this->setHeight(aspectratio ? (this->_size / aspectratio) : 0);
+    this->setHeight(this->_size / aspectratio);
+}
+
+void QQuickMediaMessageItem::scaleToImage()
+{
+    this->updateContentWidth(this->_mediaelement->width());
+    this->setWidth(this->_size);
+    this->setHeight(this->_mediaelement->height());
+}
+
+void QQuickMediaMessageItem::scaleToColumn()
+{
+    this->setWidth(this->_size);
+    this->setHeight(this->_mediaelement->height());
 }
 
 void QQuickMediaMessageItem::callLocationDelegate()
@@ -209,7 +327,7 @@ void QQuickMediaMessageItem::callLocationDelegate()
     GeoPoint* geopoint = this->_message->media()->geo();
 
     QJSValueList args;
-    args <<  geopoint->latitude() << geopoint->longitude();
+    args << geopoint->latitude() << geopoint->longitude();
     QJSValue result = this->_locationdelegate.call(args);
 
     if(!result.isString())

@@ -19,7 +19,7 @@ QString QQuickBaseItem::version() const
 QSize QQuickBaseItem::imageSize() const
 {
     if(!this->_fileobject)
-        return QSize(this->width(), this->height());
+        return QSize();
 
     return this->_fileobject->imageSize();
 }
@@ -90,24 +90,6 @@ void QQuickBaseItem::setFontPixelSize(qreal pixelsize)
     emit fontPixelSizeChanged();
 }
 
-void QQuickBaseItem::onMediaElementWidthChanged()
-{
-    if(this->_fileobject)
-        return;
-
-    this->setWidth(this->_mediaelement->width());
-    emit imageSizeChanged();
-}
-
-void QQuickBaseItem::onMediaElementHeightChanged()
-{
-    if(this->_fileobject)
-        return;
-
-    this->setHeight(this->_mediaelement->height());
-    emit imageSizeChanged();
-}
-
 void QQuickBaseItem::setVersion(const QString &version)
 {
     if(this->_version == version)
@@ -160,19 +142,17 @@ void QQuickBaseItem::createComponent(const QString &componentcode)
         return;
     }
 
-    this->_mediaelement = qobject_cast<QQuickItem*>(component->create(context));
+    QQuickItem* item = qobject_cast<QQuickItem*>(component->create(context));
 
-    if(!this->_mediaelement)
+    if(!item)
     {
         qWarning() << component->errorString();
         return;
     }
 
-    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickBaseItem::onMediaElementWidthChanged);
-    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickBaseItem::onMediaElementHeightChanged);
-
-    this->_mediaelement->setParent(this);
-    this->_mediaelement->setParentItem(this);
+    item->setParent(this);
+    item->setParentItem(this);
+    this->_mediaelement = item;
 }
 
 FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
@@ -192,40 +172,10 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
     connect(this->_fileobject, &FileObject::downloadedChanged, this, &QQuickBaseItem::downloadedChanged);
     connect(this->_fileobject, &FileObject::downloadingChanged, this, &QQuickBaseItem::downloadingChanged);
     connect(this->_fileobject, &FileObject::hasThumbnailChanged, this, &QQuickBaseItem::hasThumbnailChanged);
-    connect(this->_fileobject, &FileObject::thumbnailChanged, [this]() { this->bindToElement(); });
-    connect(this->_fileobject, &FileObject::filePathChanged, [this]() { this->bindToElement(); });
+    connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::bindToElement);
+    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::bindToElement);
 
     return this->_fileobject;
-}
-
-void QQuickBaseItem::createImageElement()
-{
-    this->createComponent("Image {\n"
-                              "anchors.fill: parent\n"
-                              "asynchronous: true\n"
-                          "}");
-}
-
-void QQuickBaseItem::createAnimatedElement()
-{
-    QString componentsource = "Item {\n"
-                                  "property url source\n"
-                                  "id: animatedelement\n"
-                                  "anchors.fill: parent\n"
-                                  "MediaPlayer {\n"
-                                      "id: mediaplayer\n"
-                                      "loops: MediaPlayer.Infinite\n"
-                                      "autoPlay: true\n"
-                                      "source: animatedelement.source\n"
-                                  "}\n"
-                                  "VideoOutput {\n"
-                                      "id: videooutput\n"
-                                      "anchors.fill: parent\n"
-                                      "source: mediaplayer\n"
-                                  "}\n"
-                              "}";
-
-    this->createComponent(componentsource);
 }
 
 QString QQuickBaseItem::thumbnail() const
