@@ -21,7 +21,12 @@ bool MTProtoDecompilerBase::isPrintable(const QByteArray &ba)
 QString MTProtoDecompilerBase::printableString(const QByteArray &ba)
 {
     if(this->isPrintable(ba))
+    {
+        if(ba.length() > ELIDE_LENGTH)
+            return QString::fromUtf8(ba.left(ELIDE_LENGTH)).simplified().append("...");
+
         return QString::fromUtf8(ba);
+    }
 
     if(ba.length() > ELIDE_LENGTH)
         return QString(ba.left(ELIDE_LENGTH).toHex()).append("...");
