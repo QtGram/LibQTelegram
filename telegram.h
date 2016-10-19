@@ -17,35 +17,20 @@ class Telegram : public QObject
         User* me() const;
         void setInitializer(TelegramInitializer* initializer);
 
-    private:
-        QString messageMediaText(MessageMedia* messagemedia);
-        QString messageActionText(Message *message);
+    public: // C++ side API
+        QString dialogTitle(Dialog* dialog) const;
+        QString dialogStatusText(Dialog* dialog) const;
+        QString messagePreview(Message* message) const;
+        QString messageText(Message* message) const;
+        TelegramObject* messageFrom(Message *message) const;
 
-    public slots: // Objects
-        bool constructorIs(TelegramObject* telegramobject, TLConstructor constructor);
+    private:
+        QString messageMediaText(MessageMedia* messagemedia) const;
+        QString messageActionText(Message *message) const;
 
     public slots: // Login
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
-
-    public slots: // Dialogs
-        QString dialogTitle(Dialog* dialog);
-        QString dialogStatusText(Dialog* dialog);
-        QString dialogDraftMessage(Dialog* dialog);
-        bool dialogIsChat(Dialog* dialog);
-        bool dialogIsChannel(Dialog* dialog);
-        bool dialogIsBroadcast(Dialog* dialog);
-        bool dialogHasDraftMessage(Dialog* dialog);
-
-    public slots: // Users
-        QString userFullName(User* user);
-        QString userStatusText(User* user);
-
-    public slots: // Messages
-        Message* message(TLInt messageid);
-        QString messageFrom(Message* message);
-        QString messageText(Message* message);
-        QString messagePreview(Message* message);
 
     signals:
         void initializerChanged();

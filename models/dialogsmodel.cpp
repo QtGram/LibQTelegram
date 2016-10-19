@@ -8,8 +8,70 @@ DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
 {
+    if(!index.isValid() || (index.row() >= this->_dialogs.count()))
+        return QVariant();
+
+    Dialog* dialog = this->_dialogs[index.row()];
+
     if(role == DialogsModel::ItemRole)
-        return QVariant::fromValue(this->_dialogs[index.row()]);
+        return QVariant::fromValue(dialog);
+
+    if(role == DialogsModel::TitleRole)
+        return this->_telegram->dialogTitle(dialog);
+
+    if(role == DialogsModel::TopMessageRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+
+        if(!message)
+            return QVariant();
+
+        return QVariant::fromValue(message);
+    }
+
+    if(role == DialogsModel::TopMessageFromRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return this->messageFrom(message);
+    }
+
+    if(role == DialogsModel::TopMessageTextRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return this->firstMessageLine(message);
+    }
+
+    if(role == DialogsModel::DraftMessageRole)
+        return this->draftMessage(dialog);
+
+    if(role == DialogsModel::IsChatRole)
+        return TelegramHelper::isChat(dialog);
+
+    if(role == DialogsModel::IsBroadcastRole)
+    {
+        if(!TelegramHelper::isChannel(dialog))
+            return false;
+
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog));
+
+        if(!chat)
+            return false;
+
+        return chat->isBroadcast();
+    }
+
+    if(role == DialogsModel::IsMegaGroupRole)
+    {
+        if(!TelegramHelper::isChannel(dialog))
+            return false;
+
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog));
+
+        if(!chat)
+            return false;
+
+        return chat->isMegagroup();
+    }
 
     return QVariant();
 }
@@ -21,7 +83,62 @@ int DialogsModel::rowCount(const QModelIndex &) const
 
 QHash<int, QByteArray> DialogsModel::roleNames() const
 {
-    return this->initRoles();
+    QHash<int, QByteArray> roles = this->initRoles();
+
+    roles[DialogsModel::TitleRole] = "title";
+    roles[DialogsModel::TopMessageRole] = "topMessage";
+    roles[DialogsModel::TopMessageFromRole] = "topMessageFrom";
+    roles[DialogsModel::TopMessageTextRole] = "topMessageText";
+    roles[DialogsModel::DraftMessageRole] = "draftMessage";
+    roles[DialogsModel::IsMegaGroupRole] = "isMegaGroup";
+    roles[DialogsModel::IsBroadcastRole] = "isBroadcast";
+    roles[DialogsModel::IsChatRole] = "isChat";
+
+    return roles;
+}
+
+QString DialogsModel::messageFrom(Message *message) const
+{
+    TelegramObject* tgobj = this->_telegram->messageFrom(message);
+
+    if(!tgobj)
+        return QString();
+
+    switch(tgobj->constructorId())
+    {
+        case TLTypes::Chat:
+        case TLTypes::ChatForbidden:
+        case TLTypes::Channel:
+        case TLTypes::ChannelForbidden:
+            return qobject_cast<Chat*>(tgobj)->title();
+
+        case TLTypes::User:
+            return qobject_cast<User*>(tgobj)->firstName();
+
+        default:
+            break;
+    }
+
+    return QString();
+}
+
+QString DialogsModel::firstMessageLine(Message *message) const
+{
+    QString preview = this->_telegram->messagePreview(message);
+    int newline = preview.indexOf("\n");
+
+    if(newline > -1)
+        return preview.left(newline - 1);
+
+    return preview;
+}
+
+QString DialogsModel::draftMessage(Dialog *dialog) const
+{
+    if(!dialog->draft())
+        return QString();
+
+    return dialog->draft()->message();
 }
 
 void DialogsModel::sortDialogs()

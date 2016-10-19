@@ -8,7 +8,11 @@ class ContactsModel : public TelegramModel
     Q_OBJECT
 
     public:
-        enum UserRoles { FirstLetterRole = Qt::UserRole + 10 };
+        enum ContactRoles {
+            FirstLetterRole = Qt::UserRole + 10,
+            FullNameRole,
+            StatusText,
+        };
 
     public:
         explicit ContactsModel(QObject *parent = 0);

@@ -38,7 +38,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     emit initializerChanged();
 }
 
-QString Telegram::messageMediaText(MessageMedia *messagemedia)
+QString Telegram::messageMediaText(MessageMedia *messagemedia) const
 {
     TLConstructor ctorid = messagemedia->constructorId();
 
@@ -89,7 +89,7 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia)
     return result;
 }
 
-QString Telegram::messageActionText(Message* message)
+QString Telegram::messageActionText(Message* message) const
 {
     User *fromuser = NULL, *inviteruser = NULL, *user = NULL;
     QString fromfullname, fullname, inviterfullname;
@@ -184,15 +184,7 @@ QString Telegram::messageActionText(Message* message)
     return QString("Unhandled action: %1").arg(ctorid, 0, 16);
 }
 
-bool Telegram::constructorIs(TelegramObject *telegramobject, TLConstructor constructor)
-{
-    if(!telegramobject)
-        return false;
-
-    return telegramobject->constructorId() == constructor;
-}
-
-QString Telegram::dialogTitle(Dialog *dialog)
+QString Telegram::dialogTitle(Dialog *dialog) const
 {
     if(!dialog)
         return QString();
@@ -209,7 +201,7 @@ QString Telegram::dialogTitle(Dialog *dialog)
     return TelegramHelper::fullName(user);
 }
 
-QString Telegram::dialogStatusText(Dialog *dialog)
+QString Telegram::dialogStatusText(Dialog *dialog) const
 {
     if(!dialog)
         return QString();
@@ -229,95 +221,35 @@ QString Telegram::dialogStatusText(Dialog *dialog)
     User* user = TelegramCache_user(id);
 
     if(user)
-        return this->userStatusText(user);
+        return TelegramHelper::statusText(user);
 
     return QString();
 }
 
-QString Telegram::dialogDraftMessage(Dialog *dialog)
+TelegramObject *Telegram::messageFrom(Message *message) const
 {
-    if(dialog->draft())
-        return dialog->draft()->message().toString();
+    if(!message)
+        return NULL;
 
-    return QString();
-}
-
-bool Telegram::dialogIsChat(Dialog *dialog)
-{
-    if(!dialog)
-        return false;
-
-    return TelegramHelper::isChat(dialog);
-}
-
-bool Telegram::dialogIsChannel(Dialog *dialog)
-{
-    if(!dialog)
-        return false;
-
-    return TelegramHelper::isChannel(dialog);
-}
-
-bool Telegram::dialogIsBroadcast(Dialog *dialog)
-{
-    if(!dialog || !TelegramHelper::isChannel(dialog))
-        return false;
-
-    Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog->peer()));
-
-    if(chat)
-        return chat->isBroadcast();
-
-    return false;
-}
-
-bool Telegram::dialogHasDraftMessage(Dialog *dialog)
-{
-    if(!dialog)
-        return false;
-
-    return dialog->draft() && (dialog->draft()->constructorId() != DraftMessage::CtorDraftMessageEmpty);
-}
-
-QString Telegram::userFullName(User *user)
-{
-    return TelegramHelper::fullName(user);
-}
-
-QString Telegram::userStatusText(User *user)
-{
-    return TelegramHelper::statusText(user);
-}
-
-Message *Telegram::message(TLInt messageid)
-{
-    return TelegramCache_message(messageid);
-}
-
-QString Telegram::messageFrom(Message *message)
-{
-    if(message)
+    if(message->isPost()) // Post = messages from channels
     {
-        if(message->isPost()) // Post = messages from channels
-        {
-            Chat* chat = TelegramCache_chat(TelegramHelper::identifier(message->toId()));
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(message->toId()));
 
-            if(chat)
-                return chat->title();
-        }
-        else
-        {
-            User* user = TelegramCache_user(message->fromId());
+        if(chat)
+            return chat;
+    }
+    else
+    {
+        User* user = TelegramCache_user(message->fromId());
 
-            if(user)
-                return TelegramHelper::fullName(user);
-        }
+        if(user)
+            return user;
     }
 
-    return "???";
+    return NULL;
 }
 
-QString Telegram::messageText(Message *message)
+QString Telegram::messageText(Message *message) const
 {
     if(!message)
         return QString();
@@ -339,7 +271,7 @@ QString Telegram::messageText(Message *message)
     return message->message();
 }
 
-QString Telegram::messagePreview(Message *message)
+QString Telegram::messagePreview(Message *message) const
 {
     if(!message)
         return QString();

@@ -10,6 +10,12 @@ MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpee
 
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
+
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isChatChanged);
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isBroadcastChanged);
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isMegaGroupChanged);
 }
 
 Dialog *MessagesModel::dialog() const
@@ -27,6 +33,22 @@ void MessagesModel::setDialog(Dialog *dialog)
     emit dialogChanged();
 }
 
+QString MessagesModel::title() const
+{
+    if(!this->_telegram)
+        return QString();
+
+    return this->_telegram->dialogTitle(this->_dialog);
+}
+
+QString MessagesModel::statusText() const
+{
+    if(!this->_telegram)
+        return QString();
+
+    return this->_telegram->dialogStatusText(this->_dialog);
+}
+
 int MessagesModel::loadCount() const
 {
     return this->_loadcount;
@@ -41,10 +63,58 @@ void MessagesModel::setLoadCount(int loadcount)
     emit loadCountChanged();
 }
 
+bool MessagesModel::isChat() const
+{
+    if(!this->_dialog)
+        return false;
+
+    return TelegramHelper::isChat(this->_dialog);
+}
+
+bool MessagesModel::isBroadcast() const
+{
+    if(!this->_dialog || !TelegramHelper::isChannel(this->_dialog))
+        return false;
+
+    Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
+
+    if(!chat)
+        return false;
+
+    return chat->isBroadcast();
+}
+
+bool MessagesModel::isMegaGroup() const
+{
+    if(!this->_dialog || !TelegramHelper::isChannel(this->_dialog))
+        return false;
+
+    Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
+
+    if(!chat)
+        return false;
+
+    return chat->isMegagroup();
+}
+
 QVariant MessagesModel::data(const QModelIndex &index, int role) const
 {
+    if(!index.isValid() || (index.row() >= this->_messages.length()))
+        return QVariant();
+
+    Message* message = this->_messages[index.row()];
+
     if(role == MessagesModel::ItemRole)
-        return QVariant::fromValue(this->_messages[index.row()]);
+        return QVariant::fromValue(message);
+
+    if(role == MessagesModel::MessageFrom)
+        return this->messageFrom(message);
+
+    if(role == MessagesModel::MessageText)
+        return this->_telegram->messageText(message);
+
+    if(role == MessagesModel::IsServiceMessageRole)
+        return (message->constructorId() == TLTypes::MessageService);
 
     return QVariant();
 }
@@ -56,7 +126,13 @@ int MessagesModel::rowCount(const QModelIndex &) const
 
 QHash<int, QByteArray> MessagesModel::roleNames() const
 {
-    return this->initRoles();
+    QHash<int, QByteArray> roles = this->initRoles();
+
+    roles[MessagesModel::MessageFrom] = "messageFrom";
+    roles[MessagesModel::MessageText] = "messageText";
+    roles[MessagesModel::IsServiceMessageRole] = "isServiceMessage";
+
+    return roles;
 }
 
 void MessagesModel::loadMore()
@@ -157,6 +233,31 @@ void MessagesModel::onDeleteMessage(Message* message)
         this->endRemoveRows();
         break;
     }
+}
+
+QString MessagesModel::messageFrom(Message *message) const
+{
+    TelegramObject* tgobj = this->_telegram->messageFrom(message);
+
+    if(!tgobj)
+        return QString();
+
+    switch(tgobj->constructorId())
+    {
+        case TLTypes::Chat:
+        case TLTypes::ChatForbidden:
+        case TLTypes::Channel:
+        case TLTypes::ChannelForbidden:
+            return qobject_cast<Chat*>(tgobj)->title();
+
+        case TLTypes::User:
+            return TelegramHelper::fullName(qobject_cast<User*>(tgobj));
+
+        default:
+            break;
+    }
+
+    return QString();
 }
 
 TLInt MessagesModel::maxId() const
