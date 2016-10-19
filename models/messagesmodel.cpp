@@ -95,9 +95,12 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     MessagesMessages messages;
     messages.read(mtreply);
 
-    this->_athistoryend = (messages.constructorId() != TLTypes::MessagesMessagesSlice);
+    if(messages.constructorId() == TLTypes::MessagesMessages)
+        this->_athistoryend = true;
+    else
+        this->_athistoryend = (this->_messages.count() >= messages.count());
 
-    this->beginInsertRows(QModelIndex(), 0, messages.count() - 1);
+    this->beginInsertRows(QModelIndex(), 0, messages.messages().count() - 1);
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
