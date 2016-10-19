@@ -18,6 +18,9 @@ class TelegramHelper
         static QString dateString(TLInt timestamp);
         static QString fullName(User* user);
         static QString statusText(User* user);
+        static DocumentAttribute* documentHas(Document* document, TLConstructor attributector);
+        static bool isSticker(Document* document);
+        static bool isAnimated(Document* document);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);
         static bool isChat(Peer* peer);

@@ -158,6 +158,27 @@ QString TelegramHelper::statusText(User *user)
     return QObject::tr("Long time ago");
 }
 
+DocumentAttribute *TelegramHelper::documentHas(Document *document, TLConstructor attributector)
+{
+    foreach(DocumentAttribute* attribute, document->attributes())
+    {
+        if(attribute->constructorId() == attributector)
+            return attribute;
+    }
+
+    return NULL;
+}
+
+bool TelegramHelper::isSticker(Document *document)
+{
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker) != NULL;
+}
+
+bool TelegramHelper::isAnimated(Document *document)
+{
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAnimated) != NULL;
+}
+
 bool TelegramHelper::isChat(Dialog *dialog)
 {
     return TelegramHelper::isChat(dialog->peer());
