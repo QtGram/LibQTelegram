@@ -24,19 +24,19 @@ class Telegram : public QObject
         QString messageText(Message* message) const;
         TelegramObject* messageFrom(Message *message) const;
 
-    private:
-        QString messageMediaText(MessageMedia* messagemedia) const;
-        QString messageActionText(Message *message) const;
-
     public slots: // Login
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
 
+    private:
+        QString messageMediaText(MessageMedia* messagemedia) const;
+        QString messageActionText(Message *message) const;
     signals:
         void initializerChanged();
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
+        void floodWait(int seconds);
 
     private:
         TelegramInitializer* _initializer;

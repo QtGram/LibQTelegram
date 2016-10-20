@@ -18,8 +18,10 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     dcconfig.setPort(port);
 
     DC* dc = new DC(host, port, id, this);
+    connect(dc, &DC::disconnected, this, &DCSessionManager::onDCDisconnected);
     connect(dc, &DC::authorizationReply, this, &DCSessionManager::onAuthorizationReply);
     connect(dc, &DC::migrateDC, this, &DCSessionManager::onMigrateDC);
+    connect(dc, &DC::floodWait, this, &DCSessionManager::floodWait);
 
     this->_dclist[id] = dc;
     return dc;
@@ -68,15 +70,12 @@ void DCSessionManager::initializeSession(DCSession *dcsession)
 
     if(dc->state() != DC::ConnectedState)
     {
-        connect(dcsession, &DCSession::connected, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
-
         if(dc->state() == DC::UnconnectedState)
             dc->connectToDC();
 
         return;
     }
 
-    disconnect(dcsession, &DCSession::connected, this, 0);
     DCConfig& dcconfig = DCConfig_fromDc(dc);
 
     if(dcconfig.authorization() < DCConfig::Authorized)
@@ -126,9 +125,15 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
     this->_mainsession = new DCSession(dc, this);
     this->_mainsession->setOwnedDC(true);
 
+    connect(this->_mainsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
+
     if(oldsession)
     {
-        dc->keepRequest(oldsession->dc()->lastRequest());
+        DCConfig& olddcconfig = DCConfig_fromSession(oldsession);
+
+        if(olddcconfig.authorization() == DCConfig::Signed) // Get the last request only if the previous DC was signed
+            dc->keepRequest(oldsession->dc()->lastRequest());
+
         this->closeSession(oldsession);
     }
 
@@ -145,7 +150,11 @@ DCSession *DCSessionManager::createMainSession(int dcid)
 DCSession *DCSessionManager::createSession(int dcid)
 {
     DC* dc = this->createDC(dcid);
-    return new DCSession(dc, this);
+    DCSession* dcsession = new DCSession(dc, this);
+
+    connect(dcsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
+
+    return dcsession;
 }
 
 void DCSessionManager::onAuthorized(DC* dc)
@@ -194,4 +203,15 @@ void DCSessionManager::onMigrateDC(int fromdcid, int todcid)
 
     DCSession* session = this->createMainSession(todcid);
     this->initializeSession(session);
+}
+
+void DCSessionManager::onDCDisconnected()
+{
+    DC* dc = qobject_cast<DC*>(this->sender());
+
+    if(!this->_dcauthorizations.contains(dc))
+        return;
+
+    DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
+    dcauthorization->deleteLater();
 }

@@ -1,8 +1,8 @@
 #ifndef DC_H
 #define DC_H
 
-#define QueryTimeout                 10000  // 10  seconds
-#define AckTimeout                   120000 // 120 seconds
+#define QueryTimeout                 10000  // 10 seconds
+#define AckTimeout                   16000 //  16 seconds
 #define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 
 #include <QTimer>
@@ -36,13 +36,17 @@ class DC : public DCConnection
         void repeatRequest(TLLong messageid);
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
+        void onDCFloodWait(int seconds);
         void onDCReadyRead();
         void onDCConnected();
+        void onDCUnauthorized();
 
     signals:
         void authorizationReply(MTProtoReply* mtreply);
         void configurationReceived(Config* config);
         void migrateDC(int fromdcid, int dcid);
+        void floodWait(int seconds);
+        void unauthorized();
 
     private:
         QHash<TLLong, MTProtoRequest*> _pendingrequests; // Queries sent and waiting for ACKs

@@ -68,7 +68,7 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
     RpcError re;
     re.read(mtreply);
 
-    if(re.errorMessage().indexOf("_MIGRATE_") != -1)
+    if(re.errorMessage().contains("_MIGRATE_"))
     {
         QRegularExpression regexp("_MIGRATE_([0-9]+)");
         QRegularExpressionMatch match = regexp.match(re.errorMessage());
@@ -76,11 +76,30 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
 
         if(dcnum.isNull())
         {
-            qFatal("Unknown destination DC: %s", qUtf8Printable(dcnum));
+            qFatal("DC %d Unknown destination DC: %s", this->_dcid, qUtf8Printable(dcnum));
             return true;
         }
 
         emit migrateDC(this->_dcid, dcnum.toInt());
+    }
+    else if(re.errorMessage().contains("AUTH_KEY_"))
+    {
+        qDebug("DC %d Unauthorized client, requesting new authorization...", this->_dcid);
+        emit unauthorized();
+    }
+    else if(re.errorMessage().contains("FLOOD_WAIT_"))
+    {
+        QRegularExpression regexp("FLOOD_WAIT_([0-9]+)");
+        QRegularExpressionMatch match = regexp.match(re.errorMessage());
+        QString seconds = match.captured(1);
+
+        if(!seconds.isNull())
+        {
+            qWarning("DC %d Flood lock enabled (%s seconds)", this->_dcid, qUtf8Printable(seconds));
+            emit floodWait(seconds.toInt());
+        }
+        else
+            qFatal("DC %d Cannot get flood duration", this->_dcid);
     }
     else
         qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));

@@ -10,6 +10,8 @@ class DCConnection : public QTcpSocket
     public:
         explicit DCConnection(const QString& address, quint16 port, int dcid, QObject *parent = 0);
         int id() const;
+
+    public slots:
         void connectToDC();
 
     protected:

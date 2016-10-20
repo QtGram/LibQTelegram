@@ -4,7 +4,7 @@
 #include "config/cache/telegramcache.h"
 #include <QDebug>
 
-TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _debugmode(false)
+TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _debugmode(false), _floodwaittimer(0)
 {
 }
 
@@ -147,42 +147,49 @@ void TelegramInitializer::tryConnect()
     if(!this->_apiid || !this->_port)
         return;
 
-    DCSession* session = NULL;
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
     TelegramConfig::config()->setDebugMode(true);
+
+    DCSession* mainsession = NULL;
 
     if(DCConfig_isLoggedIn)
     {
         TelegramCache_load;
         DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
+        mainsession = DCSessionManager_instance->createMainSession(dcconfig);
+    }
+    else
+        mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
 
-        session = DCSessionManager_instance->createMainSession(dcconfig);
-        connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onSessionLoggedIn);
+    connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
+    connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onMainSessionReady, Qt::UniqueConnection);
+    DC_InitializeSession(mainsession);
+}
+
+void TelegramInitializer::timerEvent(QTimerEvent *event)
+{
+    if(event->timerId() == this->_floodwaittimer)
+    {
+        this->killTimer(this->_floodwaittimer);
+        this->_floodwaittimer = 0;
+    }
+}
+
+void TelegramInitializer::onMainSessionReady(DCSession* dcsession)
+{
+    if(dcsession != DC_MainSession)
+        return;
+
+    if(DCConfig_isLoggedIn)
+    {
+        UpdateHandler_sync;
+        emit loginCompleted();
     }
     else
     {
-        session = DCSessionManager_instance->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
-        connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onSessionReady);
+        MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, false, this->_apiid, this->_apihash);
+        connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
     }
-
-    DC_InitializeSession(session);
-}
-
-void TelegramInitializer::onSessionLoggedIn(DCSession* dcsession)
-{
-    Q_UNUSED(dcsession);
-    disconnect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, 0);
-
-    UpdateHandler_sync;
-    emit loginCompleted();
-}
-
-void TelegramInitializer::onSessionReady(DCSession* dcsession)
-{
-    disconnect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, 0);
-
-    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, false, this->_apiid, this->_apihash);
-    connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
 }
 
 void TelegramInitializer::onAuthCheckPhoneReplied(MTProtoReply *mtreply)
@@ -225,4 +232,13 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
     });
 
     cacheinitializer->initialize();
+}
+
+void TelegramInitializer::onFloodWait(int seconds)
+{
+    if(this->_floodwaittimer) // Ignore other flood signals for some time
+        return;
+
+    this->_floodwaittimer = this->startTimer(5000); // 5 seconds
+    emit floodWait(seconds);
 }

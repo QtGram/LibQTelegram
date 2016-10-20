@@ -41,9 +41,12 @@ class DCSessionManager: public QObject
         void onAuthorizationImported(DC *dc);
         void onAuthorizationReply(MTProtoReply *mtreply);
         void onMigrateDC(int fromdcid, int todcid);
+        void onDCDisconnected();
 
     signals:
         void sessionReady(DCSession* session);
+        void unauthorized(DCSession* mainsession);
+        void floodWait(int seconds);
 
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;

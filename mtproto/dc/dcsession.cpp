@@ -6,12 +6,11 @@ DCSession::DCSession(DC *dc, QObject *parent) : QObject(parent), _dc(dc)
 {
     this->_acktimer = new QTimer(this);
     this->_acktimer->setSingleShot(true);
-    this->_acktimer->setInterval(1600);
+    this->_acktimer->setInterval(AckTimeout);
 
-    connect(dc, &DC::connected, this, &DCSession::onDCConnected);
+    connect(dc, &DC::unauthorized, this, &DCSession::requestAuthorization);
+    connect(dc, &DC::connected, this, &DCSession::requestAuthorization);
     connect(this->_acktimer, &QTimer::timeout, this, &DCSession::sendAck);
-
-    this->generateSessionId();
 }
 
 bool DCSession::ownedDc() const
@@ -59,9 +58,12 @@ void DCSession::generateSessionId()
     Math::randomize(&this->_sessionid);
 }
 
-void DCSession::onDCConnected()
+void DCSession::requestAuthorization()
 {
-     emit connected(this);
+    this->generateSessionId();
+    this->_ackqueue.clear();
+
+    emit unauthorized(this);
 }
 
 void DCSession::sendAck()

@@ -76,6 +76,11 @@ QByteArray MTProtoRequest::build()
     return request;
 }
 
+void MTProtoRequest::resetFirst(int dcid)
+{
+    ResetFirst(dcid);
+}
+
 void MTProtoRequest::setAcked(bool b)
 {
     this->_acked = b;

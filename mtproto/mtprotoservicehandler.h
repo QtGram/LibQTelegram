@@ -19,6 +19,8 @@ class MTProtoServiceHandler : public QObject
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
         void saltChanged(TLLong reqmsgid);
+        void unauthorized();
+        void floodWait(int seconds);
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);

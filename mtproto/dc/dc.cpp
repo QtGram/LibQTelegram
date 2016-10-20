@@ -14,6 +14,8 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
     connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::floodWait, this, &DC::onDCFloodWait);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::unauthorized, this, &DC::onDCUnauthorized);
 
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
 
@@ -111,6 +113,29 @@ void DC::repeatRequest(TLLong msgid)
 void DC::onDCConnected()
 {
     this->_contentmsgno = -1; // Init connection to DC
+    MTProtoRequest::resetFirst(this->id());
+}
+
+void DC::onDCUnauthorized()
+{
+    // Reset authorization state
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
+    dcconfig.reset();
+
+    qDeleteAll(this->_pendingrequests);
+    this->_pendingrequests.clear();
+
+    this->abort();
+    emit unauthorized();
+}
+
+void DC::onDCFloodWait(int seconds)
+{
+    qDeleteAll(this->_pendingrequests);
+    this->_pendingrequests.clear();
+
+    this->abort();
+    emit floodWait(seconds);
 }
 
 void DC::handleReply(const QByteArray &message)

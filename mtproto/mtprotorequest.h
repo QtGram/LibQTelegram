@@ -7,6 +7,7 @@
 
 #define IsFirst(dcid) MTProtoRequest::_firstmap[dcid]
 #define UnsetFirst(dcid) MTProtoRequest::_firstmap[dcid] = false;
+#define ResetFirst(dcid) MTProtoRequest::_firstmap[dcid] = true;
 
 #include <QObject>
 #include "mtprotostream.h"
@@ -25,6 +26,9 @@ class MTProtoRequest : public QObject
         bool encrypted() const;
         const QByteArray& body() const;
         QByteArray build();
+
+    public:
+        static void resetFirst(int dcid);
 
     public:
         void setAcked(bool b);

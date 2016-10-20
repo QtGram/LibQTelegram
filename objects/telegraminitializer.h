@@ -45,13 +45,17 @@ class TelegramInitializer : public QObject
     private:
         void tryConnect();
 
+    protected:
+        void timerEvent(QTimerEvent *event);
+
     private slots:
-        void onSessionLoggedIn(DCSession *dcsession);
-        void onSessionReady(DCSession *dcsession);
+        void onMainSessionReady(DCSession *dcsession);
         void onAuthCheckPhoneReplied(MTProtoReply *mtreply);
         void onLoginCompleted(MTProtoReply* mtreply);
+        void onFloodWait(int seconds);
 
     signals:
+        void floodWait(int seconds);
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
@@ -74,6 +78,7 @@ class TelegramInitializer : public QObject
 
      private:
         TLString _phonecodehash;
+        int _floodwaittimer;
 };
 
 #endif // TELEGRAM_H

@@ -24,6 +24,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
     if(this->_initializer)
     {
+        disconnect(this->_initializer, &TelegramInitializer::floodWait, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signUpRequested, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signInRequested, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::loginCompleted, this, 0);
@@ -31,7 +32,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
     this->_initializer = initializer;
 
-    connect(this->_initializer, &TelegramInitializer::signUpRequested, this, &Telegram::signUpRequested);
+    connect(this->_initializer, &TelegramInitializer::floodWait, this, &Telegram::floodWait);
     connect(this->_initializer, &TelegramInitializer::signInRequested, this, &Telegram::signInRequested);
     connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
 

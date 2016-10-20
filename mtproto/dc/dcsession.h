@@ -25,12 +25,12 @@ class DCSession : public QObject
         void generateSessionId();
 
     private slots:
-        void onDCConnected();
+        void requestAuthorization();
         void sendAck();
         void queueAck(MTProtoReply *);
 
     signals:
-        void connected(DCSession* dcsession);
+        void unauthorized(DCSession* dcsession);
         void ready();
 
     private:
