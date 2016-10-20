@@ -46,6 +46,8 @@ class TelegramInitializer : public QObject
         void tryConnect();
 
     private slots:
+        void onSessionLoggedIn(DCSession *dcsession);
+        void onSessionReady(DCSession *dcsession);
         void onAuthCheckPhoneReplied(MTProtoReply *mtreply);
         void onLoginCompleted(MTProtoReply* mtreply);
 

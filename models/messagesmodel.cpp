@@ -179,8 +179,6 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
         this->_athistoryend = (this->_messages.count() >= messages.count());
 
     int count = messages.messages().count();
-    qDebug() << "INSERT" << this->_messages.count() << "->" << (this->_messages.count() + count);
-
     this->beginInsertRows(QModelIndex(), this->_messages.count(), this->_messages.count() + count);
 
     TelegramCache_store(messages.users());

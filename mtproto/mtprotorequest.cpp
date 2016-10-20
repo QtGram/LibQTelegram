@@ -6,14 +6,19 @@
 
 QHash<int, bool> MTProtoRequest::_firstmap;
 
-MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _dcid(dcid), _constructorid(0), _sessionid(0), _messageid(0), _seqno(0), _body(NULL)
+MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _acked(false), _dcid(dcid), _sessionid(0), _messageid(0), _seqno(0), _body(NULL)
 {
-    TRY_INIT_FIRST(dcid);
+    Try_InitFirst(dcid);
 }
 
-TLConstructor MTProtoRequest::constructorId() const
+bool MTProtoRequest::acked() const
 {
-    return this->_constructorid;
+    return this->_acked;
+}
+
+int MTProtoRequest::dcId() const
+{
+    return this->_dcid;
 }
 
 TLLong MTProtoRequest::messageId() const
@@ -55,7 +60,6 @@ void MTProtoRequest::setBody(MTProtoStream *body)
 {
     body->setParent(this); // Take ownership
 
-    this->_constructorid = body->peekTLConstructor();
     this->_body = body;
 }
 
@@ -70,6 +74,11 @@ QByteArray MTProtoRequest::build()
 
     this->build(request, requestbody);
     return request;
+}
+
+void MTProtoRequest::setAcked(bool b)
+{
+    this->_acked = b;
 }
 
 void MTProtoRequest::setDcId(int dcid)
@@ -94,10 +103,10 @@ void MTProtoRequest::initConnection(MTProtoStream &mtstream) const
 
 void MTProtoRequest::build(QByteArray &request, const QByteArray &requestbody)
 {
-    if(IS_FIRST(this->_dcid))
+    if(IsFirst(this->_dcid))
     {
         request.append(0xEF); // Use Abridged version
-        UNSET_FIRST(this->_dcid);
+        UnsetFirst(this->_dcid);
     }
 
     TLInt len = requestbody.length() / 4;
@@ -122,6 +131,14 @@ QByteArray MTProtoRequest::buildPlain()
     mtstream.writeRaw(this->_body);
 
     return mtstream.data();
+}
+
+void MTProtoRequest::timerEvent(QTimerEvent *event)
+{
+    if(!this->_acked)
+        emit timeout(this->_messageid);
+    else
+        killTimer(event->timerId());
 }
 
 QByteArray MTProtoRequest::buildEncrypted()

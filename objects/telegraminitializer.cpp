@@ -147,22 +147,41 @@ void TelegramInitializer::tryConnect()
     if(!this->_apiid || !this->_port)
         return;
 
+    DCSession* session = NULL;
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
     TelegramConfig::config()->setDebugMode(true);
 
     if(DCConfig_isLoggedIn)
     {
-        DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
-        DCSessionManager::instance()->createMainSession(dcconfig);
-
         TelegramCache_load;
-        UpdateHandler_sync;
-        emit loginCompleted();
-        return;
+        DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
+
+        session = DCSessionManager_instance->createMainSession(dcconfig);
+        connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onSessionLoggedIn);
+    }
+    else
+    {
+        session = DCSessionManager_instance->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
+        connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onSessionReady);
     }
 
-    DCSessionManager::instance()->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
-    MTProtoRequest* req = TelegramAPI::authSendCode(DC_MainSession, this->_phonenumber, false, this->_apiid, this->_apihash);
+    DC_InitializeSession(session);
+}
+
+void TelegramInitializer::onSessionLoggedIn(DCSession* dcsession)
+{
+    Q_UNUSED(dcsession);
+    disconnect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, 0);
+
+    UpdateHandler_sync;
+    emit loginCompleted();
+}
+
+void TelegramInitializer::onSessionReady(DCSession* dcsession)
+{
+    disconnect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, 0);
+
+    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, false, this->_apiid, this->_apihash);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
 }
 

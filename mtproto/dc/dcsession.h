@@ -18,15 +18,20 @@ class DCSession : public QObject
         TLLong sessionId() const;
         DC* dc() const;
         void setOwnedDC(bool b);
-        MTProtoRequest* sendPlain(MTProtoStream *mtstream);
+        void sendPlain(MTProtoStream *mtstream);
         MTProtoRequest* sendEncrypted(MTProtoStream *mtstream);
 
     private:
         void generateSessionId();
 
     private slots:
+        void onDCConnected();
         void sendAck();
         void queueAck(MTProtoReply *);
+
+    signals:
+        void connected(DCSession* dcsession);
+        void ready();
 
     private:
         QTimer* _acktimer;

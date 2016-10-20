@@ -6,17 +6,27 @@
 
 TLLong DC::_lastclientmsgid = 0;
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0)
+DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
     connect(this->_mtservicehandler, &MTProtoServiceHandler::configurationReceived, this, &DC::configurationReceived);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
-    connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatLastRequest);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
+
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
-    connect(this, &DC::connected, this, &DC::sendPendingRequests);
-    connect(this, &DC::reconnecting, this, &DC::onReconnecting);
+
+    connect(this, &DC::connected, this, &DC::onDCConnected);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
+}
+
+MTProtoRequest *DC::lastRequest() const
+{
+    if(!this->_pendingrequests.contains(this->_lastmsgid))
+        return NULL;
+
+    return this->_pendingrequests[this->_lastmsgid];
 }
 
 TLInt DC::generateContentMsgNo()
@@ -82,31 +92,25 @@ TLInt DC::getPacketLength()
         return packetlength * 4;
     }
 
-    qFatal("Incorrect TCP Package");
+    qFatal("DC %d: Incorrect TCP Package", this->id());
     return 0;
 }
 
-void DC::repeatLastRequest()
+void DC::repeatRequest(TLLong msgid)
 {
-    if(!this->_sentrequests.contains(this->_lastmsgid))
-    {
-        qWarning("Cannot repeat messageid: %llx", this->_lastmsgid);
+    if(!this->_pendingrequests.contains(msgid))
         return;
-    }
 
-    this->send(this->_sentrequests[this->_lastmsgid]);
+    qDebug("DC %d: Repeating request %llx...", this->id(), msgid);
+
+    MTProtoRequest* req = this->_pendingrequests.take(msgid);
+    req->setAcked(false);
+    this->send(req);
 }
 
-void DC::onReconnecting()
+void DC::onDCConnected()
 {
-    this->_contentmsgno = -1; // Reinit connection too
-
-    QList<TLLong> messageids = this->_sentrequests.keys();
-
-    foreach(TLLong messageid, messageids)
-        this->_pendingrequests << this->_sentrequests[messageid];
-
-    this->_sentrequests.clear();
+    this->_contentmsgno = -1; // Init connection to DC
 }
 
 void DC::handleReply(const QByteArray &message)
@@ -115,12 +119,12 @@ void DC::handleReply(const QByteArray &message)
 
     if(mtreply.isError())
     {
-        qDebug() << "DC" << this->id() << "ERROR" << qAbs(mtreply.errorCode());
+        qWarning("DC %d ERROR %d", this->id(), qAbs(mtreply.errorCode()));
         return;
     }
 
     if(((mtreply.messageId() % 4) != 1) && ((mtreply.messageId() % 4) != 3))
-        qFatal("Invalid server Message %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
+        qFatal("DC %d: Invalid server Message %llx (yields %lld, instead of 1 or 3)", this->id(), mtreply.messageId(), mtreply.messageId() % 4);
 
     this->checkSyncronization(&mtreply);
 
@@ -136,10 +140,6 @@ void DC::handleReply(MTProtoReply *mtreply)
     if(this->_mtservicehandler->handle(mtreply))
         return;
 
-    if(UpdateHandler_instance->handle(mtreply))
-        return;
-
-    this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
 
     if(dcconfig.authorization() < DCConfig::Authorized)
@@ -148,95 +148,92 @@ void DC::handleReply(MTProtoReply *mtreply)
         return;
     }
 
-    MTProtoRequest* req = this->_sentrequests[mtreply->messageId()];
+    MTProtoRequest* req = this->_pendingrequests.take(mtreply->messageId());
 
     if(!req)
     {
-        qWarning("Request for msg_id %llx not found", mtreply->messageId());
+        qWarning("DC %d: Request for msg_id %llx not found", this->id(), mtreply->messageId());
         return;
     }
 
-    emit req->replied(mtreply);
+    req->setAcked(true);
 
-    this->_sentrequests.remove(mtreply->messageId());
+    if(UpdateHandler_instance->handle(mtreply))
+    {
+        req->deleteLater();
+        return;
+    }
+
+    this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
+    emit req->replied(mtreply);
     req->deleteLater();
 }
 
-void DC::sendPendingRequests()
+void DC::onAck(const TLVector<TLLong> &msgids)
 {
-    int idx = 0;
-    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-
-    while(idx < this->_pendingrequests.length())
+    foreach(TLLong msgid, msgids)
     {
-        MTProtoRequest* req = this->_pendingrequests[idx];
-
-        // Check for authorization state
-        if(req->encrypted() && (dcconfig.authorization() < DCConfig::Authorized))
-        {
-            idx++;
+        if(!this->_pendingrequests.contains(msgid))
             continue;
-        }
 
-        this->_pendingrequests.removeAt(idx);
-        this->send(req);
+        MTProtoRequest* req = this->_pendingrequests[msgid];
+        req->setAcked(true);
     }
 }
 
 void DC::send(MTProtoRequest *req)
 {
-    if(this->_sentrequests.contains(req->messageId())) // This is a repeated request, remove old message_id
-        this->_sentrequests.remove(req->messageId());
+    if(this->state() != DC::ConnectedState)
+    {
+        qWarning("DC %d: Not connected, cannot send queries", this->id());
+        return;
+    }
 
     this->assignMessageId(req);
 
-    if(this->state() == DC::ConnectedState)
+    if(req->encrypted())
     {
-        if(req->encrypted())
+        this->_pendingrequests[req->messageId()] = req;
+        DCConfig& dcconfig = DCConfig_fromDcId(this->id());
+
+        if(dcconfig.authorization() < DCConfig::Authorized)
         {
-            DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-
-            if(dcconfig.authorization() < DCConfig::Authorized)
-            {
-                this->_pendingrequests << req;
-                return;
-            }
-
-            req->setSeqNo(this->generateContentMsgNo());
+            qWarning("DC %d: Cannot send encrypted requests", this->id());
+            return;
         }
 
-        QByteArray reqpayload = req->build();
-
-        if(req->encrypted())
-            this->_sentrequests[req->messageId()] = req;
-
-        this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
-        this->write(reqpayload);
-
-        if(!req->encrypted())
-            req->deleteLater(); // Plain requests are handled manually
+        req->setSeqNo(this->generateContentMsgNo());
     }
-    else
-    {
-        this->_pendingrequests << req;
 
-        if(this->state() == DC::UnconnectedState)
-            this->connectToDC();
-    }
+    QByteArray reqpayload = req->build();
+    this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
+
+    if(req->encrypted())
+        connect(req, &MTProtoRequest::timeout, this, &DC::repeatRequest, Qt::UniqueConnection);
+
+    this->write(reqpayload);
 }
 
-void DC::takeRequests(TLLong sessionid, DC *fromdc)
+void DC::keepRequest(MTProtoRequest *req)
 {
-    QList<TLLong> messageids = fromdc->_sentrequests.keys();
-    qSort(messageids); // Sort by messageid
-
-    foreach(TLLong messageid, messageids)
+    if(!req)
     {
-        MTProtoRequest* req = fromdc->_sentrequests[messageid];
-        req->setDcId(this->id());
-        req->setSessionId(sessionid);
-        this->_pendingrequests << req;
+        this->_savedrequest = NULL;
+        return;
     }
+
+    req->setAcked(false);
+    req->setDcId(this->id());
+
+    this->_savedrequest = req;
+}
+
+MTProtoRequest *DC::giveRequest()
+{
+    MTProtoRequest* req = this->_savedrequest;
+
+    this->_savedrequest = NULL;
+    return req;
 }
 
 void DC::onDCReadyRead()
@@ -250,7 +247,7 @@ void DC::onDCReadyRead()
 
         if(packetlen < 4)
         {
-            qFatal("Invalid TCP package, length: %d", packetlen);
+            qFatal("DC %d: Invalid TCP package, length: %d", this->id(), packetlen);
             return;
         }
 

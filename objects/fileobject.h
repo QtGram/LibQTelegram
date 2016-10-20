@@ -50,11 +50,12 @@ class FileObject : public QObject
 
     private slots:
         void onUploadFile(MTProtoReply* mtreply);
+        void sendDownloadRequest();
 
     private:
         void setDownloadMode(int downloadmode);
         QString extension(const UploadFile* uploadfile);
-        void sendDownloadRequest();
+        void createDownloadSession(int dcid);
 
     signals:
         void imageSizeChanged();

@@ -1,6 +1,10 @@
 #ifndef DC_H
 #define DC_H
 
+#define QueryTimeout                 10000  // 10  seconds
+#define AckTimeout                   120000 // 120 seconds
+#define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
+
 #include <QTimer>
 #include <QHash>
 #include "dcconnection.h"
@@ -9,19 +13,16 @@
 #include "../mtprotoreply.h"
 #include "../mtprotoservicehandler.h"
 
-#define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
-
 class DC : public DCConnection
 {
     Q_OBJECT
 
     public:
         explicit DC(const QString& address, qint16 port, int dcid, QObject *parent = 0);
-
-    public:
-        void sendPendingRequests();
+        MTProtoRequest* lastRequest() const;
         void send(MTProtoRequest *req);
-        void takeRequests(TLLong sessionid, DC* fromdc);
+        void keepRequest(MTProtoRequest *req);
+        MTProtoRequest* giveRequest();
 
     private:
         void decompile(int direction, TLLong messageid, const QByteArray &body);
@@ -32,10 +33,11 @@ class DC : public DCConnection
         TLInt getPacketLength();
 
     private slots:
-        void repeatLastRequest();
-        void onReconnecting();
+        void repeatRequest(TLLong messageid);
         void handleReply(MTProtoReply* mtreply);
+        void onAck(const TLVector<TLLong>& msgids);
         void onDCReadyRead();
+        void onDCConnected();
 
     signals:
         void authorizationReply(MTProtoReply* mtreply);
@@ -43,10 +45,10 @@ class DC : public DCConnection
         void migrateDC(int fromdcid, int dcid);
 
     private:
-        QList<MTProtoRequest*> _pendingrequests;
-        QHash<TLLong, MTProtoRequest*> _sentrequests;
+        QHash<TLLong, MTProtoRequest*> _pendingrequests; // Queries sent and waiting for ACKs
         MTProtoServiceHandler* _mtservicehandler;
         MTProtoDecompiler* _mtdecompiler;
+        MTProtoRequest* _savedrequest;
         TLInt _lastpacketlen;
         TLInt _contentmsgno;
         TLLong _lastmsgid;

@@ -127,7 +127,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
         config.setServerSalt(badmsgnotification.newServerSalt());
         TelegramConfig_save;
 
-        emit saltChanged();
+        emit saltChanged(badmsgnotification.badMsgId());
     }
 
     return true;
@@ -160,7 +160,10 @@ bool MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
 
-    qDebug() << "DC" << this->_dcid << "Unhandled MsgAck";
+    MsgsAck msgsack;
+    msgsack.read(mtreply);
+
+    emit ack(msgsack.msgIds());
     return true;
 }
 

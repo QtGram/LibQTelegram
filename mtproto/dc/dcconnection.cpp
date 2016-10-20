@@ -25,14 +25,14 @@ void DCConnection::timerEvent(QTimerEvent *event)
     if(event->timerId() == this->_reconnecttimerid)
     {
         this->connectToDC();
+        this->killTimer(this->_reconnecttimerid);
         this->_reconnecttimerid = -1;
     }
 }
 
 void DCConnection::reconnectToDC()
 {
-    emit reconnecting();
-    this->_reconnecttimerid = QObject::startTimer(5000);
+    this->_reconnecttimerid = this->startTimer(5000);
 }
 
 void DCConnection::onStateChanged(SocketState state)

@@ -1,12 +1,12 @@
 #ifndef MTPROTOREQUEST_H
 #define MTPROTOREQUEST_H
 
-#define TRY_INIT_FIRST(dcid) \
+#define Try_InitFirst(dcid) \
     if(!MTProtoRequest::_firstmap.contains(dcid)) \
         MTProtoRequest::_firstmap[dcid] = true;
 
-#define IS_FIRST(dcid) MTProtoRequest::_firstmap[dcid]
-#define UNSET_FIRST(dcid) MTProtoRequest::_firstmap[dcid] = false;
+#define IsFirst(dcid) MTProtoRequest::_firstmap[dcid]
+#define UnsetFirst(dcid) MTProtoRequest::_firstmap[dcid] = false;
 
 #include <QObject>
 #include "mtprotostream.h"
@@ -18,7 +18,8 @@ class MTProtoRequest : public QObject
 
     public:
         explicit MTProtoRequest(int dcid, QObject *parent = 0);
-        TLConstructor constructorId() const;
+        bool acked() const;
+        int dcId() const;
         TLLong messageId() const;
         TLLong sessionId() const;
         bool encrypted() const;
@@ -26,6 +27,7 @@ class MTProtoRequest : public QObject
         QByteArray build();
 
     public:
+        void setAcked(bool b);
         void setDcId(int dcid);
         void setSessionId(TLLong sessionid);
         void setMessageId(TLLong messageid);
@@ -38,14 +40,17 @@ class MTProtoRequest : public QObject
         QByteArray buildEncrypted();
         QByteArray buildPlain();
 
+    protected:
+        void timerEvent(QTimerEvent *event);
+
     signals:
+        void timeout(TLLong messageid);
         void replied(MTProtoReply* reply);
 
     private:
+        bool _acked;
         int _dcid;
-        TLConstructor _constructorid;
         TLLong _sessionid;
-        TLLong _mainmsgid;
         TLLong _messageid;
         TLInt _seqno;
         MTProtoStream* _body;

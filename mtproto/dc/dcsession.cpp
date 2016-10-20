@@ -8,6 +8,7 @@ DCSession::DCSession(DC *dc, QObject *parent) : QObject(parent), _dc(dc)
     this->_acktimer->setSingleShot(true);
     this->_acktimer->setInterval(1600);
 
+    connect(dc, &DC::connected, this, &DCSession::onDCConnected);
     connect(this->_acktimer, &QTimer::timeout, this, &DCSession::sendAck);
 
     this->generateSessionId();
@@ -33,13 +34,12 @@ void DCSession::setOwnedDC(bool b)
     this->_dc->setParent(b ? this : NULL);
 }
 
-MTProtoRequest *DCSession::sendPlain(MTProtoStream *mtstream)
+void DCSession::sendPlain(MTProtoStream *mtstream)
 {
-    MTProtoRequest* req = new MTProtoRequest(this->_dc->id());
-    req->setBody(mtstream); // Take ownership
+    MTProtoRequest req(this->_dc->id());
+    req.setBody(mtstream); // Take ownership
 
-    this->_dc->send(req);
-    return req;
+    this->_dc->send(&req);
 }
 
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
@@ -59,6 +59,11 @@ void DCSession::generateSessionId()
     Math::randomize(&this->_sessionid);
 }
 
+void DCSession::onDCConnected()
+{
+     emit connected(this);
+}
+
 void DCSession::sendAck()
 {
     MTProtoStream* mtstream = new MTProtoStream();
@@ -74,14 +79,12 @@ void DCSession::sendAck()
     req->deleteLater();
 }
 
-void DCSession::queueAck(MTProtoReply *)
+void DCSession::queueAck(MTProtoReply* mtreply)
 {
-    MTProtoRequest* req = qobject_cast<MTProtoRequest*>(this->sender());
-
     if(!this->_acktimer->isActive())
         this->_acktimer->start();
 
-    this->_ackqueue << req->messageId();
+    this->_ackqueue << mtreply->messageId();
 
     if(this->_ackqueue.length() > 16)
     {

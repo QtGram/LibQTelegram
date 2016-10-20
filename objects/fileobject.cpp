@@ -114,10 +114,9 @@ void FileObject::downloadThumbnail()
     if(!this->_locthumbnail || (this->_locthumbnail->constructorId() == TLTypes::FileLocationUnavailable))
         return;
 
-    this->setDownloadMode(FileObject::DownloadThumbnail);
     this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locthumbnail);
-    this->_dcsession = DC_CreateSession(this->_locthumbnail->dcId());
-    this->sendDownloadRequest();
+    this->setDownloadMode(FileObject::DownloadThumbnail);
+    this->createDownloadSession(this->_locthumbnail->dcId());
 }
 
 bool FileObject::loadCache()
@@ -145,20 +144,18 @@ void FileObject::download()
 {
     if(this->_document)
     {
-        this->setDownloadMode(FileObject::Download);
         this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_document);
-        this->_dcsession = DC_CreateSession(this->_document->dcId());
-        this->sendDownloadRequest();
+        this->setDownloadMode(FileObject::Download);
+        this->createDownloadSession(this->_document->dcId());
         return;
     }
 
     if(!this->_locfile || (this->_locfile->constructorId() == TLTypes::FileLocationUnavailable))
         return;
 
-    this->setDownloadMode(FileObject::Download);
     this->_inputfilelocation = TelegramHelper::inputFileLocation(this->_locfile);
-    this->_dcsession = DC_CreateSession(this->_locfile->dcId());
-    this->sendDownloadRequest();
+    this->setDownloadMode(FileObject::Download);
+    this->createDownloadSession(this->_locfile->dcId());
 }
 
 QString FileObject::extension(const UploadFile *uploadfile)
@@ -193,6 +190,13 @@ QString FileObject::extension(const UploadFile *uploadfile)
         return ".temp";
 
     return QString();
+}
+
+void FileObject::createDownloadSession(int dcid)
+{
+    this->_dcsession = DC_CreateSession(dcid);
+    connect(this->_dcsession, &DCSession::ready, this, &FileObject::sendDownloadRequest);
+    DC_InitializeSession(this->_dcsession);
 }
 
 void FileObject::sendDownloadRequest()

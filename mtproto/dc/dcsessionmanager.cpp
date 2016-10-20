@@ -44,15 +44,45 @@ void DCSessionManager::doAuthorization(DCSession *dcsession)
     dcauthorization->authorize();
 }
 
-void DCSessionManager::initSession(DCSession *dcsession)
+void DCSessionManager::doSessionReady(DCSession *dcsession)
 {
     DC* dc = dcsession->dc();
     Q_ASSERT(dc != NULL);
 
+    MTProtoRequest* keptreq = dc->giveRequest();
+
+    if(keptreq)
+    {
+        keptreq->setSessionId(dcsession->sessionId());
+        dc->send(keptreq);
+    }
+
+    emit sessionReady(dcsession);
+    emit dcsession->ready();
+}
+
+void DCSessionManager::initializeSession(DCSession *dcsession)
+{
+    DC* dc = dcsession->dc();
+    Q_ASSERT(dc != NULL);
+
+    if(dc->state() != DC::ConnectedState)
+    {
+        connect(dcsession, &DCSession::connected, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
+
+        if(dc->state() == DC::UnconnectedState)
+            dc->connectToDC();
+
+        return;
+    }
+
+    disconnect(dcsession, &DCSession::connected, this, 0);
     DCConfig& dcconfig = DCConfig_fromDc(dc);
 
     if(dcconfig.authorization() < DCConfig::Authorized)
         this->doAuthorization(dcsession);
+    else
+        this->doSessionReady(dcsession);
 }
 
 void DCSessionManager::closeSession(DCSession *dcsession)
@@ -62,7 +92,7 @@ void DCSessionManager::closeSession(DCSession *dcsession)
 
     if(dcsession->ownedDc())
     {
-        qDebug() << "DC" << dc->id() << "closed";
+        qDebug("DC %d closed", dc->id());
         dc->close();
         this->_dclist.remove(dc->id());
     }
@@ -98,12 +128,11 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
 
     if(oldsession)
     {
-        dc->takeRequests(this->_mainsession->sessionId(), oldsession->dc());
+        dc->keepRequest(oldsession->dc()->lastRequest());
         this->closeSession(oldsession);
     }
 
     DCConfig_setMainDc(dcid);
-    this->initSession(this->_mainsession);
     return this->_mainsession;
 }
 
@@ -116,10 +145,7 @@ DCSession *DCSessionManager::createMainSession(int dcid)
 DCSession *DCSessionManager::createSession(int dcid)
 {
     DC* dc = this->createDC(dcid);
-    DCSession* dcsession = new DCSession(dc, this);
-
-    this->initSession(dcsession);
-    return dcsession;
+    return new DCSession(dc, this);
 }
 
 void DCSessionManager::onAuthorized(DC* dc)
@@ -134,9 +160,11 @@ void DCSessionManager::onAuthorized(DC* dc)
         return;
     }
 
+    DCSession* dcsession = dcauthorization->dcSession();
+
     this->_dcauthorizations.remove(dc);
     dcauthorization->deleteLater();
-    dc->sendPendingRequests();
+    this->doSessionReady(dcsession);
 }
 
 void DCSessionManager::onAuthorizationImported(DC *dc)
@@ -144,8 +172,10 @@ void DCSessionManager::onAuthorizationImported(DC *dc)
     Q_ASSERT(this->_dcauthorizations.contains(dc));
 
     DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
+    DCSession* dcsession = dcauthorization->dcSession();
+
     dcauthorization->deleteLater();
-    dc->sendPendingRequests();
+    this->doSessionReady(dcsession);
 }
 
 void DCSessionManager::onAuthorizationReply(MTProtoReply *mtreply)
@@ -160,6 +190,8 @@ void DCSessionManager::onAuthorizationReply(MTProtoReply *mtreply)
 
 void DCSessionManager::onMigrateDC(int fromdcid, int todcid)
 {
-    qDebug().noquote() << "DC" << fromdcid << "->" << todcid;
-    this->createMainSession(todcid);
+    qDebug("DC %d -> %d", fromdcid, todcid);
+
+    DCSession* session = this->createMainSession(todcid);
+    this->initializeSession(session);
 }

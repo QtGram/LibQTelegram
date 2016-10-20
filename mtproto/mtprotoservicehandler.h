@@ -14,10 +14,11 @@ class MTProtoServiceHandler : public QObject
         bool handle(MTProtoReply* mtreply);
 
     signals:
+        void ack(const TLVector<TLLong>& msgids);
         void configurationReceived(Config* config);
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
-        void saltChanged();
+        void saltChanged(TLLong reqmsgid);
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);
