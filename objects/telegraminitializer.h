@@ -46,7 +46,7 @@ class TelegramInitializer : public QObject
         void tryConnect();
 
     protected:
-        void timerEvent(QTimerEvent *event);
+        virtual void timerEvent(QTimerEvent *event);
 
     private slots:
         void onMainSessionReady(DCSession *dcsession);
