@@ -22,9 +22,9 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
 }
 
-QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int limit)
+QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
 {
-    return this->_database->messages()->messagesForDialog(dialog, this->_messages, limit, this);
+    return this->_database->messages()->messagesForDialog(dialog, this->_messages, offset, limit, this);
 }
 
 User *TelegramCache::user(TLInt id)

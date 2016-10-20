@@ -137,8 +137,10 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::loadMore()
 {
-    if(this->_athistoryend)
+    if(this->_athistoryend || this->_loading)
         return;
+
+    this->setLoading(true);
 
     this->createInputPeer();
 
@@ -147,7 +149,7 @@ void MessagesModel::loadMore()
     if(this->_messages.length() < this->_loadcount)
         limit = (this->_loadcount - this->_messages.length()) + 1;
 
-    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, 0, limit, this->maxId(), 0);
+    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), limit, 0, 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
 }
 
@@ -177,19 +179,21 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
         this->_athistoryend = (this->_messages.count() >= messages.count());
 
     int count = messages.messages().count();
+    qDebug() << "INSERT" << this->_messages.count() << "->" << (this->_messages.count() + count);
 
-    this->beginInsertRows(QModelIndex(), 0, count - 1);
+    this->beginInsertRows(QModelIndex(), this->_messages.count(), this->_messages.count() + count);
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
-    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, count);
+    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, this->_messages.count(), count);
 
-    for(int i = newmessages.count() - 1; i >= 0; i--)
-        this->_messages.prepend(newmessages[i]);
+    for(int i = 0; i < newmessages.count() - 1; i++)
+        this->_messages.append(newmessages[i]);
 
     this->endInsertRows();
+    this->setLoading(false);
 }
 
 void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
@@ -305,7 +309,7 @@ void MessagesModel::telegramReady()
     if(!this->_dialog)
         return;
 
-    this->_messages = TelegramCache_messages(this->_dialog, this->_loadcount);
+    this->_messages = TelegramCache_messages(this->_dialog, 0, this->_loadcount);
 
     if(this->_messages.length() < this->_loadcount)
     {

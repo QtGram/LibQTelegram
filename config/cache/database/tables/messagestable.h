@@ -12,7 +12,7 @@ class MessagesTable : public DatabaseTable
         virtual void createSchema();
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject *telegramobject);
         Message* previousMessage(Message*message, QHash<TLInt, Message*>& messages, QObject* parent);
-        QList<Message*> messagesForDialog(Dialog* dialog, QHash<TLInt, Message*>& messages, int limit, QObject* parent);
+        QList<Message*> messagesForDialog(Dialog* dialog, QHash<TLInt, Message*>& messages, int offset, int limit, QObject* parent);
 };
 
 #endif // MESSAGESTABLE_H

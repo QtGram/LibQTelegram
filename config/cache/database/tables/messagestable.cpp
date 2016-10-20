@@ -55,18 +55,19 @@ Message *MessagesTable::previousMessage(Message* message, QHash<TLInt, Message *
     return prevmessage;
 }
 
-QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<TLInt, Message *> &messages, int limit, QObject *parent)
+QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<TLInt, Message *> &messages, int offset, int limit, QObject *parent)
 {
     QList<Message*> result;
     TLInt dialogid = TelegramHelper::identifier(dialog);
 
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY date DESC LIMIT :limit"))
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY date DESC LIMIT :limit OFFSET :offset"))
         return result;
 
     queryobj.bindValue(":dialogid", dialogid);
     queryobj.bindValue(":limit", limit);
+    queryobj.bindValue(":offset", offset);
 
     if(!this->execute(queryobj))
         return result;

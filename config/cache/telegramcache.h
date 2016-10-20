@@ -13,7 +13,7 @@
 
 #define TelegramCache_cacheNotify(message) TelegramCache::cache()->cacheNotify(message)
 #define TelegramCache_message(messageid) TelegramCache::cache()->message(messageid)
-#define TelegramCache_messages(dialogid, limit) TelegramCache::cache()->dialogMessages(dialogid, limit)
+#define TelegramCache_messages(dialogid, offset, limit) TelegramCache::cache()->dialogMessages(dialogid, offset, limit)
 
 #include <QObject>
 #include <QList>
@@ -36,7 +36,7 @@ class TelegramCache: public QObject
         void load();
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
-        QList<Message*> dialogMessages(Dialog* dialog, int limit);
+        QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
         User* user(TLInt id);
         Chat* chat(TLInt id);
         Message* message(TLInt id);

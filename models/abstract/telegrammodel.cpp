@@ -1,7 +1,7 @@
 #include "telegrammodel.h"
 #include "../../config/telegramconfig.h"
 
-TelegramModel::TelegramModel(QObject *parent) : QAbstractListModel(parent), _telegram(NULL)
+TelegramModel::TelegramModel(QObject *parent) : QAbstractListModel(parent), _telegram(NULL), _loading(false)
 {
 
 }
@@ -26,6 +26,20 @@ void TelegramModel::setTelegram(Telegram *telegram)
         this->telegramReady();
 
     emit telegramChanged();
+}
+
+bool TelegramModel::loading() const
+{
+    return this->_loading;
+}
+
+void TelegramModel::setLoading(bool loading)
+{
+    if(this->_loading == loading)
+        return;
+
+    this->_loading = loading;
+    emit loadingChanged();
 }
 
 QHash<int, QByteArray> TelegramModel::initRoles() const
