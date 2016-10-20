@@ -92,7 +92,7 @@ TLInt DC::getPacketLength()
         return packetlength * 4;
     }
 
-    qFatal("DC %d: Incorrect TCP Package", this->id());
+    qFatal("DC %d Incorrect TCP Package", this->id());
     return 0;
 }
 
@@ -101,7 +101,7 @@ void DC::repeatRequest(TLLong msgid)
     if(!this->_pendingrequests.contains(msgid))
         return;
 
-    qDebug("DC %d: Repeating request %llx...", this->id(), msgid);
+    qDebug("DC %d Repeating request %llx...", this->id(), msgid);
 
     MTProtoRequest* req = this->_pendingrequests.take(msgid);
     req->setAcked(false);
@@ -185,7 +185,7 @@ void DC::send(MTProtoRequest *req)
 {
     if(this->state() != DC::ConnectedState)
     {
-        qWarning("DC %d: Not connected, cannot send queries", this->id());
+        qWarning("DC %d Not connected, cannot send queries", this->id());
         return;
     }
 
@@ -198,7 +198,7 @@ void DC::send(MTProtoRequest *req)
 
         if(dcconfig.authorization() < DCConfig::Authorized)
         {
-            qWarning("DC %d: Cannot send encrypted requests", this->id());
+            qWarning("DC %d Cannot send encrypted requests", this->id());
             return;
         }
 
@@ -209,7 +209,10 @@ void DC::send(MTProtoRequest *req)
     this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
 
     if(req->encrypted())
+    {
         connect(req, &MTProtoRequest::timeout, this, &DC::repeatRequest, Qt::UniqueConnection);
+        req->startTimer(QueryTimeout);
+    }
 
     this->write(reqpayload);
 }
@@ -247,7 +250,7 @@ void DC::onDCReadyRead()
 
         if(packetlen < 4)
         {
-            qFatal("DC %d: Invalid TCP package, length: %d", this->id(), packetlen);
+            qFatal("DC %d Invalid TCP package, length: %d", this->id(), packetlen);
             return;
         }
 

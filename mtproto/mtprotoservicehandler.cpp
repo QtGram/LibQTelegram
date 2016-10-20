@@ -122,7 +122,7 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     }
     else if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadServerSalt)
     {
-        qDebug() << "DC" << this->_dcid << "New Salt, repeating last request...";
+        qDebug("DC %d New salt %llx", this->_dcid, badmsgnotification.newServerSalt());
         DCConfig& config = DCConfig_fromDcId(this->_dcid);
         config.setServerSalt(badmsgnotification.newServerSalt());
         TelegramConfig_save;
