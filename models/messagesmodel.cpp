@@ -176,13 +176,15 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     else
         this->_athistoryend = (this->_messages.count() >= messages.count());
 
-    this->beginInsertRows(QModelIndex(), 0, messages.messages().count() - 1);
+    int count = messages.messages().count();
+
+    this->beginInsertRows(QModelIndex(), 0, count - 1);
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
-    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, messages.count());
+    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, count);
 
     for(int i = newmessages.count() - 1; i >= 0; i--)
         this->_messages.prepend(newmessages[i]);
