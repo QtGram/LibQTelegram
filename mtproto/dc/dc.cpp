@@ -169,7 +169,7 @@ void DC::handleReply(const QByteArray &message)
 
 void DC::handleReply(MTProtoReply *mtreply)
 {
-    if(this->_mtservicehandler->handle(mtreply))
+    if(this->_mtservicehandler->handle(mtreply) || UpdateHandler_instance->handle(mtreply))
         return;
 
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
@@ -189,12 +189,6 @@ void DC::handleReply(MTProtoReply *mtreply)
     }
 
     req->setAcked(true);
-
-    if(UpdateHandler_instance->handle(mtreply))
-    {
-        req->deleteLater();
-        return;
-    }
 
     this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
     emit req->replied(mtreply);
