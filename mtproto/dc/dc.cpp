@@ -184,7 +184,7 @@ void DC::handleReply(MTProtoReply *mtreply)
 
     if(!req)
     {
-        qWarning("DC %d: Request for msg_id %llx not found", this->id(), mtreply->messageId());
+        qWarning("DC %d Request for msg_id %llx not found", this->id(), mtreply->messageId());
         return;
     }
 
