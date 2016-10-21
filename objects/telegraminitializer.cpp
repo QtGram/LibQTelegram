@@ -127,16 +127,20 @@ void TelegramInitializer::signIn(const QString &phonecode)
 {
     MTProtoRequest* req = TelegramAPI::authSignIn(DC_MainSession, this->_phonenumber, this->_phonecodehash, phonecode);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onLoginCompleted);
-
-    this->_phonecodehash.clear();
 }
 
 void TelegramInitializer::signUp(const QString &firstname, const QString &lastname, const QString &phonecode)
 {
     MTProtoRequest* req = TelegramAPI::authSignUp(DC_MainSession, this->_phonenumber, this->_phonecodehash, phonecode, firstname, lastname);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onLoginCompleted);
+}
 
-    this->_phonecodehash.clear();
+void TelegramInitializer::resendCode()
+{
+    if(this->_phonecodehash.isEmpty() || this->_phonecodehash.isEmpty())
+        return;
+
+    TelegramAPI::authResendCode(DC_MainSession, this->_phonenumber, this->_phonecodehash);
 }
 
 void TelegramInitializer::tryConnect()
@@ -152,7 +156,7 @@ void TelegramInitializer::tryConnect()
 
     DCSession* mainsession = NULL;
 
-    if(DCConfig_isLoggedIn)
+    if(!this->isConfigurationChanged() && DCConfig_isLoggedIn)
     {
         TelegramCache_load;
         DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
@@ -164,6 +168,20 @@ void TelegramInitializer::tryConnect()
     connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onMainSessionReady, Qt::UniqueConnection);
     DC_InitializeSession(mainsession);
+}
+
+bool TelegramInitializer::isConfigurationChanged() const
+{
+    DCConfig& dcconfig = DCConfig_fromDcId(0);
+    bool ischanged = !dcconfig.host().isEmpty() && (this->_host != dcconfig.host());
+
+    if(ischanged)
+    {
+        qDebug("Configuration is changed, resetting client");
+        DCConfig_reset;
+    }
+
+    return ischanged;
 }
 
 void TelegramInitializer::timerEvent(QTimerEvent *event)
@@ -232,6 +250,8 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
     });
 
     cacheinitializer->initialize();
+
+    this->_phonecodehash.clear();
 }
 
 void TelegramInitializer::onFloodWait(int seconds)

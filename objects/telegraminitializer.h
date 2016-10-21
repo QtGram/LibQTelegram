@@ -41,9 +41,11 @@ class TelegramInitializer : public QObject
     public:
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
+        void resendCode();
 
     private:
         void tryConnect();
+        bool isConfigurationChanged() const;
 
     protected:
         virtual void timerEvent(QTimerEvent *event);

@@ -27,6 +27,7 @@ class Telegram : public QObject
     public slots: // Login
         void signIn(const QString& phonecode);
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
+        void resendCode();
 
     private:
         QString messageMediaText(MessageMedia* messagemedia) const;
