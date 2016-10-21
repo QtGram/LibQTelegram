@@ -111,6 +111,15 @@ InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *par
     return inputpeer;
 }
 
+InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
+{
+    InputUser* inputuser = new InputUser(parent);
+    inputuser->setConstructorId(TLTypes::InputUser);
+    inputuser->setUserId(user->id());
+    inputuser->setAccessHash(user->accessHash());
+    return inputuser;
+}
+
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);
