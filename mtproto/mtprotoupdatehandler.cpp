@@ -36,6 +36,7 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
 
         case TLTypes::UpdatesDifference:
         case TLTypes::UpdatesDifferenceSlice:
+        case TLTypes::UpdatesDifferenceEmpty:
             this->handleUpdatesDifference(mtreply);
             return true;
 
@@ -87,6 +88,9 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 {
     UpdatesDifference updatedifference;
     updatedifference.read(mtreply);
+
+    if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceEmpty)
+        return;
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
