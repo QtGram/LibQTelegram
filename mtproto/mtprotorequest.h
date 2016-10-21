@@ -50,6 +50,7 @@ class MTProtoRequest : public QObject
     signals:
         void timeout(TLLong messageid);
         void replied(MTProtoReply* reply);
+        void error();
 
     private:
         bool _acked;

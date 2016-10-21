@@ -145,6 +145,13 @@ void DC::handleReply(const QByteArray &message)
     if(mtreply.isError())
     {
         qWarning("DC %d ERROR %d", this->id(), qAbs(mtreply.errorCode()));
+
+        if(!this->_pendingrequests.contains(this->_lastmsgid))
+            return;
+
+        MTProtoRequest* req = this->_pendingrequests.take(this->_lastmsgid);
+        req->error();
+        req->deleteLater();
         return;
     }
 
