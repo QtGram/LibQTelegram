@@ -142,6 +142,12 @@ void TelegramConfig::load()
     this->loadDCConfig();
 }
 
+void TelegramConfig::reset()
+{
+    this->_dcconfig.clear();
+    this->_dcconfigipv6.clear();
+}
+
 bool TelegramConfig::hasDC(int id)
 {
     if(this->_ipv6)

@@ -8,6 +8,7 @@
 #define TelegramConfig_instance TelegramConfig::config()
 
 #define DCConfig_mainDcId (TelegramConfig::config() ? TelegramConfig::config()->mainDcId() : -1)
+#define DCConfig_reset TelegramConfig::config()->reset()
 #define DCConfig_isLoggedIn (TelegramConfig::config() ? TelegramConfig::config()->isLoggedIn() : false)
 #define DCConfig_fromDcId(dcid) TelegramConfig::config()->dcConfig(dcid)
 #define DCConfig_fromDc(dc) DCConfig_fromDcId(dc->id())
@@ -38,6 +39,7 @@ class TelegramConfig
         User* me();
         void save();
         void load();
+        void reset();
         bool hasDC(int id);
         bool isLoggedIn() const;
         bool debugMode() const;
