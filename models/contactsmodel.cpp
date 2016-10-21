@@ -5,6 +5,18 @@ ContactsModel::ContactsModel(QObject *parent) : TelegramModel(parent)
 {
 }
 
+void ContactsModel::createGroup(const QString& title, const QVariantList& users)
+{
+    TLVector<InputUser*> inputusers;
+    inputusers << TelegramHelper::inputUser(TelegramConfig_me, this);
+
+    foreach(QVariant user, users)
+        inputusers << TelegramHelper::inputUser(user.value<User*>(), this);
+
+    TelegramAPI::messagesCreateChat(DC_MainSession, inputusers, ToTLString(title));
+    qDeleteAll(inputusers);
+}
+
 QVariant ContactsModel::data(const QModelIndex &index, int role) const
 {
     if(role == ContactsModel::ItemRole)

@@ -17,6 +17,9 @@ class ContactsModel : public TelegramModel
     public:
         explicit ContactsModel(QObject *parent = 0);
 
+    public slots:
+        void createGroup(const QString &title, const QVariantList &users);
+
     protected:
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
