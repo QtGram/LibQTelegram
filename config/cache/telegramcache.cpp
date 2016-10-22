@@ -154,13 +154,11 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         TLInt dialogid = TelegramHelper::messageToDialog(message);
         Dialog* dialog = this->dialog(dialogid);
 
-        if(dialog)
-        {
-            dialog->setTopMessage(message->id());
-            this->cache(dialog);
-        }
-        else
-            qWarning("Cannot find dialog %x", dialogid);
+        if(!dialog)
+            return;
+
+        dialog->setTopMessage(message->id());
+        this->cache(dialog);
     }
 
     emit dialogsChanged();
