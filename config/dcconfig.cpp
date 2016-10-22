@@ -121,6 +121,11 @@ TLLong DCConfig::deltaTime() const
     return this->_deltatime;
 }
 
+bool DCConfig::ipv6() const
+{
+    return this->_ipv6;
+}
+
 int DCConfig::authorization() const
 {
     return this->_authorization;

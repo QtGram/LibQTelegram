@@ -29,6 +29,7 @@ class DCConfig
         TLLong authorizationKeyId();
         TLLong serverSalt() const;
         TLLong deltaTime() const;
+        bool ipv6() const;
         int authorization() const;
         int id() const;
         bool isMain() const;
