@@ -37,7 +37,7 @@ class DCAuthorization : public QObject
         void onServerDhGenFail(MTProtoStream* mtstream);
         void onServerDhGenRetry(MTProtoStream* mtstream);
         void onServerDhGenOk(MTProtoStream* mtstream);
-        void onConfigurationReceived(Config* config);
+        void onConfigurationReceived(MTProtoReply *mtreply);
         void onAuthorizationExported(MTProtoReply* mtreply);
         void onAuthorizationImported(MTProtoReply* mtreply);
 

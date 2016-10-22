@@ -32,9 +32,6 @@ bool MTProtoServiceHandler::handle(MTProtoReply *mtreply)
     if(mtreply->constructorId() == TLTypes::MsgsAck)
         return this->handleMsgAck(mtreply);
 
-    if(mtreply->constructorId() == TLTypes::Config)
-        return this->handleConfig(mtreply);
-
     return false;
 }
 
@@ -183,14 +180,5 @@ bool MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
     msgsack.read(mtreply);
 
     emit ack(msgsack.msgIds());
-    return true;
-}
-
-bool MTProtoServiceHandler::handleConfig(MTProtoReply *mtreply)
-{
-    Config config;
-    config.read(mtreply);
-
-    emit configurationReceived(&config);
     return true;
 }

@@ -15,7 +15,6 @@ class MTProtoServiceHandler : public QObject
 
     signals:
         void ack(const TLVector<TLLong>& msgids);
-        void configurationReceived(Config* config);
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
         void saltChanged(TLLong reqmsgid);

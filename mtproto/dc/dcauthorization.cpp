@@ -11,7 +11,6 @@ const int DCAuthorization::ENCRYPTED_PQINNERDATA_LENGTH = 255;
 
 DCAuthorization::DCAuthorization(DCSession *dcsession, QObject *parent) : QObject(parent), _dcsession(dcsession), _respq(NULL), _retryid(0)
 {
-    connect(dcsession->dc(), &DC::configurationReceived, this, &DCAuthorization::onConfigurationReceived);
 }
 
 DCSession *DCAuthorization::dcSession() const
@@ -152,7 +151,15 @@ void DCAuthorization::handleDHParamsOk()
 
 void DCAuthorization::handleAuthorized()
 {
-    TelegramAPI::helpGetConfig(this->_dcsession);
+    if(DCConfig_needsConfiguration)
+    {
+        MTProtoRequest* req = TelegramAPI::helpGetConfig(this->_dcsession);
+        connect(req, &MTProtoRequest::replied, this, &DCAuthorization::onConfigurationReceived);
+        return;
+    }
+
+    TelegramConfig_save;
+    emit authorized(this->_dcsession->dc());
 }
 
 void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
@@ -261,17 +268,17 @@ void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
     this->authorize();
 }
 
-void DCAuthorization::onConfigurationReceived(Config *config)
+void DCAuthorization::onConfigurationReceived(MTProtoReply* mtreply)
 {
-    foreach(const DcOption* dcoption, config->dcOptions())
+    Config config;
+    config.read(mtreply);
+
+    foreach(const DcOption* dcoption, config.dcOptions())
     {
         if(dcoption->isMediaOnly()) // NOTE: "Media Only" DCs needs investigation
             continue;
 
         DCConfig& dcconfig = TelegramConfig::config()->setDcConfig(dcoption->id(), dcoption->isIpv6());
-
-        if(!dcconfig.host().isEmpty() && (dcconfig.host() != dcoption->ipAddress())) // DC Configuration has changed
-            dcconfig.reset();
 
         dcconfig.setHost(dcoption->ipAddress());
         dcconfig.setPort(dcoption->port());

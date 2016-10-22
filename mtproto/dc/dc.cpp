@@ -10,7 +10,6 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
-    connect(this->_mtservicehandler, &MTProtoServiceHandler::configurationReceived, this, &DC::configurationReceived);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
@@ -101,7 +100,10 @@ TLInt DC::getPacketLength()
 void DC::repeatRequest(TLLong msgid)
 {
     if(!this->_pendingrequests.contains(msgid))
+    {
+        qDebug("DC %d Expired request %llx...", this->id(), msgid);
         return;
+    }
 
     qDebug("DC %d Repeating request %llx...", this->id(), msgid);
 
@@ -170,6 +172,9 @@ void DC::handleReply(const QByteArray &message)
 
 void DC::handleReply(MTProtoReply *mtreply)
 {
+    if(this->_mtservicehandler->handle(mtreply))
+        return;
+
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
     MTProtoRequest* req = this->_pendingrequests.take(mtreply->messageId());
 
@@ -178,10 +183,7 @@ void DC::handleReply(MTProtoReply *mtreply)
 
     if(dcconfig.authorization() >= DCConfig::Authorized)
     {
-        bool handled = this->_mtservicehandler->handle(mtreply);
-
-        if(!handled)
-            handled = UpdateHandler_instance->handle(mtreply);
+        bool handled = UpdateHandler_instance->handle(mtreply);
 
         if(!handled)
         {
