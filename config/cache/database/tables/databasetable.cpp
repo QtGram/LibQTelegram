@@ -91,7 +91,7 @@ void DatabaseTable::prepareInsert(QSqlQuery &insertquery)
 }
 
 
-bool DatabaseTable::query(QSqlQuery &queryobj, const QString &query)
+bool DatabaseTable::query(QSqlQuery &queryobj, const QString &query) const
 {
     if(!this->prepare(queryobj, query))
         return false;

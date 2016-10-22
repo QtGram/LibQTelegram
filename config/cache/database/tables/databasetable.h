@@ -31,7 +31,7 @@ class DatabaseTable : public QObject
 
     protected:
         void createTable(const QString &fields, const QString& defaultfield);
-        bool query(QSqlQuery& queryobj, const QString& query);
+        bool query(QSqlQuery& queryobj, const QString& query) const;
         bool query(const QString& query);
         bool prepare(QSqlQuery &queryobj, const QString& query) const;
         bool execute(QSqlQuery &queryobj) const;
