@@ -156,6 +156,14 @@ bool TelegramConfig::hasDC(int id)
     return this->_dcconfig.contains(id);
 }
 
+bool TelegramConfig::needsConfiguration() const
+{
+    if(this->_ipv6)
+        return this->_dcconfigipv6.count() <= 1;
+
+    return this->_dcconfig.count() <= 1;
+}
+
 bool TelegramConfig::isLoggedIn() const
 {
     if(this->_ipv6)
@@ -182,6 +190,11 @@ bool TelegramConfig::isLoggedIn() const
 bool TelegramConfig::debugMode() const
 {
     return this->_debugmode;
+}
+
+bool TelegramConfig::isIpv6() const
+{
+    return this->_ipv6;
 }
 
 TLInt TelegramConfig::layerNum() const

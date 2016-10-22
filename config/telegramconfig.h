@@ -8,7 +8,9 @@
 #define TelegramConfig_instance TelegramConfig::config()
 
 #define DCConfig_mainDcId (TelegramConfig::config() ? TelegramConfig::config()->mainDcId() : -1)
+#define DCConfig_needsConfiguration TelegramConfig::config()->needsConfiguration()
 #define DCConfig_reset TelegramConfig::config()->reset()
+#define DCConfig_isIpv6 TelegramConfig::config()->isIpv6()
 #define DCConfig_isLoggedIn (TelegramConfig::config() ? TelegramConfig::config()->isLoggedIn() : false)
 #define DCConfig_fromDcId(dcid) TelegramConfig::config()->dcConfig(dcid)
 #define DCConfig_fromDc(dc) DCConfig_fromDcId(dc->id())
@@ -41,8 +43,10 @@ class TelegramConfig
         void load();
         void reset();
         bool hasDC(int id);
+        bool needsConfiguration() const;
         bool isLoggedIn() const;
         bool debugMode() const;
+        bool isIpv6() const;
         TLInt layerNum() const;
         TLInt apiId() const;
         const QString& apiHash() const;
@@ -54,6 +58,7 @@ class TelegramConfig
         const QString& phoneNumber() const;
         void setDebugMode(bool dbgmode);
         void setIpv6(bool ipv6);
+        void setDefaultDcId(int dcid);
         void setStoragePath(const QString& storagepath);
         void setDeviceModel(const QString& devicemodel);
         void setApplicationVersion(const QString& appversion);
