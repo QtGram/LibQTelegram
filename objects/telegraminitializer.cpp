@@ -4,7 +4,7 @@
 #include "config/cache/telegramcache.h"
 #include <QDebug>
 
-TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _debugmode(false), _floodwaittimer(0)
+TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _floodwaittimer(0)
 {
 }
 
@@ -44,6 +44,11 @@ const QString &TelegramInitializer::phoneNumber() const
 qint32 TelegramInitializer::port() const
 {
     return this->_port;
+}
+
+qint32 TelegramInitializer::dcId() const
+{
+    return this->_dcid;
 }
 
 bool TelegramInitializer::debugMode() const
@@ -114,6 +119,15 @@ void TelegramInitializer::setPort(qint32 port)
     emit portChanged();
 }
 
+void TelegramInitializer::setDcId(qint32 dcid)
+{
+    if(this->_dcid == dcid)
+        return;
+
+    this->_dcid = dcid;
+    emit dcIdChanged();
+}
+
 void TelegramInitializer::setDebugMode(bool dbgmode)
 {
     if(this->_debugmode == dbgmode)
@@ -156,32 +170,18 @@ void TelegramInitializer::tryConnect()
 
     DCSession* mainsession = NULL;
 
-    if(!this->isConfigurationChanged() && DCConfig_isLoggedIn)
+    if(DCConfig_isLoggedIn)
     {
         TelegramCache_load;
         DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
         mainsession = DCSessionManager_instance->createMainSession(dcconfig);
     }
     else
-        mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, 0); // The entry point doesn't have a Dc Id, set it to 0
+        mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, this->_dcid);
 
     connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onMainSessionReady, Qt::UniqueConnection);
     DC_InitializeSession(mainsession);
-}
-
-bool TelegramInitializer::isConfigurationChanged() const
-{
-    DCConfig& dcconfig = DCConfig_fromDcId(0);
-    bool ischanged = !dcconfig.host().isEmpty() && (this->_host != dcconfig.host());
-
-    if(ischanged)
-    {
-        qDebug("Configuration is changed, resetting client");
-        DCConfig_reset;
-    }
-
-    return ischanged;
 }
 
 void TelegramInitializer::timerEvent(QTimerEvent *event)

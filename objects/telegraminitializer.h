@@ -16,6 +16,7 @@ class TelegramInitializer : public QObject
     Q_PROPERTY(QString apiHash READ apiHash WRITE setApiHash NOTIFY apiHashChanged)
     Q_PROPERTY(qint32 apiId READ apiId WRITE setApiId NOTIFY apiIdChanged)
     Q_PROPERTY(qint32 port READ port WRITE setPort NOTIFY portChanged)
+    Q_PROPERTY(qint32 dcId READ dcId WRITE setDcId NOTIFY dcIdChanged)
     Q_PROPERTY(bool debugMode READ debugMode WRITE setDebugMode NOTIFY debugModeChanged)
 
     public:
@@ -27,6 +28,7 @@ class TelegramInitializer : public QObject
         const QString& phoneNumber() const;
         qint32 apiId() const;
         qint32 port() const;
+        qint32 dcId() const;
         bool debugMode() const;
 
     public:
@@ -36,6 +38,7 @@ class TelegramInitializer : public QObject
         void setPhoneNumber(const QString& phonenumber);
         void setApiId(qint32 appid);
         void setPort(qint32 port);
+        void setDcId(qint32 dcid);
         void setDebugMode(bool dbgmode);
 
     public:
@@ -45,7 +48,6 @@ class TelegramInitializer : public QObject
 
     private:
         void tryConnect();
-        bool isConfigurationChanged() const;
 
     protected:
         virtual void timerEvent(QTimerEvent *event);
@@ -67,6 +69,7 @@ class TelegramInitializer : public QObject
         void phoneNumberChanged();
         void apiIdChanged();
         void portChanged();
+        void dcIdChanged();
         void debugModeChanged();
 
     private:
@@ -76,6 +79,7 @@ class TelegramInitializer : public QObject
         QString _apihash;
         qint32 _apiid;
         qint32 _port;
+        int _dcid;
         bool _debugmode;
 
      private:
