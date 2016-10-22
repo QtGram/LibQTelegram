@@ -19,6 +19,7 @@ class MTProtoRequest : public QObject
 
     public:
         explicit MTProtoRequest(int dcid, QObject *parent = 0);
+        ~MTProtoRequest();
         bool acked() const;
         int dcId() const;
         TLLong messageId() const;
@@ -45,7 +46,7 @@ class MTProtoRequest : public QObject
         QByteArray buildPlain();
 
     protected:
-        void timerEvent(QTimerEvent *event);
+        virtual void timerEvent(QTimerEvent *event);
 
     signals:
         void timeout(TLLong messageid);

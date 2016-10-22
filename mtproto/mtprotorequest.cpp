@@ -11,6 +11,11 @@ MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _ac
     Try_InitFirst(dcid);
 }
 
+MTProtoRequest::~MTProtoRequest()
+{
+
+}
+
 bool MTProtoRequest::acked() const
 {
     return this->_acked;
@@ -148,7 +153,7 @@ void MTProtoRequest::timerEvent(QTimerEvent *event)
 
 QByteArray MTProtoRequest::buildEncrypted()
 {
-    Q_ASSERT(this->_dcid >= 0);
+    Q_ASSERT(this->_dcid > 0);
     Q_ASSERT(this->_sessionid != 0);
     Q_ASSERT(this->_seqno > 0);
 
