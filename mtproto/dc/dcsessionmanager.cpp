@@ -153,7 +153,6 @@ DCSession *DCSessionManager::createSession(int dcid)
     DCSession* dcsession = new DCSession(dc, this);
 
     connect(dcsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
-
     return dcsession;
 }
 
