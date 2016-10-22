@@ -150,6 +150,7 @@ void DC::handleReply(const QByteArray &message)
             return;
 
         MTProtoRequest* req = this->_pendingrequests.take(this->_lastmsgid);
+        req->setAcked(true);
         req->error();
         req->deleteLater();
         return;
@@ -169,30 +170,34 @@ void DC::handleReply(const QByteArray &message)
 
 void DC::handleReply(MTProtoReply *mtreply)
 {
-    if(this->_mtservicehandler->handle(mtreply) || UpdateHandler_instance->handle(mtreply))
-        return;
-
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-
-    if(dcconfig.authorization() < DCConfig::Authorized)
-    {
-        emit authorizationReply(mtreply);
-        return;
-    }
-
     MTProtoRequest* req = this->_pendingrequests.take(mtreply->messageId());
 
-    if(!req)
+    if(req)
+        req->setAcked(true);
+
+    if(dcconfig.authorization() >= DCConfig::Authorized)
     {
-        qWarning("DC %d Request for msg_id %llx not found", this->id(), mtreply->messageId());
-        return;
+        bool handled = this->_mtservicehandler->handle(mtreply);
+
+        if(!handled)
+            handled = UpdateHandler_instance->handle(mtreply);
+
+        if(!handled)
+        {
+            this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
+
+            if(req)
+                emit req->replied(mtreply);
+            else
+                qWarning("DC %d Request for msg_id %llx not found", this->id(), mtreply->messageId());
+        }
     }
+    else
+        emit authorizationReply(mtreply);
 
-    req->setAcked(true);
-
-    this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
-    emit req->replied(mtreply);
-    req->deleteLater();
+    if(req)
+        req->deleteLater();
 }
 
 void DC::onAck(const TLVector<TLLong> &msgids)
