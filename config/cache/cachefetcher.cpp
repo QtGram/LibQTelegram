@@ -49,10 +49,10 @@ void CacheFetcher::onMessagesDialogs(MTProtoReply *mtreply)
     MessagesDialogs messagesdialogs;
     messagesdialogs.read(mtreply);
 
+    emit dialogsReceived(messagesdialogs.dialogs());
     emit usersReceived(messagesdialogs.users());
     emit chatsReceived(messagesdialogs.chats());
     emit messagesReceived(messagesdialogs.messages());
-    emit dialogsReceived(messagesdialogs.dialogs());
 }
 
 void CacheFetcher::onTypingUserReplied(MTProtoReply *mtreply)
