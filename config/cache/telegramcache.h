@@ -40,9 +40,9 @@ class TelegramCache: public QObject
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
-        User* user(TLInt id);
-        Chat* chat(TLInt id);
-        Message* message(TLInt id);
+        User* user(TLInt id, bool ignoreerror = false);
+        Chat* chat(TLInt id, bool ignoreerror = false);
+        Message* message(TLInt id, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
 
@@ -65,12 +65,14 @@ class TelegramCache: public QObject
         void onNewDraftMessage(Update* update);
         void onDeleteMessages(const TLVector<TLInt>& messageids);
         void onReadHistory(Update* update);
+        void onTyping(Update* update);
 
     signals:
         void dialogsChanged();
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void deleteMessage(Message* message);
+        void typing(Dialog* dialog, SendMessageAction* sendmessageaction);
 
     private:
         QList<Dialog*> _dialogs;

@@ -12,6 +12,8 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
     connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
     connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
+    connect(this->_fetcher, SIGNAL(typingUserReady(Update*)), this, SLOT(onTyping(Update*)));
+    connect(this->_fetcher, SIGNAL(userStatusReady(Update*)), this, SLOT(onNewUserStatus(Update*)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
@@ -26,6 +28,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(editMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(typing(Update*)), this, SLOT(onTyping(Update*)));
 }
 
 QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
@@ -33,11 +36,11 @@ QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int l
     return this->_database->messages()->messagesForDialog(dialog, this->_messages, offset, limit, this);
 }
 
-User *TelegramCache::user(TLInt id)
+User *TelegramCache::user(TLInt id, bool ignoreerror)
 {
     if(!this->_users.contains(id))
     {
-        User* user = this->_database->users()->get<User>(id, "user", this);
+        User* user = this->_database->users()->get<User>(id, "user", ignoreerror, this);
 
         if(user)
             this->_users[id] = user;
@@ -48,11 +51,11 @@ User *TelegramCache::user(TLInt id)
     return this->_users[id];
 }
 
-Chat *TelegramCache::chat(TLInt id)
+Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
 {
     if(!this->_chats.contains(id))
     {
-        Chat* chat = this->_database->chats()->get<Chat>(id, "chat", this);
+        Chat* chat = this->_database->chats()->get<Chat>(id, "chat", ignoreerror, this);
 
         if(chat)
             this->_chats[chat->id()] = chat;
@@ -63,11 +66,11 @@ Chat *TelegramCache::chat(TLInt id)
     return this->_chats[id];
 }
 
-Message *TelegramCache::message(TLInt id)
+Message *TelegramCache::message(TLInt id, bool ignoreerror)
 {
     if(!this->_messages.contains(id))
     {
-        Message* message = this->_database->messages()->get<Message>(id, "message", this);
+        Message* message = this->_database->messages()->get<Message>(id, "message", ignoreerror, this);
 
         if(message)
             this->_messages[message->id()] = message;
@@ -206,10 +209,13 @@ void TelegramCache::cacheNotify(const TLVector<Dialog *> &dialogs)
 void TelegramCache::onNewUserStatus(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);
-    User* user = this->user(update->userId());
+    User* user = this->user(update->userId(), true);
 
     if(!user)
+    {
+        this->_fetcher->getUser(update);
         return;
+    }
 
     user->setStatus(update->status());
     this->cache(user);
@@ -311,6 +317,24 @@ void TelegramCache::onReadHistory(Update *update)
 
     this->cache(dialog);
     emit dialogsChanged();
+}
+
+void TelegramCache::onTyping(Update *update)
+{
+    Q_ASSERT((update->constructorId() == TLTypes::UpdateUserTyping) ||
+             (update->constructorId() == TLTypes::UpdateChatUserTyping));
+
+    User* user = this->user(update->userId(), true);
+
+    if(!user)
+    {
+        this->_fetcher->getUser(update);
+        return;
+    }
+
+    TLInt dialogid = (update->constructorId() == TLTypes::UpdateChatUserTyping) ? update->chatId() : update->userId();
+    Dialog* dialog = this->dialog(dialogid);
+    emit typing(dialog, update->action());
 }
 
 TelegramCache *TelegramCache::cache()

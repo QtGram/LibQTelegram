@@ -165,6 +165,11 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit readHistory(update);
             break;
 
+        case TLTypes::UpdateUserTyping:
+        case TLTypes::UpdateChatUserTyping:
+            emit typing(update);
+            break;
+
         case TLTypes::UpdateMessageID:
             Nop;
             break;

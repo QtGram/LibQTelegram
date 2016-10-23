@@ -20,7 +20,7 @@ class DatabaseTable : public QObject
         virtual void createSchema() = 0;
 
     public:
-        template<typename T> T* get(TLInt id, const char* type, QObject* parent) const;
+        template<typename T> T* get(TLInt id, const char* type, bool ignoreerror, QObject* parent) const;
         void prepareInsert(QSqlQuery& insertquery);
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
         void insert(TelegramObject* telegramobject);
@@ -43,7 +43,7 @@ class DatabaseTable : public QObject
         QStringList _values;
 };
 
-template<typename T> T* DatabaseTable::get(TLInt id, const char* type, QObject* parent) const
+template<typename T> T* DatabaseTable::get(TLInt id, const char* type, bool ignoreerror, QObject* parent) const
 {
     CreateQuery(queryobj);
 
@@ -53,7 +53,9 @@ template<typename T> T* DatabaseTable::get(TLInt id, const char* type, QObject* 
 
     if(!queryobj.first())
     {
-        qWarning("Cannot get %s with id %d", type, id);
+        if(!ignoreerror)
+            qWarning("Cannot get %s with id %d", type, id);
+
         return NULL;
     }
 
