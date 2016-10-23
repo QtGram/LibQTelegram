@@ -9,6 +9,9 @@
 #define REGISTER_TYPE(type) \
     qRegisterMetaType<type>(#type)
 
+#define REGISTER_UNCREATABLE_OBJECT(objectname) \
+    qmlRegisterUncreatableType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, #objectname, "")
+
 #define REGISTER_OBJECT(objectname) \
     qmlRegisterType<objectname>(TG_IMPORT(uri), TG_VERSION_MAJOR, TG_VERSION_MINOR, #objectname)
 

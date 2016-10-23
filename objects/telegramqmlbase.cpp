@@ -22,6 +22,9 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_TYPE(TLString);
     REGISTER_TYPE(TLConstructor);
 
+    // Uncreatable objects
+    REGISTER_UNCREATABLE_OBJECT(TelegramObject);
+
     // Main objects
     REGISTER_OBJECT(TelegramInitializer);
     REGISTER_OBJECT(Telegram);
