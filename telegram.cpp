@@ -125,10 +125,12 @@ QString Telegram::messageActionText(Message* message) const
 
     if(ctorid == TLTypes::MessageActionChatCreate)
     {
-        if(messageaction->channelId())
-            return tr("Channel created by «%1»").arg(fullname);
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(message->toId()));
 
-        return tr("Group created by «%1»").arg(fullname);
+        if(messageaction->channelId())
+            return tr("%1 created channel «%2»").arg(fromfullname, (chat ? chat->title().toString() : QString()));
+
+        return tr("%1 created group «%2»").arg(fromfullname, (chat ? chat->title().toString() : QString()));
     }
 
     if(ctorid == TLTypes::MessageActionChatEditTitle)
