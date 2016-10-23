@@ -4,6 +4,7 @@
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
     connect(TelegramCache_instance, &TelegramCache::dialogsChanged, this, &DialogsModel::sortDialogs);
+    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
@@ -39,6 +40,18 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
     {
         Message* message = TelegramCache_message(dialog->topMessage());
         return this->firstMessageLine(message);
+    }
+
+    if(role == DialogsModel::IsTopMessageOutRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return message->isOut();
+    }
+
+    if(role == DialogsModel::IsTopMessageServiceRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return message->constructorId() == TLTypes::MessageService;
     }
 
     if(role == DialogsModel::DraftMessageRole)
@@ -89,6 +102,8 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     roles[DialogsModel::TopMessageRole] = "topMessage";
     roles[DialogsModel::TopMessageFromRole] = "topMessageFrom";
     roles[DialogsModel::TopMessageTextRole] = "topMessageText";
+    roles[DialogsModel::IsTopMessageOutRole] = "isTopMessageOut";
+    roles[DialogsModel::IsTopMessageServiceRole] = "isTopMessageService";
     roles[DialogsModel::DraftMessageRole] = "draftMessage";
     roles[DialogsModel::IsMegaGroupRole] = "isMegaGroup";
     roles[DialogsModel::IsBroadcastRole] = "isBroadcast";
@@ -156,6 +171,12 @@ void DialogsModel::sortDialogs()
     });
 
     this->endResetModel();
+}
+
+void DialogsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
+{
+    this->_dialogs << dialogs;
+    this->sortDialogs();
 }
 
 void DialogsModel::telegramReady()

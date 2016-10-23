@@ -13,10 +13,12 @@ class DialogsModel : public TelegramModel
             TopMessageRole,
             TopMessageFromRole,
             TopMessageTextRole,
+            IsTopMessageOutRole,
+            IsTopMessageServiceRole,
             DraftMessageRole,
             IsMegaGroupRole,
             IsBroadcastRole,
-            IsChatRole
+            IsChatRole,
         };
 
     public:
@@ -32,6 +34,7 @@ class DialogsModel : public TelegramModel
 
     private slots:
         void sortDialogs();
+        void onNewDialogs(const TLVector<Dialog*>& dialogs);
 
     protected:
         virtual void telegramReady();
