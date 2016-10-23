@@ -6,6 +6,12 @@ TelegramCache* TelegramCache::_instance = NULL;
 TelegramCache::TelegramCache(QObject* parent): QObject(parent)
 {
     this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
+    this->_fetcher = new CacheFetcher(this);
+
+    connect(this->_fetcher, SIGNAL(dialogsReceived(TLVector<Dialog*>)), this, SLOT(cacheNotify(TLVector<Dialog*>)));
+    connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
+    connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
+    connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
@@ -72,7 +78,7 @@ Message *TelegramCache::message(TLInt id)
     return this->_messages[id];
 }
 
-Dialog *TelegramCache::dialog(TLInt id)
+Dialog *TelegramCache::dialog(TLInt id, bool ignoreerror) const
 {
     foreach(Dialog* dialog, this->_dialogs)
     {
@@ -80,8 +86,20 @@ Dialog *TelegramCache::dialog(TLInt id)
             return dialog;
     }
 
-    qWarning("Cannot get dialog with id %d", id);
+    if(!ignoreerror)
+        qWarning("Cannot get dialog with id %d", id);
+
     return NULL;
+}
+
+bool TelegramCache::hasDialog(TLInt id) const
+{
+    Dialog* dialog = this->dialog(id, true);
+
+    if(!dialog) // Try from Database
+        return this->_database->dialogs()->contains(id);
+
+    return true;
 }
 
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
@@ -147,21 +165,27 @@ void TelegramCache::cache(const TLVector<Message *>& messages)
 
 void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 {
+    bool dialogsupdated = false;
     this->cache(messages);
 
     foreach(Message* message, messages)
     {
         TLInt dialogid = TelegramHelper::messageToDialog(message);
-        Dialog* dialog = this->dialog(dialogid);
+        Dialog* dialog = this->dialog(dialogid, true);
 
-        if(!dialog)
-            return;
-
-        dialog->setTopMessage(message->id());
-        this->cache(dialog);
+        if(dialog)
+        {
+            dialogsupdated = true;
+            dialog->setTopMessage(message->id());
+            this->cache(dialog);
+            continue;
+        }
+        else
+            this->_fetcher->getDialog(TelegramHelper::inputPeer(message));
     }
 
-    emit dialogsChanged();
+    if(dialogsupdated)
+        emit dialogsChanged();
 }
 
 void TelegramCache::cacheNotify(Message *message)
@@ -171,6 +195,12 @@ void TelegramCache::cacheNotify(Message *message)
 
     this->onNewMessages(messages);
     emit newMessage(message);
+}
+
+void TelegramCache::cacheNotify(const TLVector<Dialog *> &dialogs)
+{
+    this->cache(dialogs);
+    emit newDialogs(dialogs);
 }
 
 void TelegramCache::onNewUserStatus(Update *update)

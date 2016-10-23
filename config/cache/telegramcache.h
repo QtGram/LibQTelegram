@@ -5,6 +5,8 @@
 #define TelegramCache_load TelegramCache::cache()->load();
 #define TelegramCache_store(objs) TelegramCache::cache()->cache(objs);
 
+#define TelegramCache_hasDialog(dialogid) TelegramCache::cache()->hasDialog(dialogid)
+
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
 
@@ -23,6 +25,7 @@
 #include "../../types/telegramhelper.h"
 #include "../telegramconfig.h"
 #include "database/cachedatabase.h"
+#include "cachefetcher.h"
 
 class TelegramCache: public QObject
 {
@@ -40,7 +43,8 @@ class TelegramCache: public QObject
         User* user(TLInt id);
         Chat* chat(TLInt id);
         Message* message(TLInt id);
-        Dialog* dialog(TLInt id);
+        Dialog* dialog(TLInt id, bool ignoreerror = false) const;
+        bool hasDialog(TLInt id) const;
 
     public slots:
         void cache(Dialog* dialog);
@@ -52,6 +56,7 @@ class TelegramCache: public QObject
         void cache(const TLVector<Chat *> &chats);
         void cache(const TLVector<Message *> &messages);
         void cacheNotify(Message* message);
+        void cacheNotify(const TLVector<Dialog *> &dialogs);
         void editMessage(Message* message);
 
     private slots:
@@ -63,6 +68,7 @@ class TelegramCache: public QObject
 
     signals:
         void dialogsChanged();
+        void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void deleteMessage(Message* message);
 
@@ -73,6 +79,7 @@ class TelegramCache: public QObject
         QHash<TLInt, User*> _users;
         QHash<TLInt, Message*> _messages;
         CacheDatabase* _database;
+        CacheFetcher* _fetcher;
 
     private:
         static TelegramCache* _instance;
