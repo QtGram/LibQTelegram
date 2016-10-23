@@ -247,7 +247,8 @@ SOURCES += \
     config/cache/database/tables/messagestable.cpp \
     quick/qquickmediamessageitem.cpp \
     quick/qquickpeerimage.cpp \
-    quick/qquickbaseitem.cpp
+    quick/qquickbaseitem.cpp \
+    config/cache/cachefetcher.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -488,7 +489,8 @@ HEADERS +=\
     config/cache/database/tables/messagestable.h \
     quick/qquickmediamessageitem.h \
     quick/qquickpeerimage.h \
-    quick/qquickbaseitem.h
+    quick/qquickbaseitem.h \
+    config/cache/cachefetcher.h
 
 unix {
     target.path = /usr/lib
