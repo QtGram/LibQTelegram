@@ -17,6 +17,7 @@ class TelegramHelper
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash, QObject* parent = 0);
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
+        static InputUser* inputUser(TLInt userid, QObject* parent = 0);
         static QString dateString(TLInt timestamp);
         static QString fullName(User* user);
         static QString statusText(User* user);
