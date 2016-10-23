@@ -147,8 +147,8 @@ void MTProtoRequest::timerEvent(QTimerEvent *event)
 {
     if(!this->_acked)
         emit timeout(this->_messageid);
-    else
-        killTimer(event->timerId());
+
+    killTimer(event->timerId());
 }
 
 QByteArray MTProtoRequest::buildEncrypted()
