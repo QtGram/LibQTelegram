@@ -11,7 +11,8 @@ class DialogsTable : public DatabaseTable
         explicit DialogsTable(QObject *parent = 0);
         virtual void createSchema();
         virtual void insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject);
-        void populate(QList<Dialog *> &dialogs, QObject* parent);
+        void populate(QList<Dialog *> &dialogs, QObject* parent) const;
+        bool contains(TLInt id) const;
 };
 
 #endif // DIALOGSTABLE_H

@@ -21,7 +21,7 @@ void DialogsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobje
     this->execute(queryobj);
 }
 
-void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent)
+void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent) const
 {
     CreateQuery(queryobj);
 
@@ -36,4 +36,19 @@ void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent)
         dialog->unserialize(data);
         dialogs << dialog;
     }
+}
+
+bool DialogsTable::contains(TLInt id) const
+{
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE id=:id"))
+        return false;
+
+    queryobj.bindValue(":id", id);
+
+    if(!this->execute(queryobj))
+        return false;
+
+    return queryobj.first();
 }
