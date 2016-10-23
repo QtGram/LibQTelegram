@@ -20,7 +20,7 @@ class MessagesModel : public TelegramModel
             MessageFrom = Qt::UserRole + 10,
             MessageText,
             IsMessageOutRole,
-            IsServiceMessageRole,
+            IsMessageServiceRole,
         };
 
     public:

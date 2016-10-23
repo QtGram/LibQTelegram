@@ -116,7 +116,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageOutRole)
         return message->isOut();
 
-    if(role == MessagesModel::IsServiceMessageRole)
+    if(role == MessagesModel::IsMessageServiceRole)
         return (message->constructorId() == TLTypes::MessageService);
 
     return QVariant();
@@ -134,7 +134,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::MessageFrom] = "messageFrom";
     roles[MessagesModel::MessageText] = "messageText";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
-    roles[MessagesModel::IsServiceMessageRole] = "isServiceMessage";
+    roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
 
     return roles;
 }
