@@ -6,6 +6,7 @@
 
 QT       -= gui
 QT       += network quick sql
+CONFIG += c++11
 
 TARGET = QTelegram
 TEMPLATE = lib
