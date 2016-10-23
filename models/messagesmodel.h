@@ -19,6 +19,7 @@ class MessagesModel : public TelegramModel
         enum MessageRoles {
             MessageFrom = Qt::UserRole + 10,
             MessageText,
+            IsMessageOutRole,
             IsServiceMessageRole,
         };
 
@@ -49,7 +50,6 @@ class MessagesModel : public TelegramModel
 
     private:
         QString messageFrom(Message *message) const;
-        TLInt maxId() const;
         void createInputPeer();
         virtual void telegramReady();
 

@@ -113,6 +113,9 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::MessageText)
         return this->_telegram->messageText(message);
 
+    if(role == MessagesModel::IsMessageOutRole)
+        return message->isOut();
+
     if(role == MessagesModel::IsServiceMessageRole)
         return (message->constructorId() == TLTypes::MessageService);
 
@@ -130,6 +133,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
     roles[MessagesModel::MessageFrom] = "messageFrom";
     roles[MessagesModel::MessageText] = "messageText";
+    roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsServiceMessageRole] = "isServiceMessage";
 
     return roles;
@@ -179,7 +183,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
         this->_athistoryend = (this->_messages.count() >= messages.count());
 
     int count = messages.messages().count();
-    this->beginInsertRows(QModelIndex(), this->_messages.count(), this->_messages.count() + count);
+    this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + count) - 1);
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
@@ -262,19 +266,6 @@ QString MessagesModel::messageFrom(Message *message) const
     }
 
     return QString();
-}
-
-TLInt MessagesModel::maxId() const
-{
-    TLInt maxid = 0;
-
-    foreach(Message* message, this->_messages)
-    {
-        if(message->id() >= maxid)
-            maxid = message->id();
-    }
-
-    return maxid;
 }
 
 void MessagesModel::createInputPeer()
