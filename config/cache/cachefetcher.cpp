@@ -10,6 +10,7 @@ CacheFetcher::CacheFetcher(QObject *parent) : QObject(parent)
 void CacheFetcher::getDialog(InputPeer* inputpeer)
 {
     MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, inputpeer, 1);
+    inputpeer->deleteLater();
     connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onMessagesDialogs);
 }
 
