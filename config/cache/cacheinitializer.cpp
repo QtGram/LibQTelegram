@@ -63,10 +63,10 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     MessagesDialogs messagesdialogs;
     messagesdialogs.read(mtreply);
 
+    TelegramCache_store(messagesdialogs.dialogs());
     TelegramCache_store(messagesdialogs.users());
     TelegramCache_store(messagesdialogs.chats());
     TelegramCache_store(messagesdialogs.messages());
-    TelegramCache_store(messagesdialogs.dialogs());
 
     this->_state++;
     this->initialize();
