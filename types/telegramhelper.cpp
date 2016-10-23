@@ -111,6 +111,30 @@ InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *par
     return inputpeer;
 }
 
+InputPeer *TelegramHelper::inputPeer(Message *message, QObject *parent)
+{
+    InputPeer* inputpeer = new InputPeer(parent);
+    TLInt dialogid = TelegramHelper::messageToDialog(message);
+
+    if(TelegramHelper::isChannel(message->toId()))
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerChannel);
+        inputpeer->setChannelId(dialogid);
+    }
+    else if(TelegramHelper::isChat(message->toId()))
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerChat);
+        inputpeer->setChatId(dialogid);
+    }
+    else
+    {
+        inputpeer->setConstructorId(TLTypes::InputPeerUser);
+        inputpeer->setUserId(dialogid);
+    }
+
+    return inputpeer;
+}
+
 InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
 {
     InputUser* inputuser = new InputUser(parent);
