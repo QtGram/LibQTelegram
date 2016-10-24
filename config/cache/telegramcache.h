@@ -57,12 +57,12 @@ class TelegramCache: public QObject
         void cache(const TLVector<Message *> &messages);
         void cacheNotify(Message* message);
         void cacheNotify(const TLVector<Dialog *> &dialogs);
-        void editMessage(Message* message);
 
     private slots:
-        void onNewMessages(const TLVector<Message*>& messages);
         void onNewUserStatus(Update* update);
         void onNewDraftMessage(Update* update);
+        void onEditMessage(Message* message);
+        void onNewMessages(const TLVector<Message*>& messages);
         void onDeleteMessages(const TLVector<TLInt>& messageids);
         void onReadHistory(Update* update);
         void onTyping(Update* update);
@@ -71,6 +71,7 @@ class TelegramCache: public QObject
         void dialogsChanged();
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
+        void editMessage(Message* message);
         void deleteMessage(Message* message);
         void typing(Dialog* dialog, SendMessageAction* sendmessageaction);
 

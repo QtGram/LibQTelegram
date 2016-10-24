@@ -25,7 +25,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newChats(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
 
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
-    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(editMessage(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
     connect(UpdateHandler_instance, SIGNAL(typing(Update*)), this, SLOT(onTyping(Update*)));
@@ -234,23 +234,15 @@ void TelegramCache::onNewDraftMessage(Update *update)
     emit dialogsChanged();
 }
 
-void TelegramCache::editMessage(Message *message)
+void TelegramCache::onEditMessage(Message *message)
 {
-    Message* oldmessage = this->message(message->id());
-
-    if(!oldmessage)
-    {
-        qWarning("Edited message %x not available", message->id());
-        return;
-    }
-
     this->cache(message);
     Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
 
     if(dialog && (dialog->topMessage() == message->id()))
         emit dialogsChanged();
 
-    oldmessage->deleteLater();
+    emit editMessage(message);
 }
 
 void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
@@ -393,11 +385,16 @@ void TelegramCache::cache(Chat *chat)
 
 void TelegramCache::cache(Message *message)
 {
+    Message* oldmessage = NULL;
+
     if(this->_messages.contains(message->id()))
-        return;
+        oldmessage = this->_messages[message->id()];
 
     message->setParent(this);
 
     this->_messages[message->id()] = message;
     this->_database->messages()->insert(message);
+
+    if(oldmessage)
+        oldmessage->deleteLater();
 }
