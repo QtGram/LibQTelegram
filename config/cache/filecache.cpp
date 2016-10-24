@@ -111,6 +111,8 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool autodownload)
         return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->document(), autodownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaWebPage)
         return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->webpage(), autodownload);
+    else if(tgobj->constructorId() == TLTypes::FileLocation) // Direct access for debugging purpose
+        return this->fileObject(qobject_cast<FileLocation*>(tgobj), qobject_cast<FileLocation*>(tgobj), autodownload);
 
     return NULL;
 }
