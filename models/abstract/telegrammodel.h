@@ -4,6 +4,8 @@
 #include <QAbstractListModel>
 #include "../../telegram.h"
 
+#define Emit_DataChanged(i) (emit dataChanged(this->index(i, 0), this->index(i, 0)))
+
 class TelegramModel : public QAbstractListModel
 {
     Q_OBJECT

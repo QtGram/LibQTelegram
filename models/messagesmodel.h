@@ -46,9 +46,12 @@ class MessagesModel : public TelegramModel
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onNewMessage(Message* message);
+        void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
 
     private:
+        int indexOf(Message* message) const;
+        bool ownMessage(Message* message) const;
         QString messageFrom(Message *message) const;
         void createInputPeer();
         virtual void telegramReady();

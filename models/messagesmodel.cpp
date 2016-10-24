@@ -10,6 +10,7 @@ MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpee
 
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
+    connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
 
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -218,7 +219,7 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
 
 void MessagesModel::onNewMessage(Message *message)
 {
-    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::messageToDialog(message)))
+    if(!this->ownMessage(message))
         return;
 
     this->beginInsertRows(QModelIndex(), 0, 0);
@@ -226,9 +227,23 @@ void MessagesModel::onNewMessage(Message *message)
     this->endInsertRows();
 }
 
+void MessagesModel::onEditMessage(Message *message)
+{
+    if(!this->ownMessage(message))
+        return;
+
+    int idx = this->indexOf(message);
+
+    if(idx == -1)
+        return;
+
+    this->_messages[idx] = message;
+    Emit_DataChanged(idx);
+}
+
 void MessagesModel::onDeleteMessage(Message* message)
 {
-    if(!this->_dialog || (TelegramHelper::identifier(this->_dialog) != TelegramHelper::messageToDialog(message)))
+    if(!this->ownMessage(message))
         return;
 
     for(int i = 0; i < this->_messages.length(); i++)
@@ -241,6 +256,22 @@ void MessagesModel::onDeleteMessage(Message* message)
         this->endRemoveRows();
         break;
     }
+}
+
+int MessagesModel::indexOf(Message *message) const
+{
+    for(int i = 0; i < this->_messages.count(); i++)
+    {
+        if(this->_messages[i]->id() == message->id())
+            return i;
+    }
+
+    return -1;
+}
+
+bool MessagesModel::ownMessage(Message *message) const
+{
+    return this->_dialog && (TelegramHelper::identifier(this->_dialog) == TelegramHelper::messageToDialog(message));
 }
 
 QString MessagesModel::messageFrom(Message *message) const
