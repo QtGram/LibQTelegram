@@ -70,6 +70,9 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
 
             if(attribute->constructorId() == TLTypes::DocumentAttributeHasStickers)
                 return tr("Sticker set");
+
+            if(attribute->constructorId() == TLTypes::DocumentAttributeFilename)
+                return attribute->fileName();
         }
 
         return tr("Document");
