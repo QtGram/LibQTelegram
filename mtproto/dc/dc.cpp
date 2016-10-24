@@ -133,7 +133,6 @@ void DC::onDCUnauthorized()
 
 void DC::onDCFloodWait(int seconds)
 {
-    qDeleteAll(this->_pendingrequests);
     this->_pendingrequests.clear();
 
     this->abort();
