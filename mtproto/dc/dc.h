@@ -1,7 +1,7 @@
 #ifndef DC_H
 #define DC_H
 
-#define QueryTimeout                 10000  // 10 seconds
+#define QueryTimeout                 15000  // 15 seconds
 #define AckTimeout                   16000 //  16 seconds
 #define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 

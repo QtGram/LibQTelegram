@@ -28,6 +28,7 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
     switch(mtreply->constructorId())
     {
         case TLTypes::Updates:
+        case TLTypes::UpdatesCombined:
         case TLTypes::UpdateShort:
         case TLTypes::UpdateShortMessage:
         case TLTypes::UpdateShortChatMessage:
@@ -75,12 +76,16 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
             this->handleUpdate(updates.update());
             break;
 
-        default:
-        {
-            const TLVector<Update*>& updatelist = updates.updates();
-            this->handleUpdates(updatelist);
+        case TLTypes::Updates:
+        case TLTypes::UpdatesCombined:
+            emit newUsers(updates.users());
+            emit newChats(updates.chats());
+            this->handleUpdates(updates.updates());
             break;
-        }
+
+        default:
+            qWarning("Unhandled updates: %s#%08x", qUtf8Printable(DecompilerTable::constructorName(updates.constructorId())), updates.constructorId());
+            break;
     }
 }
 
@@ -175,7 +180,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             break;
 
         default:
-            qWarning("Unhandled update: %s#%08x", DecompilerTable::constructorName(update->constructorId()).toUtf8().constData(), update->constructorId());
+            qWarning("Unhandled update: %s#%08x", qUtf8Printable(DecompilerTable::constructorName(update->constructorId())), update->constructorId());
             break;
     }
 }

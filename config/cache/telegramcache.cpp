@@ -12,8 +12,6 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
     connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
     connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
-    connect(this->_fetcher, SIGNAL(typingUserReady(Update*)), this, SLOT(onTyping(Update*)));
-    connect(this->_fetcher, SIGNAL(userStatusReady(Update*)), this, SLOT(onNewUserStatus(Update*)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
@@ -209,13 +207,10 @@ void TelegramCache::cacheNotify(const TLVector<Dialog *> &dialogs)
 void TelegramCache::onNewUserStatus(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);
-    User* user = this->user(update->userId(), true);
+    User* user = this->user(update->userId());
 
     if(!user)
-    {
-        this->_fetcher->getUser(update);
         return;
-    }
 
     user->setStatus(update->status());
     this->cache(user);
@@ -316,13 +311,10 @@ void TelegramCache::onTyping(Update *update)
     Q_ASSERT((update->constructorId() == TLTypes::UpdateUserTyping) ||
              (update->constructorId() == TLTypes::UpdateChatUserTyping));
 
-    User* user = this->user(update->userId(), true);
+    User* user = this->user(update->userId());
 
     if(!user)
-    {
-        this->_fetcher->getUser(update);
         return;
-    }
 
     TLInt dialogid = (update->constructorId() == TLTypes::UpdateChatUserTyping) ? update->chatId() : update->userId();
     Dialog* dialog = this->dialog(dialogid);
@@ -363,7 +355,7 @@ void TelegramCache::cache(Dialog *dialog)
 
 void TelegramCache::cache(User *user)
 {
-    if(!this->_users.contains(user->id()))
+    if(this->_users.contains(user->id()))
         return;
 
     user->setParent(this);
@@ -374,7 +366,7 @@ void TelegramCache::cache(User *user)
 
 void TelegramCache::cache(Chat *chat)
 {
-    if(!this->_chats.contains(chat->id()))
+    if(this->_chats.contains(chat->id()))
         return;
 
     chat->setParent(this);

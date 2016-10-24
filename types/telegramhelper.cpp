@@ -144,14 +144,6 @@ InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
     return inputuser;
 }
 
-InputUser *TelegramHelper::inputUser(TLInt userid, QObject *parent)
-{
-    InputUser* inputuser = new InputUser(parent);
-    inputuser->setConstructorId(TLTypes::InputUser);
-    inputuser->setUserId(userid);
-    return inputuser;
-}
-
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);

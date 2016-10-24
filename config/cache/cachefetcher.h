@@ -13,23 +13,15 @@ class CacheFetcher : public QObject
     public:
         explicit CacheFetcher(QObject *parent = 0);
         void getDialog(InputPeer *inputpeer);
-        void getUser(Update* update);
 
     private slots:
         void onMessagesDialogs(MTProtoReply* mtreply);
-        void onTypingUserReplied(MTProtoReply* mtreply);
-        void onUserStatusReplied(MTProtoReply* mtreply);
-
-    private:
-        bool cacheNewUsers(MTProtoReply *mtreply);
 
     signals:
         void dialogsReceived(const TLVector<Dialog*>& dialog);
         void usersReceived(const TLVector<User*>& users);
         void chatsReceived(const TLVector<Chat*>& chats);
         void messagesReceived(const TLVector<Message*>& messages);
-        void typingUserReady(Update* update);
-        void userStatusReady(Update* update);
 
      private:
         Update* _update;

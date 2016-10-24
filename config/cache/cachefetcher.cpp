@@ -15,35 +15,6 @@ void CacheFetcher::getDialog(InputPeer* inputpeer)
     connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onMessagesDialogs);
 }
 
-void CacheFetcher::getUser(Update *update)
-{
-    update->setParent(this); // Take ownership
-    this->_update = update;
-
-    TLVector<InputUser*> userids;
-    userids << TelegramHelper::inputUser(update->userId());
-
-    MTProtoRequest* req = TelegramAPI::usersGetUsers(DC_MainSession, userids);
-
-    switch(update->constructorId())
-    {
-        case TLTypes::UpdateUserTyping:
-        case TLTypes::UpdateChatUserTyping:
-            connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onTypingUserReplied);
-            break;
-
-        case TLTypes::UpdateUserStatus:
-            connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onUserStatusReplied);
-            break;
-
-        default:
-            qFatal("Unhandled update type: %x", update->constructorId());
-            break;
-    }
-
-    qDeleteAll(userids);
-}
-
 void CacheFetcher::onMessagesDialogs(MTProtoReply *mtreply)
 {
     MessagesDialogs messagesdialogs;
@@ -53,32 +24,4 @@ void CacheFetcher::onMessagesDialogs(MTProtoReply *mtreply)
     emit usersReceived(messagesdialogs.users());
     emit chatsReceived(messagesdialogs.chats());
     emit messagesReceived(messagesdialogs.messages());
-}
-
-void CacheFetcher::onTypingUserReplied(MTProtoReply *mtreply)
-{
-    if(this->cacheNewUsers(mtreply))
-        emit typingUserReady(this->_update);
-
-    this->_update->deleteLater();
-}
-
-void CacheFetcher::onUserStatusReplied(MTProtoReply *mtreply)
-{
-    if(this->cacheNewUsers(mtreply))
-        emit userStatusReady(this->_update);
-
-    this->_update->deleteLater();
-}
-
-bool CacheFetcher::cacheNewUsers(MTProtoReply* mtreply)
-{
-    TLVector<User*> users;
-    mtreply->readTLVector<User>(users, false, NULL);
-
-    if(users.isEmpty())
-        return false;
-
-    emit usersReceived(users);
-    return true;
 }
