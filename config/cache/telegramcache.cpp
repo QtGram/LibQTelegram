@@ -183,7 +183,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
             this->cache(dialog);
             continue;
         }
-        else
+        else if(!this->hasDialog(dialogid))
             this->_fetcher->getDialog(TelegramHelper::inputPeer(message));
     }
 
