@@ -329,6 +329,17 @@ void MessagesModel::telegramReady()
     if(!this->_dialog)
         return;
 
+    if(TelegramHelper::isChannel(this->_dialog) || (TelegramHelper::isChat(this->_dialog)))
+    {
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
+        connect(chat, &Chat::participantsCountChanged, this, &MessagesModel::statusTextChanged);
+    }
+    else
+    {
+        User* user = TelegramCache_user(TelegramHelper::identifier(this->_dialog));
+        connect(user, &User::statusChanged, this, &MessagesModel::statusTextChanged);
+    }
+
     this->_messages = TelegramCache_messages(this->_dialog, 0, this->_loadcount);
 
     if(this->_messages.length() < this->_loadcount)
