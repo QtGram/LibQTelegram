@@ -231,6 +231,74 @@ void QQuickMediaMessageItem::createWebPagePhotoElement()
     this->scaleToColumn();
 }
 
+void QQuickMediaMessageItem::createFileElement()
+{
+    QString componentstring = "Row {\n"
+                                  "property url source\n"
+                                  "id: fileelement\n"
+                                  "width: parent.width\n"
+                                  "height: textcolumn.height\n"
+                                  "Image {\n"
+                                      "id: image\n"
+                                      "height: textcolumn.height\n"
+                                      "width: height\n"
+                                      "asynchronous: true\n"
+                                  "}\n"
+                                  "Column {\n"
+                                      "id: textcolumn\n"
+                                      "width: parent.width - x\n"
+                                      "height: childrenRect.height\n"
+                                      "Text {\n"
+                                          "width: parent.width\n"
+                                          "text: \"%1\"\n"
+                                      "}\n"
+                                      "Text {\n"
+                                          "width: parent.width\n"
+                                          "text: \"%2\"\n"
+                                      "}\n"
+                                  "}\n"
+                              "}";
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    TLString fileName;
+    foreach(DocumentAttribute* attribute, messagemedia->document()->attributes())
+    {
+        if(attribute->constructorId() == TLTypes::DocumentAttributeFilename)
+            fileName = attribute->fileName();
+    }
+    QString fileSize;
+    TLDouble size = messagemedia->document()->size();
+    int unit = 0;
+    while (size > 1024) {
+        size /= 1024;
+        unit++;
+    }
+    fileSize = QString::number(size, 'g', 2);
+    switch (unit) {
+    case 0:
+        fileSize += "B";
+        break;
+    case 1:
+        fileSize += "KB";
+        break;
+    case 2:
+        fileSize += "MB";
+        break;
+    case 3:
+        fileSize += "GB";
+        break;
+    }
+
+    this->createComponent(componentstring.arg(this->escape(fileName),
+                                              this->escape(fileSize)));
+
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    this->scaleToColumn();
+}
+
 void QQuickMediaMessageItem::initialize()
 {
     if(!this->_message || this->_mediaelement)
@@ -264,6 +332,8 @@ void QQuickMediaMessageItem::initialize()
                 this->createImageElement();
             else if(TelegramHelper::isAnimated(document))
                 this->createAnimatedElement();
+            else if(TelegramHelper::isFile(document))
+                this->createFileElement();
 
             break;
         }
@@ -281,6 +351,7 @@ void QQuickMediaMessageItem::initialize()
         }
 
         default:
+            qDebug() << "Unhandled Message Media Type:" << messagemedia->constructorId();
             return;
     }
 

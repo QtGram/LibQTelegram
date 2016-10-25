@@ -212,6 +212,11 @@ bool TelegramHelper::isAnimated(Document *document)
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAnimated) != NULL;
 }
 
+bool TelegramHelper::isFile(Document *document)
+{
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename) != NULL;
+}
+
 bool TelegramHelper::isChat(Dialog *dialog)
 {
     return TelegramHelper::isChat(dialog->peer());
