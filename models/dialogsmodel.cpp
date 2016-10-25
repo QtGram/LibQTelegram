@@ -20,6 +20,9 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
     if(role == DialogsModel::TitleRole)
         return this->_telegram->dialogTitle(dialog);
 
+    if(role == DialogsModel::UnreadCountRole)
+        return dialog->unreadCount();
+
     if(role == DialogsModel::TopMessageRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage());
@@ -99,12 +102,13 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     QHash<int, QByteArray> roles = this->initRoles();
 
     roles[DialogsModel::TitleRole] = "title";
+    roles[DialogsModel::DraftMessageRole] = "draftMessage";
+    roles[DialogsModel::UnreadCountRole] = "unreadCount";
     roles[DialogsModel::TopMessageRole] = "topMessage";
     roles[DialogsModel::TopMessageFromRole] = "topMessageFrom";
     roles[DialogsModel::TopMessageTextRole] = "topMessageText";
     roles[DialogsModel::IsTopMessageOutRole] = "isTopMessageOut";
     roles[DialogsModel::IsTopMessageServiceRole] = "isTopMessageService";
-    roles[DialogsModel::DraftMessageRole] = "draftMessage";
     roles[DialogsModel::IsMegaGroupRole] = "isMegaGroup";
     roles[DialogsModel::IsBroadcastRole] = "isBroadcast";
     roles[DialogsModel::IsChatRole] = "isChat";

@@ -10,12 +10,13 @@ class DialogsModel : public TelegramModel
     public:
         enum DialogRoles {
             TitleRole = Qt::UserRole + 10,
+            DraftMessageRole,
+            UnreadCountRole,
             TopMessageRole,
             TopMessageFromRole,
             TopMessageTextRole,
             IsTopMessageOutRole,
             IsTopMessageServiceRole,
-            DraftMessageRole,
             IsMegaGroupRole,
             IsBroadcastRole,
             IsChatRole,
