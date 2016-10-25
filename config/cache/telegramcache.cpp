@@ -355,9 +355,6 @@ void TelegramCache::cache(Dialog *dialog)
 
 void TelegramCache::cache(User *user)
 {
-    if(this->_users.contains(user->id()))
-        return;
-
     user->setParent(this);
 
     this->_users[user->id()] = user;
@@ -366,9 +363,6 @@ void TelegramCache::cache(User *user)
 
 void TelegramCache::cache(Chat *chat)
 {
-    if(this->_chats.contains(chat->id()))
-        return;
-
     chat->setParent(this);
 
     this->_chats[chat->id()] = chat;
