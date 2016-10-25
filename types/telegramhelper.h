@@ -23,6 +23,7 @@ class TelegramHelper
         static DocumentAttribute* documentHas(Document* document, TLConstructor attributector);
         static bool isSticker(Document* document);
         static bool isAnimated(Document* document);
+        static bool isFile(Document* document);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);
         static bool isChat(Peer* peer);

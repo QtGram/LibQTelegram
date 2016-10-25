@@ -40,6 +40,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void createAnimatedElement();
         void createLocationElement();
         void createWebPagePhotoElement();
+        void createFileElement();
         void initialize();
 
     signals:
