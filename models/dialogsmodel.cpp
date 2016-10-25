@@ -47,6 +47,18 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
         return this->firstMessageLine(message);
     }
 
+    if(role == DialogsModel::TopMessageDateRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return TelegramHelper::dateString(message->date());
+    }
+
+    if(role == DialogsModel::IsTopMessageUnreadRole)
+    {
+        Message* message = TelegramCache_message(dialog->topMessage());
+        return (dialog->readOutboxMaxId() < message->id());
+    }
+
     if(role == DialogsModel::IsTopMessageOutRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage());
@@ -109,6 +121,8 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     roles[DialogsModel::TopMessageRole] = "topMessage";
     roles[DialogsModel::TopMessageFromRole] = "topMessageFrom";
     roles[DialogsModel::TopMessageTextRole] = "topMessageText";
+    roles[DialogsModel::TopMessageDateRole] = "topMessageDate";
+    roles[DialogsModel::IsTopMessageUnreadRole] = "isTopMessageUnread";
     roles[DialogsModel::IsTopMessageOutRole] = "isTopMessageOut";
     roles[DialogsModel::IsTopMessageServiceRole] = "isTopMessageService";
     roles[DialogsModel::IsMegaGroupRole] = "isMegaGroup";

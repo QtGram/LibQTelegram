@@ -15,6 +15,8 @@ class DialogsModel : public TelegramModel
             TopMessageRole,
             TopMessageFromRole,
             TopMessageTextRole,
+            TopMessageDateRole,
+            IsTopMessageUnreadRole,
             IsTopMessageOutRole,
             IsTopMessageServiceRole,
             IsMegaGroupRole,
