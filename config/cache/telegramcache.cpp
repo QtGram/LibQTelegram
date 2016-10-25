@@ -204,7 +204,6 @@ void TelegramCache::cacheNotify(Message *message)
     messages << message;
 
     this->onNewMessages(messages);
-    emit newMessage(message);
 }
 
 void TelegramCache::cacheNotify(const TLVector<Dialog *> &dialogs)
