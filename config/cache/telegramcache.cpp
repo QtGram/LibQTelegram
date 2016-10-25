@@ -103,6 +103,12 @@ bool TelegramCache::hasDialog(TLInt id) const
     return true;
 }
 
+void TelegramCache::markAsRead(Dialog *dialog)
+{
+    dialog->setUnreadCount(0);
+    emit readInbox(dialog);
+}
+
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 {
     this->_database->transaction([this, dialogs](QSqlQuery& queryobj) {
@@ -179,6 +185,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
             dialogsupdated = true;
             dialog->setTopMessage(message->id());
             this->cache(dialog);
+            emit newMessage(message);
             continue;
         }
         else if(!this->hasDialog(dialogid))
@@ -297,10 +304,14 @@ void TelegramCache::onReadHistory(Update *update)
     if(!dialog)
         return;
 
-    if(isout)
-        dialog->setReadOutboxMaxId(update->maxId());
-    else
+    if(!isout)
+    {
         dialog->setReadInboxMaxId(update->maxId());
+        dialog->setUnreadCount(0);
+        emit readInbox(dialog);
+    }
+    else
+        dialog->setReadOutboxMaxId(update->maxId());
 
     this->cache(dialog);
     emit dialogsChanged();

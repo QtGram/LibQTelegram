@@ -5,6 +5,8 @@ DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
     connect(TelegramCache_instance, &TelegramCache::dialogsChanged, this, &DialogsModel::sortDialogs);
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
+    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &DialogsModel::onNewMessage);
+    connect(TelegramCache_instance, &TelegramCache::readInbox, this, &DialogsModel::onReadInbox);
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
@@ -116,6 +118,17 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     return roles;
 }
 
+int DialogsModel::indexOf(TLInt dialogid) const
+{
+    for(int i = 0; i < this->_dialogs.length(); i++)
+    {
+        if(TelegramHelper::identifier(this->_dialogs[i]) == dialogid)
+            return i;
+    }
+
+    return -1;
+}
+
 QString DialogsModel::messageFrom(Message *message) const
 {
     TelegramObject* tgobj = this->_telegram->messageFrom(message);
@@ -181,6 +194,33 @@ void DialogsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
 {
     this->_dialogs << dialogs;
     this->sortDialogs();
+}
+
+void DialogsModel::onReadInbox(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChangedRoles(idx, DialogsModel::UnreadCountRole);
+}
+
+void DialogsModel::onNewMessage(Message *message)
+{
+    if(message->isOut()) // Ignore my messages
+        return;
+
+    TLInt dialogid = TelegramHelper::messageToDialog(message);
+    int idx = this->indexOf(dialogid);
+
+    if(idx == -1)
+        return;
+
+    Dialog* dialog = this->_dialogs[idx];
+    dialog->setUnreadCount(dialog->unreadCount() + 1);
+
+    Emit_DataChangedRoles(idx, DialogsModel::UnreadCountRole);
 }
 
 void DialogsModel::telegramReady()

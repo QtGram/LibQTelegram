@@ -341,6 +341,7 @@ void MessagesModel::telegramReady()
     }
 
     this->_messages = TelegramCache_messages(this->_dialog, 0, this->_loadcount);
+    TelegramCache_markAsRead(this->_dialog); // NOTE: Read state must be more selective
 
     if(this->_messages.length() < this->_loadcount)
     {

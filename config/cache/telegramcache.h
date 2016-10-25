@@ -6,6 +6,7 @@
 #define TelegramCache_store(objs) TelegramCache::cache()->cache(objs);
 
 #define TelegramCache_hasDialog(dialogid) TelegramCache::cache()->hasDialog(dialogid)
+#define TelegramCache_markAsRead(dialog) TelegramCache::cache()->markAsRead(dialog)
 
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
@@ -45,6 +46,7 @@ class TelegramCache: public QObject
         Message* message(TLInt id, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
+        void markAsRead(Dialog* dialog);
 
     public slots:
         void cache(Dialog* dialog);
@@ -73,6 +75,7 @@ class TelegramCache: public QObject
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessage(Message* message);
+        void readInbox(Dialog* dialog);
         void typing(Dialog* dialog, SendMessageAction* sendmessageaction);
 
     private:

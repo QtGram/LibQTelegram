@@ -5,6 +5,7 @@
 #include "../../telegram.h"
 
 #define Emit_DataChanged(i) (emit dataChanged(this->index(i, 0), this->index(i, 0)))
+#define Emit_DataChangedRoles(i, roles) emit dataChanged(this->index(i, 0), this->index(i, 0), QVector<int>() << (roles))
 
 class TelegramModel : public QAbstractListModel
 {
