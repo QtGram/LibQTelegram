@@ -64,19 +64,19 @@ Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
     return this->_chats[id];
 }
 
-Message *TelegramCache::message(TLInt id, bool ignoreerror)
+Message *TelegramCache::message(MessageId messageid, bool ignoreerror)
 {
-    if(!this->_messages.contains(id))
+    if(!this->_messages.contains(messageid))
     {
-        Message* message = this->_database->messages()->get<Message>(id, "message", ignoreerror, this);
+        Message* message = this->_database->messages()->get<Message>(messageid, "message", ignoreerror, this);
 
         if(message)
-            this->_messages[message->id()] = message;
+            this->_messages[messageid] = message;
 
         return message;
     }
 
-    return this->_messages[id];
+    return this->_messages[messageid];
 }
 
 Dialog *TelegramCache::dialog(TLInt id, bool ignoreerror) const
@@ -160,11 +160,13 @@ void TelegramCache::cache(const TLVector<Message *>& messages)
         this->_database->messages()->prepareInsert(queryobj);
 
         foreach(Message* message, messages) {
-            if(this->_messages.contains(message->id()))
+            MessageId messageid = TelegramHelper::identifier(message);
+
+            if(this->_messages.contains(messageid))
                 continue;
 
             message->setParent(this);
-            this->_messages[message->id()] = message;
+            this->_messages[messageid] = message;
             this->_database->messages()->insertQuery(queryobj, message);
         }
     });
@@ -249,6 +251,7 @@ void TelegramCache::onEditMessage(Message *message)
 
 void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 {
+    /* FIXME:
     bool updatedialogs = false;
 
     foreach(TLInt messageid, messageids)
@@ -278,6 +281,7 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 
     if(updatedialogs)
         emit dialogsChanged();
+        */
 }
 
 void TelegramCache::onReadHistory(Update *update)
@@ -383,13 +387,14 @@ void TelegramCache::cache(Chat *chat)
 void TelegramCache::cache(Message *message)
 {
     Message* oldmessage = NULL;
+    MessageId messageid = TelegramHelper::identifier(message);
 
-    if(this->_messages.contains(message->id()))
-        oldmessage = this->_messages[message->id()];
+    if(this->_messages.contains(messageid))
+        oldmessage = this->_messages[messageid];
 
     message->setParent(this);
 
-    this->_messages[message->id()] = message;
+    this->_messages[messageid] = message;
     this->_database->messages()->insert(message);
 
     if(oldmessage)

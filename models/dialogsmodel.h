@@ -35,6 +35,7 @@ class DialogsModel : public TelegramModel
         QString messageFrom(Message *message) const;
         QString firstMessageLine(Message* message) const;
         QString draftMessage(Dialog *dialog) const;
+        Message* topMessage(Dialog* dialog) const;
 
     private slots:
         void sortDialogs();

@@ -27,7 +27,7 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
 
     if(role == DialogsModel::TopMessageRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
 
         if(!message)
             return QVariant();
@@ -37,37 +37,37 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
 
     if(role == DialogsModel::TopMessageFromRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return this->messageFrom(message);
     }
 
     if(role == DialogsModel::TopMessageTextRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return this->firstMessageLine(message);
     }
 
     if(role == DialogsModel::TopMessageDateRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return TelegramHelper::dateString(message->date());
     }
 
     if(role == DialogsModel::IsTopMessageUnreadRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return (dialog->readOutboxMaxId() < message->id());
     }
 
     if(role == DialogsModel::IsTopMessageOutRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return message->isOut();
     }
 
     if(role == DialogsModel::IsTopMessageServiceRole)
     {
-        Message* message = TelegramCache_message(dialog->topMessage());
+        Message* message = this->topMessage(dialog);
         return message->constructorId() == TLTypes::MessageService;
     }
 
@@ -187,13 +187,18 @@ QString DialogsModel::draftMessage(Dialog *dialog) const
     return dialog->draft()->message();
 }
 
+Message *DialogsModel::topMessage(Dialog *dialog) const
+{
+    return TelegramCache_message(TelegramHelper::identifier(dialog, dialog->topMessage()));
+}
+
 void DialogsModel::sortDialogs()
 {
     this->beginResetModel();
 
     std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](Dialog* dlg1, Dialog* dlg2) {
-        Message* msg1 = TelegramCache_message(dlg1->topMessage());
-        Message* msg2 = TelegramCache_message(dlg2->topMessage());
+        Message* msg1 = TelegramCache_message(TelegramHelper::identifier(dlg1, dlg1->topMessage()));
+        Message* msg2 = TelegramCache_message(TelegramHelper::identifier(dlg2, dlg2->topMessage()));
 
         if(!msg1 || !msg2)
             return false;

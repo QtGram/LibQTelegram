@@ -25,7 +25,7 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     this->execute(queryobj);
 }
 
-Message *MessagesTable::previousMessage(Message* message, QHash<TLInt, Message *> &messages, QObject *parent)
+Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Message *> &messages, QObject *parent)
 {
     TLInt dialogid = TelegramHelper::messageToDialog(message);
     CreateQuery(queryobj);
@@ -55,7 +55,7 @@ Message *MessagesTable::previousMessage(Message* message, QHash<TLInt, Message *
     return prevmessage;
 }
 
-QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<TLInt, Message *> &messages, int offset, int limit, QObject *parent)
+QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent)
 {
     QList<Message*> result;
     TLInt dialogid = TelegramHelper::identifier(dialog);

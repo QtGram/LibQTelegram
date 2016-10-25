@@ -232,6 +232,21 @@ bool TelegramHelper::isChannel(Peer *peer)
     return peer->constructorId() == TLTypes::PeerChannel;
 }
 
+MessageId TelegramHelper::identifier(TLInt dialogid, TLInt messageid)
+{
+    return (static_cast<MessageId>(dialogid) << 32u) + messageid;
+}
+
+MessageId TelegramHelper::identifier(Dialog *dialog, TLInt messageid)
+{
+    return TelegramHelper::identifier(TelegramHelper::identifier(dialog), messageid);
+}
+
+MessageId TelegramHelper::identifier(Message *message)
+{
+    return TelegramHelper::identifier(TelegramHelper::messageToDialog(message), message->id());
+}
+
 TLInt TelegramHelper::identifier(User *user)
 {
     return user->id();
@@ -260,11 +275,6 @@ TLInt TelegramHelper::identifier(Peer *peer)
 TLInt TelegramHelper::identifier(Dialog *dialog)
 {
     return TelegramHelper::identifier(dialog->peer());
-}
-
-TLInt TelegramHelper::identifier(Message *message)
-{
-    return message->id();
 }
 
 TLInt TelegramHelper::messageToDialog(Message *message)

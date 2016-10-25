@@ -43,7 +43,7 @@ class TelegramCache: public QObject
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
-        Message* message(TLInt id, bool ignoreerror = false);
+        Message* message(MessageId messageid, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
         void markAsRead(Dialog* dialog);
@@ -83,7 +83,7 @@ class TelegramCache: public QObject
         QList<User*> _contacts;
         QHash<TLInt, Chat*> _chats;
         QHash<TLInt, User*> _users;
-        QHash<TLInt, Message*> _messages;
+        QHash<MessageId, Message*> _messages;
         CacheDatabase* _database;
         CacheFetcher* _fetcher;
 

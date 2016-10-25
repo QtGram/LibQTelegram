@@ -20,6 +20,9 @@ typedef double TLDouble;
 typedef QByteArray TLBytes;
 typedef QByteArray TLObject;
 
+// Internal types
+typedef quint64 MessageId;
+
 class TLString: public QByteArray
 {
     public:
