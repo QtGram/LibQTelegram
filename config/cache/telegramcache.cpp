@@ -64,8 +64,11 @@ Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
     return this->_chats[id];
 }
 
-Message *TelegramCache::message(MessageId messageid, bool ignoreerror)
+Message *TelegramCache::message(MessageId messageid, Dialog *dialog, bool ignoreerror)
 {
+    if(dialog && TelegramHelper::isChannel(dialog))
+        messageid = TelegramHelper::identifier(messageid, dialog);
+
     if(!this->_messages.contains(messageid))
     {
         Message* message = this->_database->messages()->get<Message>(messageid, "message", ignoreerror, this);
@@ -250,12 +253,11 @@ void TelegramCache::onEditMessage(Message *message)
 
 void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 {
-    /* FIXME:
     bool updatedialogs = false;
 
     foreach(TLInt messageid, messageids)
     {
-        Message* message = this->message(messageid);
+        Message* message = this->message(messageid, NULL);
 
         if(!message)
             continue;
@@ -275,12 +277,11 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
         }
 
         emit deleteMessage(message);
-        this->_database->messages()->remove(messageid);
+        this->_database->messages()->remove(messageid); // There is no need to call identifier() because they are standard message ids
     }
 
     if(updatedialogs)
         emit dialogsChanged();
-        */
 }
 
 void TelegramCache::onReadHistory(Update *update)

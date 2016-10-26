@@ -28,8 +28,8 @@ class TelegramHelper
         static bool isChannel(Dialog* dialog);
         static bool isChat(Peer* peer);
         static bool isChannel(Peer* peer);
-        static MessageId identifier(TLInt dialogid, TLInt messageid);
-        static MessageId identifier(Dialog* dialog, TLInt messageid);
+        static MessageId identifier(TLInt messageid, TLInt channelid);
+        static MessageId identifier(TLInt messageid, Dialog* dialog);
         static MessageId identifier(Message* message);
         static TLInt identifier(User* user);
         static TLInt identifier(Chat* chat);

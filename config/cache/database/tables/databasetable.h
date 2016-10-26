@@ -43,7 +43,7 @@ class DatabaseTable : public QObject
         QStringList _values;
 };
 
-template<typename T, typename U> T* DatabaseTable::get(U id, const char* type, bool ignoreerror, QObject* parent) const
+template<typename T1, typename T2> T1* DatabaseTable::get(T2 id, const char* type, bool ignoreerror, QObject* parent) const
 {
     CreateQuery(queryobj);
 
@@ -61,7 +61,7 @@ template<typename T, typename U> T* DatabaseTable::get(U id, const char* type, b
 
     QByteArray data = queryobj.value(this->defaultField()).toByteArray();
 
-    T* t = new T(parent);
+    T1* t = new T1(parent);
     t->unserialize(data);
     return t;
 }

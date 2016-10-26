@@ -25,7 +25,7 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     this->execute(queryobj);
 }
 
-Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Message *> &messages, QObject *parent)
+Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Message *> &messages, QObject *parent) const
 {
     TLInt dialogid = TelegramHelper::messageToDialog(message);
     CreateQuery(queryobj);
@@ -39,7 +39,7 @@ Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Messa
     if(!this->execute(queryobj))
         return NULL;
 
-    TLInt prevmessageid = queryobj.value("id").toInt();
+    MessageId prevmessageid = queryobj.value("id").toLongLong();
 
     if(messages.contains(prevmessageid))
         return messages[prevmessageid];
@@ -55,7 +55,7 @@ Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Messa
     return prevmessage;
 }
 
-QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent)
+QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent) const
 {
     QList<Message*> result;
     TLInt dialogid = TelegramHelper::identifier(dialog);
@@ -74,11 +74,11 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
 
     while(queryobj.next())
     {
-        TLInt id = queryobj.value("id").toInt();
+        MessageId messageid = queryobj.value("id").toLongLong();
 
-        if(messages.contains(id))
+        if(messages.contains(messageid))
         {
-            result << messages[id];
+            result << messages[messageid];
             continue;
         }
 
@@ -86,7 +86,7 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
         Message* message = new Message(parent);
         message->unserialize(data);
 
-        messages[message->id()] = message;
+        messages[messageid] = message;
         result << message;
     }
 

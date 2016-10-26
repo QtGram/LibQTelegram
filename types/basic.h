@@ -23,6 +23,12 @@ typedef QByteArray TLObject;
 // Internal types
 typedef quint64 MessageId;
 
+/*
+ * Message ID value:
+ * Non Channels: total_number_of_sent_received_messages + 1
+ * Channels: Channel message index + 1
+ */
+
 class TLString: public QByteArray
 {
     public:

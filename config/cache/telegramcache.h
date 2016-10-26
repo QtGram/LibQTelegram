@@ -13,9 +13,9 @@
 
 #define TelegramCache_user(userid) TelegramCache::cache()->user(userid)
 #define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
+#define TelegramCache_message(messageid, dialog) TelegramCache::cache()->message(messageid, dialog)
 
 #define TelegramCache_insert(message) TelegramCache::cache()->insert(message)
-#define TelegramCache_message(messageid) TelegramCache::cache()->message(messageid)
 #define TelegramCache_messages(dialogid, offset, limit) TelegramCache::cache()->dialogMessages(dialogid, offset, limit)
 
 #include <QObject>
@@ -43,7 +43,7 @@ class TelegramCache: public QObject
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
-        Message* message(MessageId messageid, bool ignoreerror = false);
+        Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
         void markAsRead(Dialog* dialog);
