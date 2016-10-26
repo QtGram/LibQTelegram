@@ -55,25 +55,20 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
 
     if(ctorid == TLTypes::MessageMediaDocument)
     {
+        DocumentAttribute* attribute = NULL;
         Document* document = messagemedia->document();
 
-        foreach(DocumentAttribute* attribute, document->attributes())
-        {
-            if(attribute->constructorId() == TLTypes::DocumentAttributeAnimated)
-                return tr("GIF");
+        if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAnimated))
+            return tr("GIF");
 
-            if(attribute->constructorId() == TLTypes::DocumentAttributeSticker)
-                return tr("Sticker");
+        if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker))
+            return tr("Sticker");
 
-            if(attribute->constructorId() == TLTypes::DocumentAttributeAudio)
-                return tr("Audio recording");
+        if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeHasStickers))
+            return tr("Sticker Set");
 
-            if(attribute->constructorId() == TLTypes::DocumentAttributeHasStickers)
-                return tr("Sticker set");
-
-            if(attribute->constructorId() == TLTypes::DocumentAttributeFilename)
-                return attribute->fileName();
-        }
+        if((attribute = TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename)))
+            return attribute->fileName();
 
         return tr("Document");
     }
