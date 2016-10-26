@@ -120,7 +120,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageServiceRole)
         return (message->constructorId() == TLTypes::MessageService);
 
-    if(role == MessagesModel::TimestampRole)
+    if(role == MessagesModel::MessageDateRole)
         return QDateTime::fromMSecsSinceEpoch(message->date() * 1000).time().toString("hh:mm");
 
     if(role == MessagesModel::IsMessageUnreadRole)
@@ -142,7 +142,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::MessageText] = "messageText";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
-    roles[MessagesModel::TimestampRole] = "timestamp";
+    roles[MessagesModel::MessageDateRole] = "messageDate";
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
 
     return roles;
