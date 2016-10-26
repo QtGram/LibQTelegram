@@ -214,7 +214,7 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
     message->setFlags(updates.flags());
     message->setMedia(updates.media());
 
-    TelegramCache_cacheNotify(message);
+    TelegramCache_insert(message);
 }
 
 void MessagesModel::onNewMessage(Message *message)

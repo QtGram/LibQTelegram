@@ -8,14 +8,14 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
     this->_fetcher = new CacheFetcher(this);
 
-    connect(this->_fetcher, SIGNAL(dialogsReceived(TLVector<Dialog*>)), this, SLOT(cacheNotify(TLVector<Dialog*>)));
+    connect(this->_fetcher, SIGNAL(dialogsReceived(TLVector<Dialog*>)), this, SLOT(onDialogsReceived(TLVector<Dialog*>)));
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
     connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
     connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
-    connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(cacheNotify(Message*)));
+    connect(UpdateHandler_instance, SIGNAL(newMessage(Message*)), this, SLOT(insert(Message*)));
     connect(UpdateHandler_instance, SIGNAL(newChat(Chat*)), this, SLOT(cache(Chat*)));
 
     connect(UpdateHandler_instance, SIGNAL(newMessages(TLVector<Message*>)), this, SLOT(onNewMessages(TLVector<Message*>)));
@@ -198,7 +198,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         emit dialogsChanged();
 }
 
-void TelegramCache::cacheNotify(Message *message)
+void TelegramCache::insert(Message *message)
 {
     TLVector<Message*> messages;
     messages << message;
@@ -206,7 +206,7 @@ void TelegramCache::cacheNotify(Message *message)
     this->onNewMessages(messages);
 }
 
-void TelegramCache::cacheNotify(const TLVector<Dialog *> &dialogs)
+void TelegramCache::onDialogsReceived(const TLVector<Dialog *> &dialogs)
 {
     this->cache(dialogs);
     emit newDialogs(dialogs);
