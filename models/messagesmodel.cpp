@@ -121,7 +121,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return (message->constructorId() == TLTypes::MessageService);
 
     if(role == MessagesModel::MessageDateRole)
-        return QDateTime::fromMSecsSinceEpoch(message->date() * 1000).time().toString("hh:mm");
+        return TelegramHelper::dateString(message->date());
 
     if(role == MessagesModel::IsMessageUnreadRole)
         return dialog()->readOutboxMaxId() < message->id();
