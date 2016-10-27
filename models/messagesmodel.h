@@ -21,6 +21,8 @@ class MessagesModel : public TelegramModel
             MessageText,
             IsMessageOutRole,
             IsMessageServiceRole,
+            MessageDateRole,
+            IsMessageUnreadRole
         };
 
     public:

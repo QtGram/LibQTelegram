@@ -120,6 +120,12 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageServiceRole)
         return (message->constructorId() == TLTypes::MessageService);
 
+    if(role == MessagesModel::MessageDateRole)
+        return TelegramHelper::dateString(message->date());
+
+    if(role == MessagesModel::IsMessageUnreadRole)
+        return dialog()->readOutboxMaxId() < message->id();
+
     return QVariant();
 }
 
@@ -136,6 +142,8 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::MessageText] = "messageText";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
+    roles[MessagesModel::MessageDateRole] = "messageDate";
+    roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
 
     return roles;
 }
