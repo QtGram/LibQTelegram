@@ -263,15 +263,9 @@ QString Telegram::messageText(Message *message) const
     if(message->media())
     {
         MessageMedia* messagemedia = message->media();
-
-        if(!messagemedia->caption().isEmpty())
-            return messagemedia->caption();
-
-        if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
-            return messagemedia->webpage()->url();
+        return messagemedia->caption();
     }
-
-    if(message->action())
+    else if(message->action())
         return this->messageActionText(message);
 
     return message->message();
