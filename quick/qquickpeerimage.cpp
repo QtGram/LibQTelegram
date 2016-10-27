@@ -3,6 +3,8 @@
 
 QQuickPeerImage::QQuickPeerImage(QQuickItem* parent): QQuickBaseItem(parent), _peer(NULL), _size(0)
 {
+    this->_fallbackpeerdelegate = NULL;
+    this->_peerdelegate = NULL;
 }
 
 TelegramObject *QQuickPeerImage::peer() const
@@ -35,6 +37,34 @@ void QQuickPeerImage::setSize(int size)
     emit sizeChanged();
 }
 
+QQmlComponent *QQuickPeerImage::peerDelegate() const
+{
+    return this->_peerdelegate;
+}
+
+void QQuickPeerImage::setPeerDelegate(QQmlComponent *peerdelegate)
+{
+    if(this->_peerdelegate == peerdelegate)
+        return;
+
+    this->_peerdelegate = peerdelegate;
+    emit peerDelegateChanged();
+}
+
+QQmlComponent *QQuickPeerImage::fallbackPeerDelegate() const
+{
+    return this->_fallbackpeerdelegate;
+}
+
+void QQuickPeerImage::setFallbackPeerDelegate(QQmlComponent *fallbackpeerdelegate)
+{
+    if(this->_fallbackpeerdelegate == fallbackpeerdelegate)
+        return;
+
+    this->_fallbackpeerdelegate = fallbackpeerdelegate;
+    emit fallbackPeerDelegateChanged();
+}
+
 void QQuickPeerImage::initialize()
 {
     if(!this->_peer || this->_mediaelement)
@@ -46,15 +76,17 @@ void QQuickPeerImage::initialize()
     {
         connect(fileobject, &FileObject::hasThumbnailChanged, this, &QQuickPeerImage::reinitialize);
         connect(fileobject, &FileObject::downloadedChanged, this, &QQuickPeerImage::reinitialize);
+        connect(fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::sourceChanged);
+        connect(fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
     }
 
     if(fileobject && (fileobject->hasThumbnail() || fileobject->downloaded()))
     {
-        this->createRoundImageElement();
+        this->createPeerElement();
         this->bindToElement();
     }
     else
-        this->createPlaceHolderImageElement();
+        this->createFallbackPeerElement();
 }
 
 void QQuickPeerImage::updateMetrics()
@@ -63,7 +95,12 @@ void QQuickPeerImage::updateMetrics()
     this->setHeight(this->_size);
 }
 
-void QQuickPeerImage::createRoundImageElement()
+void QQuickPeerImage::updateSource(QVariant sourcevalue)
+{
+    this->_mediaelement->setProperty("source", sourcevalue);
+}
+
+void QQuickPeerImage::createPeerElement()
 {
     QString componentsource = "Item {\n"
                                   "property url source\n"
@@ -94,8 +131,13 @@ void QQuickPeerImage::createRoundImageElement()
     this->createComponent(componentsource);
 }
 
-void QQuickPeerImage::createPlaceHolderImageElement()
+void QQuickPeerImage::createFallbackPeerElement()
 {
+    if(!this->_fallbackpeerdelegate)
+        return;
+
+    this->createObject(this->_fallbackpeerdelegate);
+
     QString componentsource = "Item {\n"
                                   "anchors.fill: parent\n"
                                   "Rectangle {\n"
@@ -169,4 +211,21 @@ void QQuickPeerImage::reinitialize()
 
     this->initialize();
     olditem->deleteLater();
+}
+
+void QQuickPeerImage::bindToElement()
+{
+    if(!this->_mediaelement)
+        return;
+
+    QUrl mediaurl;
+
+    if(this->downloaded())
+        mediaurl = QUrl::fromLocalFile(this->filePath());
+    else if(this->hasThumbnail())
+        mediaurl = QUrl::fromLocalFile(this->thumbnail());
+    else
+        return;
+
+    this->updateSource(mediaurl);
 }

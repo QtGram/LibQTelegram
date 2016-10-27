@@ -13,6 +13,7 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_inputfilelocation = NULL;
     this->_dcsession = NULL;
     this->_file = NULL;
+    this->_filesize = 0;
 
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
@@ -48,6 +49,16 @@ QString FileObject::filePath() const
     return this->_filepath;
 }
 
+QString FileObject::fileName() const
+{
+    return this->_filename;
+}
+
+TLInt FileObject::fileSize() const
+{
+    return this->_filesize;
+}
+
 void FileObject::setAutoDownload(bool autodownload)
 {
     this->_autodownload = autodownload;
@@ -59,6 +70,7 @@ void FileObject::setDocument(Document *document)
         return;
 
     this->_document = document;
+    this->setFileSize(document->size());
 
     if(document->thumb())
         this->_locthumbnail = document->thumb()->location();
@@ -72,6 +84,29 @@ void FileObject::setDocument(Document *document)
 
     if(attribute)
         this->setImageSize(QSize(attribute->w(), attribute->h()));
+
+    attribute =  TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename);
+
+    if(attribute)
+        this->setFileName(attribute->fileName());
+}
+
+void FileObject::setFileSize(TLInt filesize)
+{
+    if(this->_filesize == filesize)
+        return;
+
+    this->_filesize = filesize;
+    emit fileSizeChanged();
+}
+
+void FileObject::setFileName(const QString &filename)
+{
+    if(this->_filename == filename)
+        return;
+
+    this->_filename = filename;
+    emit fileNameChanged();
 }
 
 void FileObject::setImageSize(const QSize &imagesize)

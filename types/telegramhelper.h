@@ -18,6 +18,7 @@ class TelegramHelper
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
         static QString dateString(TLInt timestamp);
+        static QString fileSize(TLDouble size);
         static QString fullName(User* user);
         static QString statusText(User* user);
         static DocumentAttribute* documentHas(Document* document, TLConstructor attributector);

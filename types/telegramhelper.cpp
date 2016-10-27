@@ -157,6 +157,30 @@ QString TelegramHelper::dateString(TLInt timestamp)
     return datetime.toString("MMM dd, HH:mm");
 }
 
+QString TelegramHelper::fileSize(TLDouble size)
+{
+    int unit = 0;
+
+    while(size > 1024)
+    {
+        size /= 1024;
+        unit++;
+    }
+
+    QString filesize = QString::number(size, 'g', 2);
+
+    if(unit == 0)
+        filesize += "B";
+    else if(unit == 1)
+        filesize += "KB";
+    else if(unit == 2)
+        filesize += "MB";
+    else if(unit == 3)
+        filesize += "GB";
+
+    return filesize;
+}
+
 QString TelegramHelper::fullName(User *user)
 {
     if(!user)

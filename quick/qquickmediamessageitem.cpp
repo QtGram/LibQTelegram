@@ -1,9 +1,14 @@
 #include "qquickmediamessageitem.h"
-#include "../types/telegramhelper.h"
 #include <QDateTime>
 
 QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseItem(parent), _message(NULL), _size(0), _contentwidth(0)
 {
+    this->_imagecomponent = NULL;
+    this->_animatedcomponent = NULL;
+    this->_locationcomponent = NULL;
+    this->_webpagecomponent = NULL;
+    this->_filecomponent = NULL;
+
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
 }
@@ -49,9 +54,82 @@ qreal QQuickMediaMessageItem::contentWidth() const
     return this->_contentwidth;
 }
 
-const QJSValue &QQuickMediaMessageItem::locationDelegate() const
+QString QQuickMediaMessageItem::venueTitle() const
 {
-   return this->_locationdelegate;
+    if(!this->_message)
+        return QString();
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaVenue))
+        return QString();
+
+    return messagemedia->title();
+}
+
+QString QQuickMediaMessageItem::venueAddress() const
+{
+    if(!this->_message)
+        return QString();
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaVenue))
+        return QString();
+
+    return messagemedia->address();
+}
+
+QString QQuickMediaMessageItem::webPageTitle() const
+{
+    if(!this->_message)
+        return NULL;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
+        return NULL;
+
+    return messagemedia->webpage()->title();
+}
+
+QString QQuickMediaMessageItem::webPageDescription() const
+{
+    if(!this->_message)
+        return NULL;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
+        return NULL;
+
+    return messagemedia->webpage()->description();
+}
+
+QString QQuickMediaMessageItem::webPageUrl() const
+{
+    if(!this->_message)
+        return NULL;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
+        return NULL;
+
+    return messagemedia->webpage()->url();
+}
+
+GeoPoint *QQuickMediaMessageItem::geoPoint() const
+{
+    if(!this->_message)
+        return NULL;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || ((messagemedia->constructorId() != TLTypes::MessageMediaGeo) && (messagemedia->constructorId() != TLTypes::MessageMediaVenue)))
+        return NULL;
+
+    return messagemedia->geo();
 }
 
 void QQuickMediaMessageItem::setMessage(Message *message)
@@ -73,14 +151,74 @@ void QQuickMediaMessageItem::setSize(qreal size)
     emit sizeChanged();
 }
 
-void QQuickMediaMessageItem::setLocationDelegate(const QJSValue &locationdelegate)
+QQmlComponent *QQuickMediaMessageItem::imageDelegate() const
 {
-    if(this->_locationdelegate.equals(locationdelegate))
+    return this->_imagecomponent;
+}
+
+void QQuickMediaMessageItem::setImageDelegate(QQmlComponent *imagecomponent)
+{
+    if(this->_imagecomponent == imagecomponent)
         return;
 
-    this->_locationdelegate = locationdelegate;
-    this->callLocationDelegate();
+    this->_imagecomponent = imagecomponent;
+    emit imageDelegateChanged();
+}
+
+QQmlComponent *QQuickMediaMessageItem::animatedDelegate() const
+{
+    return this->_animatedcomponent;
+}
+
+void QQuickMediaMessageItem::setAnimatedDelegate(QQmlComponent *animatedcomponent)
+{
+    if(this->_animatedcomponent == animatedcomponent)
+        return;
+
+    this->_animatedcomponent = animatedcomponent;
+    emit animatedDelegateChanged();
+}
+
+QQmlComponent *QQuickMediaMessageItem::locationDelegate() const
+{
+    return this->_locationcomponent;
+}
+
+void QQuickMediaMessageItem::setLocationDelegate(QQmlComponent *locationcomponent)
+{
+    if(this->_locationcomponent == locationcomponent)
+        return;
+
+    this->_locationcomponent = locationcomponent;
     emit locationDelegateChanged();
+}
+
+QQmlComponent *QQuickMediaMessageItem::webPageDelegate() const
+{
+    return this->_webpagecomponent;
+}
+
+void QQuickMediaMessageItem::setWebPageDelegate(QQmlComponent *webpagecomponent)
+{
+    if(this->_webpagecomponent == webpagecomponent)
+        return;
+
+    this->_webpagecomponent = webpagecomponent;
+    emit webPageDelegateChanged();
+}
+
+QQmlComponent *QQuickMediaMessageItem::fileDelegate() const
+{
+    return this->_filecomponent;
+}
+
+void QQuickMediaMessageItem::setFileDelegate(QQmlComponent *filecomponent)
+{
+    if(this->_filecomponent == filecomponent)
+        return;
+
+    this->_filecomponent = filecomponent;
+    emit fileDelegateChanged();
 }
 
 void QQuickMediaMessageItem::updateContentWidth(qreal contentwidth)
@@ -113,196 +251,87 @@ qreal QQuickMediaMessageItem::calcAspectRatio(const QSize& imagesize) const
 
 void QQuickMediaMessageItem::createImageElement()
 {
-    this->createComponent("Image {\n"
-                              "id: image\n"
-                              "anchors.fill: parent\n"
-                              "asynchronous: true\n"
-                          "}");
+    if(!this->_imagecomponent)
+        return;
 
+    this->createObject(this->_imagecomponent);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
     this->scaleToImageSize();
 }
 
 void QQuickMediaMessageItem::createAnimatedElement()
 {
-    QString componentsource = "Item {\n"
-                                  "property url source\n"
-                                  "id: animatedelement\n"
-                                  "anchors.fill: parent\n"
-                                  "MediaPlayer {\n"
-                                      "id: mediaplayer\n"
-                                      "loops: MediaPlayer.Infinite\n"
-                                      "autoPlay: true\n"
-                                      "source: animatedelement.source\n"
-                                  "}\n"
-                                  "VideoOutput {\n"
-                                      "id: videooutput\n"
-                                      "anchors.fill: parent\n"
-                                      "source: mediaplayer\n"
-                                  "}\n"
-                              "}";
+    if(!this->_animatedcomponent)
+        return;
 
-    this->createComponent(componentsource);
+    this->createObject(this->_animatedcomponent);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
     this->scaleToImageSize();
 }
 
 void QQuickMediaMessageItem::createLocationElement()
 {
-    QString componentstring = "Column {\n"
-                                  "property url source\n"
-                                  "id: locationelement\n"
-                                  "width: imgmap.width\n"
-                                  "Text {\n"
-                                      "id: txtvenue\n"
-                                      "width: parent.width\n"
-                                      "color: \"%1\"\n"
-                                      "wrapMode: Text.Wrap\n"
-                                      "font.pixelSize: %2\n"
-                                      "visible: (text.length > 0)\n"
-                                      "text: \"%3\"\n"
-                                  "}\n"
-                                  "Image {\n"
-                                      "id: imgmap\n"
-                                      "asynchronous: true\n"
-                                      "fillMode: Image.PreserveAspectFit\n"
-                                      "source: locationelement.source\n"
-                                  "}\n"
-                              "}";
+    if(!this->_locationcomponent)
+        return;
 
-    QString venue;
+    this->createObject(this->_locationcomponent);
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToImage);
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToImage);
 
     if(this->_message->media()->constructorId() == TLTypes::MessageMediaVenue)
     {
-        MessageMedia* messagemedia = this->_message->media();
-        venue = messagemedia->title() + "\n" + messagemedia->address();
+        emit venueTitleChanged();
+        emit venueAddressChanged();
     }
 
-    this->createComponent(componentstring.arg(this->foregroundColor().name())
-                                         .arg(this->fontPixelSize())
-                                         .arg(this->escape(venue)));
-
-    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToImage);
-    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToImage);
+    emit geoPointChanged();
     this->scaleToImage();
 }
 
-void QQuickMediaMessageItem::createWebPagePhotoElement()
+void QQuickMediaMessageItem::createWebPageElement()
 {
-    QString componentstring = "Column {\n"
-                                  "property url source\n"
-                                  "id: webpagephotoelement\n"
-                                  "width: parent.width\n"
-                              "Text {\n"
-                                  "id: wpurl\n"
-                                  "width: parent.width\n"
-                                  "wrapMode: Text.Wrap\n"
-                                  "text: \"%1\"\n"
-                              "}\n"
-                              "Text {\n"
-                                  "id: wptitle\n"
-                                  "width: parent.width\n"
-                                  "wrapMode: Text.NoWrap\n"
-                                  "elide: Text.ElideRight\n"
-                                  "text: \"%2\"\n"
-                              "}\n"
-                              "Text {\n"
-                                  "id: wpdescription\n"
-                                  "width: parent.width\n"
-                                  "wrapMode: Text.Wrap\n"
-                                  "text: \"%3\"\n"
-                              "}\n"
-                              "Image {\n"
-                                  "width: parent.width\n"
-                                  "asynchronous: true\n"
-                                  "fillMode: Image.PreserveAspectFit\n"
-                                  "source: webpagephotoelement.source\n"
-                              "}\n"
-                            "}";
+    if(!this->_webpagecomponent)
+        return;
 
-    WebPage* webpage = this->_message->media()->webpage();
-
-    this->createComponent(componentstring.arg(this->escape(webpage->url()),
-                                              this->escape(webpage->title()),
-                                              this->escape(webpage->description())));
-
+    this->createObject(this->_webpagecomponent);
     connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+
+    emit webPageTitleChanged();
+    emit webPageDescriptionChanged();
+    emit webPageUrlChanged();
+
     this->scaleToColumn();
 }
 
 void QQuickMediaMessageItem::createFileElement()
 {
-    QString componentstring = "Row {\n"
-                                  "property url source\n"
-                                  "id: fileelement\n"
-                                  "width: parent.width\n"
-                                  "height: textcolumn.height\n"
-                                  "Image {\n"
-                                      "id: image\n"
-                                      "height: textcolumn.height\n"
-                                      "width: height\n"
-                                      "asynchronous: true\n"
-                                  "}\n"
-                                  "Column {\n"
-                                      "id: textcolumn\n"
-                                      "width: parent.width - x\n"
-                                      "height: childrenRect.height\n"
-                                      "Text {\n"
-                                          "width: parent.width\n"
-                                          "text: \"%1\"\n"
-                                      "}\n"
-                                      "Text {\n"
-                                          "width: parent.width\n"
-                                          "text: \"%2\"\n"
-                                      "}\n"
-                                  "}\n"
-                              "}";
+    if(!this->_filecomponent)
+        return;
 
-    MessageMedia* messagemedia = this->_message->media();
+    this->createObject(this->_filecomponent);
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
 
-    TLString fileName;
-    foreach(DocumentAttribute* attribute, messagemedia->document()->attributes())
-    {
-        if(attribute->constructorId() == TLTypes::DocumentAttributeFilename)
-            fileName = attribute->fileName();
-    }
-    QString fileSize;
-    TLDouble size = messagemedia->document()->size();
-    int unit = 0;
-    while (size > 1024) {
-        size /= 1024;
-        unit++;
-    }
-    fileSize = QString::number(size, 'g', 2);
-    switch (unit) {
-    case 0:
-        fileSize += "B";
-        break;
-    case 1:
-        fileSize += "KB";
-        break;
-    case 2:
-        fileSize += "MB";
-        break;
-    case 3:
-        fileSize += "GB";
-        break;
-    }
+    emit fileNameChanged();
+    emit fileSizeChanged();
 
-    this->createComponent(componentstring.arg(this->escape(fileName),
-                                              this->escape(fileSize)));
-
-    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-    this->scaleToColumn();
+    this->scaleToFree();
 }
 
 void QQuickMediaMessageItem::initialize()
 {
     if(!this->_message || this->_mediaelement)
         return;
+
+    FileObject* fileobject = this->createFileObject(this->_message);
+
+    if(fileobject)
+    {
+        connect(fileobject, SIGNAL(imageSizeChanged()), this, SLOT(updateContentWidth()));
+        this->updateContentWidth();
+    }
 
     MessageMedia* messagemedia = this->_message->media();
 
@@ -321,7 +350,6 @@ void QQuickMediaMessageItem::initialize()
         case TLTypes::MessageMediaGeo:
         case TLTypes::MessageMediaVenue:
             this->createLocationElement();
-            this->callLocationDelegate();
             break;
 
         case TLTypes::MessageMediaDocument:
@@ -343,7 +371,7 @@ void QQuickMediaMessageItem::initialize()
             WebPage* webpage = messagemedia->webpage();
 
             if(webpage->photo())
-                this->createWebPagePhotoElement();
+                this->createWebPageElement();
             else
                 return;
 
@@ -355,14 +383,7 @@ void QQuickMediaMessageItem::initialize()
             return;
     }
 
-    FileObject* fileobject = this->createFileObject(this->_message);
-
-    if(!fileobject)
-        return;
-
-    connect(fileobject, SIGNAL(imageSizeChanged()), this, SLOT(updateContentWidth()));
-    this->updateContentWidth();
-    this->bindToElement();
+    emit sourceChanged();
 }
 
 void QQuickMediaMessageItem::scaleToImageSize()
@@ -390,22 +411,9 @@ void QQuickMediaMessageItem::scaleToColumn()
     this->setHeight(this->_mediaelement->height());
 }
 
-void QQuickMediaMessageItem::callLocationDelegate()
+void QQuickMediaMessageItem::scaleToFree()
 {
-    if(!this->_message || !this->_message->media() || !this->_mediaelement || this->_locationdelegate.isNull() || !this->_locationdelegate.isCallable())
-        return;
-
-    if((this->_message->media()->constructorId() != TLTypes::MessageMediaGeo) && (this->_message->media()->constructorId() != TLTypes::MessageMediaVenue))
-        return;
-
-    GeoPoint* geopoint = this->_message->media()->geo();
-
-    QJSValueList args;
-    args << geopoint->latitude() << geopoint->longitude();
-    QJSValue result = this->_locationdelegate.call(args);
-
-    if(!result.isString())
-        return;
-
-    this->updateSource(result.toVariant());
+    this->updateContentWidth(this->_mediaelement->width());
+    this->setWidth(this->_mediaelement->width());
+    this->setHeight(this->_mediaelement->height());
 }

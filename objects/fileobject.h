@@ -18,6 +18,8 @@ class FileObject : public QObject
     Q_PROPERTY(QSize imageSize READ imageSize NOTIFY imageSizeChanged)
     Q_PROPERTY(QString thumbnail READ thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QString filePath READ filePath NOTIFY filePathChanged)
+    Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
+    Q_PROPERTY(TLInt fileSize READ fileSize NOTIFY fileSizeChanged)
 
     public:
         enum DownloadMode {
@@ -35,8 +37,12 @@ class FileObject : public QObject
         QSize imageSize() const;
         QString thumbnail() const;
         QString filePath() const;
+        QString fileName() const;
+        TLInt fileSize() const;
         void setAutoDownload(bool autodownload);
         void setDocument(Document* document);
+        void setFileSize(TLInt filesize);
+        void setFileName(const QString& filename);
         void setImageSize(const QSize& imagesize);
         void setThumbnailLocation(FileLocation* filelocation);
         void setFileLocation(FileLocation* filelocation);
@@ -58,9 +64,11 @@ class FileObject : public QObject
         void createDownloadSession(int dcid);
 
     signals:
+        void fileSizeChanged();
         void imageSizeChanged();
         void thumbnailChanged();
         void filePathChanged();
+        void fileNameChanged();
         void downloadedChanged();
         void downloadingChanged();
         void hasThumbnailChanged();
@@ -81,7 +89,9 @@ class FileObject : public QObject
         QString _filepath;
         QString _fileid;
         QString _thumbnailid;
+        QString _filename;
         QSize _imagesize;
+        TLInt _filesize;
 };
 
 #endif // FILEOBJECT_H

@@ -4,12 +4,16 @@
 #include <QtQuick>
 #include <QHash>
 #include "../config/cache/filecache.h"
+#include "../types/telegramhelper.h"
 
 class QQuickBaseItem : public QQuickItem
 {
     Q_OBJECT
 
     Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
+    Q_PROPERTY(QString source READ source NOTIFY sourceChanged)
+    Q_PROPERTY(QString fileSize READ fileSize NOTIFY fileSizeChanged)
+    Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(qreal fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
@@ -20,6 +24,9 @@ class QQuickBaseItem : public QQuickItem
     public:
         explicit QQuickBaseItem(QQuickItem *parent = 0);
         QString version() const;
+        QString source() const;
+        QString fileSize() const;
+        QString fileName() const;
         QSize imageSize() const;
         QColor backgroundColor() const;
         QColor foregroundColor() const;
@@ -38,19 +45,20 @@ class QQuickBaseItem : public QQuickItem
     protected:
         QString escape(const TLString& s);
         void createComponent(const QString& componentcode);
+        void createObject(QQmlComponent* component);
         FileObject* createFileObject(TelegramObject* telegramobject);
         QString thumbnail() const;
         QString filePath() const;
-        void updateSource(QVariant sourcevalue);
-
-    protected slots:
-        void bindToElement();
 
     signals:
+        void filePathChanged();
+        void fileNameChanged();
+        void fileSizeChanged();
         void backgroundColorChanged();
         void foregroundColorChanged();
         void fontPixelSizeChanged();
         void versionChanged();
+        void sourceChanged();
         void imageSizeChanged();
         void downloadedChanged();
         void downloadingChanged();

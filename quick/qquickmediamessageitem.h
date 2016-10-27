@@ -12,7 +12,17 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(bool isAnimated READ isAnimated NOTIFY isAnimatedChanged)
     Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
-    Q_PROPERTY(QJSValue locationDelegate READ locationDelegate WRITE setLocationDelegate NOTIFY locationDelegateChanged)
+    Q_PROPERTY(QString venueTitle READ venueTitle NOTIFY venueTitleChanged)
+    Q_PROPERTY(QString venueAddress READ venueAddress NOTIFY venueAddressChanged)
+    Q_PROPERTY(QString webPageTitle READ webPageTitle NOTIFY webPageTitleChanged)
+    Q_PROPERTY(QString webPageDescription READ webPageDescription NOTIFY webPageDescriptionChanged)
+    Q_PROPERTY(QString webPageUrl READ webPageUrl NOTIFY webPageUrlChanged)
+    Q_PROPERTY(GeoPoint* geoPoint READ geoPoint NOTIFY geoPointChanged)
+    Q_PROPERTY(QQmlComponent* imageDelegate READ imageDelegate WRITE setImageDelegate NOTIFY imageDelegateChanged)
+    Q_PROPERTY(QQmlComponent* animatedDelegate READ animatedDelegate WRITE setAnimatedDelegate NOTIFY animatedDelegateChanged)
+    Q_PROPERTY(QQmlComponent* locationDelegate READ locationDelegate WRITE setLocationDelegate NOTIFY locationDelegateChanged)
+    Q_PROPERTY(QQmlComponent* webPageDelegate READ webPageDelegate WRITE setWebPageDelegate NOTIFY webPageDelegateChanged)
+    Q_PROPERTY(QQmlComponent* fileDelegate READ fileDelegate WRITE setFileDelegate NOTIFY fileDelegateChanged)
 
     public:
         QQuickMediaMessageItem(QQuickItem *parent = 0);
@@ -21,10 +31,26 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         bool isAnimated() const;
         qreal size() const;
         qreal contentWidth() const;
-        const QJSValue& locationDelegate() const;
+        QString venueTitle() const;
+        QString venueAddress() const;
+        QString webPageTitle() const;
+        QString webPageDescription() const;
+        QString webPageUrl() const;
+        GeoPoint* geoPoint() const;
         void setMessage(Message* message);
         void setSize(qreal size);
-        void setLocationDelegate(const QJSValue& locationdelegate);
+
+    public:
+        QQmlComponent* imageDelegate() const;
+        void setImageDelegate(QQmlComponent* imagecomponent);
+        QQmlComponent* animatedDelegate() const;
+        void setAnimatedDelegate(QQmlComponent* animatedcomponent);
+        QQmlComponent* locationDelegate() const;
+        void setLocationDelegate(QQmlComponent* locationcomponent);
+        QQmlComponent* webPageDelegate() const;
+        void setWebPageDelegate(QQmlComponent* webpagecomponent);
+        QQmlComponent* fileDelegate() const;
+        void setFileDelegate(QQmlComponent* filecomponent);
 
     private slots:
         void updateContentWidth(qreal contentwidth);
@@ -32,14 +58,14 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void scaleToImageSize();
         void scaleToImage();
         void scaleToColumn();
+        void scaleToFree();
 
     private:
         qreal calcAspectRatio(const QSize &imagesize) const;
-        void callLocationDelegate();
         void createImageElement();
         void createAnimatedElement();
         void createLocationElement();
-        void createWebPagePhotoElement();
+        void createWebPageElement();
         void createFileElement();
         void initialize();
 
@@ -49,13 +75,29 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void isAnimatedChanged();
         void sizeChanged();
         void contentWidthChanged();
+        void venueTitleChanged();
+        void venueAddressChanged();
+        void webPageTitleChanged();
+        void webPageDescriptionChanged();
+        void webPageUrlChanged();
+        void geoPointChanged();
+        void imageDelegateChanged();
+        void animatedDelegateChanged();
         void locationDelegateChanged();
+        void webPageDelegateChanged();
+        void fileDelegateChanged();
 
     private:
         Message* _message;
         qreal _size;
         qreal _contentwidth;
-        QJSValue _locationdelegate;
+
+    private:
+        QQmlComponent* _imagecomponent;
+        QQmlComponent* _animatedcomponent;
+        QQmlComponent* _locationcomponent;
+        QQmlComponent* _webpagecomponent;
+        QQmlComponent* _filecomponent;
 };
 
 #endif // QQUICKMEDIAMESSAGEITEM_H

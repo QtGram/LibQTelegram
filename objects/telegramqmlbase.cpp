@@ -18,6 +18,7 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_TYPE(TLTrue);
     REGISTER_TYPE(TLBool);
     REGISTER_TYPE(TLInt);
+    REGISTER_TYPE(TLDouble);
     REGISTER_TYPE(TLBytes);
     REGISTER_TYPE(TLString);
     REGISTER_TYPE(TLConstructor);

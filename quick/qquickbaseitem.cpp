@@ -16,6 +16,36 @@ QString QQuickBaseItem::version() const
     return this->_version;
 }
 
+QString QQuickBaseItem::source() const
+{
+    if(!this->_fileobject)
+        return QString();
+
+    if(this->_fileobject->downloaded())
+        return this->_fileobject->filePath();
+
+    if(this->_fileobject->hasThumbnail())
+        return this->_fileobject->thumbnail();
+
+    return QString();
+}
+
+QString QQuickBaseItem::fileSize() const
+{
+    if(!this->_fileobject)
+        return QString();
+
+    return TelegramHelper::fileSize(this->_fileobject->fileSize());
+}
+
+QString QQuickBaseItem::fileName() const
+{
+    if(!this->_fileobject)
+        return QString();
+
+    return this->_fileobject->fileName();
+}
+
 QSize QQuickBaseItem::imageSize() const
 {
     if(!this->_fileobject)
@@ -160,6 +190,29 @@ void QQuickBaseItem::createComponent(const QString &componentcode)
     this->_mediaelement = item;
 }
 
+void QQuickBaseItem::createObject(QQmlComponent *component)
+{
+    QQmlContext *context = qmlContext(this);
+
+    if(!context)
+    {
+        qFatal("Cannot get QML context");
+        return;
+    }
+
+    QQuickItem* item = qobject_cast<QQuickItem*>(component->create(context));
+
+    if(!item)
+    {
+        qWarning() << component->errorString();
+        return;
+    }
+
+    item->setParent(this);
+    item->setParentItem(this);
+    this->_mediaelement = item;
+}
+
 FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
 {
     if(!telegramobject)
@@ -174,11 +227,13 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
         return NULL;
 
     connect(this->_fileobject, &FileObject::imageSizeChanged, this, &QQuickBaseItem::imageSizeChanged);
+    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::filePathChanged);
+    connect(this->_fileobject, &FileObject::fileNameChanged, this, &QQuickBaseItem::fileNameChanged);
     connect(this->_fileobject, &FileObject::downloadedChanged, this, &QQuickBaseItem::downloadedChanged);
     connect(this->_fileobject, &FileObject::downloadingChanged, this, &QQuickBaseItem::downloadingChanged);
     connect(this->_fileobject, &FileObject::hasThumbnailChanged, this, &QQuickBaseItem::hasThumbnailChanged);
-    connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::bindToElement);
-    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::bindToElement);
+    connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::sourceChanged);
+    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
 
     return this->_fileobject;
 }
@@ -197,26 +252,4 @@ QString QQuickBaseItem::filePath() const
         return QString();
 
     return this->_fileobject->filePath();
-}
-
-void QQuickBaseItem::bindToElement()
-{
-    if(!this->_fileobject || !this->_mediaelement)
-        return;
-
-    QUrl mediaurl;
-
-    if(this->_fileobject->downloaded())
-        mediaurl = QUrl::fromLocalFile(this->_fileobject->filePath());
-    else if(this->hasThumbnail())
-        mediaurl = QUrl::fromLocalFile(this->_fileobject->thumbnail());
-    else
-        return;
-
-    this->updateSource(mediaurl);
-}
-
-void QQuickBaseItem::updateSource(QVariant sourcevalue)
-{
-    this->_mediaelement->setProperty("source", sourcevalue);
 }
