@@ -3,8 +3,6 @@
 
 QQuickPeerImage::QQuickPeerImage(QQuickItem* parent): QQuickBaseItem(parent), _peer(NULL), _size(0)
 {
-    this->_fallbackpeerdelegate = NULL;
-    this->_peerdelegate = NULL;
 }
 
 TelegramObject *QQuickPeerImage::peer() const
@@ -35,34 +33,6 @@ void QQuickPeerImage::setSize(int size)
     this->_size = size;
     this->updateMetrics();
     emit sizeChanged();
-}
-
-QQmlComponent *QQuickPeerImage::peerDelegate() const
-{
-    return this->_peerdelegate;
-}
-
-void QQuickPeerImage::setPeerDelegate(QQmlComponent *peerdelegate)
-{
-    if(this->_peerdelegate == peerdelegate)
-        return;
-
-    this->_peerdelegate = peerdelegate;
-    emit peerDelegateChanged();
-}
-
-QQmlComponent *QQuickPeerImage::fallbackPeerDelegate() const
-{
-    return this->_fallbackpeerdelegate;
-}
-
-void QQuickPeerImage::setFallbackPeerDelegate(QQmlComponent *fallbackpeerdelegate)
-{
-    if(this->_fallbackpeerdelegate == fallbackpeerdelegate)
-        return;
-
-    this->_fallbackpeerdelegate = fallbackpeerdelegate;
-    emit fallbackPeerDelegateChanged();
 }
 
 void QQuickPeerImage::initialize()
@@ -133,11 +103,6 @@ void QQuickPeerImage::createPeerElement()
 
 void QQuickPeerImage::createFallbackPeerElement()
 {
-    if(!this->_fallbackpeerdelegate)
-        return;
-
-    this->createObject(this->_fallbackpeerdelegate);
-
     QString componentsource = "Item {\n"
                                   "anchors.fill: parent\n"
                                   "Rectangle {\n"
