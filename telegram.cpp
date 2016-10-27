@@ -64,6 +64,9 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
         if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker))
             return tr("Sticker");
 
+        if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAudio))
+            return tr("Audio recording");
+
         if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeHasStickers))
             return tr("Sticker Set");
 
