@@ -164,9 +164,9 @@ template<typename T> bool MTProtoStream::expect(int size)
         return true;
 
     if(this->_buffer.isReadable())
-        qWarning("Expected %ld bytes, readed %d\n", sizeof(T), size);
+        qWarning("Expected %" PRIdPTR " bytes, readed %d\n", sizeof(T), size);
     else if(this->_buffer.isWritable())
-        qWarning("Expected %ld bytes, writed %d\n", sizeof(T), size);
+        qWarning("Expected %" PRIdPTR " bytes, writed %d\n", sizeof(T), size);
     else
         Q_ASSERT(false);
 

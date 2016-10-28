@@ -54,7 +54,7 @@ template<typename T1, typename T2> T1* DatabaseTable::get(T2 id, const char* typ
     if(!queryobj.first())
     {
         if(!ignoreerror)
-            qWarning("Cannot get %s with id %d", type, id);
+            qWarning("Cannot get %s with id %" PRIdPTR, type, id);
 
         return NULL;
     }

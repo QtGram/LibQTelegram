@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QMetaType>
 #include <QString>
+#include <inttypes.h>
 
 // Qt < 5.4 compatibility
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
