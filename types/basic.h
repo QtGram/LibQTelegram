@@ -5,6 +5,11 @@
 #include <QMetaType>
 #include <QString>
 
+// Qt <= 5.2 compatibility
+#if QT_VERSION <= QT_VERSION_CHECK(5, 2, 0)
+    #define qUtf8Printable(string) QString(string).toUtf8().constData()
+#endif
+
 #define IS_FLAG_SET(flags, bitno) ((flags & (1 << bitno)) ? true : false)
 #define SET_FLAG_BIT(flags, bitno) flags |= (1 << bitno)
 #define UNSET_FLAG_BIT(flags, bitno) flags & ~(1 << bitno)

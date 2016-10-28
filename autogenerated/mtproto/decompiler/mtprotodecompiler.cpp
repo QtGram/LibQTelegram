@@ -15,9 +15,9 @@ void MTProtoDecompiler::decompile(int dcid, int direction, TLLong messageid, con
 		return;
 	
 	if(direction == MTProtoDecompiler::DIRECTION_IN)
-		qDebug().noquote() << "DC" << dcid << "IN" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
+		qDebug("DC %d IN (%16llx) %s", dcid, messageid, qUtf8Printable(result));
 	else if(direction == MTProtoDecompiler::DIRECTION_OUT)
-		qDebug().noquote() << "DC" << dcid << "OUT" << QString("(%1)").arg(messageid, 16, 16, QLatin1Char('0')) << result;
+		qDebug("DC %d OUT (%16llx) %s", dcid, messageid, qUtf8Printable(result));
 }
 
 void MTProtoDecompiler::doDecompile(QString& result, MTProtoStream& mtstream, TLLong messageid) 
