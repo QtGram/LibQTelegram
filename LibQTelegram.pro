@@ -492,10 +492,3 @@ HEADERS +=\
     quick/qquickpeerimage.h \
     quick/qquickbaseitem.h \
     config/cache/cachefetcher.h
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-DISTFILES +=
