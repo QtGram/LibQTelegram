@@ -6,7 +6,7 @@
 #include <QString>
 
 // Qt < 5.4 compatibility
-#if QT_VERSION <= QT_VERSION_CHECK(5, 4, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
     #define qUtf8Printable(string) QString(string).toUtf8().constData()
 #endif
 
