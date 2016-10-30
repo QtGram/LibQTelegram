@@ -260,12 +260,12 @@ QString Telegram::messageText(Message *message) const
     if(!message)
         return QString();
 
-    if(message->media())
+    if(message->media() && (message->media()->constructorId() != TLTypes::MessageMediaEmpty))
     {
         MessageMedia* messagemedia = message->media();
         return messagemedia->caption();
     }
-    else if(message->action())
+    else if(message->action() && (message->action()->constructorId() != TLTypes::MessageActionEmpty))
         return this->messageActionText(message);
 
     return message->message();
