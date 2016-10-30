@@ -270,22 +270,23 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
         if(!message)
             continue;
 
+        this->_database->messages()->remove(messageid); // There is no need to call identifier() because they are standard message ids
+
         Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
 
         if(dialog && (dialog->topMessage() == message->id()))
         {
-            Message* prevmessage = this->_database->messages()->previousMessage(message, this->_messages, this);
+            Message* topmessage = this->_database->messages()->topMessage(dialog, this->_messages, this);
 
-            if(prevmessage)
+            if(topmessage)
             {
-                dialog->setTopMessage(prevmessage->id());
-                this->_database->dialogs()->insert(dialog);
+                dialog->setTopMessage(topmessage->id());
+                this->_database->dialogs()->insert(dialog); // NOTE: Needs investigation
                 updatedialogs = true;
             }
         }
 
         emit deleteMessage(message);
-        this->_database->messages()->remove(messageid); // There is no need to call identifier() because they are standard message ids
     }
 
     if(updatedialogs)

@@ -25,34 +25,20 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     this->execute(queryobj);
 }
 
-Message *MessagesTable::previousMessage(Message* message, QHash<MessageId, Message *> &messages, QObject *parent) const
+Message *MessagesTable::topMessage(Dialog *dialog, QHash<MessageId, Message *> &messages, QObject *parent)
 {
-    TLInt dialogid = TelegramHelper::messageToDialog(message);
+    TLInt dialogid = TelegramHelper::identifier(dialog);
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND date < :date ORDER BY date DESC LIMIT 1"))
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY date DESC LIMIT 1"))
         return NULL;
 
     queryobj.bindValue(":dialogid", dialogid);
-    queryobj.bindValue(":date", message->date());
 
-    if(!this->execute(queryobj))
+    if(!this->execute(queryobj) || !queryobj.first())
         return NULL;
 
-    MessageId prevmessageid = queryobj.value("id").toLongLong();
-
-    if(messages.contains(prevmessageid))
-        return messages[prevmessageid];
-
-    if(!queryobj.first())
-        return NULL;
-
-    QByteArray data = queryobj.value("message").toByteArray();
-
-    Message* prevmessage = new Message(parent);
-    prevmessage->unserialize(data);
-    messages[prevmessageid] = prevmessage;
-    return prevmessage;
+    return this->loadMessage(queryobj, messages, parent);
 }
 
 QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent) const
@@ -146,4 +132,19 @@ void MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, Q
         else
             result.prepend(message);
     }
+}
+
+Message *MessagesTable::loadMessage(QSqlQuery &queryobj, QHash<MessageId, Message *> &messages, QObject *parent) const
+{
+    MessageId messageid = queryobj.value("id").toLongLong();
+
+    if(messages.contains(messageid))
+        return messages[messageid];
+
+    QByteArray data = queryobj.value("message").toByteArray();
+    Message* message = new Message(parent);
+    message->unserialize(data);
+
+    messages[messageid] = message;
+    return message;
 }
