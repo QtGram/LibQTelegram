@@ -49,19 +49,18 @@ class TelegramConfig
         bool isIpv6() const;
         TLInt layerNum() const;
         TLInt apiId() const;
+        QString osVersion() const;
+        QString applicationVersion() const;
         const QString& apiHash() const;
         const QString& publicKey() const;
         const QString& storagePath() const;
         const QString& deviceModel() const;
-        const QString& osVersion() const;
-        const QString& applicationVersion() const;
         const QString& phoneNumber() const;
         void setDebugMode(bool dbgmode);
         void setIpv6(bool ipv6);
         void setDefaultDcId(int dcid);
         void setStoragePath(const QString& storagepath);
         void setDeviceModel(const QString& devicemodel);
-        void setApplicationVersion(const QString& appversion);
         void setPhoneNumber(const QString& phonenumber);
         void setMe(User* me);
 
@@ -87,8 +86,6 @@ class TelegramConfig
         QString _storagepath;
         QString _profilestoragepath;
         QString _devicemodel;
-        QString _osversion;
-        QString _appversion;
         QString _phonenumber;
         QHash<int, DCConfig> _dcconfig;
         QHash<int, DCConfig> _dcconfigipv6;

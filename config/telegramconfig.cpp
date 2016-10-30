@@ -6,12 +6,14 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
+#include <QCoreApplication>
 
 #define CONFIG_FOLDER "telegram"
 
 const QString TelegramConfig::DCCONFIG_FILE = "dcconfig.json";
 const QString TelegramConfig::STATE_FILE = "state.mtproto";
 const QString TelegramConfig::ME_FILE = "me.user";
+
 TelegramConfig* TelegramConfig::_config = NULL;
 
 TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0), _me(NULL)
@@ -20,8 +22,6 @@ TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0),
     this->_updatesstate = new UpdatesState();
 
     this->_devicemodel = "Unknown Device";
-    this->_osversion = "Unknown OS";
-    this->_appversion = "1.0";
 }
 
 TelegramConfig *TelegramConfig::config()
@@ -227,14 +227,32 @@ const QString &TelegramConfig::deviceModel() const
     return this->_devicemodel;
 }
 
-const QString &TelegramConfig::osVersion() const
+QString TelegramConfig::osVersion() const
 {
-    return this->_osversion;
+    #if defined(Q_OS_ANDROID)
+        return QString("Android");
+    #elif defined(Q_OS_BLACKBERRY)
+        return QString("Blackberry");
+    #elif defined(Q_OS_IOS)
+        return QString("iOS");
+    #elif defined(Q_OS_MAC)
+        return QString("MacOS");
+    #elif defined(Q_OS_WINCE)
+        return QString("WinCE");
+    #elif defined(Q_OS_WIN)
+        return QString("Windows");
+    #elif defined(Q_OS_LINUX)
+        return QString("Linux");
+    #elif defined(Q_OS_UNIX)
+        return QString("Unix");
+    #else
+        return QString("Unknown");
+    #endif
 }
 
-const QString &TelegramConfig::applicationVersion() const
+QString TelegramConfig::applicationVersion() const
 {
-    return this->_appversion;
+    return qApp->applicationVersion().isEmpty() ? "1.0" : qApp->applicationVersion();
 }
 
 const QString &TelegramConfig::phoneNumber() const
@@ -260,11 +278,6 @@ void TelegramConfig::setStoragePath(const QString &storagepath)
 void TelegramConfig::setDeviceModel(const QString &devicemodel)
 {
     this->_devicemodel = devicemodel;
-}
-
-void TelegramConfig::setApplicationVersion(const QString &appversion)
-{
-    this->_appversion = appversion;
 }
 
 void TelegramConfig::setPhoneNumber(const QString &phonenumber)
