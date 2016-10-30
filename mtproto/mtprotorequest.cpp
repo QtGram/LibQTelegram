@@ -98,7 +98,7 @@ void MTProtoRequest::setDcId(int dcid)
 
 void MTProtoRequest::initConnection(MTProtoStream &mtstream) const
 {
-    TelegramConfig* config = TelegramConfig::config();
+    TelegramConfig* config = TelegramConfig_instance;
 
     mtstream.writeTLConstructor(TLTypes::InvokeWithLayer);
     mtstream.writeTLInt(config->layerNum());
