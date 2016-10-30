@@ -20,6 +20,7 @@ class MessagesModel : public TelegramModel
             MessageFrom = Qt::UserRole + 10,
             MessageText,
             MessageDateRole,
+            IsMessageNewRole,
             IsMessageOutRole,
             IsMessageServiceRole,
             IsMessageUnreadRole,
@@ -42,17 +43,23 @@ class MessagesModel : public TelegramModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     public slots:
+        void loadHistory();
         void loadMore();
         void sendMessage(const QString& text);
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
+        void onMessagesReadHistoryReplied(MTProtoReply* mtreply);
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
 
     private:
+        void setFirstNewMessage();
+        TLInt inboxMaxId() const;
+        TLInt outboxMaxId() const;
+        void markAsRead();
         int indexOf(Message* message) const;
         bool ownMessage(Message* message) const;
         QString messageFrom(Message *message) const;
@@ -73,6 +80,7 @@ class MessagesModel : public TelegramModel
         QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
         Dialog* _dialog;
+        TLInt _firstnewmsgid;
         bool _athistoryend;
         int _loadcount;
 };

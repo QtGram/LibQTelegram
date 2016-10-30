@@ -4,10 +4,8 @@
 
 #define DEFAULT_LOAD_COUNT 50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _athistoryend(false)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _athistoryend(false), _loadcount(DEFAULT_LOAD_COUNT)
 {
-    this->_loadcount = DEFAULT_LOAD_COUNT;
-
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
     connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
@@ -114,6 +112,9 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::MessageText)
         return this->_telegram->messageText(message);
 
+    if(role == MessagesModel::IsMessageNewRole)
+        return message->id() == this->_firstnewmsgid;
+
     if(role == MessagesModel::IsMessageOutRole)
         return message->isOut();
 
@@ -144,6 +145,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::MessageFrom] = "messageFrom";
     roles[MessagesModel::MessageText] = "messageText";
     roles[MessagesModel::MessageDateRole] = "messageDate";
+    roles[MessagesModel::IsMessageNewRole] = "isMessageNew";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
@@ -152,7 +154,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     return roles;
 }
 
-void MessagesModel::loadMore()
+void MessagesModel::loadHistory()
 {
     if(this->_athistoryend || this->_loading)
         return;
@@ -168,6 +170,11 @@ void MessagesModel::loadMore()
 
     MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), limit, 0, 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
+}
+
+void MessagesModel::loadMore()
+{
+
 }
 
 void MessagesModel::sendMessage(const QString &text)
@@ -229,6 +236,12 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
     TelegramCache_insert(message);
 }
 
+void MessagesModel::onMessagesReadHistoryReplied(MTProtoReply *mtreply)
+{
+    Q_UNUSED(mtreply)
+    TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
+}
+
 void MessagesModel::onNewMessage(Message *message)
 {
     if(!this->ownMessage(message))
@@ -268,6 +281,64 @@ void MessagesModel::onDeleteMessage(Message* message)
         this->endRemoveRows();
         break;
     }
+}
+
+void MessagesModel::setFirstNewMessage()
+{
+    TLInt maxinmsgid = this->_dialog->readInboxMaxId();
+
+    if(maxinmsgid >= this->_messages.first()->id())
+        return;
+
+    for(int i = 0; i < this->_messages.length(); i++)
+    {
+        Message* message = this->_messages[i];
+
+        if(message->isOut())
+            continue;
+
+        if(message->id() <= maxinmsgid)
+            return;
+
+        this->_firstnewmsgid = message->id();
+    }
+}
+
+TLInt MessagesModel::inboxMaxId() const
+{
+    for(int i = 0; i < this->_messages.length(); i++)
+    {
+        Message* message = this->_messages[i];
+
+        if(message->isOut())
+            continue;
+
+        return message->id();
+    }
+
+    return this->_dialog->readInboxMaxId();
+}
+
+TLInt MessagesModel::outboxMaxId() const
+{
+    for(int i = 0; i < this->_messages.length(); i++)
+    {
+        Message* message = this->_messages[i];
+
+        if(!message->isOut())
+            continue;
+
+        return message->id();
+    }
+
+    return this->_dialog->readOutboxMaxId();
+}
+
+void MessagesModel::markAsRead()
+{
+    this->createInputPeer();
+    MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->_messages.first()->id());
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesReadHistoryReplied);
 }
 
 int MessagesModel::indexOf(Message *message) const
@@ -352,12 +423,13 @@ void MessagesModel::telegramReady()
         connect(user, &User::statusChanged, this, &MessagesModel::statusTextChanged);
     }
 
-    this->_messages = TelegramCache_messages(this->_dialog, 0, this->_loadcount);
-    TelegramCache_markAsRead(this->_dialog); // NOTE: Read state must be more selective
+    this->_messages = TelegramCache_lastDialogMessages(this->_dialog, this->_loadcount);
+    this->setFirstNewMessage();
+    this->markAsRead();
 
     if(this->_messages.length() < this->_loadcount)
     {
-        this->loadMore();
+        this->loadHistory();
         return;
     }
 
