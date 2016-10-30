@@ -14,6 +14,7 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(bool isChat READ isChat NOTIFY isChatChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
+    Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
 
     public:
         enum MessageRoles {
@@ -38,6 +39,7 @@ class MessagesModel : public TelegramModel
         bool isChat() const;
         bool isBroadcast() const;
         bool isMegaGroup() const;
+        bool isWritable() const;
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
@@ -74,6 +76,7 @@ class MessagesModel : public TelegramModel
         void isChatChanged();
         void isBroadcastChanged();
         void isMegaGroupChanged();
+        void isWritableChanged();
 
     private:
         TLVector<Message*> _messages;

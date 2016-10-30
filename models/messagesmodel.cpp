@@ -15,6 +15,7 @@ MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpee
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isChatChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isBroadcastChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isMegaGroupChanged);
+    connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isWritableChanged);
 }
 
 Dialog *MessagesModel::dialog() const
@@ -94,6 +95,29 @@ bool MessagesModel::isMegaGroup() const
         return false;
 
     return chat->isMegagroup();
+}
+
+bool MessagesModel::isWritable() const
+{
+    if(!this->_dialog)
+        return false;
+
+    TLInt dialogid = TelegramHelper::identifier(this->_dialog);
+
+    if(this->isBroadcast())
+        return dialogid == TelegramConfig_me->id();
+
+    if(TelegramHelper::isChat(this->_dialog) || TelegramHelper::isChannel(this->_dialog))
+    {
+        Chat* chat = TelegramCache_chat(dialogid);
+
+        if(!chat)
+            return false;
+
+        return (chat->constructorId() == TLTypes::Chat) || (chat->constructorId() == TLTypes::Channel);
+    }
+
+    return true;
 }
 
 QVariant MessagesModel::data(const QModelIndex &index, int role) const
