@@ -336,6 +336,9 @@ TLInt MessagesModel::outboxMaxId() const
 
 void MessagesModel::markAsRead()
 {
+    if(this->_dialog->unreadCount() <= 0)
+        return;
+
     this->createInputPeer();
     MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->_messages.first()->id());
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesReadHistoryReplied);
