@@ -250,6 +250,8 @@ void MessagesModel::onNewMessage(Message *message)
     this->beginInsertRows(QModelIndex(), 0, 0);
     this->_messages.prepend(message);
     this->endInsertRows();
+
+    this->markAsRead();
 }
 
 void MessagesModel::onEditMessage(Message *message)
