@@ -10,11 +10,11 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(Dialog* dialog READ dialog WRITE setDialog NOTIFY dialogChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
-    Q_PROPERTY(int loadCount READ loadCount WRITE setLoadCount NOTIFY loadCountChanged)
     Q_PROPERTY(bool isChat READ isChat NOTIFY isChatChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
     Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
+    Q_PROPERTY(int loadCount READ loadCount CONSTANT FINAL)
 
     public:
         enum MessageRoles {
@@ -34,12 +34,12 @@ class MessagesModel : public TelegramModel
         void setDialog(Dialog* dialog);
         QString title() const;
         QString statusText() const;
-        int loadCount() const;
         void setLoadCount(int loadcount);
         bool isChat() const;
         bool isBroadcast() const;
         bool isMegaGroup() const;
         bool isWritable() const;
+        int loadCount() const;
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
@@ -72,7 +72,6 @@ class MessagesModel : public TelegramModel
         void dialogChanged();
         void titleChanged();
         void statusTextChanged();
-        void loadCountChanged();
         void isChatChanged();
         void isBroadcastChanged();
         void isMegaGroupChanged();

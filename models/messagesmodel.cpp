@@ -2,9 +2,10 @@
 #include "../config/cache/telegramcache.h"
 #include "../crypto/math.h"
 
-#define DEFAULT_LOAD_COUNT 50
+#define MessagesFirstLoad 30
+#define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _athistoryend(false), _loadcount(DEFAULT_LOAD_COUNT)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _athistoryend(false), _loadcount(MessagesFirstLoad)
 {
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
@@ -47,20 +48,6 @@ QString MessagesModel::statusText() const
         return QString();
 
     return this->_telegram->dialogStatusText(this->_dialog);
-}
-
-int MessagesModel::loadCount() const
-{
-    return this->_loadcount;
-}
-
-void MessagesModel::setLoadCount(int loadcount)
-{
-    if(this->_loadcount == loadcount)
-        return;
-
-    this->_loadcount = loadcount;
-    emit loadCountChanged();
 }
 
 bool MessagesModel::isChat() const
@@ -118,6 +105,11 @@ bool MessagesModel::isWritable() const
     }
 
     return true;
+}
+
+int MessagesModel::loadCount() const
+{
+    return MessagesPerPage;
 }
 
 QVariant MessagesModel::data(const QModelIndex &index, int role) const
@@ -184,15 +176,9 @@ void MessagesModel::loadHistory()
         return;
 
     this->setLoading(true);
-
     this->createInputPeer();
 
-    int limit = this->_loadcount;
-
-    if(this->_messages.length() < this->_loadcount)
-        limit = (this->_loadcount - this->_messages.length()) + 1;
-
-    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), limit, 0, 0);
+    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
 }
 
@@ -220,6 +206,8 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 {
     MessagesMessages messages;
     messages.read(mtreply);
+
+    this->_loadcount = MessagesPerPage;
 
     if(messages.constructorId() == TLTypes::MessagesMessages)
         this->_athistoryend = true;
