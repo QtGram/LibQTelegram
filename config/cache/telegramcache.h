@@ -6,7 +6,7 @@
 #define TelegramCache_store(objs) TelegramCache::cache()->cache(objs);
 
 #define TelegramCache_hasDialog(dialogid) TelegramCache::cache()->hasDialog(dialogid)
-#define TelegramCache_markAsRead(dialog) TelegramCache::cache()->markAsRead(dialog)
+#define TelegramCache_markAsRead(dialog, inmaxid, outmaxid) TelegramCache::cache()->markAsRead(dialog, inmaxid, outmaxid)
 
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
@@ -16,7 +16,8 @@
 #define TelegramCache_message(messageid, dialog) TelegramCache::cache()->message(messageid, dialog)
 
 #define TelegramCache_insert(message) TelegramCache::cache()->insert(message)
-#define TelegramCache_messages(dialogid, offset, limit) TelegramCache::cache()->dialogMessages(dialogid, offset, limit)
+#define TelegramCache_messages(dialog, offset, limit) TelegramCache::cache()->dialogMessages(dialog, offset, limit)
+#define TelegramCache_lastDialogMessages(dialog, limit) TelegramCache::cache()->lastDialogMessages(dialog, limit)
 
 #include <QObject>
 #include <QList>
@@ -41,12 +42,13 @@ class TelegramCache: public QObject
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
+        QList<Message*> lastDialogMessages(Dialog* dialog, int limit);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
-        void markAsRead(Dialog* dialog);
+        void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);
 
     public slots:
         void cache(Dialog* dialog);

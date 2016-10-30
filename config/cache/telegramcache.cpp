@@ -34,6 +34,11 @@ QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int l
     return this->_database->messages()->messagesForDialog(dialog, this->_messages, offset, limit, this);
 }
 
+QList<Message *> TelegramCache::lastDialogMessages(Dialog *dialog, int limit)
+{
+    return this->_database->messages()->lastMessagesForDialog(dialog, this->_messages, limit, this);
+}
+
 User *TelegramCache::user(TLInt id, bool ignoreerror)
 {
     if(!this->_users.contains(id))
@@ -106,9 +111,12 @@ bool TelegramCache::hasDialog(TLInt id) const
     return true;
 }
 
-void TelegramCache::markAsRead(Dialog *dialog)
+void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
 {
+    dialog->setReadInboxMaxId(inmaxid);
+    dialog->setReadOutboxMaxId(outmaxid);
     dialog->setUnreadCount(0);
+
     emit readInbox(dialog);
 }
 
