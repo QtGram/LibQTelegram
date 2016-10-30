@@ -72,13 +72,66 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
     if(!this->execute(queryobj))
         return result;
 
+    this->loadMessages(queryobj, result, messages, true, parent);
+    return result;
+}
+
+QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int limit, QObject *parent) const
+{
+    QList<Message*> result;
+    TLInt dialogid = TelegramHelper::identifier(dialog);
+    MessageId maxmsgid = TelegramHelper::identifier(qMax(dialog->readInboxMaxId(), dialog->readOutboxMaxId()), dialog);
+
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND id <= :maxmsgid ORDER BY date DESC LIMIT :limit"))
+        return result;
+
+    queryobj.bindValue(":dialogid", dialogid);
+    queryobj.bindValue(":maxmsgid", maxmsgid);
+    queryobj.bindValue(":limit", limit);
+
+    if(!this->execute(queryobj))
+        return result;
+
+    this->loadMessages(queryobj, result, messages, true, parent);
+    this->loadMore(dialog, result, messages, 3, parent); // Load 3 new messages too
+    return result;
+}
+
+void MessagesTable::loadMore(Dialog* dialog, QList<Message*>& result, QHash<MessageId, Message *> &messages, int limit, QObject *parent) const
+{
+    TLInt dialogid = TelegramHelper::identifier(dialog);
+    MessageId maxmsgid = TelegramHelper::identifier(qMax(dialog->readInboxMaxId(), dialog->readOutboxMaxId()), dialog);
+
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND id > :maxmsgid ORDER BY date ASC LIMIT :limit"))
+        return;
+
+    queryobj.bindValue(":dialogid", dialogid);
+    queryobj.bindValue(":maxmsgid", maxmsgid);
+    queryobj.bindValue(":limit", limit);
+
+    if(!this->execute(queryobj))
+        return;
+
+    this->loadMessages(queryobj, result, messages, false, parent);
+}
+
+void MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, QHash<MessageId, Message *> &messages, bool append, QObject *parent) const
+{
     while(queryobj.next())
     {
         MessageId messageid = queryobj.value("id").toLongLong();
 
         if(messages.contains(messageid))
         {
-            result << messages[messageid];
+            if(append)
+                result << messages[messageid];
+            else
+                result.prepend(messages[messageid]);
+
             continue;
         }
 
@@ -87,8 +140,10 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
         message->unserialize(data);
 
         messages[messageid] = message;
-        result << message;
-    }
 
-    return result;
+        if(append)
+            result << message;
+        else
+            result.prepend(message);
+    }
 }
