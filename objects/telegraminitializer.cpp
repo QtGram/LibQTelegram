@@ -175,6 +175,7 @@ void TelegramInitializer::tryConnect()
         TelegramCache_load;
         DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
         mainsession = DCSessionManager_instance->createMainSession(dcconfig);
+        emit loginCompleted();
     }
     else
         mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, this->_dcid);
@@ -201,13 +202,11 @@ void TelegramInitializer::onMainSessionReady(DCSession* dcsession)
     if(DCConfig_isLoggedIn)
     {
         UpdateHandler_sync;
-        emit loginCompleted();
+        return;
     }
-    else
-    {
-        MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, false, this->_apiid, this->_apihash);
-        connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
-    }
+
+    MTProtoRequest* req = TelegramAPI::authSendCode(dcsession, this->_phonenumber, false, this->_apiid, this->_apihash);
+    connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAuthCheckPhoneReplied);
 }
 
 void TelegramInitializer::onAuthCheckPhoneReplied(MTProtoReply *mtreply)
