@@ -181,6 +181,7 @@ void TelegramInitializer::tryConnect()
         mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, this->_dcid);
 
     connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
+    connect(DCSessionManager_instance, &DCSessionManager::phoneCodeError, this, &TelegramInitializer::phoneCodeError, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onMainSessionReady, Qt::UniqueConnection);
     DC_InitializeSession(mainsession);
 }
@@ -249,7 +250,6 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
     });
 
     cacheinitializer->initialize();
-
     this->_phonecodehash.clear();
 }
 

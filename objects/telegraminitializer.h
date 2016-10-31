@@ -60,6 +60,7 @@ class TelegramInitializer : public QObject
 
     signals:
         void floodWait(int seconds);
+        void phoneCodeError(QString errormessage);
         void signUpRequested();
         void signInRequested();
         void loginCompleted();

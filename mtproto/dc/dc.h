@@ -37,15 +37,16 @@ class DC : public DCConnection
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
         void onDCFloodWait(int seconds);
+        void onPhoneCodeError(TLLong reqmsgid, QString errormessage);
         void onDCReadyRead();
         void onDCConnected();
         void onDCUnauthorized();
 
     signals:
         void authorizationReply(MTProtoReply* mtreply);
-        void configurationReceived(Config* config);
         void migrateDC(int fromdcid, int dcid);
         void floodWait(int seconds);
+        void phoneCodeError(QString errormessage);
         void unauthorized();
 
     private:

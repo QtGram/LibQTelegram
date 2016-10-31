@@ -20,6 +20,7 @@ class MTProtoServiceHandler : public QObject
         void saltChanged(TLLong reqmsgid);
         void unauthorized();
         void floodWait(int seconds);
+        void phoneCodeError(TLLong rqmsgid, QString errormessage);
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);

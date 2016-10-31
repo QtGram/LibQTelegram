@@ -38,6 +38,7 @@ class Telegram : public QObject
         void signInRequested();
         void loginCompleted();
         void floodWait(int seconds);
+        void phoneCodeError(QString errormessage);
 
     private:
         TelegramInitializer* _initializer;

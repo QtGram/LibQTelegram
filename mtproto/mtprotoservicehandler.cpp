@@ -98,6 +98,21 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
         else
             qFatal("DC %d Cannot get flood duration", this->_dcid);
     }
+    else if(re.errorMessage().startsWith("PHONE_CODE_"))
+    {
+        QString errormessage;
+
+        if(re.errorMessage().endsWith("EMPTY"))
+            errormessage = tr("Phone code empty");
+        else if(re.errorMessage().endsWith("EXPIRED"))
+            errormessage = tr("Phone code expired");
+        else if(re.errorMessage().endsWith("INVALID"))
+            errormessage = tr("Invalid phone code");
+        else
+            errormessage = tr("Unknown error");
+
+        emit phoneCodeError(mtreply->messageId(), errormessage);
+    }
     else
         qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
 
