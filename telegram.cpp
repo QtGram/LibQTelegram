@@ -17,6 +17,11 @@ User *Telegram::me() const
     return TelegramConfig_me;
 }
 
+int Telegram::apiLayer() const
+{
+    return TELEGRAM_API_LAYER;
+}
+
 void Telegram::setInitializer(TelegramInitializer *initializer)
 {
     if(this->_initializer == initializer)

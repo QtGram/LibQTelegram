@@ -10,11 +10,13 @@ class Telegram : public QObject
 
     Q_PROPERTY(TelegramInitializer* initializer READ initializer WRITE setInitializer NOTIFY initializerChanged)
     Q_PROPERTY(User* me READ me CONSTANT FINAL)
+    Q_PROPERTY(int apiLayer READ apiLayer CONSTANT FINAL)
 
     public:
         explicit Telegram(QObject *parent = 0);
         TelegramInitializer* initializer() const;
         User* me() const;
+        int apiLayer() const;
         void setInitializer(TelegramInitializer* initializer);
 
     public: // C++ side API
