@@ -230,20 +230,44 @@ void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
 {
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
 
     Q_ASSERT(clientdhparamsanswer.constructorId() == TLTypes::DhGenFail);
-    qDebug() << "DHGen Fail not implemented";
+
+    TLBytes expectedhashdata = ByteConverter::serialize(this->_newnonce);
+    TLBytes newnoncehash3 = ByteConverter::serialize(clientdhparamsanswer.newNonceHash1());
+
+    expectedhashdata.append(static_cast<char>(3));
+    expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
+
+    Q_ASSERT_X(Sha1::hash(expectedhashdata).mid(4) == newnoncehash3, "ServerDhGenFail", "Server (newnonce + auth_key_aux_hash) hash is not correct.");
+
+    this->_retryid = ByteConverter::integer<TLLong>(dcconfig.authorizationKeyAuxHash());
+    this->authorize();
 }
 
 void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
 {
+    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
 
     Q_ASSERT(clientdhparamsanswer.constructorId() == TLTypes::DhGenRetry);
-    qDebug() << "DHGen Retry not implemented";
+
+    TLBytes expectedhashdata = ByteConverter::serialize(this->_newnonce);
+    TLBytes newnoncehash3 = ByteConverter::serialize(clientdhparamsanswer.newNonceHash1());
+
+    expectedhashdata.append(static_cast<char>(2));
+    expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
+
+    Q_ASSERT_X(Sha1::hash(expectedhashdata).mid(4) == newnoncehash3, "ServerDhGenRetry", "Server (newnonce + auth_key_aux_hash) hash is not correct.");
+
+    this->_retryid = ByteConverter::integer<TLLong>(dcconfig.authorizationKeyAuxHash());
+    this->authorize();
 }
 
 void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)

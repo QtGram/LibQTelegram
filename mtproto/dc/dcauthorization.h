@@ -54,7 +54,7 @@ class DCAuthorization : public QObject
         ResPQ* _respq;
         TLInt128 _nonce;
         TLInt256 _newnonce;
-        TLInt _retryid;
+        TLLong _retryid;
 
     private:
         static const int ENCRYPTED_PQINNERDATA_LENGTH;
