@@ -55,7 +55,8 @@ struct TLInt128
     TLLong hi;
 
     TLInt128(): lo(0), hi(0) { }
-    bool operator ==(const TLInt128& rhs) const { return  rhs.hi == hi && rhs.lo == lo; }
+    bool operator ==(const TLInt128& rhs) const { return  (rhs.hi == hi) && (rhs.lo == lo); }
+    bool operator !=(const TLInt128& rhs) const { return  (rhs.hi != hi) || (rhs.lo != lo); }
 };
 
 struct TLInt256
@@ -64,7 +65,8 @@ struct TLInt256
     TLInt128 hi;
 
     TLInt256(): lo(), hi() { }
-    bool operator ==(const TLInt256& rhs) const { return  rhs.hi == hi && rhs.lo == lo; }
+    bool operator ==(const TLInt256& rhs) const { return  (rhs.hi == hi) && (rhs.lo == lo); }
+    bool operator !=(const TLInt256& rhs) const { return  (rhs.hi != hi) || (rhs.lo != lo); }
 };
 
 #endif // BASIC_H

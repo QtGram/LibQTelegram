@@ -19,11 +19,11 @@ class DCAuthorization : public QObject
         void authorizeReply(MTProtoReply *mtreply);
 
     private:
+        void restart();
         void encryptPQInnerData(PQInnerData* pqinnerdata, TLBytes& encinnerdata);
         void encryptClientDHInnerData(ClientDHInnerData *clientdhinnerdata, const TLBytes& tmpaeskey, const TLBytes& tmpaesiv, TLBytes &encinnerdata);
         void handleNotAuthorized();
         void handlePQReceived();
-        void handleDHParamsFail();
         void handleDHParamsOk();
         void handleDHGenFail();
         void handleDHGenRetry();
