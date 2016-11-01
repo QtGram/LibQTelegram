@@ -25,6 +25,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(newDraftMessage(Update*)), this, SLOT(onNewDraftMessage(Update*)));
     connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
+    connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
     connect(UpdateHandler_instance, SIGNAL(typing(Update*)), this, SLOT(onTyping(Update*)));
 }
@@ -264,37 +265,17 @@ void TelegramCache::onEditMessage(Message *message)
 
 void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
 {
-    bool updatedialogs = false;
+    foreach(TLInt messageid, messageids)
+        this->eraseMessage(messageid);
+}
 
+void TelegramCache::onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt> &messageids)
+{
     foreach(TLInt messageid, messageids)
     {
-        Message* message = this->message(messageid, NULL);
-
-        if(!message)
-            continue;
-
-        this->_database->messages()->remove(messageid); // There is no need to call identifier() because they are standard message ids
-
-        Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
-
-        if(dialog && (dialog->topMessage() == message->id()))
-        {
-            Message* topmessage = this->_database->messages()->topMessage(dialog, this->_messages, this);
-
-            if(topmessage)
-            {
-                dialog->setTopMessage(topmessage->id());
-                this->_database->dialogs()->insert(dialog); // NOTE: Needs investigation
-                updatedialogs = true;
-            }
-        }
-
-        emit deleteMessage(message);
-        this->_messages.remove(messageid);
+        MessageId fullmessageid = TelegramHelper::identifier(messageid, channelid);
+        this->eraseMessage(fullmessageid);
     }
-
-    if(updatedialogs)
-        emit dialogsChanged();
 }
 
 void TelegramCache::onReadHistory(Update *update)
@@ -347,6 +328,36 @@ void TelegramCache::onTyping(Update *update)
     TLInt dialogid = (update->constructorId() == TLTypes::UpdateChatUserTyping) ? update->chatId() : update->userId();
     Dialog* dialog = this->dialog(dialogid);
     emit typing(dialog, update->action());
+}
+
+void TelegramCache::eraseMessage(MessageId messageid)
+{
+    Message* message = this->message(messageid, NULL);
+
+    if(!message)
+        return;
+
+    this->_database->messages()->remove(messageid);
+    Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
+
+    if(dialog && (dialog->topMessage() == message->id()))
+    {
+        Message* topmessage = this->_database->messages()->topMessage(dialog, this->_messages, this);
+
+        if(!topmessage) // Dialog is empty
+        {
+            dialog->setTopMessage(0);
+            dialog->setUnreadCount(0);
+        }
+        else
+            dialog->setTopMessage(topmessage->id());
+
+        this->_database->dialogs()->insert(dialog); // Update dialog
+        emit dialogChanged(dialog);
+    }
+
+    emit deleteMessage(message);
+    this->_messages.remove(messageid);
 }
 
 TelegramCache *TelegramCache::cache()

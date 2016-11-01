@@ -67,12 +67,17 @@ class TelegramCache: public QObject
         void onEditMessage(Message* message);
         void onNewMessages(const TLVector<Message*>& messages);
         void onDeleteMessages(const TLVector<TLInt>& messageids);
+        void onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt>& messageids);
         void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
         void onTyping(Update* update);
 
+    private:
+        void eraseMessage(MessageId messageid);
+
     signals:
         void dialogsChanged();
+        void dialogChanged(Dialog* dialog);
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void editMessage(Message* message);
