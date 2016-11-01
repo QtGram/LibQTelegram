@@ -3,10 +3,13 @@
 
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
-    connect(TelegramCache_instance, &TelegramCache::dialogsChanged, this, &DialogsModel::sortDialogs);
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
-    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &DialogsModel::onNewMessage);
-    connect(TelegramCache_instance, &TelegramCache::readInbox, this, &DialogsModel::onReadInbox);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory);
+    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage);
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
@@ -156,6 +159,29 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     return roles;
 }
 
+int DialogsModel::insertionPoint(Dialog *changeddialog, int fromidx) const
+{
+    if(!changeddialog->topMessage())
+        return this->_dialogs.length() - 1;
+
+    Message* msg1 = TelegramCache_message(changeddialog->topMessage(), changeddialog);
+
+    for(int i = fromidx + 1; i < this->_dialogs.length(); i++)
+    {
+        Dialog* dialog = this->_dialogs[i];
+
+        if(!dialog->topMessage())
+            return i;
+
+        Message* msg2 = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!msg2 || (msg1->date() > msg2->date()))
+            return i;
+    }
+
+    return fromidx;
+}
+
 int DialogsModel::indexOf(TLInt dialogid) const
 {
     for(int i = 0; i < this->_dialogs.length(); i++)
@@ -228,13 +254,7 @@ void DialogsModel::sortDialogs()
     this->endResetModel();
 }
 
-void DialogsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
-{
-    this->_dialogs << dialogs;
-    this->sortDialogs();
-}
-
-void DialogsModel::onReadInbox(Dialog *dialog)
+void DialogsModel::onDialogUnreadCountChanged(Dialog *dialog)
 {
     int idx = this->_dialogs.indexOf(dialog);
 
@@ -244,21 +264,94 @@ void DialogsModel::onReadInbox(Dialog *dialog)
     Emit_DataChangedRoles(idx, DialogsModel::UnreadCountRole);
 }
 
-void DialogsModel::onNewMessage(Message *message)
+void DialogsModel::onDialogNewMessage(Dialog *dialog)
 {
-    if(message->isOut()) // Ignore my messages
-        return;
-
-    TLInt dialogid = TelegramHelper::messageToDialog(message);
-    int idx = this->indexOf(dialogid);
+    int idx = this->_dialogs.indexOf(dialog);
 
     if(idx == -1)
         return;
 
-    Dialog* dialog = this->_dialogs[idx];
-    dialog->setUnreadCount(dialog->unreadCount() + 1);
+    Emit_DataChanged(idx);
 
-    Emit_DataChangedRoles(idx, DialogsModel::UnreadCountRole);
+    if(idx == 0)
+        return;
+
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), 0);
+    this->_dialogs.move(idx, 0);
+    this->endMoveRows();
+}
+
+void DialogsModel::onDialogNewDraftMessage(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    DraftMessage* draftmessage = dialog->draft();
+
+    if((idx > 0) && (draftmessage->constructorId() == TLTypes::DraftMessage))
+    {
+        this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), 0);
+        this->_dialogs.move(idx, 0);
+        this->endMoveRows();
+    }
+
+    Emit_DataChanged(idx);
+    int newidx = this->insertionPoint(dialog, idx);
+
+    if(idx == newidx)
+        return;
+
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx);
+    this->_dialogs.move(idx, newidx);
+    this->endMoveRows();
+}
+
+void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChanged(idx);
+    int newidx = this->insertionPoint(dialog, idx);
+
+    if(idx == newidx)
+        return;
+
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx);
+    this->_dialogs.move(idx, newidx);
+    this->endMoveRows();
+}
+
+void DialogsModel::onDialogEditMessage(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChangedRoles(idx, DialogsModel::TopMessageRole <<
+                               DialogsModel::TopMessageDateRole <<
+                               DialogsModel::TopMessageTextRole);
+}
+
+void DialogsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
+{
+    this->_dialogs << dialogs;
+    this->sortDialogs(); // NOTE: Remove this evil call
+}
+
+void DialogsModel::onReadHistory(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChanged(idx);
 }
 
 void DialogsModel::telegramReady()

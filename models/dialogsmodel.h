@@ -31,6 +31,7 @@ class DialogsModel : public TelegramModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     private:
+        int insertionPoint(Dialog* changeddialog, int fromidx) const;
         int indexOf(TLInt dialogid) const;
         QString messageFrom(Message *message) const;
         QString firstMessageLine(Message* message) const;
@@ -38,9 +39,13 @@ class DialogsModel : public TelegramModel
 
     private slots:
         void sortDialogs();
+        void onDialogUnreadCountChanged(Dialog* dialog);
+        void onDialogNewMessage(Dialog* dialog);
+        void onDialogNewDraftMessage(Dialog* dialog);
+        void onDialogDeleteMessage(Dialog* dialog);
+        void onDialogEditMessage(Dialog* dialog);
         void onNewDialogs(const TLVector<Dialog*>& dialogs);
-        void onReadInbox(Dialog* dialog);
-        void onNewMessage(Message* message);
+        void onReadHistory(Dialog* dialog);
 
     protected:
         virtual void telegramReady();
