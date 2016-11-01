@@ -83,7 +83,8 @@ class MessagesModel : public TelegramModel
         InputPeer* _inputpeer;
         Dialog* _dialog;
         TLInt _firstnewmsgid;
-        bool _athistoryend;
+        bool _atend;
+        bool _atstart;
         int _loadcount;
 };
 

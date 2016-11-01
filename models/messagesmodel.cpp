@@ -5,7 +5,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _athistoryend(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _atend(false), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
@@ -172,7 +172,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
 void MessagesModel::loadHistory()
 {
-    if(this->_athistoryend || this->_loading)
+    if(this->_atend || this->_loading)
         return;
 
     this->setLoading(true);
@@ -184,7 +184,23 @@ void MessagesModel::loadHistory()
 
 void MessagesModel::loadMore()
 {
+    if(this->_atstart)
+        return;
 
+    QList<Message*> newmessages = TelegramCache_lastDialogMessages(this->_dialog, MessagesPerPage);
+
+    if(newmessages.isEmpty())
+    {
+        this->_atstart = true;
+        return;
+    }
+
+    this->beginInsertRows(QModelIndex(), 0, newmessages.count());
+
+    for(int i = newmessages.count(); i > 0; )
+        this->_messages.prepend(newmessages[--i]);
+
+    this->endInsertRows();
 }
 
 void MessagesModel::sendMessage(const QString &text)
@@ -210,9 +226,9 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     this->_loadcount = MessagesPerPage;
 
     if(messages.constructorId() == TLTypes::MessagesMessages)
-        this->_athistoryend = true;
+        this->_atend = true;
     else
-        this->_athistoryend = (this->_messages.count() >= messages.count());
+        this->_atend = (this->_messages.count() >= messages.count());
 
     int count = messages.messages().count();
     this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + count) - 1);
