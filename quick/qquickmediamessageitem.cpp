@@ -313,28 +313,16 @@ void QQuickMediaMessageItem::createWebPageElement()
         return;
 
     this->createObject(this->_webpagecomponent);
-
-    if(this->webPageHasPhoto())
-    {
-        connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-        connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-    }
-    else
-    {
-        connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
-        connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
-        connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
-    }
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
 
     emit webPageTitleChanged();
     emit webPageDescriptionChanged();
     emit webPageUrlChanged();
     emit webPageHasPhotoChanged();
 
-    if(this->webPageHasPhoto())
-        this->scaleToColumn();
-    else
-        this->scaleToFree();
+    this->scaleToFree();
 }
 
 void QQuickMediaMessageItem::createFileElement()
