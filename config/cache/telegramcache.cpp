@@ -71,6 +71,9 @@ Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
 
 Message *TelegramCache::message(MessageId messageid, Dialog *dialog, bool ignoreerror)
 {
+    if(!messageid)
+        return NULL;
+
     if(dialog && TelegramHelper::isChannel(dialog))
         messageid = TelegramHelper::identifier(messageid, dialog);
 
