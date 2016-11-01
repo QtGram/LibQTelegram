@@ -90,7 +90,13 @@ QString QQuickMediaMessageItem::webPageTitle() const
     if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
         return NULL;
 
-    return messagemedia->webpage()->title();
+    if(!messagemedia->webpage()->title().isEmpty())
+        return messagemedia->webpage()->title();
+
+    if(!messagemedia->webpage()->author().isEmpty())
+        return messagemedia->webpage()->siteName() + "\n" + messagemedia->webpage()->author();
+
+    return messagemedia->webpage()->siteName();
 }
 
 QString QQuickMediaMessageItem::webPageDescription() const
@@ -117,6 +123,19 @@ QString QQuickMediaMessageItem::webPageUrl() const
         return NULL;
 
     return messagemedia->webpage()->url();
+}
+
+bool QQuickMediaMessageItem::webPageHasPhoto() const
+{
+    if(!this->_message)
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
+        return false;
+
+    return messagemedia->webpage()->photo() && (messagemedia->webpage()->photo()->constructorId() == TLTypes::Photo);
 }
 
 GeoPoint *QQuickMediaMessageItem::geoPoint() const
@@ -294,14 +313,28 @@ void QQuickMediaMessageItem::createWebPageElement()
         return;
 
     this->createObject(this->_webpagecomponent);
-    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
-    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+
+    if(this->webPageHasPhoto())
+    {
+        connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+        connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToColumn);
+    }
+    else
+    {
+        connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
+        connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
+        connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    }
 
     emit webPageTitleChanged();
     emit webPageDescriptionChanged();
     emit webPageUrlChanged();
+    emit webPageHasPhotoChanged();
 
-    this->scaleToColumn();
+    if(this->webPageHasPhoto())
+        this->scaleToColumn();
+    else
+        this->scaleToFree();
 }
 
 void QQuickMediaMessageItem::createFileElement()
@@ -367,16 +400,8 @@ void QQuickMediaMessageItem::initialize()
         }
 
         case TLTypes::MessageMediaWebPage:
-        {
-            WebPage* webpage = messagemedia->webpage();
-
-            if(webpage->photo())
-                this->createWebPageElement();
-            else
-                return;
-
+            this->createWebPageElement();
             break;
-        }
 
         default:
             qDebug() << "Unhandled Message Media Type:" << messagemedia->constructorId();
