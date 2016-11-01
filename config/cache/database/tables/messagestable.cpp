@@ -45,10 +45,9 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
 {
     QList<Message*> result;
     TLInt dialogid = TelegramHelper::identifier(dialog);
-
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY date DESC LIMIT :limit OFFSET :offset"))
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY id DESC LIMIT :limit OFFSET :offset"))
         return result;
 
     queryobj.bindValue(":dialogid", dialogid);
@@ -62,47 +61,25 @@ QList<Message *> MessagesTable::messagesForDialog(Dialog *dialog, QHash<MessageI
     return result;
 }
 
-QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, int limit, QObject *parent) const
+QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<MessageId, Message *> &messages, QObject *parent) const
 {
     QList<Message*> result;
     TLInt dialogid = TelegramHelper::identifier(dialog);
-    MessageId maxmsgid = TelegramHelper::identifier(qMax(dialog->readInboxMaxId(), dialog->readOutboxMaxId()), dialog);
+    MessageId minmsgid = TelegramHelper::identifier(dialog->readInboxMaxId(), dialog);
 
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND id <= :maxmsgid ORDER BY date DESC LIMIT :limit"))
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND id >= :minmsgid ORDER BY date DESC"))
         return result;
 
     queryobj.bindValue(":dialogid", dialogid);
-    queryobj.bindValue(":maxmsgid", maxmsgid);
-    queryobj.bindValue(":limit", limit);
+    queryobj.bindValue(":minmsgid", minmsgid);
 
     if(!this->execute(queryobj))
         return result;
 
     this->loadMessages(queryobj, result, messages, true, parent);
-    this->loadMore(dialog, result, messages, 3, parent); // Load 3 new messages too
     return result;
-}
-
-void MessagesTable::loadMore(Dialog* dialog, QList<Message*>& result, QHash<MessageId, Message *> &messages, int limit, QObject *parent) const
-{
-    TLInt dialogid = TelegramHelper::identifier(dialog);
-    MessageId maxmsgid = TelegramHelper::identifier(qMax(dialog->readInboxMaxId(), dialog->readOutboxMaxId()), dialog);
-
-    CreateQuery(queryobj);
-
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid AND id > :maxmsgid ORDER BY date ASC LIMIT :limit"))
-        return;
-
-    queryobj.bindValue(":dialogid", dialogid);
-    queryobj.bindValue(":maxmsgid", maxmsgid);
-    queryobj.bindValue(":limit", limit);
-
-    if(!this->execute(queryobj))
-        return;
-
-    this->loadMessages(queryobj, result, messages, false, parent);
 }
 
 void MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, QHash<MessageId, Message *> &messages, bool append, QObject *parent) const
