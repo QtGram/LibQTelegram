@@ -290,6 +290,7 @@ void TelegramCache::onDeleteMessages(const TLVector<TLInt> &messageids)
         }
 
         emit deleteMessage(message);
+        this->_messages.remove(messageid);
     }
 
     if(updatedialogs)
