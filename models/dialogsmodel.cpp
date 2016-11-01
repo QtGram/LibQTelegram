@@ -38,36 +38,60 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
     if(role == DialogsModel::TopMessageFromRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return this->messageFrom(message);
     }
 
     if(role == DialogsModel::TopMessageTextRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return this->firstMessageLine(message);
     }
 
     if(role == DialogsModel::TopMessageDateRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return TelegramHelper::dateString(message->date());
     }
 
     if(role == DialogsModel::IsTopMessageUnreadRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return (dialog->readOutboxMaxId() < message->id());
     }
 
     if(role == DialogsModel::IsTopMessageOutRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return message->isOut();
     }
 
     if(role == DialogsModel::IsTopMessageServiceRole)
     {
         Message* message = TelegramCache_message(dialog->topMessage(), dialog);
+
+        if(!message)
+            return QVariant();
+
         return message->constructorId() == TLTypes::MessageService;
     }
 
