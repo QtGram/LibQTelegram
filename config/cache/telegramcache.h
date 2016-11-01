@@ -17,7 +17,7 @@
 
 #define TelegramCache_insert(message) TelegramCache::cache()->insert(message)
 #define TelegramCache_messages(dialog, offset, limit) TelegramCache::cache()->dialogMessages(dialog, offset, limit)
-#define TelegramCache_lastDialogMessages(dialog, limit) TelegramCache::cache()->lastDialogMessages(dialog, limit)
+#define TelegramCache_lastDialogMessages(dialog) TelegramCache::cache()->lastDialogMessages(dialog)
 
 #include <QObject>
 #include <QList>
@@ -42,7 +42,7 @@ class TelegramCache: public QObject
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
-        QList<Message*> lastDialogMessages(Dialog* dialog, int limit);
+        QList<Message*> lastDialogMessages(Dialog* dialog);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
@@ -76,13 +76,16 @@ class TelegramCache: public QObject
         void eraseMessage(MessageId messageid);
 
     signals:
-        void dialogsChanged();
-        void dialogChanged(Dialog* dialog);
+        void dialogUnreadCountChanged(Dialog* dialog);
+        void dialogNewMessage(Dialog* dialog);
+        void dialogNewDraftMessage(Dialog* dialog);
+        void dialogDeleteMessage(Dialog* dialog);
+        void dialogEditMessage(Dialog* dialog);
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessage(Message* message);
-        void readInbox(Dialog* dialog);
+        void readHistory(Dialog* dialog);
         void typing(Dialog* dialog, SendMessageAction* sendmessageaction);
 
     private:

@@ -35,9 +35,9 @@ QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int l
     return this->_database->messages()->messagesForDialog(dialog, this->_messages, offset, limit, this);
 }
 
-QList<Message *> TelegramCache::lastDialogMessages(Dialog *dialog, int limit)
+QList<Message *> TelegramCache::lastDialogMessages(Dialog *dialog)
 {
-    return this->_database->messages()->lastMessagesForDialog(dialog, this->_messages, limit, this);
+    return this->_database->messages()->lastMessagesForDialog(dialog, this->_messages, this);
 }
 
 User *TelegramCache::user(TLInt id, bool ignoreerror)
@@ -119,9 +119,10 @@ void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
 {
     dialog->setReadInboxMaxId(inmaxid);
     dialog->setReadOutboxMaxId(outmaxid);
-    dialog->setUnreadCount(0);
+    dialog->setUnreadCount(qMin(dialog->topMessage() - inmaxid, 0));
 
-    emit readInbox(dialog);
+    this->cache(dialog);
+    emit readHistory(dialog);
 }
 
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
@@ -189,7 +190,6 @@ void TelegramCache::cache(const TLVector<Message *>& messages)
 
 void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 {
-    bool dialogsupdated = false;
     this->cache(messages);
 
     foreach(Message* message, messages)
@@ -199,18 +199,19 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 
         if(dialog)
         {
-            dialogsupdated = true;
             dialog->setTopMessage(message->id());
+
+            if(!message->isOut())
+                dialog->setUnreadCount(dialog->unreadCount() + 1);
+
             this->cache(dialog);
+
             emit newMessage(message);
-            continue;
+            emit dialogNewMessage(dialog);
         }
         else if(!this->hasDialog(dialogid))
             this->_fetcher->getDialog(TelegramHelper::inputPeer(message));
     }
-
-    if(dialogsupdated)
-        emit dialogsChanged();
 }
 
 void TelegramCache::insert(Message *message)
@@ -249,7 +250,7 @@ void TelegramCache::onNewDraftMessage(Update *update)
 
     dialog->setDraft(update->draft());
     this->cache(dialog);
-    emit dialogsChanged();
+    emit dialogNewDraftMessage(dialog);
 }
 
 void TelegramCache::onEditMessage(Message *message)
@@ -258,7 +259,7 @@ void TelegramCache::onEditMessage(Message *message)
     Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
 
     if(dialog && (dialog->topMessage() == message->id()))
-        emit dialogsChanged();
+        emit dialogEditMessage(dialog);
 
     emit editMessage(message);
 }
@@ -306,13 +307,14 @@ void TelegramCache::onReadHistory(Update *update)
     {
         dialog->setReadInboxMaxId(update->maxId());
         dialog->setUnreadCount(0);
-        emit readInbox(dialog);
     }
     else
         dialog->setReadOutboxMaxId(update->maxId());
 
     this->cache(dialog);
-    emit dialogsChanged();
+
+    emit readHistory(dialog);
+    emit dialogUnreadCountChanged(dialog);
 }
 
 void TelegramCache::onTyping(Update *update)
@@ -346,14 +348,23 @@ void TelegramCache::eraseMessage(MessageId messageid)
 
         if(!topmessage) // Dialog is empty
         {
+            dialog->setReadInboxMaxId(0);
+            dialog->setReadOutboxMaxId(0);
             dialog->setTopMessage(0);
             dialog->setUnreadCount(0);
         }
         else
+        {
             dialog->setTopMessage(topmessage->id());
 
+            if(topmessage->isOut())
+                dialog->setReadOutboxMaxId(topmessage->id());
+            else
+                dialog->setReadInboxMaxId(topmessage->id());
+        }
+
         this->_database->dialogs()->insert(dialog); // Update dialog
-        emit dialogChanged(dialog);
+        emit dialogDeleteMessage(dialog);
     }
 
     emit deleteMessage(message);
@@ -386,9 +397,12 @@ const QList<User *> &TelegramCache::contacts() const
 
 void TelegramCache::cache(Dialog *dialog)
 {
-    dialog->setParent(this);
+    if(this->_dialogs.indexOf(dialog) == -1) // NOTE: Linear search?
+    {
+        dialog->setParent(this);
+        this->_dialogs << dialog;
+    }
 
-    this->_dialogs << dialog;
     this->_database->dialogs()->insert(dialog);
 }
 

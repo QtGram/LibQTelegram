@@ -5,7 +5,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _firstnewmsgid(-1), _atend(false), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _newmessageindex(-1), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
@@ -48,6 +48,11 @@ QString MessagesModel::statusText() const
         return QString();
 
     return this->_telegram->dialogStatusText(this->_dialog);
+}
+
+int MessagesModel::newMessageIndex() const
+{
+    return this->_newmessageindex;
 }
 
 bool MessagesModel::isChat() const
@@ -107,9 +112,31 @@ bool MessagesModel::isWritable() const
     return true;
 }
 
-int MessagesModel::loadCount() const
+bool MessagesModel::canFetchMore(const QModelIndex &) const
 {
-    return MessagesPerPage;
+    return this->_fetchmore && !this->_loading;
+}
+
+void MessagesModel::fetchMore(const QModelIndex &)
+{
+    if(this->_loading)
+        return;
+
+    this->setLoading(true);
+
+    this->_loadcount = MessagesPerPage;
+    int count = this->loadHistoryFromCache();
+
+    if(count >= this->_loadcount) // We have enough cached messages
+    {
+        this->setLoading(false);
+        return;
+    }
+
+    this->createInputPeer();
+
+    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
 }
 
 QVariant MessagesModel::data(const QModelIndex &index, int role) const
@@ -122,14 +149,23 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::ItemRole)
         return QVariant::fromValue(message);
 
-    if(role == MessagesModel::MessageFrom)
+    if(role == MessagesModel::MessageFromRole)
         return this->messageFrom(message);
 
-    if(role == MessagesModel::MessageText)
+    if(role == MessagesModel::MessageTextRole)
         return this->_telegram->messageText(message);
 
+    if(role == MessagesModel::ReplyItemRole)
+        return message->replyToMsgId() ? QVariant::fromValue(TelegramCache_message(message->replyToMsgId(), this->_dialog)) : QVariant();
+
+    if(role == MessagesModel::ReplyFromRole)
+        return this->messageFrom(TelegramCache_message(message->replyToMsgId(), this->_dialog));
+
+    if(role == MessagesModel::ReplyTextRole)
+        return this->_telegram->messagePreview(TelegramCache_message(message->replyToMsgId(), this->_dialog));
+
     if(role == MessagesModel::IsMessageNewRole)
-        return message->id() == this->_firstnewmsgid;
+        return index.row() == this->_newmessageindex;
 
     if(role == MessagesModel::IsMessageOutRole)
         return message->isOut();
@@ -139,6 +175,12 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
 
     if(role == MessagesModel::MessageDateRole)
         return TelegramHelper::dateString(message->date());
+
+    if(role == MessagesModel::MessageHasReplyRole)
+        return message->replyToMsgId() != 0;
+
+    if(role == MessagesModel::IsMessageForwardedRole)
+        return message->fwdFrom() != NULL;
 
     if(role == MessagesModel::IsMessageUnreadRole)
         return this->_dialog->readOutboxMaxId() < message->id();
@@ -158,9 +200,14 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 {
     QHash<int, QByteArray> roles = this->initRoles();
 
-    roles[MessagesModel::MessageFrom] = "messageFrom";
-    roles[MessagesModel::MessageText] = "messageText";
+    roles[MessagesModel::MessageFromRole] = "messageFrom";
+    roles[MessagesModel::MessageTextRole] = "messageText";
     roles[MessagesModel::MessageDateRole] = "messageDate";
+    roles[MessagesModel::MessageHasReplyRole] = "messageHasReply";
+    roles[MessagesModel::ReplyItemRole] = "replyItem";
+    roles[MessagesModel::ReplyFromRole] = "replyFrom";
+    roles[MessagesModel::ReplyTextRole] = "replyText";
+    roles[MessagesModel::IsMessageForwardedRole] = "isMessageForwarded";
     roles[MessagesModel::IsMessageNewRole] = "isMessageNew";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
@@ -170,52 +217,30 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     return roles;
 }
 
-void MessagesModel::loadHistory()
+int MessagesModel::loadHistoryFromCache()
 {
-    if(this->_atend || this->_loading)
-        return;
-
-    this->setLoading(true);
-    this->createInputPeer();
-
-    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
-    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
-}
-
-void MessagesModel::loadMore()
-{
-    if(this->_atstart)
-        return;
-
-    QList<Message*> newmessages = TelegramCache_lastDialogMessages(this->_dialog, MessagesPerPage);
+    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, this->_messages.count(), this->_loadcount);
 
     if(newmessages.isEmpty())
-    {
-        this->_atstart = true;
-        return;
-    }
+        return 0;
 
-    this->beginInsertRows(QModelIndex(), 0, newmessages.count());
+    this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + newmessages.count()) - 1);
 
-    for(int i = newmessages.count(); i > 0; )
-        this->_messages.prepend(newmessages[--i]);
+    for(int i = 0; i < newmessages.count() - 1; i++)
+        this->_messages.append(newmessages[i]);
 
     this->endInsertRows();
+    return newmessages.count();
 }
 
 void MessagesModel::sendMessage(const QString &text)
 {
-    if(!this->_dialog || text.trimmed().isEmpty())
-        return;
+    this->sendMessage(text, 0);
+}
 
-    this->createInputPeer();
-
-    TLLong randomid = 0;
-    Math::randomize(&randomid);
-
-    this->_pendingmessages << TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
-    MTProtoRequest* req = TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, 0, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
-    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMessageReplied);
+void MessagesModel::replyMessage(const QString &text, Message *replymessage)
+{
+    this->sendMessage(text, replymessage->id());
 }
 
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
@@ -223,26 +248,16 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     MessagesMessages messages;
     messages.read(mtreply);
 
-    this->_loadcount = MessagesPerPage;
-
     if(messages.constructorId() == TLTypes::MessagesMessages)
-        this->_atend = true;
+        this->_fetchmore = false;
     else
-        this->_atend = (this->_messages.count() >= messages.count());
-
-    int count = messages.messages().count();
-    this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + count) - 1);
+        this->_fetchmore = (this->_messages.count() < messages.count());
 
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
-    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, this->_messages.count(), count);
-
-    for(int i = 0; i < newmessages.count() - 1; i++)
-        this->_messages.append(newmessages[i]);
-
-    this->endInsertRows();
+    this->loadHistoryFromCache();
     this->setLoading(false);
 }
 
@@ -313,6 +328,27 @@ void MessagesModel::onDeleteMessage(Message* message)
     }
 }
 
+void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
+{
+    if(!this->_dialog || text.trimmed().isEmpty())
+        return;
+
+    this->createInputPeer();
+
+    TLLong randomid = 0;
+    Math::randomize(&randomid);
+
+    Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
+
+    if(replymsgid)
+        message->setReplyToMsgId(replymsgid);
+
+    this->_pendingmessages << message;
+
+    MTProtoRequest* req = TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, replymsgid, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMessageReplied);
+}
+
 void MessagesModel::setFirstNewMessage()
 {
     TLInt maxinmsgid = this->_dialog->readInboxMaxId();
@@ -330,8 +366,11 @@ void MessagesModel::setFirstNewMessage()
         if(message->id() <= maxinmsgid)
             return;
 
-        this->_firstnewmsgid = message->id();
+        this->_newmessageindex = i;
     }
+
+    if(this->_newmessageindex != -1)
+        emit newMessageIndexChanged();
 }
 
 TLInt MessagesModel::inboxMaxId() const
@@ -456,15 +495,14 @@ void MessagesModel::telegramReady()
         connect(user, &User::statusChanged, this, &MessagesModel::statusTextChanged);
     }
 
-    this->_messages = TelegramCache_lastDialogMessages(this->_dialog, this->_loadcount);
+    this->_messages = TelegramCache_lastDialogMessages(this->_dialog);
+
+    if(this->_messages.isEmpty())
+        return;
+
+    this->beginInsertRows(QModelIndex(), 0, this->_messages.count() - 1);
+    this->endInsertRows();
+
     this->setFirstNewMessage();
     this->markAsRead();
-
-    if(this->_messages.length() < this->_loadcount)
-    {
-        this->loadHistory();
-        return;
-    }
-
-    this->resetInternalData();
 }

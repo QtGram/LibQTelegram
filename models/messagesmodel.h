@@ -10,17 +10,22 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(Dialog* dialog READ dialog WRITE setDialog NOTIFY dialogChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
+    Q_PROPERTY(int newMessageIndex READ newMessageIndex NOTIFY newMessageIndexChanged)
     Q_PROPERTY(bool isChat READ isChat NOTIFY isChatChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
     Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
-    Q_PROPERTY(int loadCount READ loadCount CONSTANT FINAL)
 
     public:
         enum MessageRoles {
-            MessageFrom = Qt::UserRole + 10,
-            MessageText,
+            MessageFromRole = Qt::UserRole + 10,
+            MessageTextRole,
             MessageDateRole,
+            MessageHasReplyRole,
+            ReplyItemRole,
+            ReplyFromRole,
+            ReplyTextRole,
+            IsMessageForwardedRole,
             IsMessageNewRole,
             IsMessageOutRole,
             IsMessageServiceRole,
@@ -34,20 +39,22 @@ class MessagesModel : public TelegramModel
         void setDialog(Dialog* dialog);
         QString title() const;
         QString statusText() const;
-        void setLoadCount(int loadcount);
+        int newMessageIndex() const;
         bool isChat() const;
         bool isBroadcast() const;
         bool isMegaGroup() const;
         bool isWritable() const;
-        int loadCount() const;
+
+    public: // Overrides
+        virtual bool canFetchMore(const QModelIndex &) const;
+        virtual void fetchMore(const QModelIndex &);
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
 
     public slots:
-        void loadHistory();
-        void loadMore();
         void sendMessage(const QString& text);
+        void replyMessage(const QString& text, Message* replymessage);
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
@@ -58,13 +65,15 @@ class MessagesModel : public TelegramModel
         void onDeleteMessage(Message *message);
 
     private:
-        void setFirstNewMessage();
+        int loadHistoryFromCache();
+        int indexOf(Message* message) const;
         TLInt inboxMaxId() const;
         TLInt outboxMaxId() const;
-        void markAsRead();
-        int indexOf(Message* message) const;
-        bool ownMessage(Message* message) const;
         QString messageFrom(Message *message) const;
+        void sendMessage(const QString& text, TLInt replymsgid);
+        void setFirstNewMessage();
+        void markAsRead();
+        bool ownMessage(Message* message) const;
         void createInputPeer();
         virtual void telegramReady();
 
@@ -76,14 +85,15 @@ class MessagesModel : public TelegramModel
         void isBroadcastChanged();
         void isMegaGroupChanged();
         void isWritableChanged();
+        void newMessageIndexChanged();
 
     private:
         TLVector<Message*> _messages;
         QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
         Dialog* _dialog;
-        TLInt _firstnewmsgid;
-        bool _atend;
+        TLInt _newmessageindex;
+        bool _fetchmore;
         bool _atstart;
         int _loadcount;
 };
