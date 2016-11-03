@@ -159,6 +159,18 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     return roles;
 }
 
+Dialog *DialogsModel::getDialog(TLInt dialogid) const
+{
+    foreach(Dialog* dialog, this->_dialogs)
+    {
+        if(TelegramHelper::identifier(dialog) == dialogid)
+            return dialog;
+    }
+
+    qWarning("Cannot find dialog %d", dialogid);
+    return NULL;
+}
+
 int DialogsModel::insertionPoint(Dialog *changeddialog, int fromidx) const
 {
     if(!changeddialog->topMessage())

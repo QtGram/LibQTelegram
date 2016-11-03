@@ -30,6 +30,9 @@ class DialogsModel : public TelegramModel
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
 
+    public slots:
+        Dialog* getDialog(TLInt dialogid) const;
+
     private:
         int insertionPoint(Dialog* changeddialog, int fromidx) const;
         int indexOf(TLInt dialogid) const;
