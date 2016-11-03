@@ -27,6 +27,7 @@ class MTProtoStream : public QObject
         virtual ~MTProtoStream();
 
     public:
+        void reset();
         void seek(qint64 off);
         void randPad(int by);
         const QByteArray& data() const;

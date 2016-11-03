@@ -19,6 +19,11 @@ MTProtoStream::~MTProtoStream()
         this->_buffer.close();
 }
 
+void MTProtoStream::reset()
+{
+    this->_buffer.seek(0);
+}
+
 void MTProtoStream::seek(qint64 off)
 {
     this->_buffer.seek(off);
