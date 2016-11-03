@@ -52,6 +52,7 @@ void DCConnection::onStateChanged(SocketState state)
 
         case QAbstractSocket::ConnectedState:
             qWarning() << "DC" << this->_dcid << "connected";
+            this->setSocketOption(DCConnection::KeepAliveOption, 1);
             break;
 
         case QAbstractSocket::BoundState:
