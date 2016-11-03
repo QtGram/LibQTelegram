@@ -26,7 +26,14 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
         return;
 
     this->_telegram = telegram;
-    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &TelegramNotifications::onNewMessage, Qt::UniqueConnection);
+
+    if(this->_telegram)
+    {
+        connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, [this]() {
+            connect(TelegramCache_instance, &TelegramCache::newMessage, this, &TelegramNotifications::onNewMessage, Qt::UniqueConnection);
+        });
+    }
+
     emit telegramChanged();
 }
 
