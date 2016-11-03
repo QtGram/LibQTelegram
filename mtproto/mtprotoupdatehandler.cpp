@@ -67,7 +67,7 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
         case TLTypes::UpdateShortMessage:
         case TLTypes::UpdateShortChatMessage:
         {
-            Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_instance->me());
+            Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_me);
             emit newMessage(message);
             break;
         }
