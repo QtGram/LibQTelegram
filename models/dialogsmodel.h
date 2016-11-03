@@ -31,6 +31,7 @@ class DialogsModel : public TelegramModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     public slots:
+        int indexOf(Dialog* dialog) const;
         Dialog* getDialog(TLInt dialogid) const;
 
     private:

@@ -167,6 +167,11 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     return roles;
 }
 
+int DialogsModel::indexOf(Dialog *dialog) const
+{
+    return this->_dialogs.indexOf(dialog);
+}
+
 Dialog *DialogsModel::getDialog(TLInt dialogid) const
 {
     foreach(Dialog* dialog, this->_dialogs)
