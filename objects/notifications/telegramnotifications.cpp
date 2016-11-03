@@ -64,9 +64,10 @@ void TelegramNotifications::onNewMessage(Message *message)
         return;
 
     NotificationObject notification;
-    notification.setIsCurrentDialog((dialog == this->_currentdialog));
+    notification.setDialog(dialog);
     notification.setTitle(this->_telegram->dialogTitle(dialog));
     notification.setMessage(this->_telegram->messagePreview(message));
+    notification.setIsCurrentDialog((dialog == this->_currentdialog));
 
     emit newMessage(&notification);
 }

@@ -1,8 +1,13 @@
 #include "notificationobject.h"
 
-NotificationObject::NotificationObject(QObject *parent) : QObject(parent), _iscurrentdialog(false)
+NotificationObject::NotificationObject(QObject *parent) : QObject(parent), _dialog(NULL), _iscurrentdialog(false)
 {
 
+}
+
+Dialog *NotificationObject::dialog() const
+{
+    return this->_dialog;
 }
 
 const QString &NotificationObject::title() const
@@ -18,6 +23,15 @@ const QString &NotificationObject::message() const
 bool NotificationObject::isCurrentDialog() const
 {
     return this->_iscurrentdialog;
+}
+
+void NotificationObject::setDialog(Dialog *dialog)
+{
+    if(this->_dialog == dialog)
+        return;
+
+    this->_dialog = dialog;
+    emit dialogChanged();
 }
 
 void NotificationObject::setTitle(const QString &title)
