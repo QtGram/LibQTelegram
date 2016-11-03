@@ -3,7 +3,6 @@
 
 TelegramNotifications::TelegramNotifications(QObject *parent) : QObject(parent), _telegram(NULL), _currentdialog(NULL), _mute(false)
 {
-    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &TelegramNotifications::onNewMessage);
 }
 
 Telegram *TelegramNotifications::telegram() const
@@ -27,6 +26,7 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
         return;
 
     this->_telegram = telegram;
+    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &TelegramNotifications::onNewMessage, Qt::UniqueConnection);
     emit telegramChanged();
 }
 
