@@ -62,12 +62,12 @@ void TelegramNotifications::onNewMessage(Message *message)
 
     Dialog* dialog = TelegramCache_instance->dialog(TelegramHelper::messageToDialog(message));
 
-    if(!dialog)
+    if(!dialog || (message->id() <= dialog->readInboxMaxId())) // Message is read, don't notify
         return;
 
     PeerNotifySettings* notifysettings = dialog->notifySettings();
 
-    if(!message->isMentioned() && (notifysettings->isSilent() || notifysettings->muteUntil() > 0))
+    if(!message->isMentioned() && (notifysettings->isSilent() || (notifysettings->muteUntil() > 0)))
         return;
 
     NotificationObject notification;
