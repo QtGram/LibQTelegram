@@ -196,14 +196,12 @@ void DC::handleReply(MTProtoReply *mtreply)
         bool handled = UpdateHandler_instance->handle(mtreply);
 
         if(!handled)
-        {
             this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
 
-            if(req)
-                emit req->replied(mtreply);
-            else
-                qWarning("DC %d Request for msg_id %llx not found", this->id(), mtreply->messageId());
-        }
+        if(req)
+            emit req->replied(mtreply);
+        else if(!handled)
+            qWarning("DC %d Request for msg_id %llx not found", this->id(), mtreply->messageId());
     }
     else
         emit authorizationReply(mtreply);
