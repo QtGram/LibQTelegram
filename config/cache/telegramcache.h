@@ -85,6 +85,7 @@ class TelegramCache: public QObject
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessage(Message* message);
+        void incomingMessage(Message* message);
         void readHistory(Dialog* dialog);
         void typing(Dialog* dialog, SendMessageAction* sendmessageaction);
 

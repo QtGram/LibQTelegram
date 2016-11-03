@@ -30,7 +30,7 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
     if(this->_telegram)
     {
         connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, [this]() {
-            connect(TelegramCache_instance, &TelegramCache::newMessage, this, &TelegramNotifications::onNewMessage, Qt::UniqueConnection);
+            connect(TelegramCache_instance, &TelegramCache::incomingMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
         });
     }
 
@@ -55,9 +55,9 @@ void TelegramNotifications::setMute(bool mute)
     emit muteChanged();
 }
 
-void TelegramNotifications::onNewMessage(Message *message)
+void TelegramNotifications::onIncomingMessage(Message *message)
 {
-    if(this->_mute || !this->_telegram || message->isOut())
+    if(this->_mute || !this->_telegram)
         return;
 
     Dialog* dialog = TelegramCache_instance->dialog(TelegramHelper::messageToDialog(message));

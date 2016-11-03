@@ -24,7 +24,7 @@ class TelegramNotifications : public QObject
         void setMute(bool mute);
 
     private slots:
-        void onNewMessage(Message* message);
+        void onIncomingMessage(Message* message);
 
     signals:
         void newMessage(const NotificationObject* notification);
