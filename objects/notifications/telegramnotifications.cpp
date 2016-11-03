@@ -1,8 +1,10 @@
 #include "telegramnotifications.h"
+#include "../../mtproto/mtprotoupdatehandler.h"
 #include "../../config/cache/telegramcache.h"
 
 TelegramNotifications::TelegramNotifications(QObject *parent) : QObject(parent), _telegram(NULL), _currentdialog(NULL), _mute(false)
 {
+    connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
 }
 
 Telegram *TelegramNotifications::telegram() const
@@ -27,13 +29,6 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
 
     this->_telegram = telegram;
 
-    if(this->_telegram)
-    {
-        connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, [this]() {
-            connect(TelegramCache_instance, &TelegramCache::incomingMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
-        });
-    }
-
     emit telegramChanged();
 }
 
@@ -57,7 +52,7 @@ void TelegramNotifications::setMute(bool mute)
 
 void TelegramNotifications::onIncomingMessage(Message *message)
 {
-    if(this->_mute || !this->_telegram)
+    if(this->_mute || !this->_telegram || message->isOut() || (message->constructorId() != TLTypes::Message))
         return;
 
     Dialog* dialog = TelegramCache_instance->dialog(TelegramHelper::messageToDialog(message));

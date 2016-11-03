@@ -69,6 +69,7 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
         {
             Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_me);
             emit newMessage(message);
+            emit newSingleMessage(message);
             break;
         }
 

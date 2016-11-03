@@ -220,9 +220,6 @@ void TelegramCache::insert(Message *message)
     messages << message;
 
     this->onNewMessages(messages);
-
-    if(!message->isOut() && (message->constructorId() == TLTypes::Message))
-        emit incomingMessage(message);
 }
 
 void TelegramCache::onDialogsReceived(const TLVector<Dialog *> &dialogs)
