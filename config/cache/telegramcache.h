@@ -11,6 +11,7 @@
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
 
+#define TelegramCache_dialog(dialogid) TelegramCache::cache()->dialog(dialogid)
 #define TelegramCache_user(userid) TelegramCache::cache()->user(userid)
 #define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
 #define TelegramCache_message(messageid, dialog) TelegramCache::cache()->message(messageid, dialog)

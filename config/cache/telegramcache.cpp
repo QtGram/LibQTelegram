@@ -221,7 +221,7 @@ void TelegramCache::insert(Message *message)
 
     this->onNewMessages(messages);
 
-    if(!message->isOut())
+    if(!message->isOut() && (message->constructorId() == TLTypes::Message))
         emit incomingMessage(message);
 }
 
