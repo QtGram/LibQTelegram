@@ -27,7 +27,7 @@ class DialogsModel : public TelegramModel
     public:
         explicit DialogsModel(QObject *parent = 0);
         virtual QVariant data(const QModelIndex &index, int role) const;
-        virtual int rowCount(const QModelIndex &) const;
+        virtual int rowCount(const QModelIndex& = QModelIndex()) const;
         virtual QHash<int, QByteArray> roleNames() const;
 
     public slots:
