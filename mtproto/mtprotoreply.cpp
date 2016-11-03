@@ -82,6 +82,11 @@ QByteArray MTProtoReply::body()
     return this->_buffer.readAll();
 }
 
+void MTProtoReply::seekToBody()
+{
+    this->seek(this->_bodystart);
+}
+
 void MTProtoReply::readPlainMessage()
 {
     this->_messageid = this->readTLLong();

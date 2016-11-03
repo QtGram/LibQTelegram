@@ -198,7 +198,7 @@ void DC::handleReply(MTProtoReply *mtreply)
         if(!handled)
             this->decompile(MTProtoDecompiler::DIRECTION_IN, mtreply->messageId(), mtreply->cbody());
         else
-            mtreply->reset(); // Prepare buffer to be handled in "replied" slots
+            mtreply->seekToBody(); // Prepare buffer to be handled in "replied" slots
 
         if(req)
             emit req->replied(mtreply);

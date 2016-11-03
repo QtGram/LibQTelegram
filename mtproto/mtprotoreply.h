@@ -21,6 +21,7 @@ class MTProtoReply : public MTProtoStream
         TLConstructor constructorId() const;
         QByteArray cbody() const;
         QByteArray body();
+        void seekToBody();
 
     private:
         MTProtoReply(int dcid, QObject* parent = 0);
