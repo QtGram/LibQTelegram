@@ -14,7 +14,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
              (updates->constructorId() == TLTypes::UpdateShortChatMessage));
 
     Message* message = new Message();
-    message->setConstructorId(Message::CtorMessage);
+    message->setConstructorId(TLTypes::Message);
     message->setFlags(updates->flags());
     message->setIsOut(updates->isOut());
     message->setIsMentioned(updates->isMentioned());
@@ -31,7 +31,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     if(updates->constructorId() == TLTypes::UpdateShortMessage)
     {
         Peer* topeer = new Peer();
-        topeer->setConstructorId(Peer::CtorPeerUser);
+        topeer->setConstructorId(TLTypes::PeerUser);
         topeer->setUserId(updates->isOut() ? updates->userId() : me->id());
 
         message->setFromId(updates->isOut() ? me->id() : updates->userId());
@@ -40,7 +40,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     else if(updates->constructorId() == TLTypes::UpdateShortChatMessage)
     {
         Peer* topeer = new Peer();
-        topeer->setConstructorId(Peer::CtorPeerChat);
+        topeer->setConstructorId(TLTypes::PeerChat);
         topeer->setChatId(updates->chatId());
 
         message->setFromId(updates->fromId());
@@ -53,7 +53,7 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
 Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer)
 {
     Message* message = new Message();
-    message->setConstructorId(Message::CtorMessage);
+    message->setConstructorId(TLTypes::Message);
     message->setMessage(text);
     message->setDate(QDateTime::currentDateTime().toTime_t());
     message->setFromId(me->id());
