@@ -1,6 +1,8 @@
 #include "telegramhelper.h"
 #include <QDateTime>
 
+#define CurrentTimeStamp QDateTime::currentDateTime().toTime_t()
+
 TelegramHelper::TelegramHelper()
 {
 
@@ -206,7 +208,12 @@ QString TelegramHelper::statusText(User *user)
             return QObject::tr("Last seen %1").arg(TelegramHelper::dateString(user->status()->wasOnline()));
 
         if(user->status()->constructorId() == TLTypes::UserStatusOnline)
+        {
+            if(CurrentTimeStamp >= static_cast<uint>(user->status()->expires()))
+                return QObject::tr("Last seen %1").arg(TelegramHelper::dateString(user->status()->expires()));
+
             return QObject::tr("Online");
+        }
 
         if(user->status()->constructorId() == TLTypes::UserStatusRecently)
             return QObject::tr("Recently");
