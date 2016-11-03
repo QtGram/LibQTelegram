@@ -303,7 +303,7 @@ void DialogsModel::onDialogNewDraftMessage(Dialog *dialog)
     if(idx == newidx)
         return;
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx);
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx + 1);
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
@@ -321,7 +321,7 @@ void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
     if(idx == newidx)
         return;
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx);
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx + 1);
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
