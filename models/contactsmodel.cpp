@@ -1,11 +1,11 @@
 #include "contactsmodel.h"
 #include "../config/cache/telegramcache.h"
 
-ContactsModel::ContactsModel(QObject *parent) : TelegramModel(parent)
+ContactsModel::ContactsModel(QObject *parent) : TelegramModel(parent), _pendingdialogid(0)
 {
 }
 
-void ContactsModel::createGroup(const QString& title, const QVariantList& users)
+void ContactsModel::createChat(const QString& title, const QVariantList& users)
 {
     TLVector<InputUser*> inputusers;
     inputusers << TelegramHelper::inputUser(TelegramConfig_me, this);
@@ -13,8 +13,15 @@ void ContactsModel::createGroup(const QString& title, const QVariantList& users)
     foreach(QVariant user, users)
         inputusers << TelegramHelper::inputUser(user.value<User*>(), this);
 
-    TelegramAPI::messagesCreateChat(DC_MainSession, inputusers, ToTLString(title));
+    MTProtoRequest* req = TelegramAPI::messagesCreateChat(DC_MainSession, inputusers, ToTLString(title));
+    connect(req, &MTProtoRequest::replied, this, &ContactsModel::onCreateChannelOrChatReplied);
     qDeleteAll(inputusers);
+}
+
+void ContactsModel::createChannel(const QString &title, const QString& description)
+{
+    MTProtoRequest* req = TelegramAPI::channelsCreateChannel(DC_MainSession, ToTLString(title), ToTLString(description));
+    connect(req, &MTProtoRequest::replied, this, &ContactsModel::onCreateChannelOrChatReplied);
 }
 
 QVariant ContactsModel::data(const QModelIndex &index, int role) const
@@ -61,17 +68,62 @@ QHash<int, QByteArray> ContactsModel::roleNames() const
 
 void ContactsModel::telegramReady()
 {
-    this->_contacts = TelegramCache_contacts;
-    this->sortUsers();
-}
+    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &ContactsModel::onNewDialogs);
 
-void ContactsModel::sortUsers()
-{
     this->beginResetModel();
+    this->_contacts = TelegramCache_contacts;
 
     std::sort(this->_contacts.begin(), this->_contacts.end(), [](User* usr1, User* usr2) {
         return TelegramHelper::fullName(usr1) < TelegramHelper::fullName(usr2);
     });
 
     this->endResetModel();
+}
+
+void ContactsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
+{
+    if(!this->_pendingdialogid)
+        return;
+
+    foreach(Dialog* dialog, dialogs)
+    {
+        if(TelegramHelper::identifier(dialog) == this->_pendingdialogid)
+        {
+            this->_pendingdialogid = 0;
+            emit dialogCreated(dialog);
+            return;
+        }
+    }
+}
+
+void ContactsModel::onCreateChannelOrChatReplied(MTProtoReply *mtreply)
+{
+    Updates updates;
+    updates.read(mtreply);
+
+    TLInt dialogid = this->getDialogId(&updates);
+
+    if(!dialogid)
+        return;
+
+    this->_pendingdialogid = dialogid;
+    Dialog* dialog = TelegramCache_instance->dialog(dialogid, true);
+
+    if(!dialog)
+        return;
+
+    this->_pendingdialogid = 0;
+    emit dialogCreated(dialog);
+}
+
+TLInt ContactsModel::getDialogId(Updates *updates) const
+{
+    foreach(Update* update, updates->updates())
+    {
+        if(update->constructorId() == TLTypes::UpdateNewMessage)
+            return TelegramHelper::messageToDialog(update->messageUpdatenewmessage());
+    }
+
+    qWarning("Cannot find the first message of the new chat");
+    return 0;
 }

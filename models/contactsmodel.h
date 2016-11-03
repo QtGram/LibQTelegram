@@ -18,7 +18,8 @@ class ContactsModel : public TelegramModel
         explicit ContactsModel(QObject *parent = 0);
 
     public slots:
-        void createGroup(const QString &title, const QVariantList &users);
+        void createChat(const QString &title, const QVariantList &users);
+        void createChannel(const QString &title, const QString &description);
 
     protected:
         virtual QVariant data(const QModelIndex &index, int role) const;
@@ -26,11 +27,19 @@ class ContactsModel : public TelegramModel
         virtual QHash<int, QByteArray> roleNames() const;
         virtual void telegramReady();
 
+    private slots:
+        void onNewDialogs(const TLVector<Dialog*>& dialogs);
+        void onCreateChannelOrChatReplied(MTProtoReply* mtreply);
+
     private:
-        void sortUsers();
+        TLInt getDialogId(Updates* updates) const;
+
+    signals:
+        void dialogCreated(Dialog* dialog);
 
     private:
         QList<User*> _contacts;
+        TLInt _pendingdialogid;
 };
 
 #endif // CONTACTSMODEL_H
