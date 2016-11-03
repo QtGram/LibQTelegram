@@ -61,6 +61,7 @@ class TelegramCache: public QObject
         void cache(const TLVector<Chat *> &chats);
         void cache(const TLVector<Message *> &messages);
         void insert(Message* message);
+        void insert(Dialog* dialog);
 
     private slots:
         void onNewUserStatus(Update* update);

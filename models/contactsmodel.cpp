@@ -5,6 +5,19 @@ ContactsModel::ContactsModel(QObject *parent) : TelegramModel(parent), _pendingd
 {
 }
 
+void ContactsModel::createDialog(User *user)
+{
+    Dialog* dialog = TelegramCache_instance->dialog(user->id(), true);
+
+    if(!dialog)
+    {
+        dialog = TelegramHelper::createDialog(user);
+        TelegramCache_insert(dialog);
+    }
+
+    emit dialogCreated(dialog);
+}
+
 void ContactsModel::createChat(const QString& title, const QVariantList& users)
 {
     TLVector<InputUser*> inputusers;

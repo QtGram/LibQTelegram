@@ -222,6 +222,13 @@ void TelegramCache::insert(Message *message)
     this->onNewMessages(messages);
 }
 
+void TelegramCache::insert(Dialog *dialog)
+{
+    this->_dialogs << dialog;
+
+    emit newDialogs((TLVector<Dialog*>() << dialog));
+}
+
 void TelegramCache::onDialogsReceived(const TLVector<Dialog *> &dialogs)
 {
     this->cache(dialogs);

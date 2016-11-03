@@ -18,6 +18,7 @@ class ContactsModel : public TelegramModel
         explicit ContactsModel(QObject *parent = 0);
 
     public slots:
+        void createDialog(User* user);
         void createChat(const QString &title, const QVariantList &users);
         void createChannel(const QString &title, const QString &description);
 

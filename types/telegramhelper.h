@@ -12,6 +12,7 @@ class TelegramHelper
     public:
         static Message* createMessage(Updates *updates, User *me);
         static Message* createMessage(const QString& text, User *me, Peer *peer);
+        static Dialog* createDialog(User* user);
         static InputFileLocation* inputFileLocation(FileLocation *filelocation);
         static InputFileLocation* inputFileLocation(Document* document);
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash, QObject* parent = 0);

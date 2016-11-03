@@ -63,6 +63,19 @@ Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer
     return message;
 }
 
+Dialog *TelegramHelper::createDialog(User *user)
+{
+    Peer* peer = new Peer();
+    peer->setConstructorId(TLTypes::PeerUser);
+    peer->setUserId(user->id());
+
+    Dialog* dialog = new Dialog();
+    dialog->setConstructorId(TLTypes::Dialog);
+    dialog->setPeer(peer);
+
+    return dialog;
+}
+
 InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
 {
     InputFileLocation* inputfilelocation = new InputFileLocation();
