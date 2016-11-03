@@ -4,6 +4,8 @@
 #include "models/dialogsmodel.h"
 #include "models/messagesmodel.h"
 #include "models/contactsmodel.h"
+#include "notifications/telegramnotifications.h"
+#include "notifications/notificationobject.h"
 #include "quick/qquickpeerimage.h"
 #include "quick/qquickmediamessageitem.h"
 
@@ -29,6 +31,8 @@ void TelegramQmlBase::initialize(const QString &uri)
     // Main objects
     REGISTER_OBJECT(TelegramInitializer);
     REGISTER_OBJECT(Telegram);
+    REGISTER_OBJECT(TelegramNotifications);
+    REGISTER_OBJECT(NotificationObject);
 
     // Models
     REGISTER_OBJECT(ContactsModel);

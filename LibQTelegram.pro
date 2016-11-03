@@ -249,7 +249,9 @@ SOURCES += \
     quick/qquickmediamessageitem.cpp \
     quick/qquickpeerimage.cpp \
     quick/qquickbaseitem.cpp \
-    config/cache/cachefetcher.cpp
+    config/cache/cachefetcher.cpp \
+    objects/notifications/telegramnotifications.cpp \
+    objects/notifications/notificationobject.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -491,4 +493,6 @@ HEADERS +=\
     quick/qquickmediamessageitem.h \
     quick/qquickpeerimage.h \
     quick/qquickbaseitem.h \
-    config/cache/cachefetcher.h
+    config/cache/cachefetcher.h \
+    objects/notifications/telegramnotifications.h \
+    objects/notifications/notificationobject.h
