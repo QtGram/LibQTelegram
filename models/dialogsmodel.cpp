@@ -244,7 +244,7 @@ QString DialogsModel::firstMessageLine(Message *message) const
     int newline = preview.indexOf("\n");
 
     if(newline > -1)
-        return preview.left(newline - 1);
+        return preview.left(newline).simplified();
 
     return preview;
 }
