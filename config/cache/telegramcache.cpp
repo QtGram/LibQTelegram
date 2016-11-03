@@ -306,7 +306,7 @@ void TelegramCache::onReadHistory(Update *update)
     if(!isout)
     {
         dialog->setReadInboxMaxId(update->maxId());
-        dialog->setUnreadCount(0);
+        dialog->setUnreadCount(dialog->topMessage() - update->maxId());
     }
     else
         dialog->setReadOutboxMaxId(update->maxId());
