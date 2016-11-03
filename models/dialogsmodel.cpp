@@ -3,13 +3,6 @@
 
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
-    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
-    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory);
-    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged);
-    connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage);
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
@@ -368,6 +361,14 @@ void DialogsModel::onReadHistory(Dialog *dialog)
 
 void DialogsModel::telegramReady()
 {
+    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory);
+    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage);
+    connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage);
+
     this->_dialogs = TelegramCache_dialogs;
     this->sortDialogs();
 }
