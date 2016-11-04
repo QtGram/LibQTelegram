@@ -2,7 +2,8 @@
 #define DC_H
 
 #define QueryTimeout                 15000  // 15 seconds
-#define AckTimeout                   16000 //  16 seconds
+#define AckTimeout                   16000  // 16 seconds
+#define CloseDCTimeout                5000  //  5 seconds
 #define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 
 #include <QTimer>
@@ -23,6 +24,11 @@ class DC : public DCConnection
         void send(MTProtoRequest *req);
         void keepRequest(MTProtoRequest *req);
         MTProtoRequest* giveRequest();
+        void addSessionRef();
+        void removeSessionRef();
+
+    protected:
+        virtual void timerEvent(QTimerEvent *event);
 
     private:
         void decompile(int direction, TLLong messageid, const QByteArray &body);
@@ -58,6 +64,8 @@ class DC : public DCConnection
         TLInt _contentmsgno;
         TLLong _lastmsgid;
         int _dcid;
+        int _ownedsessions;
+        int _timcloseconnection;
 
     private:
         static TLLong _lastclientmsgid;

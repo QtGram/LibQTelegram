@@ -9,10 +9,16 @@ DCSession::DCSession(DC *dc, QObject *parent) : QObject(parent), _dc(dc)
     this->_acktimer->setInterval(AckTimeout);
 
     this->generateSessionId();
+    dc->addSessionRef();
 
     connect(dc, &DC::unauthorized, this, &DCSession::requestAuthorization);
     connect(dc, &DC::connected, this, &DCSession::requestAuthorization);
     connect(this->_acktimer, &QTimer::timeout, this, &DCSession::sendAck);
+}
+
+DCSession::~DCSession()
+{
+    this->_dc->removeSessionRef();
 }
 
 bool DCSession::ownedDc() const

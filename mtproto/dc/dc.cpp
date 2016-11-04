@@ -3,10 +3,11 @@
 #include "../mtprotoupdatehandler.h"
 #include "../mtprotoreply.h"
 #include <QDateTime>
+#include <QTimerEvent>
 
 TLLong DC::_lastclientmsgid = 0;
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0)
+DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
@@ -280,6 +281,38 @@ MTProtoRequest *DC::giveRequest()
 
     this->_savedrequest = NULL;
     return req;
+}
+
+void DC::addSessionRef()
+{
+    this->_ownedsessions++;
+}
+
+void DC::removeSessionRef()
+{
+    this->_ownedsessions--;
+
+    Q_ASSERT(this->_ownedsessions >= 0);
+
+    if(this->_ownedsessions == 0)
+    {
+        if(DCConfig_mainDcId == this->id() || (this->_timcloseconnection > 0)) // Main DC or timer is already running
+            return;
+
+        if(this->_pendingrequests.count() > 0)
+            qWarning("DC %d contains unhandled pending requests", this->id());
+
+        this->_timcloseconnection = this->startTimer(CloseDCTimeout);
+    }
+}
+
+void DC::timerEvent(QTimerEvent *event)
+{
+    if(this->_pendingrequests.count() <= 0)
+        this->close();
+
+    killTimer(event->timerId());
+    this->_timcloseconnection = 0;
 }
 
 void DC::onDCReadyRead()

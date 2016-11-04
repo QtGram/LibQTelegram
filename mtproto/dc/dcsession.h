@@ -14,6 +14,7 @@ class DCSession : public QObject
 
     public:
         explicit DCSession(DC* dc, QObject *parent = 0);
+        ~DCSession();
         bool ownedDc() const;
         TLLong sessionId() const;
         DC* dc() const;
