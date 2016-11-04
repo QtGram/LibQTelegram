@@ -33,8 +33,11 @@ class DialogsModel : public TelegramModel
     public slots:
         int indexOf(Dialog* dialog) const;
         Dialog* getDialog(TLInt dialogid) const;
+        void removeDialog(int index);
+        void clearHistory(int index);
 
     private:
+        void doRemoveDialog(int index);
         int insertionPoint(Dialog* changeddialog, int fromidx) const;
         int indexOf(TLInt dialogid) const;
         QString messageFrom(Message *message) const;

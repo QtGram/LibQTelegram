@@ -7,6 +7,7 @@
 
 #define TelegramCache_hasDialog(dialogid) TelegramCache::cache()->hasDialog(dialogid)
 #define TelegramCache_markAsRead(dialog, inmaxid, outmaxid) TelegramCache::cache()->markAsRead(dialog, inmaxid, outmaxid)
+#define TelegramCache_clearHistory(dialog) TelegramCache::cache()->clearHistory(dialog)
 
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
@@ -16,7 +17,9 @@
 #define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
 #define TelegramCache_message(messageid, dialog) TelegramCache::cache()->message(messageid, dialog)
 
-#define TelegramCache_insert(message) TelegramCache::cache()->insert(message)
+#define TelegramCache_insert(obj) TelegramCache::cache()->insert(obj)
+#define TelegramCache_remove(obj) TelegramCache::cache()->remove(obj)
+
 #define TelegramCache_messages(dialog, offset, limit) TelegramCache::cache()->dialogMessages(dialog, offset, limit)
 #define TelegramCache_lastDialogMessages(dialog) TelegramCache::cache()->lastDialogMessages(dialog)
 
@@ -48,10 +51,11 @@ class TelegramCache: public QObject
         Chat* chat(TLInt id, bool ignoreerror = false);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
-        bool hasDialog(TLInt id) const;
-        void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);
 
     public slots:
+        bool hasDialog(TLInt id) const;
+        void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);
+        void clearHistory(Dialog* dialog);
         void cache(Dialog* dialog);
         void cache(User* user);
         void cache(Chat* chat);
@@ -62,6 +66,7 @@ class TelegramCache: public QObject
         void cache(const TLVector<Message *> &messages);
         void insert(Message* message);
         void insert(Dialog* dialog);
+        void remove(Dialog* dialog);
 
     private slots:
         void onNewUserStatus(Update* update);

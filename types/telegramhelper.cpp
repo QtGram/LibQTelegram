@@ -100,6 +100,11 @@ InputFileLocation *TelegramHelper::inputFileLocation(Document *document)
     return inputfilelocation;
 }
 
+InputPeer *TelegramHelper::inputPeer(Dialog *dialog, TLLong accesshash, QObject *parent)
+{
+    return TelegramHelper::inputPeer(dialog->peer(), accesshash, parent);
+}
+
 InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *parent)
 {
     InputPeer* inputpeer = new InputPeer(parent);

@@ -25,6 +25,20 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     this->execute(queryobj);
 }
 
+void MessagesTable::removeDialogMessages(TLInt dialogid, TLVector<MessageId> deletedmessages)
+{
+    if(!this->prepareDelete(dialogid, deletedmessages))
+        return;
+
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "DELETE FROM " + this->name() + " WHERE dialogid = :dialogid"))
+        return;
+
+    queryobj.bindValue(":dialogid", dialogid);
+    this->execute(queryobj);
+}
+
 Message *MessagesTable::topMessage(Dialog *dialog, QHash<MessageId, Message *> &messages, QObject *parent)
 {
     TLInt dialogid = TelegramHelper::identifier(dialog);
@@ -80,6 +94,31 @@ QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<Mess
 
     this->loadMessages(queryobj, result, messages, true, parent);
     return result;
+}
+
+bool MessagesTable::prepareDelete(TLInt dialogid, TLVector<MessageId> &deletedmessages)
+{
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "SELECT id FROM " + this->name() + " WHERE dialogid = :dialogid"))
+        return false;
+
+    queryobj.bindValue(":dialogid", dialogid);
+
+    if(!this->execute(queryobj))
+        return false;
+
+    while(queryobj.next())
+    {
+        MessageId messageid = queryobj.value("id").toLongLong();
+
+        if(!deletedmessages.contains(messageid))
+            continue;
+
+        deletedmessages << messageid;
+    }
+
+    return queryobj.numRowsAffected() > 0;
 }
 
 void MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, QHash<MessageId, Message *> &messages, bool append, QObject *parent) const

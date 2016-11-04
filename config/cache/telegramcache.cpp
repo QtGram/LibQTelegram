@@ -125,6 +125,28 @@ void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
     emit readHistory(dialog);
 }
 
+void TelegramCache::clearHistory(Dialog *dialog)
+{
+    dialog->setUnreadCount(0);
+    dialog->setTopMessage(0);
+    this->cache(dialog);
+
+    TLVector<MessageId> deletedmessages;
+    this->_database->messages()->removeDialogMessages(TelegramHelper::identifier(dialog), deletedmessages);
+
+    foreach(MessageId messageid, deletedmessages)
+    {
+        if(!this->_messages.contains(messageid))
+            continue;
+
+        Message* message = this->_messages.take(messageid);
+        emit deleteMessage(message);
+        message->deleteLater();
+    }
+
+    emit readHistory(dialog);
+}
+
 void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 {
     this->_database->transaction([this, dialogs](QSqlQuery& queryobj) {
@@ -227,6 +249,30 @@ void TelegramCache::insert(Dialog *dialog)
     this->_dialogs << dialog;
 
     emit newDialogs((TLVector<Dialog*>() << dialog));
+}
+
+void TelegramCache::remove(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx != -1)
+        this->_dialogs.removeAt(idx);
+
+    TLVector<MessageId> deletedmessages;
+    TLInt dialogid = TelegramHelper::identifier(dialog);
+
+    this->_database->dialogs()->remove(dialogid);
+    this->_database->messages()->removeDialogMessages(dialogid, deletedmessages);
+
+    foreach(MessageId messageid, deletedmessages)
+    {
+        if(!this->_messages.contains(messageid))
+            continue;
+
+        Message* message = this->_messages.take(messageid);
+        emit deleteMessage(message);
+        message->deleteLater();
+    }
 }
 
 void TelegramCache::onDialogsReceived(const TLVector<Dialog *> &dialogs)

@@ -15,7 +15,8 @@ class TelegramHelper
         static Dialog* createDialog(User* user);
         static InputFileLocation* inputFileLocation(FileLocation *filelocation);
         static InputFileLocation* inputFileLocation(Document* document);
-        static InputPeer* inputPeer(Peer* peer, TLLong accesshash, QObject* parent = 0);
+        static InputPeer* inputPeer(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
+        static InputPeer* inputPeer(Peer* peer, TLLong accesshash = 0, QObject* parent = 0);
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
         static QString dateString(TLInt timestamp);

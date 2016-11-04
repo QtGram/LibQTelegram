@@ -184,6 +184,58 @@ Dialog *DialogsModel::getDialog(TLInt dialogid) const
     return NULL;
 }
 
+void DialogsModel::removeDialog(int index)
+{
+    if(!this->_telegram || (index < 0) || (index >= this->_dialogs.length()))
+        return;
+
+    Dialog* dialog = this->_dialogs[index];
+
+    if(dialog->topMessage() > 0)
+    {
+        InputPeer* inputpeer = this->_telegram->createInputPeer(dialog, this);
+        MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
+
+        connect(req, &MTProtoRequest::replied, [this, inputpeer, index](MTProtoReply*) {
+            inputpeer->deleteLater();
+            this->doRemoveDialog(index);
+        });
+
+        return;
+    }
+
+    this->doRemoveDialog(index);
+}
+
+void DialogsModel::clearHistory(int index)
+{
+    if(!this->_telegram || (index < 0) || (index >= this->_dialogs.length()))
+        return;
+
+    Dialog* dialog = this->_dialogs[index];
+
+    if(dialog->topMessage() <= 0)
+        return;
+
+    InputPeer* inputpeer = this->_telegram->createInputPeer(dialog, this);
+    MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
+
+    connect(req, &MTProtoRequest::replied, [this, dialog, inputpeer, index](MTProtoReply*) {
+        inputpeer->deleteLater();
+        TelegramCache_clearHistory(dialog);
+    });
+}
+
+void DialogsModel::doRemoveDialog(int index)
+{
+    Dialog* dialog = this->_dialogs[index];
+
+    this->beginRemoveRows(QModelIndex(), index, index);
+    this->_dialogs.removeAt(index);
+    TelegramCache_remove(dialog);
+    this->endRemoveRows();
+}
+
 int DialogsModel::insertionPoint(Dialog *changeddialog, int fromidx) const
 {
     if(!changeddialog->topMessage())

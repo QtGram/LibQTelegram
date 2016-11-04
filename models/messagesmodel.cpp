@@ -459,24 +459,7 @@ void MessagesModel::createInputPeer()
     if(this->_inputpeer)
         return;
 
-    TLLong accesshash = 0;
-
-    if(TelegramHelper::isChannel(this->_dialog) || TelegramHelper::isChat(this->_dialog))
-    {
-        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(this->_dialog));
-
-        if(chat)
-            accesshash = chat->accessHash();
-    }
-    else
-    {
-        User* user = TelegramCache_user(TelegramHelper::identifier(this->_dialog));
-
-        if(user)
-            accesshash = user->accessHash();
-    }
-
-    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog->peer(), accesshash, this);
+    this->_inputpeer = this->_telegram->createInputPeer(this->_dialog, this);
 }
 
 void MessagesModel::telegramReady()

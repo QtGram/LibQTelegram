@@ -261,6 +261,28 @@ TelegramObject *Telegram::messageFrom(Message *message) const
     return NULL;
 }
 
+InputPeer *Telegram::createInputPeer(Dialog *dialog, QObject* parent) const
+{
+    TLLong accesshash = 0;
+
+    if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
+    {
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog));
+
+        if(chat)
+            accesshash = chat->accessHash();
+    }
+    else
+    {
+        User* user = TelegramCache_user(TelegramHelper::identifier(dialog));
+
+        if(user)
+            accesshash = user->accessHash();
+    }
+
+    return TelegramHelper::inputPeer(dialog, accesshash, parent);
+}
+
 QString Telegram::messageText(Message *message) const
 {
     if(!message)
