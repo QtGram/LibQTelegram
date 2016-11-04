@@ -21,6 +21,7 @@ class QQuickPeerImage : public QQuickBaseItem
         void setSize(int size);
 
     private:
+        TelegramObject* findPeer(TelegramObject* peer);
         void initialize();
         void updateMetrics();
         void updateSource(QVariant sourcevalue);

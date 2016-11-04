@@ -35,12 +35,30 @@ void QQuickPeerImage::setSize(int size)
     emit sizeChanged();
 }
 
+TelegramObject *QQuickPeerImage::findPeer(TelegramObject *peer)
+{
+    if(peer->constructorId() != TLTypes::Message)
+        return peer;
+
+    Message* message = qobject_cast<Message*>(peer);
+
+    if(message->isPost() || !message->fromId())
+        return peer;
+
+    User* user = TelegramCache_user(message->fromId());
+
+    if(!user)
+        return peer;
+
+    return user;
+}
+
 void QQuickPeerImage::initialize()
 {
     if(!this->_peer || this->_mediaelement)
         return;
 
-    FileObject* fileobject = this->createFileObject(this->_peer);
+    FileObject* fileobject = this->createFileObject(this->findPeer(this->_peer));
 
     if(fileobject)
     {
