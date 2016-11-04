@@ -1,5 +1,6 @@
 #include "dialogsmodel.h"
 #include "../config/cache/telegramcache.h"
+#include "../objects/sendstatus/sendstatushandler.h"
 
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
 {
@@ -20,6 +21,9 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
 
     if(role == DialogsModel::UnreadCountRole)
         return dialog->unreadCount();
+
+    if(role == DialogsModel::PeerActionRole)
+        return SendStatusHandler_dialogSendStatus(dialog);
 
     if(role == DialogsModel::TopMessageRole)
     {
@@ -153,6 +157,7 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     roles[DialogsModel::TitleRole] = "title";
     roles[DialogsModel::DraftMessageRole] = "draftMessage";
     roles[DialogsModel::UnreadCountRole] = "unreadCount";
+    roles[DialogsModel::PeerActionRole] = "peerAction";
     roles[DialogsModel::TopMessageRole] = "topMessage";
     roles[DialogsModel::TopMessageFromRole] = "topMessageFrom";
     roles[DialogsModel::TopMessageTextRole] = "topMessageText";
@@ -340,6 +345,16 @@ void DialogsModel::sortDialogs()
     this->endResetModel();
 }
 
+void DialogsModel::onSendStatusUpdated(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChangedRoles(idx, DialogRoles::PeerActionRole);
+}
+
 void DialogsModel::onDialogUnreadCountChanged(Dialog *dialog)
 {
     int idx = this->_dialogs.indexOf(dialog);
@@ -442,13 +457,15 @@ void DialogsModel::onReadHistory(Dialog *dialog)
 
 void DialogsModel::telegramReady()
 {
-    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs);
-    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory);
-    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged);
-    connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage);
-    connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage);
+    connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage, Qt::UniqueConnection);
+
+    connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &DialogsModel::onSendStatusUpdated, Qt::UniqueConnection);
 
     this->_dialogs = TelegramCache_dialogs;
     this->sortDialogs();

@@ -60,6 +60,7 @@ class MessagesModel : public TelegramModel
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onMessagesReadHistoryReplied(MTProtoReply* mtreply);
+        void onSendStatusUpdated(Dialog* dialog);
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);

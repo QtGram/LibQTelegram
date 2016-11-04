@@ -251,7 +251,9 @@ SOURCES += \
     quick/qquickbaseitem.cpp \
     config/cache/cachefetcher.cpp \
     objects/notifications/telegramnotifications.cpp \
-    objects/notifications/notificationobject.cpp
+    objects/notifications/notificationobject.cpp \
+    objects/sendstatus/sendstatushandler.cpp \
+    objects/sendstatus/sendstatusobject.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -495,4 +497,6 @@ HEADERS +=\
     quick/qquickbaseitem.h \
     config/cache/cachefetcher.h \
     objects/notifications/telegramnotifications.h \
-    objects/notifications/notificationobject.h
+    objects/notifications/notificationobject.h \
+    objects/sendstatus/sendstatushandler.h \
+    objects/sendstatus/sendstatusobject.h

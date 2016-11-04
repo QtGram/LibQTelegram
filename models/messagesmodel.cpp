@@ -1,5 +1,6 @@
 #include "messagesmodel.h"
 #include "../config/cache/telegramcache.h"
+#include "../objects/sendstatus/sendstatushandler.h"
 #include "../crypto/math.h"
 
 #define MessagesFirstLoad 30
@@ -7,10 +8,6 @@
 
 MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _newmessageindex(-1), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
-    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
-    connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
-    connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
-
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isChatChanged);
@@ -46,6 +43,9 @@ QString MessagesModel::statusText() const
 {
     if(!this->_telegram)
         return QString();
+
+    if(SendStatusHandler_hasSendStatus(this->_dialog))
+        return SendStatusHandler_dialogSendStatus(this->_dialog);
 
     return this->_telegram->dialogStatusText(this->_dialog);
 }
@@ -285,6 +285,14 @@ void MessagesModel::onMessagesReadHistoryReplied(MTProtoReply *mtreply)
     TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
 }
 
+void MessagesModel::onSendStatusUpdated(Dialog *dialog)
+{
+    if(this->_dialog != dialog)
+        return;
+
+    emit statusTextChanged();
+}
+
 void MessagesModel::onNewMessage(Message *message)
 {
     if(!this->ownMessage(message))
@@ -466,6 +474,12 @@ void MessagesModel::telegramReady()
 {
     if(!this->_dialog)
         return;
+
+    connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
+    connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
+    connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
+
+    connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::onSendStatusUpdated);
 
     if(TelegramHelper::isChannel(this->_dialog) || (TelegramHelper::isChat(this->_dialog)))
     {

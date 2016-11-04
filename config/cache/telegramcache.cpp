@@ -27,7 +27,6 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
-    connect(UpdateHandler_instance, SIGNAL(typing(Update*)), this, SLOT(onTyping(Update*)));
 }
 
 QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
@@ -371,21 +370,6 @@ void TelegramCache::onReadHistory(Update *update)
 
     emit readHistory(dialog);
     emit dialogUnreadCountChanged(dialog);
-}
-
-void TelegramCache::onTyping(Update *update)
-{
-    Q_ASSERT((update->constructorId() == TLTypes::UpdateUserTyping) ||
-             (update->constructorId() == TLTypes::UpdateChatUserTyping));
-
-    User* user = this->user(update->userId());
-
-    if(!user)
-        return;
-
-    TLInt dialogid = (update->constructorId() == TLTypes::UpdateChatUserTyping) ? update->chatId() : update->userId();
-    Dialog* dialog = this->dialog(dialogid);
-    emit typing(dialog, update->action());
 }
 
 void TelegramCache::eraseMessage(MessageId messageid)

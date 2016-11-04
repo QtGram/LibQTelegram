@@ -12,6 +12,7 @@ class DialogsModel : public TelegramModel
             TitleRole = Qt::UserRole + 10,
             DraftMessageRole,
             UnreadCountRole,
+            PeerActionRole,
             TopMessageRole,
             TopMessageFromRole,
             TopMessageTextRole,
@@ -46,6 +47,7 @@ class DialogsModel : public TelegramModel
 
     private slots:
         void sortDialogs();
+        void onSendStatusUpdated(Dialog* dialog);
         void onDialogUnreadCountChanged(Dialog* dialog);
         void onDialogNewMessage(Dialog* dialog);
         void onDialogNewDraftMessage(Dialog* dialog);
