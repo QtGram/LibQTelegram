@@ -56,7 +56,7 @@ class MessagesModel : public TelegramModel
     public slots:
         void sendMessage(const QString& text);
         void replyMessage(const QString& text, Message* replymessage);
-        void editMessage(Message *message, const QString& newmessage);
+        void editMessage(const QString& text, Message *editmessage);
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
