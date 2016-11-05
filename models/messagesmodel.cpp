@@ -258,6 +258,12 @@ void MessagesModel::replyMessage(const QString &text, Message *replymessage)
     this->sendMessage(text, replymessage->id());
 }
 
+void MessagesModel::editMessage(Message* message, const QString& newmessage)
+{
+    this->createInputPeer();
+    TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, message->id(), newmessage, NULL, TLVector<MessageEntity*>());
+}
+
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 {
     MessagesMessages messages;
