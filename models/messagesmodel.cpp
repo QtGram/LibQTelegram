@@ -188,6 +188,20 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageEditedRole)
         return message->editDate() != 0;
 
+    if(role == MessagesModel::NeedsPeerImageRole)
+    {
+        if(!TelegramHelper::isChat(this->_dialog) || message->isOut() || (message->constructorId() == TLTypes::MessageService))
+            return false;
+
+        if(message != this->_messages.last())
+        {
+            Message* previousmessage = this->_messages[index.row() + 1];
+            return message->fromId() != previousmessage->fromId();
+        }
+
+        return true;
+    }
+
     return QVariant();
 }
 
@@ -213,6 +227,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
     roles[MessagesModel::IsMessageEditedRole] = "isMessageEdited";
+    roles[MessagesModel::NeedsPeerImageRole] = "needsPeerImage";
 
     return roles;
 }

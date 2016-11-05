@@ -31,6 +31,7 @@ class MessagesModel : public TelegramModel
             IsMessageServiceRole,
             IsMessageUnreadRole,
             IsMessageEditedRole,
+            NeedsPeerImageRole,
         };
 
     public:
