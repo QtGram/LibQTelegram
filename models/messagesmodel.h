@@ -50,6 +50,8 @@ class MessagesModel : public TelegramModel
             IsMessageUnreadRole,
             IsMessageEditedRole,
             NeedsPeerImageRole,
+            ForwardedFromUserRole,
+            ForwardedFromNameRole,
         };
 
     public:

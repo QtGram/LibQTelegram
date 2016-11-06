@@ -205,6 +205,18 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return true;
     }
 
+    if(role == MessagesModel::ForwardedFromUserRole)
+        if (message->fwdFrom())
+            return QVariant::fromValue(TelegramCache_user(message->fwdFrom()->fromId()));
+
+    if(role == MessagesModel::ForwardedFromNameRole)
+    {
+        User* user = TelegramCache_user(message->fwdFrom()->fromId());
+        if (user) {
+            return TelegramHelper::fullName(user);
+        }
+    }
+
     return QVariant();
 }
 
@@ -232,6 +244,8 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
     roles[MessagesModel::IsMessageEditedRole] = "isMessageEdited";
     roles[MessagesModel::NeedsPeerImageRole] = "needsPeerImage";
+    roles[MessagesModel::ForwardedFromUserRole] = "forwardedFromUser";
+    roles[MessagesModel::ForwardedFromNameRole] = "forwardedFromName";
 
     return roles;
 }
