@@ -82,15 +82,9 @@ QHash<int, QByteArray> ContactsModel::roleNames() const
 void ContactsModel::telegramReady()
 {
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &ContactsModel::onNewDialogs);
+    connect(TelegramCache_instance, &TelegramCache::contactsUpdated, this, &ContactsModel::loadContacts);
 
-    this->beginResetModel();
-    this->_contacts = TelegramCache_contacts;
-
-    std::sort(this->_contacts.begin(), this->_contacts.end(), [](User* usr1, User* usr2) {
-        return TelegramHelper::fullName(usr1) < TelegramHelper::fullName(usr2);
-    });
-
-    this->endResetModel();
+    this->loadContacts();
 }
 
 void ContactsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
@@ -127,6 +121,22 @@ void ContactsModel::onCreateChannelOrChatReplied(MTProtoReply *mtreply)
 
     this->_pendingdialogid = 0;
     emit dialogCreated(dialog);
+}
+
+void ContactsModel::loadContacts()
+{
+    this->_contacts = TelegramCache_contacts;
+
+    if(this->_contacts.isEmpty())
+        return;
+
+    this->beginResetModel();
+
+    std::sort(this->_contacts.begin(), this->_contacts.end(), [](User* usr1, User* usr2) {
+        return TelegramHelper::fullName(usr1) < TelegramHelper::fullName(usr2);
+    });
+
+    this->endResetModel();
 }
 
 TLInt ContactsModel::getDialogId(Updates *updates) const

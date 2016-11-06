@@ -31,6 +31,7 @@ class ContactsModel : public TelegramModel
     private slots:
         void onNewDialogs(const TLVector<Dialog*>& dialogs);
         void onCreateChannelOrChatReplied(MTProtoReply* mtreply);
+        void loadContacts();
 
     private:
         TLInt getDialogId(Updates* updates) const;

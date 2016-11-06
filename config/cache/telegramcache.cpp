@@ -162,6 +162,7 @@ void TelegramCache::cache(const TLVector<Dialog *>& dialogs)
 void TelegramCache::cache(const TLVector<User *>& users)
 {
     this->_database->transaction([this, users](QSqlQuery& queryobj) {
+        bool newcontacts = false;
         this->_database->users()->prepareInsert(queryobj);
 
         foreach(User* user, users) {
@@ -170,8 +171,18 @@ void TelegramCache::cache(const TLVector<User *>& users)
 
             user->setParent(this);
             this->_users[user->id()] = user;
+
+            if(user->isContact())
+            {
+                newcontacts = true;
+                this->_contacts << user;
+            }
+
             this->_database->users()->insertQuery(queryobj, user);
         }
+
+        if(newcontacts)
+            emit contactsUpdated();
     });
 }
 

@@ -93,6 +93,7 @@ class TelegramCache: public QObject
         void editMessage(Message* message);
         void deleteMessage(Message* message);
         void readHistory(Dialog* dialog);
+        void contactsUpdated();
 
     private:
         QList<Dialog*> _dialogs;
