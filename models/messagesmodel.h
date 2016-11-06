@@ -7,6 +7,8 @@ class MessagesModel : public TelegramModel
 {
     Q_OBJECT
 
+    Q_ENUMS(MessageActions)
+
     Q_PROPERTY(Dialog* dialog READ dialog WRITE setDialog NOTIFY dialogChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
@@ -17,6 +19,21 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
 
     public:
+        enum MessageActions {
+            TypingAction,
+            CancelAction,
+            RecordVideoAction,
+            UploadVideoAction,
+            RecordAudioAction,
+            UploadAudioAction,
+            UploadPhotoAction,
+            UploadDocumentAction,
+            GeoLocationAction,
+            ChooseContactAction,
+            GamePlayAction,
+            GameStopAction,
+        };
+
         enum MessageRoles {
             MessageFromRole = Qt::UserRole + 10,
             MessageTextRole,
@@ -57,6 +74,7 @@ class MessagesModel : public TelegramModel
         void sendMessage(const QString& text);
         void replyMessage(const QString& text, Message* replymessage);
         void editMessage(const QString& text, Message *editmessage);
+        void sendAction(int action);
 
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
@@ -67,8 +85,10 @@ class MessagesModel : public TelegramModel
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
+        void resetAction();
 
     private:
+        TLConstructor getAction(int action);
         int loadHistoryFromCache();
         int indexOf(Message* message) const;
         int indexOf(TLInt messageid) const;
@@ -97,11 +117,13 @@ class MessagesModel : public TelegramModel
         QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
         Dialog* _dialog;
+        QTimer* _timaction;
         TLInt _newmessageindex;
         TLInt _newmessageid;
         bool _fetchmore;
         bool _atstart;
         int _loadcount;
+        int _lastaction;
 };
 
 #endif // MESSAGESMODEL_H

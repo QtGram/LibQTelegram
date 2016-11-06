@@ -1,13 +1,6 @@
 #include "sendstatusobject.h"
 #include "../../types/telegramhelper.h"
 
-/*
- * From Telegram documentation: https://core.telegram.org/constructor/updateUserTyping
- * If no repeated update received after 6 seconds, it should be considered that the user stopped doing whatever he's been doing.
- */
-
-#define StatusTimeout 6000 // 6 seconds
-
 SendStatusObject::SendStatusObject(Dialog* dialog, QObject *parent) : QObject(parent), _dialog(dialog)
 {
     this->_timexpired = new QTimer(this);

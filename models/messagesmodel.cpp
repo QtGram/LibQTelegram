@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad), _lastaction(-1)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -270,6 +270,37 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
     TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
 }
 
+void MessagesModel::sendAction(int action)
+{
+    if(!this->_telegram || !this->_dialog || (this->_lastaction == action))
+        return;
+
+    if(this->_timaction && this->_timaction->isActive())
+        return;
+
+    TLConstructor actionctor = this->getAction(action);
+
+    if(!actionctor)
+        return;
+
+    SendMessageAction sendmessageaction;
+    sendmessageaction.setConstructorId(actionctor);
+
+    this->createInputPeer();
+
+    if(!this->_timaction)
+    {
+        this->_timaction = new QTimer(this);
+        connect(this->_timaction, &QTimer::timeout, this, &MessagesModel::resetAction);
+
+        this->_timaction->setSingleShot(true);
+        this->_timaction->setInterval(StatusTimeout);
+        this->_timaction->start();
+    }
+
+    TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
+}
+
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 {
     MessagesMessages messages;
@@ -375,6 +406,63 @@ void MessagesModel::onDeleteMessage(Message* message)
         this->endRemoveRows();
         break;
     }
+}
+
+void MessagesModel::resetAction()
+{
+    this->_lastaction = -1;
+
+    SendMessageAction sendmessageaction;
+    sendmessageaction.setConstructorId(TLTypes::SendMessageCancelAction);
+
+    TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
+}
+
+TLConstructor MessagesModel::getAction(int action)
+{
+    switch(action)
+    {
+        case MessagesModel::TypingAction:
+            return TLTypes::SendMessageTypingAction;
+
+        case MessagesModel::CancelAction:
+            return TLTypes::SendMessageCancelAction;
+
+        case MessagesModel::RecordVideoAction:
+            return TLTypes::SendMessageRecordVideoAction;
+
+        case MessagesModel::UploadVideoAction:
+            return TLTypes::SendMessageUploadVideoAction;
+
+        case MessagesModel::RecordAudioAction:
+            return TLTypes::SendMessageRecordAudioAction;
+
+        case MessagesModel::UploadAudioAction:
+            return TLTypes::SendMessageUploadAudioAction;
+
+        case MessagesModel::UploadPhotoAction:
+            return TLTypes::SendMessageUploadPhotoAction;
+
+        case MessagesModel::UploadDocumentAction:
+            return TLTypes::SendMessageUploadDocumentAction;
+
+        case MessagesModel::GeoLocationAction:
+            return TLTypes::SendMessageGeoLocationAction;
+
+        case MessagesModel::ChooseContactAction:
+            return TLTypes::SendMessageChooseContactAction;
+
+        case MessagesModel::GamePlayAction:
+            return TLTypes::SendMessageGamePlayAction;
+
+        case MessagesModel::GameStopAction:
+            return TLTypes::SendMessageGameStopAction;
+
+        default:
+            break;
+    }
+
+    return 0;
 }
 
 void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
