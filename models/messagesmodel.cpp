@@ -312,6 +312,20 @@ void MessagesModel::onMessagesReadHistoryReplied(MTProtoReply *mtreply)
     TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
 }
 
+void MessagesModel::onReadHistory(Dialog *dialog)
+{
+    if(!this->_dialog || !dialog || (this->_dialog != dialog))
+        return;
+
+    int idx = this->indexOf(this->_dialog->readOutboxMaxId());
+    TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
+
+    if(idx > -1)
+        Emit_DataChangedRangeRoles(0, idx, MessagesModel::IsMessageUnreadRole);
+    else
+        qWarning("Cannot find message id %d", this->_dialog->readOutboxMaxId());
+}
+
 void MessagesModel::onSendStatusUpdated(Dialog *dialog)
 {
     if(this->_dialog != dialog)
@@ -395,10 +409,7 @@ void MessagesModel::setFirstNewMessage()
     {
         Message* message = this->_messages[i];
 
-        if(message->isOut())
-            continue;
-
-        if(message->id() <= maxinmsgid)
+        if(message->isOut() || (message->id() <= maxinmsgid))
             return;
 
         this->_newmessageindex = i;
@@ -454,9 +465,14 @@ void MessagesModel::markAsRead()
 
 int MessagesModel::indexOf(Message *message) const
 {
+    return this->indexOf(message->id());
+}
+
+int MessagesModel::indexOf(TLInt messageid) const
+{
     for(int i = 0; i < this->_messages.count(); i++)
     {
-        if(this->_messages[i]->id() == message->id())
+        if(this->_messages[i]->id() == messageid)
             return i;
     }
 
@@ -509,6 +525,7 @@ void MessagesModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
     connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &MessagesModel::onReadHistory);
 
     connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::onSendStatusUpdated);
 

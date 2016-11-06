@@ -62,6 +62,7 @@ class MessagesModel : public TelegramModel
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onMessagesReadHistoryReplied(MTProtoReply* mtreply);
+        void onReadHistory(Dialog* dialog);
         void onSendStatusUpdated(Dialog* dialog);
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
@@ -70,6 +71,7 @@ class MessagesModel : public TelegramModel
     private:
         int loadHistoryFromCache();
         int indexOf(Message* message) const;
+        int indexOf(TLInt messageid) const;
         TLInt inboxMaxId() const;
         TLInt outboxMaxId() const;
         QString messageFrom(Message *message) const;

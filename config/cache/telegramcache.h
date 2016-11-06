@@ -80,6 +80,7 @@ class TelegramCache: public QObject
 
     private:
         void eraseMessage(MessageId messageid);
+        int checkUnreadMessages(Dialog* dialog);
 
     signals:
         void dialogUnreadCountChanged(Dialog* dialog);
