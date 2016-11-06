@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad), _lastaction(-1)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -272,10 +272,7 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
 
 void MessagesModel::sendAction(int action)
 {
-    if(!this->_telegram || !this->_dialog || (this->_lastaction == action))
-        return;
-
-    if(this->_timaction && this->_timaction->isActive())
+    if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
         return;
 
     TLConstructor actionctor = this->getAction(action);
@@ -295,9 +292,9 @@ void MessagesModel::sendAction(int action)
 
         this->_timaction->setSingleShot(true);
         this->_timaction->setInterval(StatusTimeout);
-        this->_timaction->start();
     }
 
+    this->_timaction->start();
     TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
 }
 
@@ -410,8 +407,6 @@ void MessagesModel::onDeleteMessage(Message* message)
 
 void MessagesModel::resetAction()
 {
-    this->_lastaction = -1;
-
     SendMessageAction sendmessageaction;
     sendmessageaction.setConstructorId(TLTypes::SendMessageCancelAction);
 

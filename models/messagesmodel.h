@@ -123,7 +123,6 @@ class MessagesModel : public TelegramModel
         bool _fetchmore;
         bool _atstart;
         int _loadcount;
-        int _lastaction;
 };
 
 #endif // MESSAGESMODEL_H
