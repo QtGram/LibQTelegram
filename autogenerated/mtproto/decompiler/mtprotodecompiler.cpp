@@ -29,6 +29,10 @@ void MTProtoDecompiler::doDecompile(QString& result, MTProtoStream& mtstream, TL
 	
 	if(ctor == TLTypes::Vector)
 		return;
+	else if(ctor == TLTypes::BoolTrue)
+		return;
+	else if(ctor == TLTypes::BoolFalse)
+		return;
 	else if(!MTProtoDecompiler::_ctordispatcher.contains(ctor))
 	{
 		qWarning("-- (%llx) Invalid constructor: 0x%08x", messageid, ctor);
@@ -1419,38 +1423,61 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authSendCode] = &MTProtoDecompiler::decompile_authSendCode;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignUp] = &MTProtoDecompiler::decompile_authSignUp;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authSignIn] = &MTProtoDecompiler::decompile_authSignIn;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authLogOut] = &MTProtoDecompiler::decompile_authLogOut;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authResetAuthorizations] = &MTProtoDecompiler::decompile_authResetAuthorizations;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authSendInvites] = &MTProtoDecompiler::decompile_authSendInvites;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authExportAuthorization] = &MTProtoDecompiler::decompile_authExportAuthorization;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportAuthorization] = &MTProtoDecompiler::decompile_authImportAuthorization;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authBindTempAuthKey] = &MTProtoDecompiler::decompile_authBindTempAuthKey;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authImportBotAuthorization] = &MTProtoDecompiler::decompile_authImportBotAuthorization;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authCheckPassword] = &MTProtoDecompiler::decompile_authCheckPassword;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authRequestPasswordRecovery] = &MTProtoDecompiler::decompile_authRequestPasswordRecovery;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authRecoverPassword] = &MTProtoDecompiler::decompile_authRecoverPassword;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::authResendCode] = &MTProtoDecompiler::decompile_authResendCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authCancelCode] = &MTProtoDecompiler::decompile_authCancelCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::authDropTempAuthKeys] = &MTProtoDecompiler::decompile_authDropTempAuthKeys;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountRegisterDevice] = &MTProtoDecompiler::decompile_accountRegisterDevice;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUnregisterDevice] = &MTProtoDecompiler::decompile_accountUnregisterDevice;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateNotifySettings] = &MTProtoDecompiler::decompile_accountUpdateNotifySettings;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetNotifySettings] = &MTProtoDecompiler::decompile_accountGetNotifySettings;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountResetNotifySettings] = &MTProtoDecompiler::decompile_accountResetNotifySettings;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateProfile] = &MTProtoDecompiler::decompile_accountUpdateProfile;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateStatus] = &MTProtoDecompiler::decompile_accountUpdateStatus;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetWallPapers] = &MTProtoDecompiler::decompile_accountGetWallPapers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountReportPeer] = &MTProtoDecompiler::decompile_accountReportPeer;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountCheckUsername] = &MTProtoDecompiler::decompile_accountCheckUsername;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateUsername] = &MTProtoDecompiler::decompile_accountUpdateUsername;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPrivacy] = &MTProtoDecompiler::decompile_accountGetPrivacy;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSetPrivacy] = &MTProtoDecompiler::decompile_accountSetPrivacy;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountDeleteAccount] = &MTProtoDecompiler::decompile_accountDeleteAccount;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAccountTTL] = &MTProtoDecompiler::decompile_accountGetAccountTTL;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSetAccountTTL] = &MTProtoDecompiler::decompile_accountSetAccountTTL;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendChangePhoneCode] = &MTProtoDecompiler::decompile_accountSendChangePhoneCode;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountChangePhone] = &MTProtoDecompiler::decompile_accountChangePhone;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdateDeviceLocked] = &MTProtoDecompiler::decompile_accountUpdateDeviceLocked;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetAuthorizations] = &MTProtoDecompiler::decompile_accountGetAuthorizations;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountResetAuthorization] = &MTProtoDecompiler::decompile_accountResetAuthorization;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPassword] = &MTProtoDecompiler::decompile_accountGetPassword;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountGetPasswordSettings] = &MTProtoDecompiler::decompile_accountGetPasswordSettings;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountUpdatePasswordSettings] = &MTProtoDecompiler::decompile_accountUpdatePasswordSettings;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::accountSendConfirmPhoneCode] = &MTProtoDecompiler::decompile_accountSendConfirmPhoneCode;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::accountConfirmPhone] = &MTProtoDecompiler::decompile_accountConfirmPhone;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetUsers] = &MTProtoDecompiler::decompile_usersGetUsers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::usersGetFullUser] = &MTProtoDecompiler::decompile_usersGetFullUser;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetStatuses] = &MTProtoDecompiler::decompile_contactsGetStatuses;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetContacts] = &MTProtoDecompiler::decompile_contactsGetContacts;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportContacts] = &MTProtoDecompiler::decompile_contactsImportContacts;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsDeleteContact] = &MTProtoDecompiler::decompile_contactsDeleteContact;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsDeleteContacts] = &MTProtoDecompiler::decompile_contactsDeleteContacts;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsBlock] = &MTProtoDecompiler::decompile_contactsBlock;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsUnblock] = &MTProtoDecompiler::decompile_contactsUnblock;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetBlocked] = &MTProtoDecompiler::decompile_contactsGetBlocked;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsExportCard] = &MTProtoDecompiler::decompile_contactsExportCard;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsImportCard] = &MTProtoDecompiler::decompile_contactsImportCard;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsSearch] = &MTProtoDecompiler::decompile_contactsSearch;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsResolveUsername] = &MTProtoDecompiler::decompile_contactsResolveUsername;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsGetTopPeers] = &MTProtoDecompiler::decompile_contactsGetTopPeers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contactsResetTopPeerRating] = &MTProtoDecompiler::decompile_contactsResetTopPeerRating;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessages] = &MTProtoDecompiler::decompile_messagesGetMessages;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDialogs] = &MTProtoDecompiler::decompile_messagesGetDialogs;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetHistory] = &MTProtoDecompiler::decompile_messagesGetHistory;
@@ -1459,9 +1486,12 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteHistory] = &MTProtoDecompiler::decompile_messagesDeleteHistory;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDeleteMessages] = &MTProtoDecompiler::decompile_messagesDeleteMessages;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReceivedMessages] = &MTProtoDecompiler::decompile_messagesReceivedMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetTyping] = &MTProtoDecompiler::decompile_messagesSetTyping;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMessage] = &MTProtoDecompiler::decompile_messagesSendMessage;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendMedia] = &MTProtoDecompiler::decompile_messagesSendMedia;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesForwardMessages] = &MTProtoDecompiler::decompile_messagesForwardMessages;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReportSpam] = &MTProtoDecompiler::decompile_messagesReportSpam;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesHideReportSpam] = &MTProtoDecompiler::decompile_messagesHideReportSpam;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerSettings] = &MTProtoDecompiler::decompile_messagesGetPeerSettings;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetChats] = &MTProtoDecompiler::decompile_messagesGetChats;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFullChat] = &MTProtoDecompiler::decompile_messagesGetFullChat;
@@ -1474,6 +1504,9 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDhConfig] = &MTProtoDecompiler::decompile_messagesGetDhConfig;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesRequestEncryption] = &MTProtoDecompiler::decompile_messagesRequestEncryption;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesAcceptEncryption] = &MTProtoDecompiler::decompile_messagesAcceptEncryption;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesDiscardEncryption] = &MTProtoDecompiler::decompile_messagesDiscardEncryption;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetEncryptedTyping] = &MTProtoDecompiler::decompile_messagesSetEncryptedTyping;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadEncryptedHistory] = &MTProtoDecompiler::decompile_messagesReadEncryptedHistory;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncrypted] = &MTProtoDecompiler::decompile_messagesSendEncrypted;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedFile] = &MTProtoDecompiler::decompile_messagesSendEncryptedFile;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendEncryptedService] = &MTProtoDecompiler::decompile_messagesSendEncryptedService;
@@ -1486,27 +1519,39 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesImportChatInvite] = &MTProtoDecompiler::decompile_messagesImportChatInvite;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetStickerSet] = &MTProtoDecompiler::decompile_messagesGetStickerSet;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesInstallStickerSet] = &MTProtoDecompiler::decompile_messagesInstallStickerSet;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesUninstallStickerSet] = &MTProtoDecompiler::decompile_messagesUninstallStickerSet;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesStartBot] = &MTProtoDecompiler::decompile_messagesStartBot;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessagesViews] = &MTProtoDecompiler::decompile_messagesGetMessagesViews;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesToggleChatAdmins] = &MTProtoDecompiler::decompile_messagesToggleChatAdmins;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditChatAdmin] = &MTProtoDecompiler::decompile_messagesEditChatAdmin;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesMigrateChat] = &MTProtoDecompiler::decompile_messagesMigrateChat;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGlobal] = &MTProtoDecompiler::decompile_messagesSearchGlobal;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReorderStickerSets] = &MTProtoDecompiler::decompile_messagesReorderStickerSets;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetDocumentByHash] = &MTProtoDecompiler::decompile_messagesGetDocumentByHash;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSearchGifs] = &MTProtoDecompiler::decompile_messagesSearchGifs;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetSavedGifs] = &MTProtoDecompiler::decompile_messagesGetSavedGifs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSaveGif] = &MTProtoDecompiler::decompile_messagesSaveGif;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineBotResults] = &MTProtoDecompiler::decompile_messagesGetInlineBotResults;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetInlineBotResults] = &MTProtoDecompiler::decompile_messagesSetInlineBotResults;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSendInlineBotResult] = &MTProtoDecompiler::decompile_messagesSendInlineBotResult;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMessageEditData] = &MTProtoDecompiler::decompile_messagesGetMessageEditData;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditMessage] = &MTProtoDecompiler::decompile_messagesEditMessage;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesEditInlineBotMessage] = &MTProtoDecompiler::decompile_messagesEditInlineBotMessage;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetBotCallbackAnswer] = &MTProtoDecompiler::decompile_messagesGetBotCallbackAnswer;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetBotCallbackAnswer] = &MTProtoDecompiler::decompile_messagesSetBotCallbackAnswer;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetPeerDialogs] = &MTProtoDecompiler::decompile_messagesGetPeerDialogs;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSaveDraft] = &MTProtoDecompiler::decompile_messagesSaveDraft;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAllDrafts] = &MTProtoDecompiler::decompile_messagesGetAllDrafts;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetFeaturedStickers] = &MTProtoDecompiler::decompile_messagesGetFeaturedStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesReadFeaturedStickers] = &MTProtoDecompiler::decompile_messagesReadFeaturedStickers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetRecentStickers] = &MTProtoDecompiler::decompile_messagesGetRecentStickers;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSaveRecentSticker] = &MTProtoDecompiler::decompile_messagesSaveRecentSticker;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesClearRecentStickers] = &MTProtoDecompiler::decompile_messagesClearRecentStickers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetArchivedStickers] = &MTProtoDecompiler::decompile_messagesGetArchivedStickers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetMaskStickers] = &MTProtoDecompiler::decompile_messagesGetMaskStickers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetAttachedStickers] = &MTProtoDecompiler::decompile_messagesGetAttachedStickers;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetGameScore] = &MTProtoDecompiler::decompile_messagesSetGameScore;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesSetInlineGameScore] = &MTProtoDecompiler::decompile_messagesSetInlineGameScore;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetGameHighScores] = &MTProtoDecompiler::decompile_messagesGetGameHighScores;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::messagesGetInlineGameHighScores] = &MTProtoDecompiler::decompile_messagesGetInlineGameHighScores;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::updatesGetState] = &MTProtoDecompiler::decompile_updatesGetState;
@@ -1516,25 +1561,33 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::photosUploadProfilePhoto] = &MTProtoDecompiler::decompile_photosUploadProfilePhoto;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::photosDeletePhotos] = &MTProtoDecompiler::decompile_photosDeletePhotos;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::photosGetUserPhotos] = &MTProtoDecompiler::decompile_photosGetUserPhotos;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::uploadSaveFilePart] = &MTProtoDecompiler::decompile_uploadSaveFilePart;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::uploadGetFile] = &MTProtoDecompiler::decompile_uploadGetFile;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::uploadSaveBigFilePart] = &MTProtoDecompiler::decompile_uploadSaveBigFilePart;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetConfig] = &MTProtoDecompiler::decompile_helpGetConfig;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetNearestDc] = &MTProtoDecompiler::decompile_helpGetNearestDc;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppUpdate] = &MTProtoDecompiler::decompile_helpGetAppUpdate;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::helpSaveAppLog] = &MTProtoDecompiler::decompile_helpSaveAppLog;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetInviteText] = &MTProtoDecompiler::decompile_helpGetInviteText;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetSupport] = &MTProtoDecompiler::decompile_helpGetSupport;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetAppChangelog] = &MTProtoDecompiler::decompile_helpGetAppChangelog;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::helpGetTermsOfService] = &MTProtoDecompiler::decompile_helpGetTermsOfService;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsReadHistory] = &MTProtoDecompiler::decompile_channelsReadHistory;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteMessages] = &MTProtoDecompiler::decompile_channelsDeleteMessages;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsDeleteUserHistory] = &MTProtoDecompiler::decompile_channelsDeleteUserHistory;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsReportSpam] = &MTProtoDecompiler::decompile_channelsReportSpam;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetMessages] = &MTProtoDecompiler::decompile_channelsGetMessages;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipants] = &MTProtoDecompiler::decompile_channelsGetParticipants;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetParticipant] = &MTProtoDecompiler::decompile_channelsGetParticipant;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetChannels] = &MTProtoDecompiler::decompile_channelsGetChannels;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsGetFullChannel] = &MTProtoDecompiler::decompile_channelsGetFullChannel;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsCreateChannel] = &MTProtoDecompiler::decompile_channelsCreateChannel;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditAbout] = &MTProtoDecompiler::decompile_channelsEditAbout;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditAdmin] = &MTProtoDecompiler::decompile_channelsEditAdmin;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditTitle] = &MTProtoDecompiler::decompile_channelsEditTitle;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsEditPhoto] = &MTProtoDecompiler::decompile_channelsEditPhoto;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsCheckUsername] = &MTProtoDecompiler::decompile_channelsCheckUsername;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsUpdateUsername] = &MTProtoDecompiler::decompile_channelsUpdateUsername;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsJoinChannel] = &MTProtoDecompiler::decompile_channelsJoinChannel;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsLeaveChannel] = &MTProtoDecompiler::decompile_channelsLeaveChannel;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::channelsInviteToChannel] = &MTProtoDecompiler::decompile_channelsInviteToChannel;
@@ -1583,6 +1636,7 @@ void MTProtoDecompiler::initDispatchers()
 	MTProtoDecompiler::_ctordispatcher[TLTypes::ping] = &MTProtoDecompiler::decompile_ping;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::pingDelayDisconnect] = &MTProtoDecompiler::decompile_pingDelayDisconnect;
 	MTProtoDecompiler::_ctordispatcher[TLTypes::destroySession] = &MTProtoDecompiler::decompile_destroySession;
+	MTProtoDecompiler::_ctordispatcher[TLTypes::contestSaveDeveloperInfo] = &MTProtoDecompiler::decompile_contestSaveDeveloperInfo;
 }
 
 void MTProtoDecompiler::decompile_Error(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -9415,6 +9469,39 @@ void MTProtoDecompiler::decompile_authSignIn(MTProtoDecompiler* thethis, QString
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_authLogOut(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authLogOut));
+	result.append("authLogOut()");
+}
+
+void MTProtoDecompiler::decompile_authResetAuthorizations(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authResetAuthorizations));
+	result.append("authResetAuthorizations()");
+}
+
+void MTProtoDecompiler::decompile_authSendInvites(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authSendInvites));
+	result.append("authSendInvites(");
+	result.append("phone_numbers:");
+	thethis->decompileTLVector<TLString>(result, mtstream, false);
+	result.append(", ");
+	TLString message = mtstream.readTLString();
+	result.append("message:" + thethis->printableString(message));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_authExportAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -9439,6 +9526,27 @@ void MTProtoDecompiler::decompile_authImportAuthorization(MTProtoDecompiler* the
 	result.append(", ");
 	TLBytes bytes = mtstream.readTLBytes();
 	result.append("bytes:" + thethis->printableString(bytes));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_authBindTempAuthKey(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authBindTempAuthKey));
+	result.append("authBindTempAuthKey(");
+	TLLong perm_auth_key_id = mtstream.readTLLong();
+	result.append("perm_auth_key_id:" + QString::number(perm_auth_key_id, 16));
+	result.append(", ");
+	TLLong nonce = mtstream.readTLLong();
+	result.append("nonce:" + QString::number(nonce, 16));
+	result.append(", ");
+	TLInt expires_at = mtstream.readTLInt();
+	result.append("expires_at:" + QString::number(expires_at, 16));
+	result.append(", ");
+	TLBytes encrypted_message = mtstream.readTLBytes();
+	result.append("encrypted_message:" + thethis->printableString(encrypted_message));
 	result.append(")");
 }
 
@@ -9511,6 +9619,77 @@ void MTProtoDecompiler::decompile_authResendCode(MTProtoDecompiler* thethis, QSt
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_authCancelCode(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authCancelCode));
+	result.append("authCancelCode(");
+	TLString phone_number = mtstream.readTLString();
+	result.append("phone_number:" + thethis->printableString(phone_number));
+	result.append(", ");
+	TLString phone_code_hash = mtstream.readTLString();
+	result.append("phone_code_hash:" + thethis->printableString(phone_code_hash));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_authDropTempAuthKeys(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::authDropTempAuthKeys));
+	result.append("authDropTempAuthKeys(");
+	result.append("except_auth_keys:");
+	thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountRegisterDevice(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountRegisterDevice));
+	result.append("accountRegisterDevice(");
+	TLInt token_type = mtstream.readTLInt();
+	result.append("token_type:" + QString::number(token_type, 16));
+	result.append(", ");
+	TLString token = mtstream.readTLString();
+	result.append("token:" + thethis->printableString(token));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountUnregisterDevice(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountUnregisterDevice));
+	result.append("accountUnregisterDevice(");
+	TLInt token_type = mtstream.readTLInt();
+	result.append("token_type:" + QString::number(token_type, 16));
+	result.append(", ");
+	TLString token = mtstream.readTLString();
+	result.append("token:" + thethis->printableString(token));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountUpdateNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountUpdateNotifySettings));
+	result.append("accountUpdateNotifySettings(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputNotifyPeer(thethis, result, mtstream);
+	result.append("settings:");
+	MTProtoDecompiler::decompile_InputPeerNotifySettings(thethis, result, mtstream);
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_accountGetNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -9521,6 +9700,15 @@ void MTProtoDecompiler::decompile_accountGetNotifySettings(MTProtoDecompiler* th
 	result.append("peer:");
 	MTProtoDecompiler::decompile_InputNotifyPeer(thethis, result, mtstream);
 	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountResetNotifySettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountResetNotifySettings));
+	result.append("accountResetNotifySettings()");
 }
 
 void MTProtoDecompiler::decompile_accountUpdateProfile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -9554,6 +9742,18 @@ void MTProtoDecompiler::decompile_accountUpdateProfile(MTProtoDecompiler* thethi
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_accountUpdateStatus(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountUpdateStatus));
+	result.append("accountUpdateStatus(");
+	TLBool is_offline = mtstream.readTLBool();
+	result.append("is_offline:" + QString::number(is_offline, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_accountGetWallPapers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -9561,6 +9761,32 @@ void MTProtoDecompiler::decompile_accountGetWallPapers(MTProtoDecompiler* thethi
 	
 	Q_ASSERT((ctor == TLTypes::accountGetWallPapers));
 	result.append("accountGetWallPapers()");
+}
+
+void MTProtoDecompiler::decompile_accountReportPeer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountReportPeer));
+	result.append("accountReportPeer(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	result.append("reason:");
+	MTProtoDecompiler::decompile_ReportReason(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountCheckUsername(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountCheckUsername));
+	result.append("accountCheckUsername(");
+	TLString username = mtstream.readTLString();
+	result.append("username:" + thethis->printableString(username));
+	result.append(")");
 }
 
 void MTProtoDecompiler::decompile_accountUpdateUsername(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -9601,6 +9827,18 @@ void MTProtoDecompiler::decompile_accountSetPrivacy(MTProtoDecompiler* thethis, 
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_accountDeleteAccount(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountDeleteAccount));
+	result.append("accountDeleteAccount(");
+	TLString reason = mtstream.readTLString();
+	result.append("reason:" + thethis->printableString(reason));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_accountGetAccountTTL(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -9608,6 +9846,18 @@ void MTProtoDecompiler::decompile_accountGetAccountTTL(MTProtoDecompiler* thethi
 	
 	Q_ASSERT((ctor == TLTypes::accountGetAccountTTL));
 	result.append("accountGetAccountTTL()");
+}
+
+void MTProtoDecompiler::decompile_accountSetAccountTTL(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountSetAccountTTL));
+	result.append("accountSetAccountTTL(");
+	result.append("ttl:");
+	MTProtoDecompiler::decompile_AccountDaysTTL(thethis, result, mtstream);
+	result.append(")");
 }
 
 void MTProtoDecompiler::decompile_accountSendChangePhoneCode(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -9652,6 +9902,18 @@ void MTProtoDecompiler::decompile_accountChangePhone(MTProtoDecompiler* thethis,
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_accountUpdateDeviceLocked(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountUpdateDeviceLocked));
+	result.append("accountUpdateDeviceLocked(");
+	TLInt period = mtstream.readTLInt();
+	result.append("period:" + QString::number(period, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_accountGetAuthorizations(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -9659,6 +9921,18 @@ void MTProtoDecompiler::decompile_accountGetAuthorizations(MTProtoDecompiler* th
 	
 	Q_ASSERT((ctor == TLTypes::accountGetAuthorizations));
 	result.append("accountGetAuthorizations()");
+}
+
+void MTProtoDecompiler::decompile_accountResetAuthorization(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountResetAuthorization));
+	result.append("accountResetAuthorization(");
+	TLLong hash = mtstream.readTLLong();
+	result.append("hash:" + QString::number(hash, 16));
+	result.append(")");
 }
 
 void MTProtoDecompiler::decompile_accountGetPassword(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -9679,6 +9953,21 @@ void MTProtoDecompiler::decompile_accountGetPasswordSettings(MTProtoDecompiler* 
 	result.append("accountGetPasswordSettings(");
 	TLBytes current_password_hash = mtstream.readTLBytes();
 	result.append("current_password_hash:" + thethis->printableString(current_password_hash));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountUpdatePasswordSettings(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountUpdatePasswordSettings));
+	result.append("accountUpdatePasswordSettings(");
+	TLBytes current_password_hash = mtstream.readTLBytes();
+	result.append("current_password_hash:" + thethis->printableString(current_password_hash));
+	result.append(", ");
+	result.append("new_settings:");
+	MTProtoDecompiler::decompile_AccountPasswordInputSettings(thethis, result, mtstream);
 	result.append(")");
 }
 
@@ -9703,6 +9992,21 @@ void MTProtoDecompiler::decompile_accountSendConfirmPhoneCode(MTProtoDecompiler*
 		TLBool is_current_number = mtstream.readTLBool();
 		result.append("is_current_number:" + QString::number(is_current_number, 16));
 	}
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_accountConfirmPhone(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::accountConfirmPhone));
+	result.append("accountConfirmPhone(");
+	TLString phone_code_hash = mtstream.readTLString();
+	result.append("phone_code_hash:" + thethis->printableString(phone_code_hash));
+	result.append(", ");
+	TLString phone_code = mtstream.readTLString();
+	result.append("phone_code:" + thethis->printableString(phone_code));
 	result.append(")");
 }
 
@@ -9773,6 +10077,42 @@ void MTProtoDecompiler::decompile_contactsDeleteContact(MTProtoDecompiler* theth
 	
 	Q_ASSERT((ctor == TLTypes::contactsDeleteContact));
 	result.append("contactsDeleteContact(");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_contactsDeleteContacts(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::contactsDeleteContacts));
+	result.append("contactsDeleteContacts(");
+	result.append("id:");
+	thethis->decompileTLVectorEx(result, mtstream, false);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_contactsBlock(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::contactsBlock));
+	result.append("contactsBlock(");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_contactsUnblock(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::contactsUnblock));
+	result.append("contactsUnblock(");
 	result.append("id:");
 	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
 	result.append(")");
@@ -9870,6 +10210,20 @@ void MTProtoDecompiler::decompile_contactsGetTopPeers(MTProtoDecompiler* thethis
 	result.append(", ");
 	TLInt hash = mtstream.readTLInt();
 	result.append("hash:" + QString::number(hash, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_contactsResetTopPeerRating(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::contactsResetTopPeerRating));
+	result.append("contactsResetTopPeerRating(");
+	result.append("category:");
+	MTProtoDecompiler::decompile_TopPeerCategory(thethis, result, mtstream);
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
 	result.append(")");
 }
 
@@ -10027,6 +10381,20 @@ void MTProtoDecompiler::decompile_messagesReceivedMessages(MTProtoDecompiler* th
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesSetTyping(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSetTyping));
+	result.append("messagesSetTyping(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	result.append("action:");
+	MTProtoDecompiler::decompile_SendMessageAction(thethis, result, mtstream);
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesSendMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10137,6 +10505,30 @@ void MTProtoDecompiler::decompile_messagesForwardMessages(MTProtoDecompiler* the
 	thethis->decompileTLVector<TLLong>(result, mtstream, false);
 	result.append(", ");
 	result.append("to_peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesReportSpam(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesReportSpam));
+	result.append("messagesReportSpam(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesHideReportSpam(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesHideReportSpam));
+	result.append("messagesHideReportSpam(");
+	result.append("peer:");
 	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
 	result.append(")");
 }
@@ -10320,6 +10712,46 @@ void MTProtoDecompiler::decompile_messagesAcceptEncryption(MTProtoDecompiler* th
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesDiscardEncryption(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesDiscardEncryption));
+	result.append("messagesDiscardEncryption(");
+	TLInt chat_id = mtstream.readTLInt();
+	result.append("chat_id:" + QString::number(chat_id, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesSetEncryptedTyping(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSetEncryptedTyping));
+	result.append("messagesSetEncryptedTyping(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputEncryptedChat(thethis, result, mtstream);
+	TLBool is_typing = mtstream.readTLBool();
+	result.append("is_typing:" + QString::number(is_typing, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesReadEncryptedHistory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesReadEncryptedHistory));
+	result.append("messagesReadEncryptedHistory(");
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputEncryptedChat(thethis, result, mtstream);
+	TLInt max_date = mtstream.readTLInt();
+	result.append("max_date:" + QString::number(max_date, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesSendEncrypted(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10484,6 +10916,18 @@ void MTProtoDecompiler::decompile_messagesInstallStickerSet(MTProtoDecompiler* t
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesUninstallStickerSet(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesUninstallStickerSet));
+	result.append("messagesUninstallStickerSet(");
+	result.append("stickerset:");
+	MTProtoDecompiler::decompile_InputStickerSet(thethis, result, mtstream);
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesStartBot(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10535,6 +10979,23 @@ void MTProtoDecompiler::decompile_messagesToggleChatAdmins(MTProtoDecompiler* th
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesEditChatAdmin(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesEditChatAdmin));
+	result.append("messagesEditChatAdmin(");
+	TLInt chat_id = mtstream.readTLInt();
+	result.append("chat_id:" + QString::number(chat_id, 16));
+	result.append(", ");
+	result.append("user_id:");
+	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	TLBool is_admin = mtstream.readTLBool();
+	result.append("is_admin:" + QString::number(is_admin, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesMigrateChat(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10567,6 +11028,24 @@ void MTProtoDecompiler::decompile_messagesSearchGlobal(MTProtoDecompiler* thethi
 	result.append(", ");
 	TLInt limit = mtstream.readTLInt();
 	result.append("limit:" + QString::number(limit, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesReorderStickerSets(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesReorderStickerSets));
+	result.append("messagesReorderStickerSets(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_masks:" + BIT_FIELD_VALUE(flags, 0));
+	result.append(", ");
+	result.append("order:");
+	thethis->decompileTLVector<TLLong>(result, mtstream, false);
 	result.append(")");
 }
 
@@ -10615,6 +11094,20 @@ void MTProtoDecompiler::decompile_messagesGetSavedGifs(MTProtoDecompiler* thethi
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesSaveGif(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSaveGif));
+	result.append("messagesSaveGif(");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
+	TLBool is_unsave = mtstream.readTLBool();
+	result.append("is_unsave:" + QString::number(is_unsave, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesGetInlineBotResults(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10640,6 +11133,44 @@ void MTProtoDecompiler::decompile_messagesGetInlineBotResults(MTProtoDecompiler*
 	result.append(", ");
 	TLString offset = mtstream.readTLString();
 	result.append("offset:" + thethis->printableString(offset));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesSetInlineBotResults(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSetInlineBotResults));
+	result.append("messagesSetInlineBotResults(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_gallery:" + BIT_FIELD_VALUE(flags, 0));
+	result.append(", ");
+	result.append("is_private:" + BIT_FIELD_VALUE(flags, 1));
+	result.append(", ");
+	TLLong query_id = mtstream.readTLLong();
+	result.append("query_id:" + QString::number(query_id, 16));
+	result.append(", ");
+	result.append("results:");
+	thethis->decompileTLVectorEx(result, mtstream, false);
+	result.append(", ");
+	TLInt cache_time = mtstream.readTLInt();
+	result.append("cache_time:" + QString::number(cache_time, 16));
+	result.append(", ");
+	if(IS_FLAG_SET(flags, 2))
+	{
+		TLString next_offset = mtstream.readTLString();
+		result.append("next_offset:" + thethis->printableString(next_offset));
+		result.append(", ");
+	}
+	if(IS_FLAG_SET(flags, 3))
+	{
+		result.append("switch_pm:");
+		MTProtoDecompiler::decompile_InlineBotSwitchPM(thethis, result, mtstream);
+	}
 	result.append(")");
 }
 
@@ -10730,6 +11261,40 @@ void MTProtoDecompiler::decompile_messagesEditMessage(MTProtoDecompiler* thethis
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesEditInlineBotMessage(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesEditInlineBotMessage));
+	result.append("messagesEditInlineBotMessage(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 1));
+	result.append(", ");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
+	if(IS_FLAG_SET(flags, 11))
+	{
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+	}
+	if(IS_FLAG_SET(flags, 2))
+	{
+		result.append("reply_markup:");
+		MTProtoDecompiler::decompile_ReplyMarkup(thethis, result, mtstream);
+	}
+	if(IS_FLAG_SET(flags, 3))
+	{
+		result.append("entities:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesGetBotCallbackAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10756,6 +11321,36 @@ void MTProtoDecompiler::decompile_messagesGetBotCallbackAnswer(MTProtoDecompiler
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesSetBotCallbackAnswer(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSetBotCallbackAnswer));
+	result.append("messagesSetBotCallbackAnswer(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_alert:" + BIT_FIELD_VALUE(flags, 1));
+	result.append(", ");
+	TLLong query_id = mtstream.readTLLong();
+	result.append("query_id:" + QString::number(query_id, 16));
+	result.append(", ");
+	if(IS_FLAG_SET(flags, 0))
+	{
+		TLString message = mtstream.readTLString();
+		result.append("message:" + thethis->printableString(message));
+		result.append(", ");
+	}
+	if(IS_FLAG_SET(flags, 2))
+	{
+		TLString url = mtstream.readTLString();
+		result.append("url:" + thethis->printableString(url));
+	}
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesGetPeerDialogs(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10765,6 +11360,38 @@ void MTProtoDecompiler::decompile_messagesGetPeerDialogs(MTProtoDecompiler* thet
 	result.append("messagesGetPeerDialogs(");
 	result.append("peers:");
 	thethis->decompileTLVectorEx(result, mtstream, false);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesSaveDraft(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSaveDraft));
+	result.append("messagesSaveDraft(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_no_webpage:" + BIT_FIELD_VALUE(flags, 1));
+	result.append(", ");
+	if(IS_FLAG_SET(flags, 0))
+	{
+		TLInt reply_to_msg_id = mtstream.readTLInt();
+		result.append("reply_to_msg_id:" + QString::number(reply_to_msg_id, 16));
+		result.append(", ");
+	}
+	result.append("peer:");
+	MTProtoDecompiler::decompile_InputPeer(thethis, result, mtstream);
+	TLString message = mtstream.readTLString();
+	result.append("message:" + thethis->printableString(message));
+	result.append(", ");
+	if(IS_FLAG_SET(flags, 3))
+	{
+		result.append("entities:");
+		thethis->decompileTLVectorEx(result, mtstream, false);
+	}
 	result.append(")");
 }
 
@@ -10789,6 +11416,18 @@ void MTProtoDecompiler::decompile_messagesGetFeaturedStickers(MTProtoDecompiler*
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_messagesReadFeaturedStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesReadFeaturedStickers));
+	result.append("messagesReadFeaturedStickers(");
+	result.append("id:");
+	thethis->decompileTLVector<TLLong>(result, mtstream, false);
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_messagesGetRecentStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -10804,6 +11443,41 @@ void MTProtoDecompiler::decompile_messagesGetRecentStickers(MTProtoDecompiler* t
 	result.append(", ");
 	TLInt hash = mtstream.readTLInt();
 	result.append("hash:" + QString::number(hash, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesSaveRecentSticker(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSaveRecentSticker));
+	result.append("messagesSaveRecentSticker(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_attached:" + BIT_FIELD_VALUE(flags, 0));
+	result.append(", ");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputDocument(thethis, result, mtstream);
+	TLBool is_unsave = mtstream.readTLBool();
+	result.append("is_unsave:" + QString::number(is_unsave, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesClearRecentStickers(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesClearRecentStickers));
+	result.append("messagesClearRecentStickers(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_attached:" + BIT_FIELD_VALUE(flags, 0));
 	result.append(")");
 }
 
@@ -10870,6 +11544,28 @@ void MTProtoDecompiler::decompile_messagesSetGameScore(MTProtoDecompiler* thethi
 	TLInt id = mtstream.readTLInt();
 	result.append("id:" + QString::number(id, 16));
 	result.append(", ");
+	result.append("user_id:");
+	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	TLInt score = mtstream.readTLInt();
+	result.append("score:" + QString::number(score, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_messagesSetInlineGameScore(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::messagesSetInlineGameScore));
+	result.append("messagesSetInlineGameScore(");
+	
+	TLInt flags = mtstream.readTLInt();
+	Q_UNUSED(flags);
+	
+	result.append("is_edit_message:" + BIT_FIELD_VALUE(flags, 0));
+	result.append(", ");
+	result.append("id:");
+	MTProtoDecompiler::decompile_InputBotInlineMessageID(thethis, result, mtstream);
 	result.append("user_id:");
 	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
 	TLInt score = mtstream.readTLInt();
@@ -11010,6 +11706,24 @@ void MTProtoDecompiler::decompile_photosGetUserPhotos(MTProtoDecompiler* thethis
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_uploadSaveFilePart(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::uploadSaveFilePart));
+	result.append("uploadSaveFilePart(");
+	TLLong file_id = mtstream.readTLLong();
+	result.append("file_id:" + QString::number(file_id, 16));
+	result.append(", ");
+	TLInt file_part = mtstream.readTLInt();
+	result.append("file_part:" + QString::number(file_part, 16));
+	result.append(", ");
+	TLBytes bytes = mtstream.readTLBytes();
+	result.append("bytes:" + thethis->printableString(bytes));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_uploadGetFile(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -11024,6 +11738,27 @@ void MTProtoDecompiler::decompile_uploadGetFile(MTProtoDecompiler* thethis, QStr
 	result.append(", ");
 	TLInt limit = mtstream.readTLInt();
 	result.append("limit:" + QString::number(limit, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_uploadSaveBigFilePart(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::uploadSaveBigFilePart));
+	result.append("uploadSaveBigFilePart(");
+	TLLong file_id = mtstream.readTLLong();
+	result.append("file_id:" + QString::number(file_id, 16));
+	result.append(", ");
+	TLInt file_part = mtstream.readTLInt();
+	result.append("file_part:" + QString::number(file_part, 16));
+	result.append(", ");
+	TLInt file_total_parts = mtstream.readTLInt();
+	result.append("file_total_parts:" + QString::number(file_total_parts, 16));
+	result.append(", ");
+	TLBytes bytes = mtstream.readTLBytes();
+	result.append("bytes:" + thethis->printableString(bytes));
 	result.append(")");
 }
 
@@ -11052,6 +11787,18 @@ void MTProtoDecompiler::decompile_helpGetAppUpdate(MTProtoDecompiler* thethis, Q
 	
 	Q_ASSERT((ctor == TLTypes::helpGetAppUpdate));
 	result.append("helpGetAppUpdate()");
+}
+
+void MTProtoDecompiler::decompile_helpSaveAppLog(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::helpSaveAppLog));
+	result.append("helpSaveAppLog(");
+	result.append("events:");
+	thethis->decompileTLVectorEx(result, mtstream, false);
+	result.append(")");
 }
 
 void MTProtoDecompiler::decompile_helpGetInviteText(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
@@ -11090,6 +11837,20 @@ void MTProtoDecompiler::decompile_helpGetTermsOfService(MTProtoDecompiler* theth
 	result.append("helpGetTermsOfService()");
 }
 
+void MTProtoDecompiler::decompile_channelsReadHistory(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::channelsReadHistory));
+	result.append("channelsReadHistory(");
+	result.append("channel:");
+	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+	TLInt max_id = mtstream.readTLInt();
+	result.append("max_id:" + QString::number(max_id, 16));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_channelsDeleteMessages(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -11115,6 +11876,22 @@ void MTProtoDecompiler::decompile_channelsDeleteUserHistory(MTProtoDecompiler* t
 	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
 	result.append("user_id:");
 	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_channelsReportSpam(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::channelsReportSpam));
+	result.append("channelsReportSpam(");
+	result.append("channel:");
+	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+	result.append("user_id:");
+	MTProtoDecompiler::decompile_InputUser(thethis, result, mtstream);
+	result.append("id:");
+	thethis->decompileTLVector<TLInt>(result, mtstream, false);
 	result.append(")");
 }
 
@@ -11212,6 +11989,20 @@ void MTProtoDecompiler::decompile_channelsCreateChannel(MTProtoDecompiler* theth
 	result.append(")");
 }
 
+void MTProtoDecompiler::decompile_channelsEditAbout(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::channelsEditAbout));
+	result.append("channelsEditAbout(");
+	result.append("channel:");
+	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+	TLString about = mtstream.readTLString();
+	result.append("about:" + thethis->printableString(about));
+	result.append(")");
+}
+
 void MTProtoDecompiler::decompile_channelsEditAdmin(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
 {
 	Q_UNUSED(thethis);
@@ -11253,6 +12044,34 @@ void MTProtoDecompiler::decompile_channelsEditPhoto(MTProtoDecompiler* thethis, 
 	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
 	result.append("photo:");
 	MTProtoDecompiler::decompile_InputChatPhoto(thethis, result, mtstream);
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_channelsCheckUsername(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::channelsCheckUsername));
+	result.append("channelsCheckUsername(");
+	result.append("channel:");
+	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+	TLString username = mtstream.readTLString();
+	result.append("username:" + thethis->printableString(username));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_channelsUpdateUsername(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::channelsUpdateUsername));
+	result.append("channelsUpdateUsername(");
+	result.append("channel:");
+	MTProtoDecompiler::decompile_InputChannel(thethis, result, mtstream);
+	TLString username = mtstream.readTLString();
+	result.append("username:" + thethis->printableString(username));
 	result.append(")");
 }
 
@@ -12182,6 +13001,30 @@ void MTProtoDecompiler::decompile_destroySession(MTProtoDecompiler* thethis, QSt
 	result.append("destroySession(");
 	TLLong session_id = mtstream.readTLLong();
 	result.append("session_id:" + QString::number(session_id, 16));
+	result.append(")");
+}
+
+void MTProtoDecompiler::decompile_contestSaveDeveloperInfo(MTProtoDecompiler* thethis, QString& result, MTProtoStream& mtstream) 
+{
+	Q_UNUSED(thethis);
+	TLConstructor ctor = mtstream.readTLConstructor();
+	
+	Q_ASSERT((ctor == TLTypes::contestSaveDeveloperInfo));
+	result.append("contestSaveDeveloperInfo(");
+	TLInt vk_id = mtstream.readTLInt();
+	result.append("vk_id:" + QString::number(vk_id, 16));
+	result.append(", ");
+	TLString name = mtstream.readTLString();
+	result.append("name:" + thethis->printableString(name));
+	result.append(", ");
+	TLString phone_number = mtstream.readTLString();
+	result.append("phone_number:" + thethis->printableString(phone_number));
+	result.append(", ");
+	TLInt age = mtstream.readTLInt();
+	result.append("age:" + QString::number(age, 16));
+	result.append(", ");
+	TLString city = mtstream.readTLString();
+	result.append("city:" + thethis->printableString(city));
 	result.append(")");
 }
 
