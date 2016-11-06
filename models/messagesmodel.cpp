@@ -174,7 +174,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return (message->constructorId() == TLTypes::MessageService);
 
     if(role == MessagesModel::IsMessageMediaRole)
-        return message->media() && (message->media()->constructorId() == TLTypes::MessageMediaEmpty);
+        return message->media() && (message->media()->constructorId() != TLTypes::MessageMediaEmpty);
 
     if(role == MessagesModel::MessageDateRole)
         return TelegramHelper::dateString(message->date());
