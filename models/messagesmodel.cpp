@@ -190,7 +190,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
 
     if(role == MessagesModel::NeedsPeerImageRole)
     {
-        if(!TelegramHelper::isChat(this->_dialog) || message->isOut() || (message->constructorId() == TLTypes::MessageService))
+        if(message->constructorId() == TLTypes::MessageService)
             return false;
 
         if(message != this->_messages.last())
