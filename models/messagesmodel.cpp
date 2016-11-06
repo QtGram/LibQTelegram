@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _newmessageindex(-1), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -165,7 +165,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return this->_telegram->messagePreview(TelegramCache_message(message->replyToMsgId(), this->_dialog));
 
     if(role == MessagesModel::IsMessageNewRole)
-        return index.row() == this->_newmessageindex;
+        return message->id() == this->_newmessageid;
 
     if(role == MessagesModel::IsMessageOutRole)
         return message->isOut();
@@ -402,10 +402,14 @@ void MessagesModel::setFirstNewMessage()
             return;
 
         this->_newmessageindex = i;
+        this->_newmessageid = message->id();
     }
 
     if(this->_newmessageindex != -1)
+    {
         emit newMessageIndexChanged();
+        Emit_DataChangedRoles(this->_newmessageindex, MessagesModel::IsMessageNewRole);
+    }
 }
 
 TLInt MessagesModel::inboxMaxId() const

@@ -96,6 +96,7 @@ class MessagesModel : public TelegramModel
         InputPeer* _inputpeer;
         Dialog* _dialog;
         TLInt _newmessageindex;
+        TLInt _newmessageid;
         bool _fetchmore;
         bool _atstart;
         int _loadcount;
