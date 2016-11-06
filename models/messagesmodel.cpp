@@ -173,6 +173,9 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageServiceRole)
         return (message->constructorId() == TLTypes::MessageService);
 
+    if(role == MessagesModel::IsMessageMediaRole)
+        return message->media() && (message->media()->constructorId() == TLTypes::MessageMediaEmpty);
+
     if(role == MessagesModel::MessageDateRole)
         return TelegramHelper::dateString(message->date());
 
@@ -225,6 +228,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::IsMessageNewRole] = "isMessageNew";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
     roles[MessagesModel::IsMessageServiceRole] = "isMessageService";
+    roles[MessagesModel::IsMessageMediaRole] = "isMessageMedia";
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
     roles[MessagesModel::IsMessageEditedRole] = "isMessageEdited";
     roles[MessagesModel::NeedsPeerImageRole] = "needsPeerImage";
