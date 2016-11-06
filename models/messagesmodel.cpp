@@ -206,7 +206,8 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     }
 
     if(role == MessagesModel::ForwardedFromUserRole)
-        return QVariant::fromValue(TelegramCache_user(message->fwdFrom()->fromId()));
+        if (message->fwdFrom())
+            return QVariant::fromValue(TelegramCache_user(message->fwdFrom()->fromId()));
 
     if(role == MessagesModel::ForwardedFromNameRole)
     {
