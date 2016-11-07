@@ -26,14 +26,13 @@ class MTProtoServiceHandler : public QObject
         void phoneCodeError(QString errormessage);
 
     private:
-        bool handleMsgContainer(MTProtoReply* mtreply);
-        bool handleRpcResult(MTProtoReply* mtreply);
-        bool handleRpcError(MTProtoReply* mtreply);
-        bool handleBadMsgNotification(MTProtoReply* mtreply);
-        bool handleGzipPacked(MTProtoReply* mtreply);
-        bool handleNewSessionCreated(MTProtoReply* mtreply);
-        bool handleMsgAck(MTProtoReply* mtreply);
-        bool handleConfig(MTProtoReply* mtreply);
+        void handleMsgContainer(MTProtoReply* mtreply);
+        void handleRpcResult(MTProtoReply* mtreply);
+        void handleRpcError(MTProtoReply* mtreply);
+        void handleBadMsgNotification(MTProtoReply* mtreply);
+        void handleGzipPacked(MTProtoReply* mtreply);
+        void handleNewSessionCreated(MTProtoReply* mtreply);
+        void handleMsgAck(MTProtoReply* mtreply);
 
     private:
         int _dcid;

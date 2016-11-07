@@ -11,31 +11,45 @@ MTProtoServiceHandler::MTProtoServiceHandler(int dcid, QObject *parent) : QObjec
 
 bool MTProtoServiceHandler::handle(MTProtoReply *mtreply)
 {
-    if(mtreply->constructorId() == TLTypes::MsgContainer)
-        return this->handleMsgContainer(mtreply);
+    switch(mtreply->constructorId())
+    {
+        case TLTypes::MsgContainer:
+            this->handleMsgContainer(mtreply);
+            break;
 
-    if(mtreply->constructorId() == TLTypes::RpcResult)
-        return this->handleRpcResult(mtreply);
+        case TLTypes::GzipPacked:
+            this->handleGzipPacked(mtreply);
+            break;
 
-    if(mtreply->constructorId() == TLTypes::RpcError)
-        return this->handleRpcError(mtreply);
+        case TLTypes::RpcResult:
+            this->handleRpcResult(mtreply);
+            break;
 
-    if((mtreply->constructorId() == TLTypes::BadMsgNotification) || (mtreply->constructorId() == TLTypes::BadServerSalt))
-        return this->handleBadMsgNotification(mtreply);
+        case TLTypes::RpcError:
+            this->handleRpcError(mtreply);
+            break;
 
-    if(mtreply->constructorId() == TLTypes::GzipPacked)
-        return this->handleGzipPacked(mtreply);
+        case TLTypes::NewSessionCreated:
+            this->handleNewSessionCreated(mtreply);
+            break;
 
-    if(mtreply->constructorId() == TLTypes::NewSessionCreated)
-        return this->handleNewSessionCreated(mtreply);
+        case TLTypes::MsgsAck:
+            this->handleMsgAck(mtreply);
+            break;
 
-    if(mtreply->constructorId() == TLTypes::MsgsAck)
-        return this->handleMsgAck(mtreply);
+        case TLTypes::BadMsgNotification:
+        case TLTypes::BadServerSalt:
+            this->handleBadMsgNotification(mtreply);
+            break;
 
-    return false;
+        default:
+            return false;
+    }
+
+    return true;
 }
 
-bool MTProtoServiceHandler::handleMsgContainer(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleMsgContainer(MTProtoReply *mtreply)
 {
     MessageContainer mc;
     mc.read(mtreply);
@@ -45,22 +59,18 @@ bool MTProtoServiceHandler::handleMsgContainer(MTProtoReply *mtreply)
         MTProtoReply mtreplymsg(message, this->_dcid);
         emit serviceHandled(&mtreplymsg);
     }
-
-    return true;
 }
 
-bool MTProtoServiceHandler::handleRpcResult(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleRpcResult(MTProtoReply *mtreply)
 {
     RpcResult rr;
     rr.read(mtreply);
 
     MTProtoReply mtreplymsg(rr.result(), rr.reqMsgId(), this->_dcid);
     emit serviceHandled(&mtreplymsg);
-
-    return true;
 }
 
-bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
 {
     RpcError re;
     re.read(mtreply);
@@ -74,7 +84,7 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
         if(dcnum.isNull())
         {
             qFatal("DC %d Unknown destination DC: %s", this->_dcid, qUtf8Printable(dcnum));
-            return true;
+            return;
         }
 
         emit migrateDC(this->_dcid, dcnum.toInt());
@@ -126,11 +136,9 @@ bool MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
     }
     else
         qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
-
-    return true;
 }
 
-bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
 {
     BadMsgNotification badmsgnotification;
     badmsgnotification.read(mtreply);
@@ -171,11 +179,9 @@ bool MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
 
         emit saltChanged(badmsgnotification.badMsgId());
     }
-
-    return true;
 }
 
-bool MTProtoServiceHandler::handleGzipPacked(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleGzipPacked(MTProtoReply *mtreply)
 {
     MTProtoObject mtobj;
     mtobj.read(mtreply);
@@ -184,21 +190,18 @@ bool MTProtoServiceHandler::handleGzipPacked(MTProtoReply *mtreply)
     TLBytes unpackeddata = GZip::uncompress(packeddata);
     MTProtoReply mtreplymsg(unpackeddata, mtreply->messageId(), this->_dcid);
     emit serviceHandled(&mtreplymsg);
-
-    return true;
 }
 
-bool MTProtoServiceHandler::handleNewSessionCreated(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleNewSessionCreated(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
     NewSession newsession;
     newsession.read(mtreply);
 
     qDebug("DC %d New Session (first messageid: %llx)", this->_dcid, newsession.firstMsgId());
-    return true;
 }
 
-bool MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
+void MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
 
@@ -206,5 +209,4 @@ bool MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
     msgsack.read(mtreply);
 
     emit ack(msgsack.msgIds());
-    return true;
 }
