@@ -129,6 +129,9 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
     if(role == DialogsModel::IsChatRole)
         return TelegramHelper::isChat(dialog);
 
+    if(role == DialogsModel::IsCloudRole)
+        return TelegramHelper::isCloud(dialog);
+
     if(role == DialogsModel::IsBroadcastRole)
     {
         if(!TelegramHelper::isChannel(dialog))
@@ -181,6 +184,7 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     roles[DialogsModel::IsMegaGroupRole] = "isMegaGroup";
     roles[DialogsModel::IsBroadcastRole] = "isBroadcast";
     roles[DialogsModel::IsChatRole] = "isChat";
+    roles[DialogsModel::IsCloudRole] = "isCloud";
 
     return roles;
 }
