@@ -32,6 +32,7 @@ class DC : public DCConnection
         virtual void timerEvent(QTimerEvent *event);
 
     private:
+        void freeOwnedRequests();
         void decompile(int direction, TLLong messageid, const QByteArray &body);
         void handleReply(const QByteArray& message);
         void assignMessageId(MTProtoRequest *req);

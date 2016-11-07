@@ -311,7 +311,7 @@ void DC::removeSessionRef()
             return;
 
         if(this->_pendingrequests.count() > 0)
-            qWarning("DC %d contains unhandled pending requests", this->id());
+            this->freeOwnedRequests();
 
         this->_timcloseconnection = this->startTimer(CloseDCTimeout);
     }
@@ -324,6 +324,19 @@ void DC::timerEvent(QTimerEvent *event)
 
     killTimer(event->timerId());
     this->_timcloseconnection = 0;
+}
+
+void DC::freeOwnedRequests()
+{
+    QList<MTProtoRequest*> requests = this->_pendingrequests.values();
+
+    foreach(MTProtoRequest* req, requests)
+    {
+        if(req->dcId() != this->id())
+            continue;
+
+        req->deleteLater();
+    }
 }
 
 void DC::onDCReadyRead()
