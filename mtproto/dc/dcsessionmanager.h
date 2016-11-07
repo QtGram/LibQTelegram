@@ -45,9 +45,10 @@ class DCSessionManager: public QObject
 
     signals:
         void sessionReady(DCSession* session);
-        void unauthorized(DCSession* mainsession);
         void phoneCodeError(QString errormessage);
         void floodWait(int seconds);
+        void invalidPassword();
+        void sessionPasswordNeeded();
 
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;

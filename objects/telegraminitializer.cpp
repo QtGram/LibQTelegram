@@ -4,7 +4,7 @@
 #include "config/cache/telegramcache.h"
 #include <QDebug>
 
-TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _floodwaittimer(0)
+TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _accountpassword(NULL), _floodwaittimer(0)
 {
 }
 
@@ -137,19 +137,28 @@ void TelegramInitializer::setDebugMode(bool dbgmode)
     emit debugModeChanged();
 }
 
-void TelegramInitializer::signIn(const QString &phonecode)
+void TelegramInitializer::signIn(const QString &phonecode) const
 {
     MTProtoRequest* req = TelegramAPI::authSignIn(DC_MainSession, this->_phonenumber, this->_phonecodehash, phonecode);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onLoginCompleted);
 }
 
-void TelegramInitializer::signUp(const QString &firstname, const QString &lastname, const QString &phonecode)
+void TelegramInitializer::signUp(const QString &firstname, const QString &lastname, const QString &phonecode) const
 {
     MTProtoRequest* req = TelegramAPI::authSignUp(DC_MainSession, this->_phonenumber, this->_phonecodehash, phonecode, firstname, lastname);
     connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onLoginCompleted);
 }
 
-void TelegramInitializer::resendCode()
+void TelegramInitializer::sendPassword(const QString &password) const
+{
+    if(!this->_accountpassword)
+        return;
+
+    MTProtoRequest* req = TelegramAPI::authCheckPassword(DC_MainSession, TelegramHelper::createPasswordHash(password, this->_accountpassword));
+    connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onLoginCompleted);
+}
+
+void TelegramInitializer::resendCode() const
 {
     if(this->_phonecodehash.isEmpty() || this->_phonecodehash.isEmpty())
         return;
@@ -182,6 +191,8 @@ void TelegramInitializer::tryConnect()
 
     connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::phoneCodeError, this, &TelegramInitializer::phoneCodeError, Qt::UniqueConnection);
+    connect(DCSessionManager_instance, &DCSessionManager::invalidPassword, this, &TelegramInitializer::invalidPassword, Qt::UniqueConnection);
+    connect(DCSessionManager_instance, &DCSessionManager::sessionPasswordNeeded, this, &TelegramInitializer::onSessionPasswordNeeded, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::sessionReady, this, &TelegramInitializer::onMainSessionReady, Qt::UniqueConnection);
     DC_InitializeSession(mainsession);
 }
@@ -251,6 +262,32 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
 
     cacheinitializer->initialize();
     this->_phonecodehash.clear();
+
+    if(this->_accountpassword)
+    {
+        this->_accountpassword->deleteLater();
+        this->_accountpassword = NULL;
+    }
+}
+
+void TelegramInitializer::onAccountGetPasswordReplied(MTProtoReply *mtreply)
+{
+    if(this->_accountpassword)
+        this->_accountpassword->deleteLater();
+
+    this->_accountpassword = new AccountPassword(this);
+    this->_accountpassword->read(mtreply);
+
+    if(this->_accountpassword->constructorId() == TLTypes::AccountNoPassword)
+    {
+        qWarning("account.NoPassword unhandled");
+
+        this->_accountpassword->deleteLater();
+        this->_accountpassword = NULL;
+        return;
+    }
+
+    emit sessionPasswordNeeded(this->_accountpassword->hint().toString());
 }
 
 void TelegramInitializer::onFloodWait(int seconds)
@@ -260,4 +297,10 @@ void TelegramInitializer::onFloodWait(int seconds)
 
     this->_floodwaittimer = this->startTimer(5000); // 5 seconds
     emit floodWait(seconds);
+}
+
+void TelegramInitializer::onSessionPasswordNeeded()
+{
+    MTProtoRequest* req = TelegramAPI::accountGetPassword(DC_MainSession);
+    connect(req, &MTProtoRequest::replied, this, &TelegramInitializer::onAccountGetPasswordReplied);
 }

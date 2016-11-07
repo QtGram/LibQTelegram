@@ -14,13 +14,16 @@ class MTProtoServiceHandler : public QObject
         bool handle(MTProtoReply* mtreply);
 
     signals:
+        void ackRequest(TLLong reqmsgid);
         void ack(const TLVector<TLLong>& msgids);
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
         void saltChanged(TLLong reqmsgid);
         void unauthorized();
         void floodWait(int seconds);
-        void phoneCodeError(TLLong rqmsgid, QString errormessage);
+        void invalidPassword();
+        void sessionPasswordNeeded();
+        void phoneCodeError(QString errormessage);
 
     private:
         bool handleMsgContainer(MTProtoReply* mtreply);

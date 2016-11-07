@@ -42,17 +42,19 @@ class DC : public DCConnection
         void repeatRequest(TLLong messageid);
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
+        void onAckRequest(TLLong reqmsgid);
         void onDCFloodWait(int seconds);
-        void onPhoneCodeError(TLLong reqmsgid, QString errormessage);
+        void onDCUnauthorized();
         void onDCReadyRead();
         void onDCConnected();
-        void onDCUnauthorized();
 
     signals:
         void authorizationReply(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int dcid);
         void floodWait(int seconds);
         void phoneCodeError(QString errormessage);
+        void invalidPassword();
+        void sessionPasswordNeeded();
         void unauthorized();
 
     private:

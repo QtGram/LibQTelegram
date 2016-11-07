@@ -28,9 +28,10 @@ class Telegram : public QObject
         TelegramObject* messageFrom(Message *message) const;
 
     public slots: // Login
-        void signIn(const QString& phonecode);
-        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
-        void resendCode();
+        void signIn(const QString& phonecode) const;
+        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode) const;
+        void sendPassword(const QString& password) const;
+        void resendCode() const;
 
     private:
         QString messageMediaText(MessageMedia* messagemedia) const;
@@ -42,6 +43,8 @@ class Telegram : public QObject
         void signInRequested();
         void loginCompleted();
         void floodWait(int seconds);
+        void invalidPassword();
+        void sessionPasswordNeeded(QString hint);
         void phoneCodeError(QString errormessage);
 
     private:

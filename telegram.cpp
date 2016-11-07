@@ -34,6 +34,8 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
         disconnect(this->_initializer, &TelegramInitializer::signUpRequested, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signInRequested, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::loginCompleted, this, 0);
+        disconnect(this->_initializer, &TelegramInitializer::invalidPassword, this, 0);
+        disconnect(this->_initializer, &TelegramInitializer::sessionPasswordNeeded, this, 0);
     }
 
     this->_initializer = initializer;
@@ -43,6 +45,8 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     connect(this->_initializer, &TelegramInitializer::signUpRequested, this, &Telegram::signUpRequested);
     connect(this->_initializer, &TelegramInitializer::signInRequested, this, &Telegram::signInRequested);
     connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
+    connect(this->_initializer, &TelegramInitializer::invalidPassword, this, &Telegram::invalidPassword);
+    connect(this->_initializer, &TelegramInitializer::sessionPasswordNeeded, this, &Telegram::sessionPasswordNeeded);
 
     emit initializerChanged();
 }
@@ -318,17 +322,22 @@ QString Telegram::messagePreview(Message *message) const
     return message->message();
 }
 
-void Telegram::signIn(const QString &phonecode)
+void Telegram::signIn(const QString &phonecode) const
 {
     this->_initializer->signIn(phonecode);
 }
 
-void Telegram::signUp(const QString &firstname, const QString &lastname, const QString &phonecode)
+void Telegram::signUp(const QString &firstname, const QString &lastname, const QString &phonecode) const
 {
     this->_initializer->signUp(firstname, lastname, phonecode);
 }
 
-void Telegram::resendCode()
+void Telegram::sendPassword(const QString &password) const
+{
+    this->_initializer->sendPassword(password);
+}
+
+void Telegram::resendCode() const
 {
     this->_initializer->resendCode();
 }

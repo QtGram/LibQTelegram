@@ -11,8 +11,11 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::ackRequest, this, &DC::onAckRequest);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::migrateDC, this, &DC::migrateDC);
-    connect(this->_mtservicehandler, &MTProtoServiceHandler::phoneCodeError, this, &DC::onPhoneCodeError);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::sessionPasswordNeeded, this, &DC::sessionPasswordNeeded);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::invalidPassword, this, &DC::invalidPassword);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::phoneCodeError, this, &DC::phoneCodeError);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::floodWait, this, &DC::onDCFloodWait);
@@ -141,16 +144,6 @@ void DC::onDCFloodWait(int seconds)
     emit floodWait(seconds);
 }
 
-void DC::onPhoneCodeError(TLLong reqmsgid, QString errormessage)
-{
-    if(this->_pendingrequests.contains(reqmsgid))
-        this->_pendingrequests[reqmsgid]->setAcked(true); // Don't repeat, we have received a reply
-    else
-        qWarning("DC %d Cannot find phone code request %llx", this->id(), reqmsgid);
-
-    emit phoneCodeError(errormessage);
-}
-
 void DC::handleReply(const QByteArray &message)
 {
     MTProtoReply mtreply(message, this->id());
@@ -223,6 +216,17 @@ void DC::onAck(const TLVector<TLLong> &msgids)
         MTProtoRequest* req = this->_pendingrequests[msgid];
         req->setAcked(true);
     }
+}
+
+void DC::onAckRequest(TLLong reqmsgid)
+{
+    if(!this->_pendingrequests.contains(reqmsgid))
+    {
+        qWarning("DC %d Cannot ACK request %llx", this->id(), reqmsgid);
+        return;
+    }
+
+    this->_pendingrequests[reqmsgid]->setAcked(true); // Don't repeat, we have received a reply
 }
 
 void DC::send(MTProtoRequest *req)

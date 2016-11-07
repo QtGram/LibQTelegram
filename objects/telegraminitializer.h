@@ -42,9 +42,10 @@ class TelegramInitializer : public QObject
         void setDebugMode(bool dbgmode);
 
     public:
-        void signIn(const QString& phonecode);
-        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode);
-        void resendCode();
+        void signIn(const QString& phonecode) const;
+        void signUp(const QString& firstname, const QString& lastname, const QString& phonecode) const;
+        void sendPassword(const QString& password) const;
+        void resendCode() const;
 
     private:
         void tryConnect();
@@ -56,11 +57,15 @@ class TelegramInitializer : public QObject
         void onMainSessionReady(DCSession *dcsession);
         void onAuthCheckPhoneReplied(MTProtoReply *mtreply);
         void onLoginCompleted(MTProtoReply* mtreply);
+        void onAccountGetPasswordReplied(MTProtoReply* mtreply);
         void onFloodWait(int seconds);
+        void onSessionPasswordNeeded();
 
     signals:
         void floodWait(int seconds);
         void phoneCodeError(QString errormessage);
+        void sessionPasswordNeeded(QString hint);
+        void invalidPassword();
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
@@ -84,6 +89,7 @@ class TelegramInitializer : public QObject
         bool _debugmode;
 
      private:
+        AccountPassword* _accountpassword;
         TLString _phonecodehash;
         int _floodwaittimer;
 };
