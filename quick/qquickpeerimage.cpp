@@ -21,7 +21,6 @@ void QQuickPeerImage::setPeer(TelegramObject *peer)
         return;
 
     this->_peer = peer;
-    this->initialize();
     emit peerChanged();
 }
 
@@ -211,4 +210,12 @@ void QQuickPeerImage::bindToElement()
         return;
 
     this->updateSource(mediaurl);
+}
+
+void QQuickPeerImage::componentComplete()
+{
+    QQuickBaseItem::componentComplete();
+
+    if(this->_peer)
+        this->initialize();
 }

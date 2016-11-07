@@ -71,6 +71,9 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void createFileElement();
         void initialize();
 
+    protected:
+        virtual void componentComplete();
+
     signals:
         void messageChanged();
         void isStickerChanged();

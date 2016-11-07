@@ -157,7 +157,6 @@ void QQuickMediaMessageItem::setMessage(Message *message)
         return;
 
     this->_message = message;
-    this->initialize();
     emit messageChanged();
 }
 
@@ -397,6 +396,13 @@ void QQuickMediaMessageItem::initialize()
     }
 
     emit sourceChanged();
+}
+
+void QQuickMediaMessageItem::componentComplete()
+{
+    QQuickBaseItem::componentComplete();
+
+    this->initialize();
 }
 
 void QQuickMediaMessageItem::scaleToImageSize()

@@ -34,6 +34,9 @@ class QQuickPeerImage : public QQuickBaseItem
         void reinitialize();
         void bindToElement();
 
+    protected:
+        virtual void componentComplete();
+
     signals:
         void peerChanged();
         void sizeChanged();
