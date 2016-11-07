@@ -3,7 +3,6 @@
 
 #include <openssl/aes.h>
 #include <QtCore>
-#include "sha1.h"
 #include "../types/basic.h"
 
 class Aes

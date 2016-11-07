@@ -1,5 +1,5 @@
 #include "dcconfig.h"
-#include "../crypto/sha1.h"
+#include "../crypto/hash.h"
 #include <QJsonObject>
 #include <QDateTime>
 
@@ -95,7 +95,7 @@ const QByteArray &DCConfig::authorizationKey() const
 QByteArray DCConfig::authorizationKeyAuxHash()
 {
     if(this->_authorizationkeyauxhash.isEmpty())
-        this->_authorizationkeyauxhash = Sha1::hash(this->_authorizationkey).left(8);
+        this->_authorizationkeyauxhash = sha1_hash(this->_authorizationkey).left(8);
 
     return this->_authorizationkeyauxhash;
 }
@@ -104,7 +104,7 @@ TLLong DCConfig::authorizationKeyId()
 {
     if(!this->_authorizationkeyid)
     {
-        QByteArray lowauthkey = Sha1::hash(this->_authorizationkey).mid(12);
+        QByteArray lowauthkey = sha1_hash(this->_authorizationkey).mid(12);
         this->_authorizationkeyid = *(reinterpret_cast<const TLLong*>(lowauthkey.constData()));
     }
 

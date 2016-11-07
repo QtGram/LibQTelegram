@@ -205,7 +205,6 @@ SOURCES += \
     crypto/gzip.cpp \
     crypto/math.cpp \
     crypto/rsa.cpp \
-    crypto/sha1.cpp \
     mtproto/dc/dc.cpp \
     mtproto/dc/dcauthorization.cpp \
     mtproto/dc/dcconnection.cpp \
@@ -450,7 +449,6 @@ HEADERS +=\
     crypto/gzip.h \
     crypto/math.h \
     crypto/rsa.h \
-    crypto/sha1.h \
     mtproto/dc/dc.h \
     mtproto/dc/dcauthorization.h \
     mtproto/dc/dcconnection.h \
@@ -499,4 +497,5 @@ HEADERS +=\
     objects/notifications/telegramnotifications.h \
     objects/notifications/notificationobject.h \
     objects/sendstatus/sendstatushandler.h \
-    objects/sendstatus/sendstatusobject.h
+    objects/sendstatus/sendstatusobject.h \
+    crypto/hash.h

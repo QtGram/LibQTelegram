@@ -1,5 +1,5 @@
 #include "qquickbaseitem.h"
-#include <QCryptographicHash>
+#include "../crypto/hash.h"
 
 QHash<QByteArray, QQmlComponent*> QQuickBaseItem::_components;
 
@@ -145,7 +145,7 @@ QString QQuickBaseItem::escape(const TLString &s)
 void QQuickBaseItem::createComponent(const QString &componentcode)
 {
     QQmlComponent* component = NULL;
-    QByteArray hash = QCryptographicHash::hash(componentcode.toUtf8(), QCryptographicHash::Md5);
+    QByteArray hash = md5_hash(componentcode.toUtf8());
 
     if(!QQuickBaseItem::_components.contains(hash))
     {

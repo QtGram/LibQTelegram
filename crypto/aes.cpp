@@ -1,4 +1,5 @@
 #include "aes.h"
+#include "hash.h"
 
 Aes::Aes()
 {
@@ -8,10 +9,10 @@ void Aes::calculateAesKeys(const TLBytes &authorizationkey, const TLBytes &msgke
 {
     int x = in ? 8 : 0;
 
-    TLBytes sha1a = Sha1::hash(msgkey + authorizationkey.mid(x, 32));
-    TLBytes sha1b = Sha1::hash(authorizationkey.mid(32 + x, 16) + msgkey + authorizationkey.mid(48 + x, 16));
-    TLBytes sha1c = Sha1::hash(authorizationkey.mid(64 + x, 32) + msgkey);
-    TLBytes sha1d = Sha1::hash(msgkey + authorizationkey.mid(96 + x, 32));
+    TLBytes sha1a = sha1_hash(msgkey + authorizationkey.mid(x, 32));
+    TLBytes sha1b = sha1_hash(authorizationkey.mid(32 + x, 16) + msgkey + authorizationkey.mid(48 + x, 16));
+    TLBytes sha1c = sha1_hash(authorizationkey.mid(64 + x, 32) + msgkey);
+    TLBytes sha1d = sha1_hash(msgkey + authorizationkey.mid(96 + x, 32));
 
     aeskey = sha1a.mid(0, 8) + sha1b.mid(8, 12) + sha1c.mid(4, 12);
     aesiv = sha1a.mid(8, 12) + sha1b.mid(0, 8) + sha1c.mid(16, 4) + sha1d.mid(0, 8);

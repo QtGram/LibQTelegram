@@ -3,7 +3,7 @@
 #include "../../config/telegramconfig.h"
 #include "../../config/dcconfig.h"
 #include "../../crypto/math.h"
-#include "../../crypto/sha1.h"
+#include "../../crypto/hash.h"
 #include "../../crypto/aes.h"
 #include "../../crypto/rsa.h"
 
@@ -76,7 +76,7 @@ void DCAuthorization::encryptPQInnerData(PQInnerData *pqinnerdata, TLBytes &enci
     MTProtoStream mtstream;
     pqinnerdata->write(&mtstream);
 
-    TLBytes datawithhash = Sha1::hash(mtstream.data());
+    TLBytes datawithhash = sha1_hash(mtstream.data());
     datawithhash.append(mtstream.data());
 
     TLInt datalen = datawithhash.length(), randlen = DCAuthorization::ENCRYPTED_PQINNERDATA_LENGTH - datalen;
@@ -91,7 +91,7 @@ void DCAuthorization::encryptClientDHInnerData(ClientDHInnerData *clientdhinnerd
     MTProtoStream mtstream;
     clientdhinnerdata->write(&mtstream);
 
-    TLBytes datawithhash = Sha1::hash(mtstream.data());
+    TLBytes datawithhash = sha1_hash(mtstream.data());
     datawithhash.append(mtstream.data());
 
     TLInt datalen = datawithhash.length(), randlen = Math::padRequired(datawithhash.length(), 16);
@@ -189,15 +189,15 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
     TLBytes newnonce = ByteConverter::serialize(this->_newnonce);
     TLBytes servernonce = ByteConverter::serialize(this->_respq->serverNonce());
 
-    this->_tmpaeskey = Sha1::hash(newnonce + servernonce) + Sha1::hash(servernonce + newnonce).left(12);
-    this->_tmpaesiv = Sha1::hash(servernonce + newnonce).mid(12, 8) + Sha1::hash(newnonce + newnonce) + newnonce.left(4);
+    this->_tmpaeskey = sha1_hash(newnonce + servernonce) + sha1_hash(servernonce + newnonce).left(12);
+    this->_tmpaesiv = sha1_hash(servernonce + newnonce).mid(12, 8) + sha1_hash(newnonce + newnonce) + newnonce.left(4);
 
     TLBytes answer = Aes::decrypt(serverdhparams.encryptedAnswer(), this->_tmpaeskey, this->_tmpaesiv);
 
     // Sanity checks
-    TLBytes sha1answer = answer.left(Sha1::BYTES_COUNT);
-    answer = answer.mid(Sha1::BYTES_COUNT, 564); // Strip SHA1 part
-    Q_ASSERT(sha1answer == Sha1::hash(answer));
+    TLBytes sha1answer = answer.left(Sha1_BytesCount);
+    answer = answer.mid(Sha1_BytesCount, 564); // Strip SHA1 part
+    Q_ASSERT(sha1answer == sha1_hash(answer));
 
     MTProtoStream mtstreamanswer(answer);
     ServerDHInnerData serverdhinnerdata;
@@ -242,7 +242,7 @@ void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
         TLBytes newnonce = ByteConverter::serialize(this->_newnonce);
         TLBytes newnoncehash = ByteConverter::serialize(serverdhparams.newNonceHash());
 
-        if(newnoncehash != Sha1::hash(newnonce))
+        if(newnoncehash != sha1_hash(newnonce))
             qWarning("DC %d ServerDHParamsFail: received new_nonce_hash != new_nonce", dcconfig.id());
     }
 
@@ -264,7 +264,7 @@ void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
     expectedhashdata.append(static_cast<char>(3));
     expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
 
-    if(Sha1::hash(expectedhashdata).mid(4) != newnoncehash3)
+    if(sha1_hash(expectedhashdata).mid(4) != newnoncehash3)
     {
         qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenFail)", dcconfig.id());
         this->restart();
@@ -290,7 +290,7 @@ void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
     expectedhashdata.append(static_cast<char>(2));
     expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
 
-    if(Sha1::hash(expectedhashdata).mid(4) != newnoncehash2)
+    if(sha1_hash(expectedhashdata).mid(4) != newnoncehash2)
     {
         qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenRetry)", dcconfig.id());
         this->restart();
@@ -316,7 +316,7 @@ void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
     expectedhashdata.append(static_cast<char>(1));
     expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
 
-    if(Sha1::hash(expectedhashdata).mid(4) != newnoncehash1)
+    if(sha1_hash(expectedhashdata).mid(4) != newnoncehash1)
     {
         qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenOk)", dcconfig.id());
         this->restart();

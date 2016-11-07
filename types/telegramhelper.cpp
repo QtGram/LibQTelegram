@@ -1,6 +1,6 @@
 #include "telegramhelper.h"
+#include "../crypto/hash.h"
 #include <QDateTime>
-#include <QCryptographicHash>
 
 #define CurrentTimeStamp QDateTime::currentDateTime().toTime_t()
 
@@ -349,5 +349,5 @@ TLInt TelegramHelper::messageToDialog(Message *message)
 TLBytes TelegramHelper::createPasswordHash(const QString &password, const AccountPassword *accountpassword)
 {
     TLBytes newpassworddata = password.isEmpty() ? TLBytes() : (accountpassword->currentSalt() + password.toUtf8() + accountpassword->currentSalt());
-    return QCryptographicHash::hash(newpassworddata, QCryptographicHash::Sha256);
+    return sha256_hash(newpassworddata);
 }
