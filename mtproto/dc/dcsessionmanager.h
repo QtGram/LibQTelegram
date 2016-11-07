@@ -46,7 +46,7 @@ class DCSessionManager: public QObject
     signals:
         void sessionReady(DCSession* session);
         void phoneCodeError(QString errormessage);
-        void floodWait(int seconds);
+        void floodLock(int seconds);
         void invalidPassword();
         void sessionPasswordNeeded();
 

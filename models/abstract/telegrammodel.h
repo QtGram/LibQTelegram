@@ -13,6 +13,7 @@ class TelegramModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(Telegram* telegram READ telegram WRITE setTelegram NOTIFY telegramChanged)
+    Q_PROPERTY(bool initializing READ initializing NOTIFY initializingChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
 
     public:
@@ -22,19 +23,23 @@ class TelegramModel : public QAbstractListModel
         explicit TelegramModel(QObject *parent = 0);
         Telegram* telegram() const;
         void setTelegram(Telegram* telegram);
+        bool initializing() const;
         bool loading() const;
 
     protected:
+        void setInitializing(bool initializing);
         void setLoading(bool loading);
         virtual QHash<int, QByteArray> initRoles() const;
         virtual void telegramReady() = 0;
 
     signals:
         void telegramChanged();
+        void initializingChanged();
         void loadingChanged();
 
     protected:
         Telegram* _telegram;
+        bool _initializing;
         bool _loading;
 };
 

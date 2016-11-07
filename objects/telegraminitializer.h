@@ -58,11 +58,11 @@ class TelegramInitializer : public QObject
         void onAuthCheckPhoneReplied(MTProtoReply *mtreply);
         void onLoginCompleted(MTProtoReply* mtreply);
         void onAccountGetPasswordReplied(MTProtoReply* mtreply);
-        void onFloodWait(int seconds);
+        void onFloodLock(int seconds);
         void onSessionPasswordNeeded();
 
     signals:
-        void floodWait(int seconds);
+        void floodLock(int seconds);
         void phoneCodeError(QString errormessage);
         void sessionPasswordNeeded(QString hint);
         void invalidPassword();
@@ -91,7 +91,7 @@ class TelegramInitializer : public QObject
      private:
         AccountPassword* _accountpassword;
         TLString _phonecodehash;
-        int _floodwaittimer;
+        int _floodlocktimer;
 };
 
 #endif // TELEGRAM_H

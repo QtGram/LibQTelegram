@@ -22,7 +22,7 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     connect(dc, &DC::authorizationReply, this, &DCSessionManager::onAuthorizationReply);
     connect(dc, &DC::migrateDC, this, &DCSessionManager::onMigrateDC);
     connect(dc, &DC::phoneCodeError, this, &DCSessionManager::phoneCodeError);
-    connect(dc, &DC::floodWait, this, &DCSessionManager::floodWait);
+    connect(dc, &DC::floodLock, this, &DCSessionManager::floodLock);
     connect(dc, &DC::invalidPassword, this, &DCSessionManager::invalidPassword);
     connect(dc, &DC::sessionPasswordNeeded, this, &DCSessionManager::sessionPasswordNeeded);
 

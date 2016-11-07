@@ -4,7 +4,7 @@
 #include "config/cache/telegramcache.h"
 #include <QDebug>
 
-TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _accountpassword(NULL), _floodwaittimer(0)
+TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _accountpassword(NULL), _floodlocktimer(0)
 {
 }
 
@@ -189,7 +189,7 @@ void TelegramInitializer::tryConnect()
     else
         mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, this->_dcid);
 
-    connect(DCSessionManager_instance, &DCSessionManager::floodWait, this, &TelegramInitializer::onFloodWait, Qt::UniqueConnection);
+    connect(DCSessionManager_instance, &DCSessionManager::floodLock, this, &TelegramInitializer::onFloodLock, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::phoneCodeError, this, &TelegramInitializer::phoneCodeError, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::invalidPassword, this, &TelegramInitializer::invalidPassword, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::sessionPasswordNeeded, this, &TelegramInitializer::onSessionPasswordNeeded, Qt::UniqueConnection);
@@ -199,10 +199,10 @@ void TelegramInitializer::tryConnect()
 
 void TelegramInitializer::timerEvent(QTimerEvent *event)
 {
-    if(event->timerId() == this->_floodwaittimer)
+    if(event->timerId() == this->_floodlocktimer)
     {
-        this->killTimer(this->_floodwaittimer);
-        this->_floodwaittimer = 0;
+        this->killTimer(this->_floodlocktimer);
+        this->_floodlocktimer = 0;
     }
 }
 
@@ -290,13 +290,13 @@ void TelegramInitializer::onAccountGetPasswordReplied(MTProtoReply *mtreply)
     emit sessionPasswordNeeded(this->_accountpassword->hint().toString());
 }
 
-void TelegramInitializer::onFloodWait(int seconds)
+void TelegramInitializer::onFloodLock(int seconds)
 {
-    if(this->_floodwaittimer) // Ignore other flood signals for some time
+    if(this->_floodlocktimer) // Ignore other flood signals for some time
         return;
 
-    this->_floodwaittimer = this->startTimer(5000); // 5 seconds
-    emit floodWait(seconds);
+    this->_floodlocktimer = this->startTimer(5000); // 5 seconds
+    emit floodLock(seconds);
 }
 
 void TelegramInitializer::onSessionPasswordNeeded()

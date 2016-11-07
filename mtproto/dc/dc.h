@@ -45,7 +45,7 @@ class DC : public DCConnection
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
         void onAckRequest(TLLong reqmsgid);
-        void onDCFloodWait(int seconds);
+        void onDcFloodClock(int seconds);
         void onDCUnauthorized();
         void onDCReadyRead();
         void onDCConnected();
@@ -53,7 +53,7 @@ class DC : public DCConnection
     signals:
         void authorizationReply(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int dcid);
-        void floodWait(int seconds);
+        void floodLock(int seconds);
         void phoneCodeError(QString errormessage);
         void invalidPassword();
         void sessionPasswordNeeded();

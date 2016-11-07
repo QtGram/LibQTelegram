@@ -42,8 +42,8 @@ class Telegram : public QObject
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
-        void floodWait(int seconds);
         void invalidPassword();
+        void floodLock(int seconds);
         void sessionPasswordNeeded(QString hint);
         void phoneCodeError(QString errormessage);
 

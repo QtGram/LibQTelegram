@@ -20,7 +20,7 @@ class MTProtoServiceHandler : public QObject
         void migrateDC(int fromdcid, int todcid);
         void saltChanged(TLLong reqmsgid);
         void unauthorized();
-        void floodWait(int seconds);
+        void floodLock(int seconds);
         void invalidPassword();
         void sessionPasswordNeeded();
         void phoneCodeError(QString errormessage);

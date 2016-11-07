@@ -3,6 +3,7 @@
 #include "../crypto/gzip.h"
 #include "../config/telegramconfig.h"
 #include <QRegularExpression>
+#include <QDateTime>
 
 MTProtoServiceHandler::MTProtoServiceHandler(int dcid, QObject *parent) : QObject(parent), _dcid(dcid)
 {
@@ -101,8 +102,9 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
 
         if(!seconds.isNull())
         {
-            qWarning("DC %d Flood lock enabled (%s seconds)", this->_dcid, qUtf8Printable(seconds));
-            emit floodWait(seconds.toInt());
+            QDateTime unlockdate = QDateTime::currentDateTime().addSecs(seconds.toInt());
+            qWarning("DC %d Flood lock enabled (unlock at: %s)", this->_dcid, qUtf8Printable(unlockdate.toString(Qt::SystemLocaleLongDate)));
+            emit floodLock(seconds.toInt());
         }
         else
             qFatal("DC %d Cannot get flood duration", this->_dcid);
