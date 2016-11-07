@@ -99,6 +99,7 @@ void DCSessionManager::closeSession(DCSession *dcsession)
         this->_dclist.remove(dc->id());
     }
 
+    MTProtoAPI::destroySession(dcsession, dcsession->sessionId());
     dcsession->deleteLater();
 }
 
