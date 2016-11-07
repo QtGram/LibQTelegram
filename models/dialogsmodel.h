@@ -7,6 +7,8 @@ class DialogsModel : public TelegramModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(Dialog* cloudDialog READ cloudDialog CONSTANT FINAL)
+
     public:
         enum DialogRoles {
             TitleRole = Qt::UserRole + 10,
@@ -27,6 +29,9 @@ class DialogsModel : public TelegramModel
 
     public:
         explicit DialogsModel(QObject *parent = 0);
+        Dialog* cloudDialog();
+
+    public:
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex& = QModelIndex()) const;
         virtual QHash<int, QByteArray> roleNames() const;
@@ -61,6 +66,7 @@ class DialogsModel : public TelegramModel
 
     private:
         QList<Dialog*> _dialogs;
+        Dialog* _clouddialog;
 };
 
 #endif // DIALOGSMODEL_H

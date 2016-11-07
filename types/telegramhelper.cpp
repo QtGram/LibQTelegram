@@ -1,5 +1,6 @@
 #include "telegramhelper.h"
 #include "../crypto/hash.h"
+#include "../config/telegramconfig.h"
 #include <QDateTime>
 
 #define CurrentTimeStamp QDateTime::currentDateTime().toTime_t()
@@ -64,13 +65,13 @@ Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer
     return message;
 }
 
-Dialog *TelegramHelper::createDialog(User *user)
+Dialog *TelegramHelper::createDialog(User *user, QObject *parent)
 {
     Peer* peer = new Peer();
     peer->setConstructorId(TLTypes::PeerUser);
     peer->setUserId(user->id());
 
-    Dialog* dialog = new Dialog();
+    Dialog* dialog = new Dialog(parent);
     dialog->setConstructorId(TLTypes::Dialog);
     dialog->setPeer(peer);
 
@@ -215,6 +216,9 @@ QString TelegramHelper::fullName(User *user)
 
 QString TelegramHelper::statusText(User *user)
 {
+    if(TelegramConfig_me->id() == user->id())
+        return QObject::tr("Chat with yourself");
+
     if(user->status())
     {
         if(user->status()->constructorId() == TLTypes::UserStatusLastMonth)
@@ -265,6 +269,11 @@ bool TelegramHelper::isAnimated(Document *document)
 bool TelegramHelper::isFile(Document *document)
 {
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename) != NULL;
+}
+
+bool TelegramHelper::isCloud(Dialog *dialog)
+{
+    return TelegramHelper::identifier(dialog) == TelegramConfig_me->id();
 }
 
 bool TelegramHelper::isChat(Dialog *dialog)

@@ -2,8 +2,21 @@
 #include "../config/cache/telegramcache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 
-DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent)
+DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent), _clouddialog(NULL)
 {
+}
+
+Dialog *DialogsModel::cloudDialog()
+{
+    TLInt dialogid = TelegramHelper::identifier(TelegramConfig_me);
+
+    if(TelegramCache_hasDialog(dialogid))
+        return TelegramCache_dialog(dialogid);
+
+    if(!this->_clouddialog)
+        this->_clouddialog = TelegramHelper::createDialog(TelegramConfig_me, this);
+
+    return this->_clouddialog;
 }
 
 QVariant DialogsModel::data(const QModelIndex &index, int role) const
