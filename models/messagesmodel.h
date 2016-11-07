@@ -67,8 +67,8 @@ class MessagesModel : public TelegramModel
         bool isWritable() const;
 
     public: // Overrides
-        virtual bool canFetchMore(const QModelIndex &) const;
-        virtual void fetchMore(const QModelIndex &);
+        virtual bool canFetchMore(const QModelIndex&) const;
+        virtual void fetchMore(const QModelIndex & = QModelIndex());
         virtual QVariant data(const QModelIndex &index, int role) const;
         virtual int rowCount(const QModelIndex &) const;
         virtual QHash<int, QByteArray> roleNames() const;
@@ -103,6 +103,7 @@ class MessagesModel : public TelegramModel
         void markAsRead();
         bool ownMessage(Message* message) const;
         void createInputPeer();
+        void terminateInitialization();
         virtual void telegramReady();
 
     signals:

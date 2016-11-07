@@ -129,6 +129,7 @@ void MessagesModel::fetchMore(const QModelIndex &)
 
     if(count >= this->_loadcount) // We have enough cached messages
     {
+        this->terminateInitialization();
         this->setLoading(false);
         return;
     }
@@ -222,6 +223,9 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
 
 int MessagesModel::rowCount(const QModelIndex &) const
 {
+    if(this->_initializing)
+        return 0;
+
     return this->_messages.length();
 }
 
@@ -293,6 +297,9 @@ void MessagesModel::sendAction(int action)
     if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
         return;
 
+    if(TelegramHelper::isCloud(this->_dialog)) // Don't notify myself
+        return;
+
     TLConstructor actionctor = this->getAction(action);
 
     if(!actionctor)
@@ -331,6 +338,10 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     TelegramCache_store(messages.messages());
 
     this->loadHistoryFromCache();
+
+    if(!this->_fetchmore)
+        this->terminateInitialization();
+
     this->setLoading(false);
 }
 
@@ -501,6 +512,9 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
 
 void MessagesModel::setFirstNewMessage()
 {
+    if(this->_messages.isEmpty())
+        return;
+
     TLInt maxinmsgid = this->_dialog->readInboxMaxId();
 
     if(maxinmsgid >= this->_messages.first()->id())
@@ -618,6 +632,16 @@ void MessagesModel::createInputPeer()
     this->_inputpeer = this->_telegram->createInputPeer(this->_dialog, this);
 }
 
+void MessagesModel::terminateInitialization()
+{
+    if(!this->_initializing)
+        return;
+
+    this->beginResetModel();
+    this->setInitializing(false);
+    this->endResetModel();
+}
+
 void MessagesModel::telegramReady()
 {
     if(!this->_dialog)
@@ -641,13 +665,14 @@ void MessagesModel::telegramReady()
         connect(user, &User::statusChanged, this, &MessagesModel::statusTextChanged);
     }
 
+    this->setInitializing(true);
+
     this->_messages = TelegramCache_lastDialogMessages(this->_dialog);
 
-    if(this->_messages.isEmpty())
-        return;
-
-    this->beginInsertRows(QModelIndex(), 0, this->_messages.count() - 1);
-    this->endInsertRows();
+    if(this->_messages.count() >= MessagesFirstLoad)
+        this->terminateInitialization();
+    else
+        this->fetchMore();
 
     this->setFirstNewMessage();
     this->markAsRead();
