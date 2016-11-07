@@ -11,7 +11,7 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     if(this->_dclist.contains(id))
         return this->_dclist[id];
 
-    qDebug() << "DC" << id << "created";
+    qDebug("DC %d created", id);
 
     DCConfig& dcconfig = DCConfig_fromDcId(id);
     dcconfig.setHost(host);
@@ -38,20 +38,20 @@ DC *DCSessionManager::createDC(int id)
 
 void DCSessionManager::doAuthorization(DCSession *dcsession)
 {
-    if(this->_dcauthorizations.contains(dcsession->dc())) // Do not authorize the same DC multiple times
+    if(this->_dcauthorizations.contains(SessionToDC(dcsession))) // Do not authorize the same DC multiple times
         return;
 
     DCAuthorization* dcauthorization = new DCAuthorization(dcsession, this);
     connect(dcauthorization, &DCAuthorization::authorized, this, &DCSessionManager::onAuthorized);
     connect(dcauthorization, &DCAuthorization::authorizationImported, this, &DCSessionManager::onAuthorizationImported);
 
-    this->_dcauthorizations[dcsession->dc()] = dcauthorization;
+    this->_dcauthorizations[SessionToDC(dcsession)] = dcauthorization;
     dcauthorization->authorize();
 }
 
 void DCSessionManager::doSessionReady(DCSession *dcsession)
 {
-    DC* dc = dcsession->dc();
+    DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
 
     MTProtoRequest* keptreq = dc->giveRequest();
@@ -68,7 +68,7 @@ void DCSessionManager::doSessionReady(DCSession *dcsession)
 
 void DCSessionManager::initializeSession(DCSession *dcsession)
 {
-    DC* dc = dcsession->dc();
+    DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
 
     if(dc->state() != DC::ConnectedState)
@@ -89,7 +89,7 @@ void DCSessionManager::initializeSession(DCSession *dcsession)
 
 void DCSessionManager::closeSession(DCSession *dcsession)
 {
-    DC* dc = dcsession->dc();
+    DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
 
     if(dcsession->ownedDc())
@@ -135,7 +135,7 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
         DCConfig& olddcconfig = DCConfig_fromSession(oldsession);
 
         if(olddcconfig.authorization() == DCConfig::Signed) // Get the last request only if the previous DC was signed
-            dc->keepRequest(oldsession->dc()->lastRequest());
+            dc->keepRequest(SessionToDC(oldsession)->lastRequest());
 
         this->closeSession(oldsession);
     }

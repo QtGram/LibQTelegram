@@ -7,17 +7,17 @@ MTProtoAPI::MTProtoAPI(QObject* parent) : QObject(parent)
 {
 }
 
-void MTProtoAPI::reqPq(DCSession* session, TLInt128 nonce) 
+void MTProtoAPI::reqPq(DC* dc, TLInt128 nonce) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::reqPq);
 	mtstream->writeTLInt128(nonce);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::reqDHParams(DCSession* session, TLInt128 nonce, TLInt128 server_nonce, TLString p, TLString q, TLLong public_key_fingerprint, TLString encrypted_data) 
+void MTProtoAPI::reqDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLString p, TLString q, TLLong public_key_fingerprint, TLString encrypted_data) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
@@ -29,10 +29,10 @@ void MTProtoAPI::reqDHParams(DCSession* session, TLInt128 nonce, TLInt128 server
 	mtstream->writeTLLong(public_key_fingerprint);
 	mtstream->writeTLString(encrypted_data);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::setClientDHParams(DCSession* session, TLInt128 nonce, TLInt128 server_nonce, TLString encrypted_data) 
+void MTProtoAPI::setClientDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLString encrypted_data) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
@@ -41,40 +41,40 @@ void MTProtoAPI::setClientDHParams(DCSession* session, TLInt128 nonce, TLInt128 
 	mtstream->writeTLInt128(server_nonce);
 	mtstream->writeTLString(encrypted_data);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::rpcDropAnswer(DCSession* session, TLLong req_msg_id) 
+void MTProtoAPI::rpcDropAnswer(DC* dc, TLLong req_msg_id) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::rpcDropAnswer);
 	mtstream->writeTLLong(req_msg_id);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::getFutureSalts(DCSession* session, TLInt num) 
+void MTProtoAPI::getFutureSalts(DC* dc, TLInt num) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::getFutureSalts);
 	mtstream->writeTLInt(num);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::ping(DCSession* session, TLLong ping_id) 
+void MTProtoAPI::ping(DC* dc, TLLong ping_id) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::ping);
 	mtstream->writeTLLong(ping_id);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::pingDelayDisconnect(DCSession* session, TLLong ping_id, TLInt disconnect_delay) 
+void MTProtoAPI::pingDelayDisconnect(DC* dc, TLLong ping_id, TLInt disconnect_delay) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
@@ -82,20 +82,20 @@ void MTProtoAPI::pingDelayDisconnect(DCSession* session, TLLong ping_id, TLInt d
 	mtstream->writeTLLong(ping_id);
 	mtstream->writeTLInt(disconnect_delay);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::destroySession(DCSession* session, TLLong session_id) 
+void MTProtoAPI::destroySession(DC* dc, TLLong session_id) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::destroySession);
 	mtstream->writeTLLong(session_id);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::contestSaveDeveloperInfo(DCSession* session, TLInt vk_id, TLString name, TLString phone_number, TLInt age, TLString city) 
+void MTProtoAPI::contestSaveDeveloperInfo(DC* dc, TLInt vk_id, TLString name, TLString phone_number, TLInt age, TLString city) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
@@ -106,6 +106,6 @@ void MTProtoAPI::contestSaveDeveloperInfo(DCSession* session, TLInt vk_id, TLStr
 	mtstream->writeTLInt(age);
 	mtstream->writeTLString(city);
 	
-	session->sendPlain(mtstream);
+	dc->sendPlain(mtstream);
 }
 

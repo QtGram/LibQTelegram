@@ -20,7 +20,6 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::floodWait, this, &DC::onDCFloodWait);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::unauthorized, this, &DC::onDCUnauthorized);
-
     connect(this->_mtservicehandler, SIGNAL(serviceHandled(MTProtoReply*)), this, SLOT(handleReply(MTProtoReply*)));
 
     connect(this, &DC::connected, this, &DC::onDCConnected);
@@ -33,6 +32,14 @@ MTProtoRequest *DC::lastRequest() const
         return NULL;
 
     return this->_pendingrequests[this->_lastmsgid];
+}
+
+void DC::sendPlain(MTProtoStream *mtstream)
+{
+    MTProtoRequest req(this->id());
+    req.setBody(mtstream); // Take ownership
+
+    this->send(&req);
 }
 
 TLInt DC::generateContentMsgNo()

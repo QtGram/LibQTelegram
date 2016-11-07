@@ -41,14 +41,6 @@ void DCSession::setOwnedDC(bool b)
     this->_dc->setParent(b ? this : NULL);
 }
 
-void DCSession::sendPlain(MTProtoStream *mtstream)
-{
-    MTProtoRequest req(this->_dc->id());
-    req.setBody(mtstream); // Take ownership
-
-    this->_dc->send(&req);
-}
-
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 {
     MTProtoRequest* req = new MTProtoRequest(this->_dc->id());

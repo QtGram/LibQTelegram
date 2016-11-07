@@ -65,9 +65,9 @@ void DCAuthorization::authorize()
 void DCAuthorization::importAuthorization(DCSession* fromsession)
 {
     Q_ASSERT(DCConfig_isLoggedIn);
-    Q_ASSERT(this->_dcsession->dc());
+    Q_ASSERT(SessionToDC(this->_dcsession));
 
-    MTProtoRequest* req = TelegramAPI::authExportAuthorization(fromsession, this->_dcsession->dc()->id());
+    MTProtoRequest* req = TelegramAPI::authExportAuthorization(fromsession, SessionToDcId(this->_dcsession));
     connect(req, &MTProtoRequest::replied, this, &DCAuthorization::onAuthorizationExported);
 }
 
@@ -104,7 +104,7 @@ void DCAuthorization::encryptClientDHInnerData(ClientDHInnerData *clientdhinnerd
 void DCAuthorization::handleNotAuthorized()
 {
     Math::randomize(&this->_nonce);
-    MTProtoAPI::reqPq(this->_dcsession, this->_nonce);
+    MTProtoAPI::reqPq(SessionToDC(this->_dcsession), this->_nonce);
 }
 
 void DCAuthorization::handlePQReceived()
@@ -132,7 +132,7 @@ void DCAuthorization::handlePQReceived()
     TLBytes encinnerdata;
     this->encryptPQInnerData(&pqinnerdata, encinnerdata);
 
-    MTProtoAPI::reqDHParams(this->_dcsession, this->_nonce,
+    MTProtoAPI::reqDHParams(SessionToDC(this->_dcsession), this->_nonce,
                             this->_respq->serverNonce(), bp, bq,
                             this->_respq->serverPublicKeyFingerprints().first(),
                             encinnerdata);
@@ -148,7 +148,7 @@ void DCAuthorization::handleDHParamsOk()
 
     TLBytes encclientdhinnerdata;
     this->encryptClientDHInnerData(&clientdhinnerdata, this->_tmpaeskey, this->_tmpaesiv, encclientdhinnerdata);
-    MTProtoAPI::setClientDHParams(this->_dcsession, this->_respq->nonce(), this->_respq->serverNonce(), encclientdhinnerdata);
+    MTProtoAPI::setClientDHParams(SessionToDC(this->_dcsession), this->_respq->nonce(), this->_respq->serverNonce(), encclientdhinnerdata);
 }
 
 void DCAuthorization::handleAuthorized()
@@ -161,7 +161,7 @@ void DCAuthorization::handleAuthorized()
     }
 
     TelegramConfig_save;
-    emit authorized(this->_dcsession->dc());
+    emit authorized(SessionToDC(this->_dcsession));
 }
 
 void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
@@ -346,7 +346,7 @@ void DCAuthorization::onConfigurationReceived(MTProtoReply* mtreply)
     }
 
     TelegramConfig_save;
-    emit authorized(this->_dcsession->dc());
+    emit authorized(SessionToDC(this->_dcsession));
 }
 
 void DCAuthorization::onAuthorizationExported(MTProtoReply *mtreply)
@@ -366,5 +366,5 @@ void DCAuthorization::onAuthorizationImported(MTProtoReply *mtreply)
     dcconfig.setAuthorization(DCConfig::Signed);
 
     TelegramConfig_save;
-    emit authorizationImported(this->_dcsession->dc());
+    emit authorizationImported(SessionToDC(this->_dcsession));
 }

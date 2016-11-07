@@ -1,6 +1,9 @@
 #ifndef DCSESSION_H
 #define DCSESSION_H
 
+#define SessionToDC(session) session->dc()
+#define SessionToDcId(session) session->dc()->id()
+
 #include <QTimer>
 #include "dc.h"
 #include "../../config/telegramconfig.h"
@@ -19,7 +22,6 @@ class DCSession : public QObject
         TLLong sessionId() const;
         DC* dc() const;
         void setOwnedDC(bool b);
-        void sendPlain(MTProtoStream *mtstream);
         MTProtoRequest* sendEncrypted(MTProtoStream *mtstream);
 
     private:

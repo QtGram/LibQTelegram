@@ -6,7 +6,6 @@
 
 MTProtoServiceHandler::MTProtoServiceHandler(int dcid, QObject *parent) : QObject(parent), _dcid(dcid)
 {
-
 }
 
 bool MTProtoServiceHandler::handle(MTProtoReply *mtreply)
