@@ -511,9 +511,7 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
 
     this->createInputPeer();
 
-    TLLong randomid = 0;
-    Math::randomize(&randomid);
-
+    TLLong randomid = Math::randomize<TLLong>();
     Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
 
     if(replymsgid)
