@@ -338,10 +338,7 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     TelegramCache_store(messages.messages());
 
     this->loadHistoryFromCache();
-
-    if(!this->_fetchmore)
-        this->terminateInitialization();
-
+    this->terminateInitialization();
     this->setLoading(false);
 }
 
