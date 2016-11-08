@@ -20,8 +20,6 @@ class Telegram : public QObject
         void setInitializer(TelegramInitializer* initializer);
 
     public: // C++ side API
-        TLLong accessHash(Dialog* dialog) const;
-        InputPeer* createInputPeer(Dialog* dialog, QObject *parent = 0) const;
         QString dialogTitle(Dialog* dialog) const;
         QString dialogStatusText(Dialog* dialog) const;
         QString messagePreview(Message* message) const;

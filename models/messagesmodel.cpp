@@ -288,7 +288,7 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
     if(!this->_telegram || !this->_dialog || !fromdialog || !forwardmessage)
         return;
 
-    InputPeer* frompeer = this->_telegram->createInputPeer(fromdialog);
+    InputPeer* frompeer = TelegramHelper::inputPeer(fromdialog, this->accessHash(fromdialog), this);
 
     TLVector<TLInt> msgids;
     msgids << forwardmessage->id();
@@ -664,7 +664,7 @@ void MessagesModel::createInputPeer()
     if(this->_inputpeer)
         return;
 
-    this->_inputpeer = this->_telegram->createInputPeer(this->_dialog, this);
+    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, this->accessHash(this->_dialog), this);
 }
 
 void MessagesModel::terminateInitialization()

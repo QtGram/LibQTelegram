@@ -190,7 +190,7 @@ bool DialogsModel::setData(const QModelIndex &index, const QVariant &value, int 
         notifysettings->setMuteUntil(ismuted ? CurrentDateTime.addYears(10).toTime_t() : 0); // Add 10 years, if muted
         TelegramCache_store(dialog);
 
-        InputNotifyPeer* inputnotifypeer = TelegramHelper::inputNotifyPeer(dialog, this->_telegram->accessHash(dialog));
+        InputNotifyPeer* inputnotifypeer = TelegramHelper::inputNotifyPeer(dialog, this->accessHash(dialog));
         InputPeerNotifySettings* inputpeernotifysettings = TelegramHelper::inputPeerNotifySettings(notifysettings);
         TelegramAPI::accountUpdateNotifySettings(DC_MainSession, inputnotifypeer, inputpeernotifysettings);
 
@@ -258,7 +258,7 @@ void DialogsModel::removeDialog(int index)
 
     if(dialog->topMessage() > 0)
     {
-        InputPeer* inputpeer = this->_telegram->createInputPeer(dialog, this);
+        InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, this->accessHash(dialog), this);
         MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
 
         connect(req, &MTProtoRequest::replied, [this, inputpeer, index](MTProtoReply*) {
@@ -282,7 +282,7 @@ void DialogsModel::clearHistory(int index)
     if(dialog->topMessage() <= 0)
         return;
 
-    InputPeer* inputpeer = this->_telegram->createInputPeer(dialog, this);
+    InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, this->accessHash(dialog), this);
     MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
 
     connect(req, &MTProtoRequest::replied, [this, dialog, inputpeer, index](MTProtoReply*) {
