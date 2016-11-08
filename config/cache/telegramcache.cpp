@@ -238,7 +238,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
             dialog->setTopMessage(message->id());
 
             if(!message->isOut())
-                dialog->setUnreadCount(dialog->unreadCount() + 1);
+                dialog->setUnreadCount(this->checkUnreadMessages(dialog));
 
             this->cache(dialog);
 
