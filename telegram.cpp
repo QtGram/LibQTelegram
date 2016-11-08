@@ -145,7 +145,12 @@ QString Telegram::messageActionText(Message* message) const
     }
 
     if(ctorid == TLTypes::MessageActionChatEditTitle)
+    {
+        if(message->isPost())
+            return tr("Channel name changed to «%1»").arg(messageaction->title().toString());
+
         return tr("«%1» changed group name to «%2»").arg(fromfullname, messageaction->title().toString());
+    }
 
     if(ctorid == TLTypes::MessageActionChatEditPhoto)
         return tr("«%1» updated group photo").arg(fromfullname);
