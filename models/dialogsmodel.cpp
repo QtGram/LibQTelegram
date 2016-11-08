@@ -158,6 +158,16 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
         return chat->isMegagroup();
     }
 
+    if(role == DialogsModel::IsMutedRole)
+    {
+        PeerNotifySettings* peernotifysettigs = dialog->notifySettings();
+
+        if(!peernotifysettigs || (peernotifysettigs->constructorId() == TLTypes::PeerNotifySettingsEmpty))
+            return false;
+
+        return peernotifysettigs->isSilent() || (peernotifysettigs->muteUntil() > 0);
+    }
+
     return QVariant();
 }
 
@@ -185,6 +195,7 @@ QHash<int, QByteArray> DialogsModel::roleNames() const
     roles[DialogsModel::IsBroadcastRole] = "isBroadcast";
     roles[DialogsModel::IsChatRole] = "isChat";
     roles[DialogsModel::IsCloudRole] = "isCloud";
+    roles[DialogsModel::IsMutedRole] = "isMuted";
 
     return roles;
 }

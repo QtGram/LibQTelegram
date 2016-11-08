@@ -26,6 +26,7 @@ class DialogsModel : public TelegramModel
             IsBroadcastRole,
             IsChatRole,
             IsCloudRole,
+            IsMutedRole,
         };
 
     public:
