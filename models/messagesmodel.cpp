@@ -283,6 +283,24 @@ void MessagesModel::replyMessage(const QString &text, Message *replymessage)
     this->sendMessage(text, replymessage->id());
 }
 
+void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
+{
+    if(!this->_telegram || !this->_dialog || !fromdialog || !forwardmessage)
+        return;
+
+    InputPeer* frompeer = this->_telegram->createInputPeer(fromdialog);
+
+    TLVector<TLInt> msgids;
+    msgids << forwardmessage->id();
+
+    TLVector<TLLong> randomids;
+    randomids << Math::randomize<TLLong>();
+
+    this->createInputPeer();
+    TelegramAPI::messagesForwardMessages(DC_MainSession, frompeer, msgids, randomids, this->_inputpeer);
+    frompeer->deleteLater();
+}
+
 void MessagesModel::editMessage(const QString& text, Message* editmessage)
 {
     if(!editmessage)

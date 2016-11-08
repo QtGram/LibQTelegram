@@ -76,6 +76,7 @@ class MessagesModel : public TelegramModel
     public slots:
         void sendMessage(const QString& text);
         void replyMessage(const QString& text, Message* replymessage);
+        void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
         void editMessage(const QString& text, Message *editmessage);
         void sendAction(int action);
 
