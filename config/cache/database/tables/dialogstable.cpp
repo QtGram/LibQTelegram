@@ -37,18 +37,3 @@ void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent) const
         dialogs << dialog;
     }
 }
-
-bool DialogsTable::contains(TLInt id) const
-{
-    CreateQuery(queryobj);
-
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE id=:id"))
-        return false;
-
-    queryobj.bindValue(":id", id);
-
-    if(!this->execute(queryobj))
-        return false;
-
-    return queryobj.first();
-}

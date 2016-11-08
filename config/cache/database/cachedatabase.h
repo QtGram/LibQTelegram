@@ -6,6 +6,7 @@
 #include "tables/chatstable.h"
 #include "tables/dialogstable.h"
 #include "tables/messagestable.h"
+#include "tables/pendingwebpagetable.h"
 #include "tables/userstable.h"
 
 class CacheDatabase : public QObject
@@ -18,6 +19,7 @@ class CacheDatabase : public QObject
         ChatsTable* chats() const;
         DialogsTable* dialogs() const;
         MessagesTable* messages() const;
+        PendingWebPageTable* pendingWebPages() const;
         UsersTable* users() const;
         void transaction(std::function<void(QSqlQuery& queryobj)> transactionproc);
 
@@ -28,6 +30,7 @@ class CacheDatabase : public QObject
         ChatsTable* _chatstable;
         DialogsTable* _dialogstable;
         MessagesTable* _messagestable;
+        PendingWebPageTable* _pendingwebpagestable;
         UsersTable* _userstable;
 };
 

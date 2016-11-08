@@ -77,6 +77,7 @@ class TelegramCache: public QObject
         void onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt>& messageids);
         void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
+        void onWebPage(WebPage* webpage);
 
     private:
         void eraseMessage(MessageId messageid);
@@ -92,6 +93,7 @@ class TelegramCache: public QObject
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessage(Message* message);
+        void messageUpdated(Message* message);
         void readHistory(Dialog* dialog);
         void contactsUpdated();
 

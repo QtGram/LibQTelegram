@@ -21,6 +21,7 @@ class DatabaseTable : public QObject
 
     public:
         template<typename T, typename U> T* get(U id, const char* type, bool ignoreerror, QObject* parent) const;
+        template<typename T> bool contains(T id) const;
         void prepareInsert(QSqlQuery& insertquery);
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
         void insert(TelegramObject* telegramobject);
@@ -64,6 +65,21 @@ template<typename T1, typename T2> T1* DatabaseTable::get(T2 id, const char* typ
     T1* t = new T1(parent);
     t->unserialize(data);
     return t;
+}
+
+template<typename T> bool DatabaseTable::contains(T id) const
+{
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE id=:id"))
+        return false;
+
+    queryobj.bindValue(":id", id);
+
+    if(!this->execute(queryobj))
+        return false;
+
+    return queryobj.first();
 }
 
 #endif // DATABASETABLE_H

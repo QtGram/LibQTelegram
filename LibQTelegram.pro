@@ -252,7 +252,8 @@ SOURCES += \
     objects/notifications/telegramnotifications.cpp \
     objects/notifications/notificationobject.cpp \
     objects/sendstatus/sendstatushandler.cpp \
-    objects/sendstatus/sendstatusobject.cpp
+    objects/sendstatus/sendstatusobject.cpp \
+    config/cache/database/tables/pendingwebpagetable.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -498,4 +499,5 @@ HEADERS +=\
     objects/notifications/notificationobject.h \
     objects/sendstatus/sendstatushandler.h \
     objects/sendstatus/sendstatusobject.h \
-    crypto/hash.h
+    crypto/hash.h \
+    config/cache/database/tables/pendingwebpagetable.h

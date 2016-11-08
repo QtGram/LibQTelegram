@@ -296,6 +296,14 @@ bool TelegramHelper::isChannel(Peer *peer)
     return peer->constructorId() == TLTypes::PeerChannel;
 }
 
+bool TelegramHelper::messageIsWebPagePending(Message *message)
+{
+    if(!message || !message->media() || (message->media()->constructorId() != TLTypes::WebPagePending))
+        return false;
+
+    return true;
+}
+
 MessageId TelegramHelper::identifier(TLInt messageid, TLInt channelid)
 {
     return (static_cast<MessageId>(channelid) << 32u) + messageid;

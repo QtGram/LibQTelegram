@@ -449,6 +449,28 @@ void MessagesModel::onDeleteMessage(Message* message)
     }
 }
 
+void MessagesModel::onUpdateMessage(Message *message)
+{
+    if(this->_messages.isEmpty() || !this->ownMessage(message))
+        return;
+
+    Message* oldestmessage = this->_messages.last();
+
+    if(message->id() < oldestmessage->id()) // We don't have this message loaded
+        return;
+
+    int idx = this->indexOf(message);
+
+    if(idx == -1)
+    {
+        qWarning("Cannot update message %d", message->id());
+        return;
+    }
+
+    Emit_DataChangedRoles(idx,  MessagesModel::ItemRole <<
+                                MessagesModel::IsMessageMediaRole);
+}
+
 void MessagesModel::resetAction()
 {
     SendMessageAction sendmessageaction;

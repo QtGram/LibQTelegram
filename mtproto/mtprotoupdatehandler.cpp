@@ -180,6 +180,10 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit typing(update);
             break;
 
+        case TLTypes::UpdateWebPage:
+            emit webPage(update->webpage());
+            break;
+
         case TLTypes::UpdateMessageID:
             Nop;
             break;

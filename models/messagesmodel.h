@@ -89,6 +89,7 @@ class MessagesModel : public TelegramModel
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
+        void onUpdateMessage(Message *message);
         void resetAction();
 
     private:

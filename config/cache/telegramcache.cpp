@@ -27,6 +27,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
 }
 
 QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
@@ -226,6 +227,9 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 
     foreach(Message* message, messages)
     {
+        if(TelegramHelper::messageIsWebPagePending(message))
+            this->_database->pendingWebPages()->insert(message);
+
         TLInt dialogid = TelegramHelper::messageToDialog(message);
         Dialog* dialog = this->dialog(dialogid, true);
 
@@ -383,6 +387,24 @@ void TelegramCache::onReadHistory(Update *update)
     emit dialogUnreadCountChanged(dialog);
 }
 
+void TelegramCache::onWebPage(WebPage *webpage)
+{
+    MessageId messageid = this->_database->pendingWebPages()->messageId(webpage);
+
+    if(!messageid)
+        return;
+
+    this->_database->pendingWebPages()->remove(webpage->id());
+    Message* message = this->message(messageid, NULL);
+
+    if(!message || !message->media())
+        return;
+
+    message->media()->setWebpage(webpage);
+    this->cache(message);
+    emit messageUpdated(message);
+}
+
 void TelegramCache::eraseMessage(MessageId messageid)
 {
     Message* message = this->message(messageid, NULL);
@@ -493,6 +515,12 @@ void TelegramCache::cache(Message *message)
 
     if(this->_messages.contains(messageid))
         oldmessage = this->_messages[messageid];
+
+    if(oldmessage == message) // We are only updating this message
+    {
+        this->_database->messages()->insert(message);
+        return;
+    }
 
     message->setParent(this);
 

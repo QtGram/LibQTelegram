@@ -43,6 +43,7 @@ class MTProtoUpdateHandler : public QObject
         void newDraftMessage(Update* update);
         void readHistory(Update* update);
         void typing(Update* update);
+        void webPage(WebPage* webpage);
 
     private:
         static MTProtoUpdateHandler* _instance;

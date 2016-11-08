@@ -33,6 +33,11 @@ MessagesTable *CacheDatabase::messages() const
     return this->_messagestable;
 }
 
+PendingWebPageTable *CacheDatabase::pendingWebPages() const
+{
+    return this->_pendingwebpagestable;
+}
+
 UsersTable *CacheDatabase::users() const
 {
     return this->_userstable;
@@ -65,10 +70,12 @@ void CacheDatabase::loadTables()
     this->_chatstable = new ChatsTable(this);
     this->_dialogstable = new DialogsTable(this);
     this->_messagestable = new MessagesTable(this);
+    this->_pendingwebpagestable = new PendingWebPageTable(this);
     this->_userstable = new UsersTable(this);
 
     this->_chatstable->createSchema();
     this->_dialogstable->createSchema();
     this->_messagestable->createSchema();
+    this->_pendingwebpagestable->createSchema();
     this->_userstable->createSchema();
 }
