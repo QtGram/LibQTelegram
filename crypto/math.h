@@ -20,8 +20,16 @@ class Math
         static void randomize(TLBytes& ba, int from = 0, int len = -1);
 
     public:
+        template<typename T> static T randomize();
         template<typename T> static void randomize(T* t);
 };
+
+template<typename T> T Math::randomize()
+{
+    T t;
+    RAND_bytes(reinterpret_cast<uchar*>(&t), sizeof(T));
+    return t;
+}
 
 template<typename T> void Math::randomize(T* t) { RAND_bytes(reinterpret_cast<uchar*>(t), sizeof(T)); }
 
