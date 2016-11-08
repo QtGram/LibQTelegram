@@ -4,8 +4,6 @@
 
 TelegramNotifications::TelegramNotifications(QObject *parent) : QObject(parent), _telegram(NULL), _currentdialog(NULL), _mute(false)
 {
-    connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
-    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
 Telegram *TelegramNotifications::telegram() const
@@ -28,7 +26,11 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
     if(telegram == this->_telegram)
         return;
 
+    if(this->_telegram)
+        disconnect(this->_telegram, &Telegram::loginCompleted, this, 0);
+
     this->_telegram = telegram;
+    connect(this->_telegram, &Telegram::loginCompleted, this, &TelegramNotifications::onLoginCompleted);
     emit telegramChanged();
 }
 
@@ -38,7 +40,7 @@ void TelegramNotifications::setCurrentDialog(Dialog *dialog)
         return;
 
     this->_currentdialog = dialog;
-    emit currentDialogChanged();;
+    emit currentDialogChanged();
 }
 
 void TelegramNotifications::setMute(bool mute)
@@ -48,6 +50,12 @@ void TelegramNotifications::setMute(bool mute)
 
     this->_mute = mute;
     emit muteChanged();
+}
+
+void TelegramNotifications::onLoginCompleted()
+{
+    connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
 void TelegramNotifications::onIncomingMessage(Message *message)

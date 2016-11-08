@@ -24,6 +24,7 @@ class TelegramNotifications : public QObject
         void setMute(bool mute);
 
     private slots:
+        void onLoginCompleted();
         void onIncomingMessage(Message* message);
         void onReadHistory(Dialog* dialog);
 
