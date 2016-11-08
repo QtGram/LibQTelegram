@@ -17,6 +17,7 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
     connect(this->_mtservicehandler, &MTProtoServiceHandler::invalidPassword, this, &DC::invalidPassword);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::phoneCodeError, this, &DC::phoneCodeError);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::deltaTimeChanged, this, &DC::onDeltaTimeChanged);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::floodLock, this, &DC::onDcFloodClock);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::unauthorized, this, &DC::onDCUnauthorized);
@@ -51,7 +52,7 @@ TLInt DC::generateContentMsgNo()
 void DC::assignMessageId(MTProtoRequest* req)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-    TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) + dcconfig.deltaTime()) << 32LL;
+    TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) - dcconfig.deltaTime()) << 32LL;
     TLLong msgid = 0, ticks = 4 - (unixtime % 4);
 
     if(!(unixtime % 4))
@@ -173,11 +174,6 @@ void DC::handleReply(const QByteArray &message)
         qFatal("DC %d: Invalid server Message %llx (yields %lld, instead of 1 or 3)", this->id(), mtreply.messageId(), mtreply.messageId() % 4);
 
     this->checkSyncronization(&mtreply);
-
-    TLInt servertime = mtreply.messageId() >> 32;
-    DCConfig& dcconfig = DCConfig_fromDc(this);
-
-    dcconfig.setDeltaTime(CurrentDeltaTime(servertime));
     this->handleReply(&mtreply);
 }
 
@@ -234,6 +230,15 @@ void DC::onAckRequest(TLLong reqmsgid)
     }
 
     this->_pendingrequests[reqmsgid]->setAcked(true); // Don't repeat, we have received a reply
+}
+
+void DC::onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid)
+{
+    DCConfig& dcconfig = DCConfig_fromDcId(this->id());
+    dcconfig.setDeltaTime(deltatime);
+
+    DC::_lastclientmsgid = 0;
+    this->repeatRequest(reqmsgid);
 }
 
 void DC::send(MTProtoRequest *req)

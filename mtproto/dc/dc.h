@@ -4,7 +4,6 @@
 #define QueryTimeout                 15000  // 15 seconds
 #define AckTimeout                   16000  // 16 seconds
 #define CloseDCTimeout                5000  //  5 seconds
-#define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 
 #include <QTimer>
 #include <QHash>
@@ -45,6 +44,7 @@ class DC : public DCConnection
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
         void onAckRequest(TLLong reqmsgid);
+        void onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid);
         void onDcFloodClock(int seconds);
         void onDCUnauthorized();
         void onDCReadyRead();
