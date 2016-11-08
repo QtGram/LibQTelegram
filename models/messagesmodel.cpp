@@ -114,7 +114,7 @@ bool MessagesModel::isWritable() const
 
 bool MessagesModel::canFetchMore(const QModelIndex &) const
 {
-    return this->_fetchmore && !this->_loading;
+    return this->_dialog && this->_fetchmore && !this->_loading;
 }
 
 void MessagesModel::fetchMore(const QModelIndex &)
