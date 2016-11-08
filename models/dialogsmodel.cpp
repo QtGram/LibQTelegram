@@ -171,6 +171,38 @@ QVariant DialogsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+bool DialogsModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(!this->_telegram || !index.isValid() || (index.row() >= this->_dialogs.count()))
+        return false;
+
+    Dialog* dialog = this->_dialogs[index.row()];
+
+    if(role == DialogsModel::IsMutedRole)
+    {
+        PeerNotifySettings* notifysettings = dialog->notifySettings();
+        bool ismuted = value.toBool();
+
+        if(notifysettings->isSilent() == ismuted)
+            return false;
+
+        notifysettings->setIsSilent(ismuted);
+        notifysettings->setMuteUntil(ismuted ? CurrentDateTime.addYears(10).toTime_t() : 0); // Add 10 years, if muted
+        TelegramCache_store(dialog);
+
+        InputNotifyPeer* inputnotifypeer = TelegramHelper::inputNotifyPeer(dialog, this->_telegram->accessHash(dialog));
+        InputPeerNotifySettings* inputpeernotifysettings = TelegramHelper::inputPeerNotifySettings(notifysettings);
+        TelegramAPI::accountUpdateNotifySettings(DC_MainSession, inputnotifypeer, inputpeernotifysettings);
+
+        inputpeernotifysettings->deleteLater();
+        inputnotifypeer->deleteLater();
+        Emit_DataChangedRoles(index.row(), DialogsModel::IsMutedRole);
+        return true;
+    }
+
+    return false;
+}
+
 int DialogsModel::rowCount(const QModelIndex &) const
 {
     return this->_dialogs.length();

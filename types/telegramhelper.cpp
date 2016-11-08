@@ -3,8 +3,6 @@
 #include "../config/telegramconfig.h"
 #include <QDateTime>
 
-#define CurrentTimeStamp QDateTime::currentDateTime().toTime_t()
-
 TelegramHelper::TelegramHelper()
 {
 
@@ -100,6 +98,27 @@ InputFileLocation *TelegramHelper::inputFileLocation(Document *document)
     inputfilelocation->setVersion(document->version());
 
     return inputfilelocation;
+}
+
+InputNotifyPeer *TelegramHelper::inputNotifyPeer(Dialog *dialog, TLLong accesshash, QObject *parent)
+{
+    InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, accesshash);
+    InputNotifyPeer* inputnotifypeer = new InputNotifyPeer(parent);
+
+    inputnotifypeer->setConstructorId(TLTypes::InputNotifyPeer);
+    inputnotifypeer->setPeer(inputpeer);
+    return inputnotifypeer;
+}
+
+InputPeerNotifySettings *TelegramHelper::inputPeerNotifySettings(PeerNotifySettings *notifysettings, QObject *parent)
+{
+    InputPeerNotifySettings* inputpeernotifysettings = new InputPeerNotifySettings(parent);
+
+    inputpeernotifysettings->setConstructorId(TLTypes::InputPeerNotifySettings);
+    inputpeernotifysettings->setIsShowPreviews(!notifysettings->isSilent());
+    inputpeernotifysettings->setIsSilent(notifysettings->isSilent());
+    inputpeernotifysettings->setMuteUntil(notifysettings->muteUntil());
+    return inputpeernotifysettings;
 }
 
 InputPeer *TelegramHelper::inputPeer(Dialog *dialog, TLLong accesshash, QObject *parent)

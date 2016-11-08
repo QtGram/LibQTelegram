@@ -346,3 +346,23 @@ void Telegram::resendCode() const
 {
     this->_initializer->resendCode();
 }
+
+TLLong Telegram::accessHash(Dialog *dialog) const
+{
+    if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
+    {
+        Chat* chat = TelegramCache_chat(TelegramHelper::identifier(dialog));
+
+        if(chat)
+            return chat->accessHash();
+    }
+    else
+    {
+        User* user = TelegramCache_user(TelegramHelper::identifier(dialog));
+
+        if(user)
+            return user->accessHash();
+    }
+
+    return 0;
+}
