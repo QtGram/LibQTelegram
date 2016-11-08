@@ -153,13 +153,20 @@ QString Telegram::messageActionText(Message* message) const
     }
 
     if(ctorid == TLTypes::MessageActionChatEditPhoto)
+    {
+        if(message->isPost())
+            return tr("Channel photo updated");
+
         return tr("«%1» updated group photo").arg(fromfullname);
+    }
 
     if(ctorid == TLTypes::MessageActionChatDeletePhoto)
-        return tr("«%1» deleted group photo").arg(fromfullname);
+    {
+        if(message->isPost())
+            return tr("Channel photo deleted");
 
-    if(ctorid == TLTypes::MessageActionChatDeletePhoto)
         return tr("«%1» deleted group photo").arg(fromfullname);
+    }
 
     if(ctorid == TLTypes::MessageActionChatAddUser)
     {
