@@ -9,6 +9,7 @@ class NotificationObject : public QObject
     Q_OBJECT
 
     Q_PROPERTY(TLInt dialogId READ dialogId NOTIFY dialogIdChanged)
+    Q_PROPERTY(TLInt date READ date WRITE setDate NOTIFY dateChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(bool isCurrentDialog READ isCurrentDialog NOTIFY isCurrentDialogChanged)
@@ -16,22 +17,26 @@ class NotificationObject : public QObject
     public:
         explicit NotificationObject(QObject *parent = 0);
         TLInt dialogId() const;
+        TLInt date() const;
         const QString& title() const;
         const QString& message() const;
         bool isCurrentDialog() const;
         void setDialogId(TLInt dialogid);
+        void setDate(TLInt date);
         void setTitle(const QString& title);
         void setMessage(const QString& message);
         void setIsCurrentDialog(bool iscurrentdialog);
 
     signals:
         void dialogIdChanged();
+        void dateChanged();
         void titleChanged();
         void messageChanged();
         void isCurrentDialogChanged();
 
     private:
         TLInt _dialogid;
+        TLInt _date;
         QString _title;
         QString _message;
         bool _iscurrentdialog;

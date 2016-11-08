@@ -25,9 +25,11 @@ class TelegramNotifications : public QObject
 
     private slots:
         void onIncomingMessage(Message* message);
+        void onReadHistory(Dialog* dialog);
 
     signals:
         void newMessage(const NotificationObject* notification);
+        void dismissNotification(Dialog* dialog);
         void telegramChanged();
         void currentDialogChanged();
         void muteChanged();

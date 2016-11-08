@@ -10,6 +10,11 @@ TLInt NotificationObject::dialogId() const
     return this->_dialogid;
 }
 
+TLInt NotificationObject::date() const
+{
+    return this->_date;
+}
+
 const QString &NotificationObject::title() const
 {
     return this->_title;
@@ -32,6 +37,15 @@ void NotificationObject::setDialogId(TLInt dialogid)
 
     this->_dialogid = dialogid;
     emit dialogIdChanged();
+}
+
+void NotificationObject::setDate(TLInt date)
+{
+    if(this->_date == date)
+        return;
+
+    this->_date = date;
+    emit dateChanged();
 }
 
 void NotificationObject::setTitle(const QString &title)

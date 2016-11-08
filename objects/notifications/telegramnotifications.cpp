@@ -5,6 +5,7 @@
 TelegramNotifications::TelegramNotifications(QObject *parent) : QObject(parent), _telegram(NULL), _currentdialog(NULL), _mute(false)
 {
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
 Telegram *TelegramNotifications::telegram() const
@@ -28,7 +29,6 @@ void TelegramNotifications::setTelegram(Telegram *telegram)
         return;
 
     this->_telegram = telegram;
-
     emit telegramChanged();
 }
 
@@ -55,7 +55,7 @@ void TelegramNotifications::onIncomingMessage(Message *message)
     if(this->_mute || !this->_telegram || message->isOut() || (message->constructorId() != TLTypes::Message))
         return;
 
-    Dialog* dialog = TelegramCache_instance->dialog(TelegramHelper::messageToDialog(message));
+    Dialog* dialog = TelegramCache_dialog(TelegramHelper::messageToDialog(message));
 
     if(!dialog || (message->id() <= dialog->readInboxMaxId())) // Message is read, don't notify
         return;
@@ -67,9 +67,18 @@ void TelegramNotifications::onIncomingMessage(Message *message)
 
     NotificationObject notification;
     notification.setDialogId(TelegramHelper::identifier(dialog));
+    notification.setDate(message->date());
     notification.setTitle(this->_telegram->dialogTitle(dialog));
     notification.setMessage(this->_telegram->messagePreview(message));
     notification.setIsCurrentDialog((dialog == this->_currentdialog));
 
     emit newMessage(&notification);
+}
+
+void TelegramNotifications::onReadHistory(Dialog *dialog)
+{
+    if((dialog->topMessage() - dialog->readInboxMaxId()) > 0)
+        return;
+
+    emit dismissNotification(dialog);
 }
