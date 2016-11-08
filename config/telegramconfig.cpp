@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QHostInfo>
 
 #define CONFIG_FOLDER "telegram"
 
@@ -21,7 +22,10 @@ TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0),
     this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
     this->_updatesstate = new UpdatesState();
 
-    this->_devicemodel = "Unknown Device";
+    this->_devicemodel = QHostInfo::localHostName();
+
+    if(this->_devicemodel.isEmpty())
+        this->_devicemodel = "Unknown Device";
 }
 
 TelegramConfig *TelegramConfig::config()
