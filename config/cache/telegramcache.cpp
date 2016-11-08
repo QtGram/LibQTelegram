@@ -28,6 +28,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
     connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
+    connect(UpdateHandler_instance, SIGNAL(notifySettings(NotifyPeer*,PeerNotifySettings*)), this, SLOT(onNotifySettings(NotifyPeer*,PeerNotifySettings*)));
 }
 
 QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
@@ -403,6 +404,22 @@ void TelegramCache::onWebPage(WebPage *webpage)
     message->media()->setWebpage(webpage);
     this->cache(message);
     emit messageUpdated(message);
+}
+
+void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings *notifysettings)
+{
+    if(notifypeer->constructorId() != TLTypes::NotifyPeer)
+        return;
+
+    TLInt dialogid = TelegramHelper::identifier(notifypeer->peer());;
+    Dialog* dialog = this->dialog(dialogid);
+
+    if(!dialog)
+        return;
+
+    dialog->setNotifySettings(notifysettings);
+    this->cache(dialog);
+    emit dialogNotifySettingsChanged(dialog);
 }
 
 void TelegramCache::eraseMessage(MessageId messageid)

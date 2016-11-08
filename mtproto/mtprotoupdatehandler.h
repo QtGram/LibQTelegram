@@ -44,6 +44,7 @@ class MTProtoUpdateHandler : public QObject
         void readHistory(Update* update);
         void typing(Update* update);
         void webPage(WebPage* webpage);
+        void notifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
 
     private:
         static MTProtoUpdateHandler* _instance;

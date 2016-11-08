@@ -56,6 +56,7 @@ class DialogsModel : public TelegramModel
         void sortDialogs();
         void onSendStatusUpdated(Dialog* dialog);
         void onDialogUnreadCountChanged(Dialog* dialog);
+        void onDialogNotifySettingsChanged(Dialog* dialog);
         void onDialogNewMessage(Dialog* dialog);
         void onDialogNewDraftMessage(Dialog* dialog);
         void onDialogDeleteMessage(Dialog* dialog);

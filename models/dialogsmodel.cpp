@@ -393,6 +393,16 @@ void DialogsModel::onDialogUnreadCountChanged(Dialog *dialog)
     Emit_DataChangedRoles(idx, DialogsModel::UnreadCountRole);
 }
 
+void DialogsModel::onDialogNotifySettingsChanged(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChangedRoles(idx, DialogsModel::IsMutedRole);
+}
+
 void DialogsModel::onDialogNewMessage(Dialog *dialog)
 {
     int idx = this->_dialogs.indexOf(dialog);
@@ -488,6 +498,7 @@ void DialogsModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogNotifySettingsChanged, this, &DialogsModel::onDialogNotifySettingsChanged, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage, Qt::UniqueConnection);

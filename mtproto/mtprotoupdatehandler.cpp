@@ -184,6 +184,10 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit webPage(update->webpage());
             break;
 
+        case TLTypes::UpdateNotifySettings:
+            emit notifySettings(update->peerUpdatenotifysettings(), update->notifySettings());
+            break;
+
         case TLTypes::UpdateMessageID:
             Nop;
             break;

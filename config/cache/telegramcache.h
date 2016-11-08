@@ -78,6 +78,7 @@ class TelegramCache: public QObject
         void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
         void onWebPage(WebPage* webpage);
+        void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
 
     private:
         void eraseMessage(MessageId messageid);
@@ -85,6 +86,7 @@ class TelegramCache: public QObject
 
     signals:
         void dialogUnreadCountChanged(Dialog* dialog);
+        void dialogNotifySettingsChanged(Dialog* dialog);
         void dialogNewMessage(Dialog* dialog);
         void dialogNewDraftMessage(Dialog* dialog);
         void dialogDeleteMessage(Dialog* dialog);
