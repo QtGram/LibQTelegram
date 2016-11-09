@@ -334,11 +334,16 @@ void DC::removeSessionRef()
 
 void DC::timerEvent(QTimerEvent *event)
 {
-    if(this->_pendingrequests.count() <= 0)
-        this->close();
+    DCConnection::timerEvent(event);
 
-    killTimer(event->timerId());
-    this->_timcloseconnection = 0;
+    if(event->timerId() == this->_timcloseconnection)
+    {
+        if(this->_pendingrequests.count() <= 0)
+            this->close();
+
+        killTimer(event->timerId());
+        this->_timcloseconnection = 0;
+    }
 }
 
 void DC::freeOwnedRequests()

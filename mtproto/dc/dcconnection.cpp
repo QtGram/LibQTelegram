@@ -1,7 +1,7 @@
 #include "dcconnection.h"
 #include <QTimerEvent>
 
-DCConnection::DCConnection(const QString &address, quint16 port, int dcid, QObject *parent): QTcpSocket(parent), _address(address), _port(port), _dcid(dcid), _reconnecttimerid(-1)
+DCConnection::DCConnection(const QString &address, quint16 port, int dcid, QObject *parent): QTcpSocket(parent), _address(address), _port(port), _dcid(dcid), _reconnecttimerid(0)
 {
     connect(this, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
@@ -25,8 +25,8 @@ void DCConnection::timerEvent(QTimerEvent *event)
     if(event->timerId() == this->_reconnecttimerid)
     {
         this->connectToDC();
-        this->killTimer(this->_reconnecttimerid);
-        this->_reconnecttimerid = -1;
+        this->killTimer(event->timerId());
+        this->_reconnecttimerid = 0;
     }
 }
 
