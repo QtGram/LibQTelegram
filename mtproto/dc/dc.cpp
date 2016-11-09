@@ -173,7 +173,6 @@ void DC::handleReply(const QByteArray &message)
     if(((mtreply.messageId() % 4) != 1) && ((mtreply.messageId() % 4) != 3))
         qFatal("DC %d: Invalid server Message %llx (yields %lld, instead of 1 or 3)", this->id(), mtreply.messageId(), mtreply.messageId() % 4);
 
-    this->checkSyncronization(&mtreply);
     this->handleReply(&mtreply);
 }
 
@@ -190,6 +189,7 @@ void DC::handleReply(MTProtoReply *mtreply)
 
     if(dcconfig.authorization() >= DCConfig::Authorized)
     {
+        this->checkSyncronization(mtreply);
         bool handled = UpdateHandler_instance->handle(mtreply);
 
         if(!handled)
