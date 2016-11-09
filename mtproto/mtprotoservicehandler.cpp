@@ -197,11 +197,9 @@ void MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     else if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadServerSalt)
     {
         qDebug("DC %d New salt %llx", this->_dcid, badmsgnotification.newServerSalt());
-        DCConfig& config = DCConfig_fromDcId(this->_dcid);
-        config.setServerSalt(badmsgnotification.newServerSalt());
-        TelegramConfig_save;
 
-        emit saltChanged(badmsgnotification.badMsgId());
+        emit ackRequest(badmsgnotification.badMsgId());
+        emit saltChanged(badmsgnotification.newServerSalt(), badmsgnotification.badMsgId());
     }
 }
 

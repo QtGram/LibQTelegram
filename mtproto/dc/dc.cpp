@@ -16,7 +16,7 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
     connect(this->_mtservicehandler, &MTProtoServiceHandler::sessionPasswordNeeded, this, &DC::sessionPasswordNeeded);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::invalidPassword, this, &DC::invalidPassword);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::phoneCodeError, this, &DC::phoneCodeError);
-    connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::repeatRequest);
+    connect(this->_mtservicehandler, &MTProtoServiceHandler::saltChanged, this, &DC::onServerSaltChanged);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::deltaTimeChanged, this, &DC::onDeltaTimeChanged);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::ack, this, &DC::onAck);
     connect(this->_mtservicehandler, &MTProtoServiceHandler::floodLock, this, &DC::onDcFloodClock);
@@ -232,10 +232,20 @@ void DC::onAckRequest(TLLong reqmsgid)
     this->_pendingrequests[reqmsgid]->setAcked(true); // Don't repeat, we have received a reply
 }
 
+void DC::onServerSaltChanged(TLLong newserversalt, TLLong reqmsgid)
+{
+    DCConfig& config = DCConfig_fromDcId(this->id());
+    config.setServerSalt(newserversalt);
+    TelegramConfig_save;
+
+    this->repeatRequest(reqmsgid);
+}
+
 void DC::onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
     dcconfig.setDeltaTime(deltatime);
+    TelegramConfig_save;
 
     DC::_lastclientmsgid = 0;
     this->repeatRequest(reqmsgid);

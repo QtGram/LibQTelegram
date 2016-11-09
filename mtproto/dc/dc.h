@@ -44,6 +44,7 @@ class DC : public DCConnection
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
         void onAckRequest(TLLong reqmsgid);
+        void onServerSaltChanged(TLLong newserversalt, TLLong reqmsgid);
         void onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid);
         void onDcFloodClock(int seconds);
         void onDCUnauthorized();

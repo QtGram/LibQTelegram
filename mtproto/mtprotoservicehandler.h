@@ -21,7 +21,7 @@ class MTProtoServiceHandler : public QObject
         void ack(const TLVector<TLLong>& msgids);
         void serviceHandled(MTProtoReply* mtreply);
         void migrateDC(int fromdcid, int todcid);
-        void saltChanged(TLLong reqmsgid);
+        void saltChanged(TLLong newserversalt, TLLong reqmsgid);
         void deltaTimeChanged(TLLong deltatime, TLLong reqmsgid);
         void unauthorized();
         void floodLock(int seconds);
