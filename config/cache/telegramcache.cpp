@@ -230,6 +230,8 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
     {
         if(TelegramHelper::messageIsWebPagePending(message))
             this->_database->pendingWebPages()->insert(message);
+        else if(TelegramHelper::messageIsAction(message))
+            this->checkMessageAction(message);
 
         TLInt dialogid = TelegramHelper::messageToDialog(message);
         Dialog* dialog = this->dialog(dialogid, true);
@@ -459,6 +461,47 @@ void TelegramCache::eraseMessage(MessageId messageid)
 
     emit deleteMessage(message);
     this->_messages.remove(messageid);
+}
+
+void TelegramCache::checkMessageAction(Message *message)
+{
+    MessageAction* messageaction = message->action();
+    TLInt dialogid = TelegramHelper::messageToDialog(message);
+
+    if(messageaction->constructorId() == TLTypes::MessageActionChatEditTitle)
+    {
+        Chat* chat = this->chat(dialogid);
+
+        if(!chat)
+            return;
+
+        chat->setTitle(messageaction->title());
+        this->cache(chat);
+
+        Dialog* dialog = this->dialog(dialogid);
+
+        if(!dialog)
+            return;
+
+        emit titleChanged(dialog);
+    }
+    else if(messageaction->constructorId() == TLTypes::MessageActionChatEditPhoto)
+    {
+        Chat* chat = this->chat(dialogid);
+
+        if(!chat)
+            return;
+
+        chat->setPhoto(TelegramHelper::chatPhoto(messageaction->photo()));
+        this->cache(chat);
+
+        Dialog* dialog = this->dialog(dialogid);
+
+        if(!dialog)
+            return;
+
+        emit photoChanged(dialog);
+    }
 }
 
 int TelegramCache::checkUnreadMessages(Dialog *dialog)

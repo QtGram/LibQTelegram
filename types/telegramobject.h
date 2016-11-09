@@ -17,6 +17,7 @@ class TelegramObject : public QObject
         void setConstructorId(TLConstructor constructorid);
         void serialize(QByteArray& serializeddata);
         void unserialize(QByteArray& serializeddata);
+        template<typename T> T* clone(QObject* parent = 0);
 
     protected:
         template<typename T> void resetTLType(T** t);
@@ -34,6 +35,17 @@ class TelegramObject : public QObject
     protected:
         TLConstructor _constructorid;
 };
+
+template<typename T> T* TelegramObject::clone(QObject* parent)
+{
+    MTProtoStream mtstream;
+    this->write(&mtstream);
+    mtstream.reset();
+
+    T* t = new T(parent);
+    t->read(&mtstream);
+    return t;
+}
 
 template<typename T> void TelegramObject::resetTLType(T** t)
 {

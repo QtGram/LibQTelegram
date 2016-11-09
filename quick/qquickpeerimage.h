@@ -32,6 +32,7 @@ class QQuickPeerImage : public QQuickBaseItem
 
     private slots:
         void reinitialize();
+        void updatePeerImage();
         void bindToElement();
 
     protected:

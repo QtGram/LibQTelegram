@@ -22,6 +22,9 @@ class TelegramHelper
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash = 0, QObject* parent = 0);
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
+        static PhotoSize* photoSmall(Photo* photo);
+        static PhotoSize* photoBig(Photo* photo);
+        static ChatPhoto* chatPhoto(Photo* photo, QObject *parent = 0);
         static QString dateString(TLInt timestamp);
         static QString fileSize(TLDouble size);
         static QString fullName(User* user);
@@ -36,6 +39,7 @@ class TelegramHelper
         static bool isChat(Peer* peer);
         static bool isChannel(Peer* peer);
         static bool messageIsWebPagePending(Message* message);
+        static bool messageIsAction(Message* message);
         static MessageId identifier(TLInt messageid, TLInt channelid);
         static MessageId identifier(TLInt messageid, Dialog* dialog);
         static MessageId identifier(Message* message);

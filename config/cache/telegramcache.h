@@ -82,6 +82,7 @@ class TelegramCache: public QObject
 
     private:
         void eraseMessage(MessageId messageid);
+        void checkMessageAction(Message* message);
         int checkUnreadMessages(Dialog* dialog);
 
     signals:
@@ -91,6 +92,8 @@ class TelegramCache: public QObject
         void dialogNewDraftMessage(Dialog* dialog);
         void dialogDeleteMessage(Dialog* dialog);
         void dialogEditMessage(Dialog* dialog);
+        void titleChanged(Dialog* dialog);
+        void photoChanged(Dialog* dialog);
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void editMessage(Message* message);

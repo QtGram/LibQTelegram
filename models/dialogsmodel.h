@@ -64,6 +64,7 @@ class DialogsModel : public TelegramModel
         void onDialogEditMessage(Dialog* dialog);
         void onNewDialogs(const TLVector<Dialog*>& dialogs);
         void onReadHistory(Dialog* dialog);
+        void onTitleChanged(Dialog* dialog);
 
     protected:
         virtual void telegramReady();

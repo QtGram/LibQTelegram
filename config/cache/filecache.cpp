@@ -69,11 +69,11 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool autodownload)
     else if(tgobj->constructorId() == TLTypes::Photo)
     {
         Photo* photo = qobject_cast<Photo*>(tgobj);
-        PhotoSize* thumbnailphoto = photo->sizes().first();
-        PhotoSize* fullphoto = photo->sizes().last();
-        FileObject* fileobj = this->fileObject(fullphoto->location(), thumbnailphoto->location(), autodownload);
+        PhotoSize* smallphoto = TelegramHelper::photoSmall(photo);
+        PhotoSize* bigphoto = TelegramHelper::photoBig(photo);
+        FileObject* fileobj = this->fileObject(bigphoto->location(), smallphoto->location(), autodownload);
 
-        fileobj->setImageSize(QSize(fullphoto->w(), fullphoto->h()));
+        fileobj->setImageSize(QSize(bigphoto->w(), bigphoto->h()));
         return fileobj;
     }
     else if(tgobj->constructorId() == TLTypes::ChatPhoto)

@@ -185,6 +185,35 @@ InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
     return inputuser;
 }
 
+PhotoSize *TelegramHelper::photoSmall(Photo *photo)
+{
+    return photo->sizes().first();
+}
+
+PhotoSize *TelegramHelper::photoBig(Photo *photo)
+{
+    return photo->sizes().last();
+}
+
+ChatPhoto *TelegramHelper::chatPhoto(Photo *photo, QObject* parent)
+{
+    ChatPhoto* chatphoto = new ChatPhoto(parent);
+
+    if(photo->constructorId() != TLTypes::PhotoEmpty)
+    {
+        PhotoSize* smallphoto = TelegramHelper::photoSmall(photo);
+        PhotoSize* bigphoto = TelegramHelper::photoBig(photo);
+
+        chatphoto->setConstructorId(TLTypes::ChatPhoto);
+        chatphoto->setPhotoSmall(smallphoto->location()->clone<FileLocation>());
+        chatphoto->setPhotoBig(bigphoto->location()->clone<FileLocation>());
+    }
+    else
+        chatphoto->setConstructorId(TLTypes::ChatPhotoEmpty);
+
+    return chatphoto;
+}
+
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);
@@ -318,6 +347,14 @@ bool TelegramHelper::isChannel(Peer *peer)
 bool TelegramHelper::messageIsWebPagePending(Message *message)
 {
     if(!message || !message->media() || (message->media()->constructorId() != TLTypes::WebPagePending))
+        return false;
+
+    return true;
+}
+
+bool TelegramHelper::messageIsAction(Message *message)
+{
+    if(!message || !message->action() || (message->action()->constructorId() == TLTypes::MessageService))
         return false;
 
     return true;

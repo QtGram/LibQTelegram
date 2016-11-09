@@ -525,10 +525,21 @@ void DialogsModel::onReadHistory(Dialog *dialog)
     Emit_DataChanged(idx);
 }
 
+void DialogsModel::onTitleChanged(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    Emit_DataChangedRoles(idx, DialogsModel::TitleRole);
+}
+
 void DialogsModel::telegramReady()
 {
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::titleChanged, this, &DialogsModel::onTitleChanged, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &DialogsModel::onDialogUnreadCountChanged, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogNotifySettingsChanged, this, &DialogsModel::onDialogNotifySettingsChanged, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogNewMessage, this, &DialogsModel::onDialogNewMessage, Qt::UniqueConnection);

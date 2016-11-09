@@ -221,6 +221,9 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
         return NULL;
     }
 
+    if(this->_fileobject)
+        disconnect(this->_fileobject, 0, this, 0);
+
     this->_fileobject = FileCache_fileObject(telegramobject);
 
     if(!this->_fileobject)

@@ -36,20 +36,46 @@ void QQuickPeerImage::setSize(int size)
 
 TelegramObject *QQuickPeerImage::findPeer(TelegramObject *peer)
 {
-    if(peer->constructorId() != TLTypes::Message)
-        return peer;
+    if(peer->constructorId() == TLTypes::Dialog)
+    {
+        Dialog* dialog = qobject_cast<Dialog*>(peer);
+        TLInt dialogid = TelegramHelper::identifier(dialog);
 
-    Message* message = qobject_cast<Message*>(peer);
+        if(TelegramHelper::isChat(dialog) ||TelegramHelper::isChannel(dialog))
+        {
+            Chat* chat = TelegramCache_chat(dialogid);
 
-    if(message->isPost() || !message->fromId())
-        return peer;
+            if(chat)
+            {
+                //connect(chat, &Chat::photoChanged, this, &QQuickPeerImage::reinitialize, Qt::UniqueConnection);
+                return chat;
+            }
+        }
+        else
+        {
+            User* user = TelegramCache_user(dialogid);
 
-    User* user = TelegramCache_user(message->fromId());
+            if(user)
+            {
+                //connect(user, &User::photoChanged, this, &QQuickPeerImage::reinitialize, Qt::UniqueConnection);
+                return user;
+            }
+        }
+    }
+    else if(peer->constructorId() == TLTypes::Message)
+    {
+        Message* message = qobject_cast<Message*>(peer);
 
-    if(!user)
-        return peer;
+        if(message->isPost() || !message->fromId())
+            return peer;
 
-    return user;
+        User* user = TelegramCache_user(message->fromId());
+
+        if(user)
+            return user;
+    }
+
+    return peer;
 }
 
 void QQuickPeerImage::initialize()
@@ -63,7 +89,7 @@ void QQuickPeerImage::initialize()
     {
         connect(fileobject, &FileObject::hasThumbnailChanged, this, &QQuickPeerImage::reinitialize);
         connect(fileobject, &FileObject::downloadedChanged, this, &QQuickPeerImage::reinitialize);
-        connect(fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::sourceChanged);
+        connect(fileobject, &FileObject::thumbnailChanged, this, &QQuickPeerImage::sourceChanged);
         connect(fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
     }
 
@@ -188,6 +214,11 @@ void QQuickPeerImage::reinitialize()
 
     this->initialize();
     olditem->deleteLater();
+}
+
+void QQuickPeerImage::updatePeerImage()
+{
+
 }
 
 void QQuickPeerImage::bindToElement()

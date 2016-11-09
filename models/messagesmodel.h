@@ -85,6 +85,7 @@ class MessagesModel : public TelegramModel
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onMessagesReadHistoryReplied(MTProtoReply* mtreply);
         void onReadHistory(Dialog* dialog);
+        void onTitleChanged(Dialog* dialog);
         void onSendStatusUpdated(Dialog* dialog);
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);

@@ -398,6 +398,14 @@ void MessagesModel::onReadHistory(Dialog *dialog)
         qWarning("Cannot find message id %d", this->_dialog->readOutboxMaxId());
 }
 
+void MessagesModel::onTitleChanged(Dialog *dialog)
+{
+    if(this->_dialog != dialog)
+        return;
+
+    emit titleChanged();
+}
+
 void MessagesModel::onSendStatusUpdated(Dialog *dialog)
 {
     if(this->_dialog != dialog)
@@ -683,6 +691,7 @@ void MessagesModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);
     connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &MessagesModel::onReadHistory);
+    connect(TelegramCache_instance, &TelegramCache::titleChanged, this, &MessagesModel::onTitleChanged);
 
     connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::onSendStatusUpdated);
 
