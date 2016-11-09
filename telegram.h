@@ -11,12 +11,14 @@ class Telegram : public QObject
     Q_PROPERTY(TelegramInitializer* initializer READ initializer WRITE setInitializer NOTIFY initializerChanged)
     Q_PROPERTY(User* me READ me CONSTANT FINAL)
     Q_PROPERTY(int apiLayer READ apiLayer CONSTANT FINAL)
+    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
 
     public:
         explicit Telegram(QObject *parent = 0);
         TelegramInitializer* initializer() const;
         User* me() const;
         int apiLayer() const;
+        bool connected() const;
         void setInitializer(TelegramInitializer* initializer);
 
     public: // C++ side API
@@ -41,6 +43,7 @@ class Telegram : public QObject
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
+        void connectedChanged();
         void invalidPassword();
         void floodLock(int seconds);
         void sessionPasswordNeeded(QString hint);

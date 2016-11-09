@@ -72,7 +72,7 @@ void DC::checkSyncronization(MTProtoReply *mtreply)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
 
-    TLLong servertime = mtreply->messageId() >> 32LL;
+    TLLong servertime = ServerTime(mtreply->messageId());
     TLLong clienttime = QDateTime::currentDateTime().toTime_t() - dcconfig.deltaTime();
 
     if(clienttime <= (servertime - 30))

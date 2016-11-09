@@ -59,7 +59,7 @@ void MTProtoServiceHandler::checkRepeat(BadMsgNotification *badmsgnotification, 
         case 33:
         case 64:
         {
-           TLInt servertime = servermsgid >> 32LL;
+           TLInt servertime = ServerTime(servermsgid);
            emit deltaTimeChanged(CurrentDeltaTime(servertime), badmsgnotification->badMsgId());
            break;
         }

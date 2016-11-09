@@ -132,6 +132,14 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
 
     if(oldsession)
     {
+        DC* olddc = SessionToDC(this->_mainsession);
+
+        if(olddc)
+        {
+            disconnect(olddc, &DC::connected, this, 0);
+            disconnect(olddc, &DC::disconnected, this, 0);
+        }
+
         DCConfig& olddcconfig = DCConfig_fromSession(oldsession);
 
         if(olddcconfig.authorization() == DCConfig::Signed) // Get the last request only if the previous DC was signed
@@ -141,6 +149,8 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
     }
 
     DCConfig_setMainDc(dcid);
+    connect(dc, &DC::connected, this, &DCSessionManager::mainSessionConnectedChanged);
+    connect(dc, &DC::disconnected, this, &DCSessionManager::mainSessionConnectedChanged);
     return this->_mainsession;
 }
 

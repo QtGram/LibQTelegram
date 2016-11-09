@@ -49,6 +49,7 @@ class DCSessionManager: public QObject
         void floodLock(int seconds);
         void invalidPassword();
         void sessionPasswordNeeded();
+        void mainSessionConnectedChanged();
 
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;

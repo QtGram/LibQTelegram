@@ -1,4 +1,5 @@
 #include "dcconnection.h"
+#include "../../types/time.h"
 #include <QTimerEvent>
 
 DCConnection::DCConnection(const QString &address, quint16 port, int dcid, QObject *parent): QTcpSocket(parent), _address(address), _port(port), _dcid(dcid), _reconnecttimerid(0)
@@ -32,7 +33,7 @@ void DCConnection::timerEvent(QTimerEvent *event)
 
 void DCConnection::reconnectToDC()
 {
-    this->_reconnecttimerid = this->startTimer(5000);
+    this->_reconnecttimerid = this->startTimer(ReconnectionTimeout);
 }
 
 void DCConnection::onStateChanged(SocketState state)

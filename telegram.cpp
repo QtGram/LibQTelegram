@@ -5,6 +5,7 @@
 
 Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
 {
+    connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
 }
 
 TelegramInitializer *Telegram::initializer() const
@@ -20,6 +21,15 @@ User *Telegram::me() const
 int Telegram::apiLayer() const
 {
     return TELEGRAM_API_LAYER;
+}
+
+bool Telegram::connected() const
+{
+    if(!DC_MainSession)
+        return false;
+
+    DC* dc = SessionToDC(DC_MainSession);
+    return dc->state() == DC::ConnectedState;
 }
 
 void Telegram::setInitializer(TelegramInitializer *initializer)

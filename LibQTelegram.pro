@@ -500,4 +500,5 @@ HEADERS +=\
     objects/sendstatus/sendstatushandler.h \
     objects/sendstatus/sendstatusobject.h \
     crypto/hash.h \
-    config/cache/database/tables/pendingwebpagetable.h
+    config/cache/database/tables/pendingwebpagetable.h \
+    types/time.h
