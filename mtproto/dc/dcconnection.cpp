@@ -40,35 +40,36 @@ void DCConnection::onStateChanged(SocketState state)
     switch(state)
     {
         case QAbstractSocket::UnconnectedState:
+            qWarning("DC %d unconnected", this->_dcid);
             break;
 
         case QAbstractSocket::HostLookupState:
-            qWarning() << "DC" << this->_dcid << "looking up host";
+            qWarning("DC %d looking up host", this->_dcid);
             break;
 
         case QAbstractSocket::ConnectingState:
-            qWarning() << "DC" << this->_dcid << "connecting";
+            qWarning("DC %d connecting", this->_dcid);
             break;
 
         case QAbstractSocket::ConnectedState:
-            qWarning() << "DC" << this->_dcid << "connected";
+            qWarning("DC %d connected", this->_dcid);
             this->setSocketOption(DCConnection::KeepAliveOption, 1);
             break;
 
         case QAbstractSocket::BoundState:
-            qWarning() << "DC" << this->_dcid << "bound";
+            qWarning("DC %d bound", this->_dcid);
             break;
 
         case QAbstractSocket::ClosingState:
-            qWarning() << "DC" << this->_dcid << "closing";
+            qWarning("DC %d closing", this->_dcid);
             break;
 
         case QAbstractSocket::ListeningState:
-            qWarning() << "DC" << this->_dcid << "listening";
+            qWarning("DC %d listening", this->_dcid);
             break;
 
         default:
-            qWarning() << "DC" << this->_dcid << "unhandled state";
+            qWarning("DC %d unhandled state", this->_dcid);
             break;
     }
 }
@@ -78,104 +79,104 @@ void DCConnection::onError(QAbstractSocket::SocketError error)
     switch(error)
     {
         case QAbstractSocket::ConnectionRefusedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Connection refused";
+            qWarning("DC %d ERROR: Connection refused", this->_dcid);
             break;
 
         case QAbstractSocket::RemoteHostClosedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Remote host closed, reconnecting in 5 seconds...";
+            qWarning("DC %d ERROR: Remote host closed, reconnecting in 5 seconds...", this->_dcid);
             this->reconnectToDC();
             break;
 
         case QAbstractSocket::HostNotFoundError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Host not found";
+            qWarning("DC %d ERROR: Host not found", this->_dcid);
             break;
 
         case QAbstractSocket::SocketAccessError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Socket access error";
+            qWarning("DC %d ERROR: Socket access error", this->_dcid);
             break;
 
         case QAbstractSocket::SocketResourceError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Socket resource error";
+            qWarning("DC %d ERROR: Socket resource error", this->_dcid);
             break;
 
         case QAbstractSocket::SocketTimeoutError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Socket timeout";
+            qWarning("DC %d ERROR: Socket timeout", this->_dcid);
             break;
 
         case QAbstractSocket::DatagramTooLargeError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Datagram too large";
+            qWarning("DC %d ERROR: Datagram too large", this->_dcid);
             break;
 
         case QAbstractSocket::NetworkError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Network error";
+            qWarning("DC %d ERROR: Network error", this->_dcid);
             break;
 
         case QAbstractSocket::AddressInUseError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Address in use";
+            qWarning("DC %d ERROR: Address in use", this->_dcid);
             break;
 
         case QAbstractSocket::SocketAddressNotAvailableError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Socket address not available";
+            qWarning("DC %d ERROR: Socket address not available", this->_dcid);
             break;
 
         case QAbstractSocket::UnsupportedSocketOperationError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Unsupported Socket operation";
+            qWarning("DC %d ERROR: Unsupported Socket operation", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyAuthenticationRequiredError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy Authentication error";
+            qWarning("DC %d ERROR: Proxy Authentication error", this->_dcid);
             break;
 
         case QAbstractSocket::SslHandshakeFailedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: SSL Handshake failed";
+            qWarning("DC %d ERROR: SSL Handshake failed", this->_dcid);
             break;
 
         case QAbstractSocket::UnfinishedSocketOperationError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Unfinished Socket operation";
+            qWarning("DC %d ERROR: Unfinished Socket operation", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyConnectionRefusedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy connection refused";
+            qWarning("DC %d ERROR: Proxy connection refused", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyConnectionClosedError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy connection closed";
+            qWarning("DC %d ERROR: Proxy connection closed", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyConnectionTimeoutError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy connection timeout";
+            qWarning("DC %d ERROR: Proxy connection timeout", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyNotFoundError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy not found timeout";
+            qWarning("DC %d ERROR: Proxy not found timeout", this->_dcid);
             break;
 
         case QAbstractSocket::ProxyProtocolError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Proxy protocol error";
+            qWarning("DC %d ERROR: Proxy protocol error", this->_dcid);
             break;
 
         case QAbstractSocket::OperationError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Operation error";
+            qWarning("DC %d ERROR: Operation error", this->_dcid);
             break;
 
         case QAbstractSocket::SslInternalError:
-            qWarning() << "DC" << this->_dcid << "ERROR: SSL Internal error";
+            qWarning("DC %d ERROR: SSL Internal error", this->_dcid);
             break;
 
         case QAbstractSocket::SslInvalidUserDataError:
-            qWarning() << "DC" << this->_dcid << "ERROR: SSL Invalid Userdata";
+            qWarning("DC %d ERROR: SSL Invalid Userdata", this->_dcid);
             break;
 
         case QAbstractSocket::TemporaryError:
-            qWarning() << "DC" << this->_dcid << "ERROR: SSL Temporary error";
+            qWarning("DC %d ERROR: SSL Temporary error", this->_dcid);
             break;
 
         case QAbstractSocket::UnknownSocketError:
-            qWarning() << "DC" << this->_dcid << "ERROR: Unknown socket error";
+            qWarning("DC %d ERROR: Unknown socket error", this->_dcid);
             break;
 
         default:
-            qWarning() << "DC" << this->_dcid << "Unhandled error";
+            qWarning("DC %d Unhandled error", this->_dcid);
             break;
     }
 }
