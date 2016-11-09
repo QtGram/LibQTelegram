@@ -6,7 +6,8 @@
 
 QHash<int, bool> MTProtoRequest::_firstmap;
 
-MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _acked(false), _dcid(dcid), _sessionid(0), _messageid(0), _seqno(0), _body(NULL)
+
+MTProtoRequest::MTProtoRequest(int dcid, QObject *parent) : QObject(parent), _needsinit(false), _acked(false), _dcid(dcid), _sessionid(0), _messageid(0), _seqno(0), _body(NULL)
 {
     Try_InitFirst(dcid);
 }
@@ -165,8 +166,10 @@ QByteArray MTProtoRequest::buildEncrypted()
     mtproto.writeTLLong(this->_messageid);
     mtproto.writeTLInt(this->_seqno);
 
-    if(this->_seqno == 1)
+    if(this->_needsinit || (this->_seqno == 1))
     {
+        this->_needsinit = true;
+
         MTProtoStream header;
         this->initConnection(header);
 

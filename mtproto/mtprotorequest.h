@@ -54,6 +54,7 @@ class MTProtoRequest : public QObject
         void error();
 
     private:
+        bool _needsinit;
         bool _acked;
         int _dcid;
         TLLong _sessionid;
