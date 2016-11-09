@@ -41,6 +41,9 @@ void DCSessionManager::doAuthorization(DCSession *dcsession)
     if(this->_dcauthorizations.contains(SessionToDC(dcsession))) // Do not authorize the same DC multiple times
         return;
 
+    DCConfig& dcconfig = DCConfig_fromSession(dcsession);
+    dcconfig.setAuthorization(DCConfig::NotAuthorized); // Reset undefined authorization state (if any)
+
     DCAuthorization* dcauthorization = new DCAuthorization(dcsession, this);
     connect(dcauthorization, &DCAuthorization::authorized, this, &DCSessionManager::onAuthorized);
     connect(dcauthorization, &DCAuthorization::authorizationImported, this, &DCSessionManager::onAuthorizationImported);
