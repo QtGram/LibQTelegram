@@ -3,6 +3,7 @@
 
 #define UpdateHandler_instance MTProtoUpdateHandler::instance()
 #define UpdateHandler_sync MTProtoUpdateHandler::instance()->sync()
+#define UpdateHandler_syncing MTProtoUpdateHandler::instance()->syncing()
 
 #include <QObject>
 #include "mtprotoreply.h"
@@ -18,9 +19,11 @@ class MTProtoUpdateHandler : public QObject
     public:
         static MTProtoUpdateHandler* instance();
         bool handle(MTProtoReply* mtreply);
+        bool syncing() const;
         void sync();
 
     private:
+        void setSyncing(bool b);
         void handleUpdates(MTProtoReply* mtreply);
         void handleUpdatesDifference(MTProtoReply* mtreply);
 
@@ -29,6 +32,7 @@ class MTProtoUpdateHandler : public QObject
         void handleUpdate(Update* update);
 
     signals:
+        void syncingChanged();
         void newMessages(const TLVector<Message*>& messages);
         void newUsers(const TLVector<User*>& users);
         void newChats(const TLVector<Chat*>& chats);
@@ -48,6 +52,7 @@ class MTProtoUpdateHandler : public QObject
 
     private:
         static MTProtoUpdateHandler* _instance;
+        bool _syncing;
 };
 
 #endif // MTPROTOUPDATEHANDLER_H

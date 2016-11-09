@@ -12,6 +12,7 @@ class Telegram : public QObject
     Q_PROPERTY(User* me READ me CONSTANT FINAL)
     Q_PROPERTY(int apiLayer READ apiLayer CONSTANT FINAL)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
+    Q_PROPERTY(bool syncing READ syncing NOTIFY syncingChanged)
 
     public:
         explicit Telegram(QObject *parent = 0);
@@ -19,6 +20,7 @@ class Telegram : public QObject
         User* me() const;
         int apiLayer() const;
         bool connected() const;
+        bool syncing() const;
         void setInitializer(TelegramInitializer* initializer);
 
     public: // C++ side API
@@ -40,6 +42,7 @@ class Telegram : public QObject
 
     signals:
         void initializerChanged();
+        void syncingChanged();
         void signUpRequested();
         void signInRequested();
         void loginCompleted();

@@ -11,7 +11,7 @@
 
 MTProtoUpdateHandler* MTProtoUpdateHandler::_instance = NULL;
 
-MTProtoUpdateHandler::MTProtoUpdateHandler(QObject *parent) : QObject(parent)
+MTProtoUpdateHandler::MTProtoUpdateHandler(QObject *parent) : QObject(parent), _syncing(false)
 {
 }
 
@@ -48,10 +48,24 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
     return false;
 }
 
+bool MTProtoUpdateHandler::syncing() const
+{
+    return this->_syncing;
+}
+
 void MTProtoUpdateHandler::sync()
 {
     UpdatesState* clientstate = TelegramConfig_clientState;
     TelegramAPI::updatesGetDifference(DC_MainSession, clientstate->pts(), clientstate->date(), clientstate->qts());
+}
+
+void MTProtoUpdateHandler::setSyncing(bool b)
+{
+    if(this->_syncing == b)
+        return;
+
+    this->_syncing = b;
+    emit syncingChanged();
 }
 
 void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
@@ -100,6 +114,8 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
+        this->setSyncing(true);
+
         qDebug("DC %d differences %s: %d users, %d chats, %d messages",
                mtreply->dcid(),
                qUtf8Printable(QDateTime::fromTime_t(updatedifference.intermediateState()->date()).toString()),
@@ -118,9 +134,11 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     {
         ClientSyncManager::syncState(updatedifference.intermediateState());
         this->sync();
+        return;
     }
-    else
-        TelegramConfig_save; // Update state
+
+    this->setSyncing(false);
+    TelegramConfig_save; // Update state
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)

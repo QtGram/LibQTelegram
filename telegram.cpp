@@ -1,4 +1,5 @@
 #include "telegram.h"
+#include "mtproto/mtprotoupdatehandler.h"
 #include "config/cache/telegramcache.h"
 #include "config/cache/filecache.h"
 #include "types/telegramhelper.h"
@@ -6,6 +7,7 @@
 Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
 {
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
+    connect(UpdateHandler_instance, &MTProtoUpdateHandler::syncingChanged, this, &Telegram::syncingChanged);
 }
 
 TelegramInitializer *Telegram::initializer() const
@@ -30,6 +32,11 @@ bool Telegram::connected() const
 
     DC* dc = SessionToDC(DC_MainSession);
     return dc->state() == DC::ConnectedState;
+}
+
+bool Telegram::syncing() const
+{
+    return UpdateHandler_syncing;
 }
 
 void Telegram::setInitializer(TelegramInitializer *initializer)
@@ -57,6 +64,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
     connect(this->_initializer, &TelegramInitializer::invalidPassword, this, &Telegram::invalidPassword);
     connect(this->_initializer, &TelegramInitializer::sessionPasswordNeeded, this, &Telegram::sessionPasswordNeeded);
+    connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
 
     emit initializerChanged();
 }
