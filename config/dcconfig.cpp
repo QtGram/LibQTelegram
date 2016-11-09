@@ -31,7 +31,7 @@ QJsonObject DCConfig::toJson()
     jsonobj["host"] = this->_host;
     jsonobj["port"] = this->_port;
     jsonobj["deltatime"] = this->_deltatime;
-    jsonobj["serversalt"] = this->_serversalt;
+    jsonobj["serversalt"] = QString::number(this->_serversalt, 16);
     jsonobj["authorization"] = this->_authorization;
     jsonobj["authorizationkey"] = QString(this->_authorizationkey.toHex());
     jsonobj["ipv6"] = this->_ipv6;
@@ -55,7 +55,7 @@ bool DCConfig::fromJson(const QJsonObject &jsonobj)
         this->_deltatime = jsonobj["deltatime"].toInt();
 
     if(jsonobj.contains("serversalt"))
-        this->_serversalt = jsonobj["serversalt"].toInt();
+        this->_serversalt = jsonobj["serversalt"].toString().toULongLong(NULL, 16);
 
     if(jsonobj.contains("authorization"))
         this->_authorization = jsonobj["authorization"].toInt();
