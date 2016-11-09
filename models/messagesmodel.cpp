@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -134,7 +134,7 @@ void MessagesModel::fetchMore(const QModelIndex &)
         return;
     }
 
-    this->createInputPeer();
+    this->createInput();
 
     MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
@@ -296,7 +296,7 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
     TLVector<TLLong> randomids;
     randomids << Math::randomize<TLLong>();
 
-    this->createInputPeer();
+    this->createInput();
     TelegramAPI::messagesForwardMessages(DC_MainSession, frompeer, msgids, randomids, this->_inputpeer);
     frompeer->deleteLater();
 }
@@ -306,7 +306,7 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
     if(!editmessage)
         return;
 
-    this->createInputPeer();
+    this->createInput();
     TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
 }
 
@@ -326,7 +326,7 @@ void MessagesModel::sendAction(int action)
     SendMessageAction sendmessageaction;
     sendmessageaction.setConstructorId(actionctor);
 
-    this->createInputPeer();
+    this->createInput();
 
     if(!this->_timaction)
     {
@@ -378,7 +378,7 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
     TelegramCache_insert(message);
 }
 
-void MessagesModel::onMessagesReadHistoryReplied(MTProtoReply *mtreply)
+void MessagesModel::onReadHistoryReplied(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply)
     TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
@@ -539,7 +539,7 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
     if(!this->_dialog || text.trimmed().isEmpty())
         return;
 
-    this->createInputPeer();
+    this->createInput();
 
     TLLong randomid = Math::randomize<TLLong>();
     Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
@@ -616,9 +616,15 @@ void MessagesModel::markAsRead()
     if(this->_initializing)
         return;
 
-    this->createInputPeer();
-    MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->_messages.first()->id());
-    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesReadHistoryReplied);
+    MTProtoRequest* req = NULL;
+    this->createInput();
+
+    if(TelegramHelper::isChannel(this->_dialog))
+        req = TelegramAPI::channelsReadHistory(DC_MainSession, this->_inputchannel, this->_messages.first()->id());
+    else
+        req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->_messages.first()->id());
+
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
 }
 
 int MessagesModel::indexOf(Message *message) const
@@ -667,12 +673,16 @@ QString MessagesModel::messageFrom(Message *message) const
     return QString();
 }
 
-void MessagesModel::createInputPeer()
+void MessagesModel::createInput()
 {
-    if(this->_inputpeer)
+    if(!this->_dialog)
         return;
 
-    this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, this->accessHash(this->_dialog), this);
+    if(!this->_inputchannel && TelegramHelper::isChannel(this->_dialog))
+        this->_inputchannel = TelegramHelper::inputChannel(this->_dialog, this->accessHash(this->_dialog), this);
+
+    if(!this->_inputpeer)
+        this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, this->accessHash(this->_dialog), this);
 }
 
 void MessagesModel::terminateInitialization()

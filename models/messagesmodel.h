@@ -83,7 +83,7 @@ class MessagesModel : public TelegramModel
     private slots:
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
-        void onMessagesReadHistoryReplied(MTProtoReply* mtreply);
+        void onReadHistoryReplied(MTProtoReply* mtreply);
         void onReadHistory(Dialog* dialog);
         void onTitleChanged(Dialog* dialog);
         void onSendStatusUpdated(Dialog* dialog);
@@ -105,7 +105,7 @@ class MessagesModel : public TelegramModel
         void setFirstNewMessage();
         void markAsRead();
         bool ownMessage(Message* message) const;
-        void createInputPeer();
+        void createInput();
         void terminateInitialization();
         virtual void telegramReady();
 
@@ -123,6 +123,7 @@ class MessagesModel : public TelegramModel
         TLVector<Message*> _messages;
         QList<Message*> _pendingmessages;
         InputPeer* _inputpeer;
+        InputChannel* _inputchannel;
         Dialog* _dialog;
         QTimer* _timaction;
         TLInt _newmessageindex;

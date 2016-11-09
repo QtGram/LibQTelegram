@@ -176,6 +176,18 @@ InputPeer *TelegramHelper::inputPeer(Message *message, QObject *parent)
     return inputpeer;
 }
 
+InputChannel *TelegramHelper::inputChannel(Dialog *dialog, TLLong accesshash, QObject *parent)
+{
+    if(!TelegramHelper::isChannel(dialog))
+        return NULL;
+
+    InputChannel* inputchannel = new InputChannel(parent);
+    inputchannel->setConstructorId(TLTypes::InputChannel);
+    inputchannel->setChannelId(TelegramHelper::identifier(dialog));
+    inputchannel->setAccessHash(accesshash);
+    return inputchannel;
+}
+
 InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
 {
     InputUser* inputuser = new InputUser(parent);
