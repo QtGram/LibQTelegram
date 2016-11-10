@@ -135,7 +135,6 @@ void MessagesModel::fetchMore(const QModelIndex &)
     }
 
     this->createInput();
-
     MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
 }
@@ -166,7 +165,12 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return this->_telegram->messagePreview(TelegramCache_message(message->replyToMsgId(), this->_dialog));
 
     if(role == MessagesModel::IsMessageNewRole)
+    {
+        if(this->_dialog->unreadCount() <= 0)
+            return false;
+
         return message->id() == this->_newmessageid;
+    }
 
     if(role == MessagesModel::IsMessageOutRole)
         return message->isOut();
