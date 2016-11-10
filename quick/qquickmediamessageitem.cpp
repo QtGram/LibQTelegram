@@ -11,6 +11,7 @@ QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseIt
 
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
+    connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isVideoChanged);
 }
 
 Message *QQuickMediaMessageItem::message() const
@@ -42,6 +43,19 @@ bool QQuickMediaMessageItem::isAnimated() const
         return false;
 
     return TelegramHelper::isAnimated(messagemedia->document());
+}
+
+bool QQuickMediaMessageItem::isVideo() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
+        return false;
+
+    return TelegramHelper::isVideo(messagemedia->document());
 }
 
 qreal QQuickMediaMessageItem::size() const
@@ -406,6 +420,8 @@ void QQuickMediaMessageItem::initialize()
                 this->createImageElement();
             else if(TelegramHelper::isAnimated(document))
                 this->createAnimatedElement();
+            else if(TelegramHelper::isVideo(document))
+                this->createImageElement();
             else if(TelegramHelper::isFile(document))
                 this->createFileElement();
 

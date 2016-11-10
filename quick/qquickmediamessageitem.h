@@ -10,6 +10,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(Message* message READ message WRITE setMessage NOTIFY messageChanged)
     Q_PROPERTY(bool isSticker READ isSticker NOTIFY isStickerChanged)
     Q_PROPERTY(bool isAnimated READ isAnimated NOTIFY isAnimatedChanged)
+    Q_PROPERTY(bool isVideo READ isVideo NOTIFY isVideoChanged)
     Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(QString venueTitle READ venueTitle NOTIFY venueTitleChanged)
@@ -30,6 +31,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         Message* message() const;
         bool isSticker() const;
         bool isAnimated() const;
+        bool isVideo() const;
         qreal size() const;
         qreal contentWidth() const;
         QString venueTitle() const;
@@ -82,6 +84,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void messageChanged();
         void isStickerChanged();
         void isAnimatedChanged();
+        void isVideoChanged();
         void sizeChanged();
         void contentWidthChanged();
         void venueTitleChanged();

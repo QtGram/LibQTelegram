@@ -326,6 +326,11 @@ bool TelegramHelper::isAnimated(Document *document)
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAnimated) != NULL;
 }
 
+bool TelegramHelper::isVideo(Document *document)
+{
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeVideo) != NULL;
+}
+
 bool TelegramHelper::isFile(Document *document)
 {
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename) != NULL;
