@@ -10,9 +10,11 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(Message* message READ message WRITE setMessage NOTIFY messageChanged)
     Q_PROPERTY(bool isSticker READ isSticker NOTIFY isStickerChanged)
     Q_PROPERTY(bool isAnimated READ isAnimated NOTIFY isAnimatedChanged)
+    Q_PROPERTY(bool isAudio READ isAudio NOTIFY isAudioChanged)
     Q_PROPERTY(bool isVideo READ isVideo NOTIFY isVideoChanged)
     Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
+    Q_PROPERTY(QString duration READ duration NOTIFY durationChanged)
     Q_PROPERTY(QString venueTitle READ venueTitle NOTIFY venueTitleChanged)
     Q_PROPERTY(QString venueAddress READ venueAddress NOTIFY venueAddressChanged)
     Q_PROPERTY(QString webPageTitle READ webPageTitle NOTIFY webPageTitleChanged)
@@ -24,6 +26,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(QQmlComponent* animatedDelegate READ animatedDelegate WRITE setAnimatedDelegate NOTIFY animatedDelegateChanged)
     Q_PROPERTY(QQmlComponent* locationDelegate READ locationDelegate WRITE setLocationDelegate NOTIFY locationDelegateChanged)
     Q_PROPERTY(QQmlComponent* webPageDelegate READ webPageDelegate WRITE setWebPageDelegate NOTIFY webPageDelegateChanged)
+    Q_PROPERTY(QQmlComponent* audioDelegate READ audioDelegate WRITE setAudioDelegate NOTIFY audioDelegateChanged)
     Q_PROPERTY(QQmlComponent* fileDelegate READ fileDelegate WRITE setFileDelegate NOTIFY fileDelegateChanged)
 
     public:
@@ -31,9 +34,11 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         Message* message() const;
         bool isSticker() const;
         bool isAnimated() const;
+        bool isAudio() const;
         bool isVideo() const;
         qreal size() const;
         qreal contentWidth() const;
+        QString duration() const;
         QString venueTitle() const;
         QString venueAddress() const;
         QString webPageTitle() const;
@@ -53,6 +58,8 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void setLocationDelegate(QQmlComponent* locationcomponent);
         QQmlComponent* webPageDelegate() const;
         void setWebPageDelegate(QQmlComponent* webpagecomponent);
+        QQmlComponent* audioDelegate() const;
+        void setAudioDelegate(QQmlComponent* audiocomponent);
         QQmlComponent* fileDelegate() const;
         void setFileDelegate(QQmlComponent* filecomponent);
 
@@ -74,6 +81,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void createAnimatedElement();
         void createLocationElement();
         void createWebPageElement();
+        void createAudioElement();
         void createFileElement();
         void initialize();
 
@@ -84,20 +92,24 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void messageChanged();
         void isStickerChanged();
         void isAnimatedChanged();
+        void isAudioChanged();
         void isVideoChanged();
         void sizeChanged();
         void contentWidthChanged();
+        void durationChanged();
         void venueTitleChanged();
         void venueAddressChanged();
         void webPageTitleChanged();
         void webPageDescriptionChanged();
         void webPageUrlChanged();
         void webPageHasPhotoChanged();
+
         void geoPointChanged();
         void imageDelegateChanged();
         void animatedDelegateChanged();
         void locationDelegateChanged();
         void webPageDelegateChanged();
+        void audioDelegateChanged();
         void fileDelegateChanged();
 
     private:
@@ -110,6 +122,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         QQmlComponent* _animatedcomponent;
         QQmlComponent* _locationcomponent;
         QQmlComponent* _webpagecomponent;
+        QQmlComponent* _audiocomponent;
         QQmlComponent* _filecomponent;
 };
 

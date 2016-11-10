@@ -8,6 +8,7 @@
 #include "notifications/notificationobject.h"
 #include "quick/qquickpeerimage.h"
 #include "quick/qquickmediamessageitem.h"
+#include "quick/qquickwaveform.h"
 
 TelegramQmlBase::TelegramQmlBase()
 {
@@ -42,4 +43,5 @@ void TelegramQmlBase::initialize(const QString &uri)
     // Components
     REGISTER_OBJECT_AS(QQuickPeerImage, "PeerImage");
     REGISTER_OBJECT_AS(QQuickMediaMessageItem, "MediaMessageItem");
+    REGISTER_OBJECT_AS(QQuickWaveform, "Waveform");
 }

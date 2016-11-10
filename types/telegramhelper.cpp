@@ -226,6 +226,17 @@ ChatPhoto *TelegramHelper::chatPhoto(Photo *photo, QObject* parent)
     return chatphoto;
 }
 
+QString TelegramHelper::duration(TLInt seconds)
+{
+    QDateTime datetime = QDateTime::fromTime_t(seconds);
+    QTime time = datetime.time();
+
+    if(time.hour() > 1)
+        return datetime.toUTC().toString("HH:mm:ss");
+
+    return datetime.toUTC().toString("mm:ss");
+}
+
 QString TelegramHelper::dateString(TLInt timestamp)
 {
     QDateTime datetime = QDateTime::fromTime_t(timestamp);
@@ -329,6 +340,11 @@ bool TelegramHelper::isAnimated(Document *document)
 bool TelegramHelper::isVideo(Document *document)
 {
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeVideo) != NULL;
+}
+
+bool TelegramHelper::isAudio(Document *document)
+{
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAudio) != NULL;
 }
 
 bool TelegramHelper::isFile(Document *document)

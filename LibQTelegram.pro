@@ -253,7 +253,8 @@ SOURCES += \
     objects/notifications/notificationobject.cpp \
     objects/sendstatus/sendstatushandler.cpp \
     objects/sendstatus/sendstatusobject.cpp \
-    config/cache/database/tables/pendingwebpagetable.cpp
+    config/cache/database/tables/pendingwebpagetable.cpp \
+    quick/qquickwaveform.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -501,4 +502,5 @@ HEADERS +=\
     objects/sendstatus/sendstatusobject.h \
     crypto/hash.h \
     config/cache/database/tables/pendingwebpagetable.h \
-    types/time.h
+    types/time.h \
+    quick/qquickwaveform.h

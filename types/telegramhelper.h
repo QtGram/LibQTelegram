@@ -26,6 +26,7 @@ class TelegramHelper
         static PhotoSize* photoSmall(Photo* photo);
         static PhotoSize* photoBig(Photo* photo);
         static ChatPhoto* chatPhoto(Photo* photo, QObject *parent = 0);
+        static QString duration(TLInt seconds);
         static QString dateString(TLInt timestamp);
         static QString fileSize(TLDouble size);
         static QString fullName(User* user);
@@ -34,6 +35,7 @@ class TelegramHelper
         static bool isSticker(Document* document);
         static bool isAnimated(Document* document);
         static bool isVideo(Document* document);
+        static bool isAudio(Document* document);
         static bool isFile(Document* document);
         static bool isCloud(Dialog* dialog);
         static bool isChat(Dialog* dialog);

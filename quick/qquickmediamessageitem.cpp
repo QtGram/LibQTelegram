@@ -11,6 +11,7 @@ QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseIt
 
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
+    connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAudioChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isVideoChanged);
 }
 
@@ -45,6 +46,19 @@ bool QQuickMediaMessageItem::isAnimated() const
     return TelegramHelper::isAnimated(messagemedia->document());
 }
 
+bool QQuickMediaMessageItem::isAudio() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
+        return false;
+
+    return TelegramHelper::isAudio(messagemedia->document());
+}
+
 bool QQuickMediaMessageItem::isVideo() const
 {
     if(!this->_message || !this->_message->media())
@@ -66,6 +80,24 @@ qreal QQuickMediaMessageItem::size() const
 qreal QQuickMediaMessageItem::contentWidth() const
 {
     return this->_contentwidth;
+}
+
+QString QQuickMediaMessageItem::duration() const
+{
+    if(!this->_message)
+        return QString();
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaDocument))
+        return QString();
+
+    DocumentAttribute* attribute = NULL;
+
+    if((attribute = TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeAudio)))
+        return TelegramHelper::duration(attribute->duration());
+
+    return QString();
 }
 
 QString QQuickMediaMessageItem::venueTitle() const
@@ -239,6 +271,20 @@ void QQuickMediaMessageItem::setWebPageDelegate(QQmlComponent *webpagecomponent)
     emit webPageDelegateChanged();
 }
 
+QQmlComponent *QQuickMediaMessageItem::audioDelegate() const
+{
+    return this->_audiocomponent;
+}
+
+void QQuickMediaMessageItem::setAudioDelegate(QQmlComponent *audiocomponent)
+{
+    if(this->_audiocomponent == audiocomponent)
+        return;
+
+    this->_audiocomponent = audiocomponent;
+    emit audioDelegateChanged();
+}
+
 QQmlComponent *QQuickMediaMessageItem::fileDelegate() const
 {
     return this->_filecomponent;
@@ -364,6 +410,20 @@ void QQuickMediaMessageItem::createWebPageElement()
     this->scaleToFree();
 }
 
+void QQuickMediaMessageItem::createAudioElement()
+{
+    if(!this->_audiocomponent)
+        return;
+
+    this->createObject(this->_audiocomponent);
+    connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
+
+    emit durationChanged();
+    this->scaleToFree();
+}
+
 void QQuickMediaMessageItem::createFileElement()
 {
     if(!this->_filecomponent)
@@ -422,6 +482,8 @@ void QQuickMediaMessageItem::initialize()
                 this->createAnimatedElement();
             else if(TelegramHelper::isVideo(document))
                 this->createImageElement();
+            else if(TelegramHelper::isAudio(document))
+                this->createAudioElement();
             else if(TelegramHelper::isFile(document))
                 this->createFileElement();
 
