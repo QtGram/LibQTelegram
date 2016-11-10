@@ -7,15 +7,18 @@
 #include <QDir>
 
 #define CACHE_FOLDER "cache"
+#define DOWNLOADS_FOLDER "Telegram"
 
 FileCache* FileCache::_instance = NULL;
 
 FileCache::FileCache(QObject *parent) : QObject(parent), _currentobject(NULL)
 {
-    this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + CACHE_FOLDER;
+    this->_cachepath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + CACHE_FOLDER;
+    this->_downloadspath = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QDir::separator() + DOWNLOADS_FOLDER;
 
     QDir dir;
-    dir.mkpath(this->_storagepath);
+    dir.mkpath(this->_cachepath);
+    dir.mkpath(this->_downloadspath);
 }
 
 FileCache *FileCache::instance()
@@ -133,9 +136,10 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     if(this->_filemap.contains(fileid))
         return this->_filemap[fileid];
 
-    FileObject* fileobject = new FileObject(this->_storagepath, this);
+    FileObject* fileobject = new FileObject(this->_cachepath, this);
     fileobject->setAutoDownload(autodownload);
     connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
+    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::onDownloadCompleted);
 
     if(locationobj->constructorId() == TLTypes::Document)
     {
@@ -179,4 +183,36 @@ void FileCache::processQueue()
 
     this->_currentobject = this->_queue.takeFirst();
     this->_currentobject->downloadThumbnail();
+}
+
+void FileCache::onDownloadCompleted()
+{
+    FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
+
+    if(!fileobject->downloaded() || (fileobject->document() && TelegramHelper::isSticker(fileobject->document())))
+        return;
+
+    QString destfolder;
+    QMimeType mime = this->_mimedb.mimeTypeForFile(fileobject->filePath());
+
+    if(mime.name().startsWith("image"))
+        destfolder = "Image";
+    else if(mime.name().startsWith("video"))
+        destfolder = "Video";
+    else if(mime.name().startsWith("audio"))
+        destfolder = "Music";
+    else
+        destfolder = "Other";
+
+    QDir destpath(this->_downloadspath);
+    destpath.mkpath(destpath.absoluteFilePath(destfolder));
+    destpath.cd(destfolder);
+
+    if(fileobject->fileName().isEmpty())
+    {
+        QString filename = QString("%1_%2.%3").arg(destfolder).arg(CurrentTimeStamp).arg(mime.preferredSuffix()).toLower();
+        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(filename));
+    }
+    else
+        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileName()), destpath.absoluteFilePath(fileobject->fileName()));
 }
