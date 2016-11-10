@@ -301,12 +301,12 @@ void DialogsModel::doRemoveDialog(int index)
     this->endRemoveRows();
 }
 
-int DialogsModel::insertionPoint(Dialog *changeddialog, int fromidx) const
+int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
 {
-    if(!changeddialog->topMessage())
-        return this->_dialogs.length() - 1;
+    if(!insdialog->topMessage())
+        return this->_dialogs.length();
 
-    Message* msg1 = TelegramCache_message(changeddialog->topMessage(), changeddialog);
+    Message* msg1 = TelegramCache_message(insdialog->topMessage(), insdialog);
 
     for(int i = fromidx + 1; i < this->_dialogs.length(); i++)
     {
@@ -320,6 +320,9 @@ int DialogsModel::insertionPoint(Dialog *changeddialog, int fromidx) const
         if(!msg2 || (msg1->date() > msg2->date()))
             return i;
     }
+
+    if(fromidx == -1)
+        return this->_dialogs.length();
 
     return fromidx;
 }
@@ -509,10 +512,13 @@ void DialogsModel::onDialogEditMessage(Dialog *dialog)
                                DialogsModel::TopMessageTextRole);
 }
 
-void DialogsModel::onNewDialogs(const TLVector<Dialog *> &dialogs)
+void DialogsModel::onNewDialogs(const TLVector<Dialog *> &newdialogs)
 {
-    this->_dialogs << dialogs;
-    this->sortDialogs(); // NOTE: Remove this evil call
+    foreach(Dialog* newdialog, newdialogs)
+    {
+        int idx = this->insertionPoint(newdialog);
+        this->_dialogs.insert(idx, newdialog);
+    }
 }
 
 void DialogsModel::onReadHistory(Dialog *dialog)

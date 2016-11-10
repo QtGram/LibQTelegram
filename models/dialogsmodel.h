@@ -47,7 +47,7 @@ class DialogsModel : public TelegramModel
 
     private:
         void doRemoveDialog(int index);
-        int insertionPoint(Dialog* changeddialog, int fromidx) const;
+        int insertionPoint(Dialog* insdialog, int fromidx = -1) const;
         int indexOf(TLInt dialogid) const;
         QString messageFrom(Message *message) const;
         QString firstMessageLine(Message* message) const;
@@ -62,7 +62,7 @@ class DialogsModel : public TelegramModel
         void onDialogNewDraftMessage(Dialog* dialog);
         void onDialogDeleteMessage(Dialog* dialog);
         void onDialogEditMessage(Dialog* dialog);
-        void onNewDialogs(const TLVector<Dialog*>& dialogs);
+        void onNewDialogs(const TLVector<Dialog*>& newdialogs);
         void onReadHistory(Dialog* dialog);
         void onTitleChanged(Dialog* dialog);
 
