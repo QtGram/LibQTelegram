@@ -40,7 +40,7 @@ class QQuickBaseItem : public QQuickItem
         void setFontPixelSize(qreal pixelsize);
 
     public slots:
-        void download();
+        virtual void download();
 
     protected:
         QString escape(const TLString& s);

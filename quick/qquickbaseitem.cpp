@@ -131,7 +131,7 @@ void QQuickBaseItem::setVersion(const QString &version)
 
 void QQuickBaseItem::download()
 {
-    if(!this->_fileobject)
+    if(!this->_fileobject || this->_fileobject->downloaded())
         return;
 
     this->_fileobject->download();
@@ -230,13 +230,13 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
         return NULL;
 
     connect(this->_fileobject, &FileObject::imageSizeChanged, this, &QQuickBaseItem::imageSizeChanged);
-    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::filePathChanged);
-    connect(this->_fileobject, &FileObject::fileNameChanged, this, &QQuickBaseItem::fileNameChanged);
-    connect(this->_fileobject, &FileObject::downloadedChanged, this, &QQuickBaseItem::downloadedChanged);
     connect(this->_fileobject, &FileObject::downloadingChanged, this, &QQuickBaseItem::downloadingChanged);
     connect(this->_fileobject, &FileObject::hasThumbnailChanged, this, &QQuickBaseItem::hasThumbnailChanged);
     connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::sourceChanged);
+    connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::filePathChanged);
     connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
+    connect(this->_fileobject, &FileObject::fileNameChanged, this, &QQuickBaseItem::fileNameChanged);
+    connect(this->_fileobject, &FileObject::downloadedChanged, this, &QQuickBaseItem::downloadedChanged);
 
     return this->_fileobject;
 }
