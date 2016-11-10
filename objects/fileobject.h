@@ -31,6 +31,7 @@ class FileObject : public QObject
 
     public:
         explicit FileObject(const QString& storagepath, QObject *parent = 0);
+        Document* document() const;
         bool downloading() const;
         bool downloaded() const;
         bool hasThumbnail() const;
@@ -38,6 +39,8 @@ class FileObject : public QObject
         QString thumbnail() const;
         QString filePath() const;
         QString fileName() const;
+        QString fileId() const;
+        QString thumbnailId() const;
         TLInt fileSize() const;
         void setAutoDownload(bool autodownload);
         void setDocument(Document* document);

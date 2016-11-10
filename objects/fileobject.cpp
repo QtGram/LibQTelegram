@@ -19,6 +19,11 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
 }
 
+Document *FileObject::document() const
+{
+    return this->_document;
+}
+
 bool FileObject::downloading() const
 {
     return (this->_downloadmode == FileObject::DownloadThumbnail) || (this->_downloadmode == FileObject::Download);
@@ -52,6 +57,16 @@ QString FileObject::filePath() const
 QString FileObject::fileName() const
 {
     return this->_filename;
+}
+
+QString FileObject::fileId() const
+{
+    return this->_fileid;
+}
+
+QString FileObject::thumbnailId() const
+{
+    return this->_thumbnailid;
 }
 
 TLInt FileObject::fileSize() const
@@ -156,23 +171,24 @@ void FileObject::downloadThumbnail()
 
 bool FileObject::loadCache()
 {
+    bool res = false;
     QDir dir(this->_storagepath);
 
     if(QFile::exists(dir.absoluteFilePath(this->_thumbnailid)))
     {
         this->_thumbnail = dir.absoluteFilePath(this->_thumbnailid);
         emit thumbnailChanged();
-        return true;
+        res = true;
     }
 
     if(QFile::exists(dir.absoluteFilePath(this->_fileid)))
     {
         this->_filepath = dir.absoluteFilePath(this->_fileid);
         emit filePathChanged();
-        return true;
+        res = true;
     }
 
-    return false;
+    return res;
 }
 
 void FileObject::download()
