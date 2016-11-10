@@ -239,6 +239,14 @@ void QQuickMediaMessageItem::setFileDelegate(QQmlComponent *filecomponent)
     emit fileDelegateChanged();
 }
 
+void QQuickMediaMessageItem::download()
+{
+    if(!this->canDownload())
+        return;
+
+    QQuickBaseItem::download();
+}
+
 void QQuickMediaMessageItem::updateContentWidth(qreal contentwidth)
 {
     if(this->_contentwidth == contentwidth)
@@ -265,6 +273,24 @@ qreal QQuickMediaMessageItem::calcAspectRatio(const QSize& imagesize) const
         return 1.0;
 
     return imagesize.width() / static_cast<qreal>(imagesize.height());
+}
+
+bool QQuickMediaMessageItem::canDownload() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    switch(this->_message->media()->constructorId())
+    {
+        case TLTypes::MessageMediaPhoto:
+        case TLTypes::MessageMediaDocument:
+            return true;
+
+        default:
+            break;
+    }
+
+    return false;
 }
 
 void QQuickMediaMessageItem::createImageElement()

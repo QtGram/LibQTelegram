@@ -54,6 +54,9 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         QQmlComponent* fileDelegate() const;
         void setFileDelegate(QQmlComponent* filecomponent);
 
+    public slots:
+        virtual void download();
+
     private slots:
         void updateContentWidth(qreal contentwidth);
         void updateContentWidth();
@@ -64,6 +67,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
 
     private:
         qreal calcAspectRatio(const QSize &imagesize) const;
+        bool canDownload() const;
         void createImageElement();
         void createAnimatedElement();
         void createLocationElement();
