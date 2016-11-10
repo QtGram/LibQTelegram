@@ -511,10 +511,10 @@ int TelegramCache::checkUnreadMessages(Dialog *dialog)
 
     Message* message = this->message(dialog->topMessage(), dialog);
 
-    if(!message || message->isOut())
+    if(!message || message->isOut() || (dialog->topMessage() == dialog->readInboxMaxId()))
         return 0;
 
-    return dialog->topMessage() - dialog->readInboxMaxId();
+    return dialog->topMessage() - (dialog->readInboxMaxId() + 1);
 }
 
 TelegramCache *TelegramCache::cache()
