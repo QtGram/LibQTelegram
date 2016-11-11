@@ -1,6 +1,7 @@
 #include "qquickwaveform.h"
 #include "../types/telegramhelper.h"
 #include <QSGSimpleRectNode>
+#include <QSGClipNode>
 #include <QSGNode>
 
 #define WaveformSkip  1  // px
@@ -117,18 +118,20 @@ void QQuickWaveform::findWaveform(TelegramObject *telegramobject)
 
 QSGNode *QQuickWaveform::updatePaintNode(QSGNode* oldnode, QQuickItem::UpdatePaintNodeData*)
 {
-    QSGNode* rootnode = oldnode;
+    QSGClipNode* rootnode = dynamic_cast<QSGClipNode*>(oldnode);
 
     if(!this->_wavemax)
         return rootnode;
 
-    int barcount = qMin(static_cast<int>(this->width() / this->_barwidth), this->_waveform.length()) - 1;
+    QRectF cliprect(0, 0, this->width(), this->height());
 
     if(!rootnode)
     {
-        rootnode = new QSGNode();
+        rootnode = new QSGClipNode();
+        rootnode->setIsRectangular(true);
+        rootnode->setClipRect(cliprect);
 
-        for(int i = 0; i < barcount; i++)
+        for(int i = 0; i < this->_waveform.length(); i++)
         {
             QRectF rect;
             this->waveRect(i, rect);
@@ -142,9 +145,10 @@ QSGNode *QQuickWaveform::updatePaintNode(QSGNode* oldnode, QQuickItem::UpdatePai
     }
     else
     {
+        rootnode->setClipRect(cliprect);
         QSGNode* node = rootnode->firstChild();
 
-        for(int i = 0; i < barcount; i++)
+        for(int i = 0; i < this->_waveform.length(); i++)
         {
             QRectF rect;
             this->waveRect(i, rect);
