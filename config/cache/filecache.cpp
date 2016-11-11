@@ -189,8 +189,14 @@ void FileCache::onDownloadCompleted()
 {
     FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
 
-    if(!fileobject->downloaded() || (fileobject->document() && TelegramHelper::isSticker(fileobject->document())))
+    if(!fileobject->downloaded())
         return;
+
+    if(fileobject->document())
+    {
+        if(TelegramHelper::isSticker(fileobject->document()) || TelegramHelper::isAudio(fileobject->document()))
+            return;
+    }
 
     QString destfolder;
     QMimeType mime = this->_mimedb.mimeTypeForFile(fileobject->filePath());
