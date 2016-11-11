@@ -385,7 +385,7 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
 void MessagesModel::onReadHistoryReplied(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply)
-    TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->outboxMaxId());
+    TelegramCache_markAsRead(this->_dialog, this->inboxMaxId(), this->_dialog->readOutboxMaxId());
 }
 
 void MessagesModel::onReadHistory(Dialog *dialog)
@@ -624,9 +624,9 @@ void MessagesModel::markAsRead()
     this->createInput();
 
     if(TelegramHelper::isChannel(this->_dialog))
-        req = TelegramAPI::channelsReadHistory(DC_MainSession, this->_inputchannel, this->_messages.first()->id());
+        req = TelegramAPI::channelsReadHistory(DC_MainSession, this->_inputchannel, this->inboxMaxId());
     else
-        req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->_messages.first()->id());
+        req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->inboxMaxId());
 
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
 }
