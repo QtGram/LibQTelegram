@@ -37,6 +37,7 @@ class TelegramHelper
         static bool isVideo(Document* document);
         static bool isAudio(Document* document);
         static bool isFile(Document* document);
+        static bool isMuted(Dialog* dialog);
         static bool isCloud(Dialog* dialog);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);

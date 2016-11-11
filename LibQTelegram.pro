@@ -254,7 +254,8 @@ SOURCES += \
     objects/sendstatus/sendstatushandler.cpp \
     objects/sendstatus/sendstatusobject.cpp \
     config/cache/database/tables/pendingwebpagetable.cpp \
-    quick/qquickwaveform.cpp
+    quick/qquickwaveform.cpp \
+    objects/peerprofile.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -503,4 +504,5 @@ HEADERS +=\
     crypto/hash.h \
     config/cache/database/tables/pendingwebpagetable.h \
     types/time.h \
-    quick/qquickwaveform.h
+    quick/qquickwaveform.h \
+    objects/peerprofile.h

@@ -352,6 +352,16 @@ bool TelegramHelper::isFile(Document *document)
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename) != NULL;
 }
 
+bool TelegramHelper::isMuted(Dialog *dialog)
+{
+    PeerNotifySettings* notifysettings = dialog->notifySettings();
+
+    if(!notifysettings || (notifysettings->constructorId() == TLTypes::PeerNotifySettingsEmpty))
+        return false;
+
+    return notifysettings->isSilent() || (CurrentTimeStamp <= static_cast<uint>(notifysettings->muteUntil()));
+}
+
 bool TelegramHelper::isCloud(Dialog *dialog)
 {
     return TelegramHelper::identifier(dialog) == TelegramConfig_me->id();

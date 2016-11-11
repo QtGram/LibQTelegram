@@ -1,6 +1,7 @@
 #include "telegramqmlbase.h"
 #include "telegram.h"
 #include "telegraminitializer.h"
+#include "peerprofile.h"
 #include "models/dialogsmodel.h"
 #include "models/messagesmodel.h"
 #include "models/contactsmodel.h"
@@ -34,6 +35,7 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_OBJECT(Telegram);
     REGISTER_OBJECT(TelegramNotifications);
     REGISTER_OBJECT(NotificationObject);
+    REGISTER_OBJECT(PeerProfile);
 
     // Models
     REGISTER_OBJECT(ContactsModel);
