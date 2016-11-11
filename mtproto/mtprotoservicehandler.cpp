@@ -95,6 +95,8 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
     RpcError re;
     re.read(mtreply);
 
+    emit ackRequest(mtreply->messageId());
+
     if(re.errorMessage().contains("_MIGRATE_"))
     {
         QRegularExpression regexp("_MIGRATE_([0-9]+)");
@@ -142,19 +144,12 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
         else
             errormessage = tr("Unknown error");
 
-        emit ackRequest(mtreply->messageId());
         emit phoneCodeError(errormessage);
     }
     else if(re.errorMessage() == "PASSWORD_HASH_INVALID")
-    {
-        emit ackRequest(mtreply->messageId());
         emit invalidPassword();
-    }
     else if(re.errorMessage() == "SESSION_PASSWORD_NEEDED")
-    {
-        emit ackRequest(mtreply->messageId());
         emit sessionPasswordNeeded();
-    }
     else
         qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
 }
