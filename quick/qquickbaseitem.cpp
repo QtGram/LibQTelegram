@@ -131,7 +131,7 @@ void QQuickBaseItem::setVersion(const QString &version)
 
 void QQuickBaseItem::download()
 {
-    if(!this->_fileobject || this->_fileobject->downloaded())
+    if(!this->_fileobject || this->_fileobject->downloading() || this->_fileobject->downloaded())
         return;
 
     this->_fileobject->download();
