@@ -162,7 +162,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return this->messageFrom(TelegramCache_message(message->replyToMsgId(), this->_dialog));
 
     if(role == MessagesModel::ReplyTextRole)
-        return this->_telegram->messagePreview(TelegramCache_message(message->replyToMsgId(), this->_dialog));
+        return this->_telegram->messageText(TelegramCache_message(message->replyToMsgId(), this->_dialog));
 
     if(role == MessagesModel::IsMessageNewRole)
     {
