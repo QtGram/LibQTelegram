@@ -110,6 +110,8 @@ class MessagesModel : public TelegramModel
         bool ownMessage(Message* message) const;
         void createInput();
         void terminateInitialization();
+
+    protected:
         virtual void telegramReady();
 
     signals:
