@@ -24,6 +24,7 @@ class Telegram : public QObject
         void setInitializer(TelegramInitializer* initializer);
 
     public: // C++ side API
+        bool muteDialog(Dialog* dialog, bool mute);
         QString dialogTitle(Dialog* dialog) const;
         QString dialogStatusText(Dialog* dialog) const;
         QString messagePreview(Message* message) const;

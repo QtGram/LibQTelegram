@@ -29,7 +29,6 @@ class TelegramModel : public QAbstractListModel
     protected:
         void setInitializing(bool initializing);
         void setLoading(bool loading);
-        TLLong accessHash(Dialog *dialog) const;
         virtual QHash<int, QByteArray> initRoles() const;
         virtual void telegramReady() = 0;
 

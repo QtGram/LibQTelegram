@@ -69,6 +69,26 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     emit initializerChanged();
 }
 
+bool Telegram::muteDialog(Dialog *dialog, bool mute)
+{
+    PeerNotifySettings* notifysettings = dialog->notifySettings();
+
+    if(notifysettings->isSilent() == mute)
+        return false;
+
+    notifysettings->setIsSilent(mute);
+    notifysettings->setMuteUntil(mute ? Future10Years : 0);
+    TelegramCache_store(dialog);
+
+    InputNotifyPeer* inputnotifypeer = TelegramHelper::inputNotifyPeer(dialog, TelegramCache_accessHash(dialog));
+    InputPeerNotifySettings* inputpeernotifysettings = TelegramHelper::inputPeerNotifySettings(notifysettings);
+    TelegramAPI::accountUpdateNotifySettings(DC_MainSession, inputnotifypeer, inputpeernotifysettings);
+
+    inputpeernotifysettings->deleteLater();
+    inputnotifypeer->deleteLater();
+    return true;
+}
+
 QString Telegram::messageMediaText(MessageMedia *messagemedia) const
 {
     TLConstructor ctorid = messagemedia->constructorId();

@@ -116,6 +116,26 @@ bool TelegramCache::hasDialog(TLInt id) const
     return true;
 }
 
+TLLong TelegramCache::accessHash(Dialog *dialog)
+{
+    if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
+    {
+        Chat* chat = this->chat(TelegramHelper::identifier(dialog));
+
+        if(chat)
+            return chat->accessHash();
+    }
+    else
+    {
+        User* user = this->user(TelegramHelper::identifier(dialog));
+
+        if(user)
+            return user->accessHash();
+    }
+
+    return 0;
+}
+
 void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
 {
     dialog->setReadInboxMaxId(inmaxid);

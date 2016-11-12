@@ -8,6 +8,7 @@
 #define TelegramCache_hasDialog(dialogid) TelegramCache::cache()->hasDialog(dialogid)
 #define TelegramCache_markAsRead(dialog, inmaxid, outmaxid) TelegramCache::cache()->markAsRead(dialog, inmaxid, outmaxid)
 #define TelegramCache_clearHistory(dialog) TelegramCache::cache()->clearHistory(dialog)
+#define TelegramCache_accessHash(dialog) TelegramCache::cache()->accessHash(dialog)
 
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
@@ -51,9 +52,10 @@ class TelegramCache: public QObject
         Chat* chat(TLInt id, bool ignoreerror = false);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
+        bool hasDialog(TLInt id) const;
+        TLLong accessHash(Dialog* dialog);
 
     public slots:
-        bool hasDialog(TLInt id) const;
         void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);
         void clearHistory(Dialog* dialog);
         void cache(Dialog* dialog);

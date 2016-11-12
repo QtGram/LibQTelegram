@@ -173,24 +173,12 @@ bool DialogsModel::setData(const QModelIndex &index, const QVariant &value, int 
 
     if(role == DialogsModel::IsMutedRole)
     {
-        PeerNotifySettings* notifysettings = dialog->notifySettings();
-        bool ismuted = value.toBool();
+        bool done = this->_telegram->muteDialog(dialog, value.toBool());
 
-        if(notifysettings->isSilent() == ismuted)
-            return false;
+        if(done)
+            Emit_DataChangedRoles(index.row(), DialogsModel::IsMutedRole);
 
-        notifysettings->setIsSilent(ismuted);
-        notifysettings->setMuteUntil(ismuted ? Future10Years : 0);
-        TelegramCache_store(dialog);
-
-        InputNotifyPeer* inputnotifypeer = TelegramHelper::inputNotifyPeer(dialog, this->accessHash(dialog));
-        InputPeerNotifySettings* inputpeernotifysettings = TelegramHelper::inputPeerNotifySettings(notifysettings);
-        TelegramAPI::accountUpdateNotifySettings(DC_MainSession, inputnotifypeer, inputpeernotifysettings);
-
-        inputpeernotifysettings->deleteLater();
-        inputnotifypeer->deleteLater();
-        Emit_DataChangedRoles(index.row(), DialogsModel::IsMutedRole);
-        return true;
+        return done;
     }
 
     return false;
@@ -251,7 +239,7 @@ void DialogsModel::removeDialog(int index)
 
     if(dialog->topMessage() > 0)
     {
-        InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, this->accessHash(dialog), this);
+        InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, TelegramCache_accessHash(dialog), this);
         MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
 
         connect(req, &MTProtoRequest::replied, [this, inputpeer, index](MTProtoReply*) {
@@ -275,7 +263,7 @@ void DialogsModel::clearHistory(int index)
     if(dialog->topMessage() <= 0)
         return;
 
-    InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, this->accessHash(dialog), this);
+    InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, TelegramCache_accessHash(dialog), this);
     MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
 
     connect(req, &MTProtoRequest::replied, [this, dialog, inputpeer, index](MTProtoReply*) {

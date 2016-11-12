@@ -292,7 +292,7 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
     if(!this->_telegram || !this->_dialog || !fromdialog || !forwardmessage)
         return;
 
-    InputPeer* frompeer = TelegramHelper::inputPeer(fromdialog, this->accessHash(fromdialog), this);
+    InputPeer* frompeer = TelegramHelper::inputPeer(fromdialog, TelegramCache_accessHash(fromdialog), this);
 
     TLVector<TLInt> msgids;
     msgids << forwardmessage->id();
@@ -683,10 +683,10 @@ void MessagesModel::createInput()
         return;
 
     if(!this->_inputchannel && TelegramHelper::isChannel(this->_dialog))
-        this->_inputchannel = TelegramHelper::inputChannel(this->_dialog, this->accessHash(this->_dialog), this);
+        this->_inputchannel = TelegramHelper::inputChannel(this->_dialog, TelegramCache_accessHash(this->_dialog), this);
 
     if(!this->_inputpeer)
-        this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, this->accessHash(this->_dialog), this);
+        this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, TelegramCache_accessHash(this->_dialog), this);
 }
 
 void MessagesModel::terminateInitialization()
