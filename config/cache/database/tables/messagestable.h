@@ -11,7 +11,7 @@ class MessagesTable : public DatabaseTable
         explicit MessagesTable(QObject *parent = 0);
         virtual void createSchema();
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject *telegramobject);
-        void removeDialogMessages(TLInt dialogid, TLVector<MessageId> deletedmessages);
+        void removeDialogMessages(TLInt dialogid, TLVector<MessageId> &deletedmessages);
         Message* topMessage(Dialog* dialog, QHash<MessageId, Message*>& messages, QObject* parent);
         QList<Message*> messagesForDialog(Dialog* dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject* parent) const;
         QList<Message*> lastMessagesForDialog(Dialog* dialog, QHash<MessageId, Message *> &messages, QObject* parent) const;

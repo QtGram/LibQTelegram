@@ -462,6 +462,11 @@ TLInt TelegramHelper::messageToDialog(Message *message)
     return message->fromId();
 }
 
+TLInt TelegramHelper::messageIdentifier(MessageId messageid)
+{
+    return messageid & 0xFFFFFFFF;
+}
+
 TLBytes TelegramHelper::createPasswordHash(const QString &password, const AccountPassword *accountpassword)
 {
     TLBytes newpassworddata = password.isEmpty() ? TLBytes() : (accountpassword->currentSalt() + password.toUtf8() + accountpassword->currentSalt());

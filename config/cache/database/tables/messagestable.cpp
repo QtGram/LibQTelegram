@@ -25,7 +25,7 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     this->execute(queryobj);
 }
 
-void MessagesTable::removeDialogMessages(TLInt dialogid, TLVector<MessageId> deletedmessages)
+void MessagesTable::removeDialogMessages(TLInt dialogid, TLVector<MessageId>& deletedmessages)
 {
     if(!this->prepareDelete(dialogid, deletedmessages))
         return;

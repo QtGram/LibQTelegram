@@ -238,17 +238,7 @@ void DialogsModel::removeDialog(int index)
     Dialog* dialog = this->_dialogs[index];
 
     if(dialog->topMessage() > 0)
-    {
-        InputPeer* inputpeer = TelegramHelper::inputPeer(dialog, TelegramCache_accessHash(dialog), this);
-        MTProtoRequest* req = TelegramAPI::messagesReadHistory(DC_MainSession, inputpeer, dialog->topMessage());
-
-        connect(req, &MTProtoRequest::replied, [this, inputpeer, index](MTProtoReply*) {
-            inputpeer->deleteLater();
-            this->doRemoveDialog(index);
-        });
-
-        return;
-    }
+        this->clearHistory(index);
 
     this->doRemoveDialog(index);
 }
@@ -268,7 +258,9 @@ void DialogsModel::clearHistory(int index)
 
     connect(req, &MTProtoRequest::replied, [this, dialog, inputpeer, index](MTProtoReply*) {
         inputpeer->deleteLater();
+
         TelegramCache_clearHistory(dialog);
+        TelegramAPI::messagesDeleteHistory(DC_MainSession, inputpeer, dialog->topMessage());
     });
 }
 

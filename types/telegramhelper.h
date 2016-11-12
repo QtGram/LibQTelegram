@@ -53,6 +53,7 @@ class TelegramHelper
         static TLInt identifier(Peer* peer);
         static TLInt identifier(Dialog* dialog);
         static TLInt messageToDialog(Message* message);
+        static TLInt messageIdentifier(MessageId messageid);
         static TLBytes createPasswordHash(const QString& password, const AccountPassword *accountpassword);
 };
 
