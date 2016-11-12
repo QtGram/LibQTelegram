@@ -133,9 +133,18 @@ void PeerProfile::setPeer(TelegramObject *peer)
     emit peerChanged();
 }
 
+void PeerProfile::setIsMuted(bool ismuted)
+{
+    if(!this->_telegram || !this->_dialog)
+        return;
+
+    if(this->_telegram->muteDialog(this->_dialog, ismuted))
+        emit isMutedChanged();
+}
+
 void PeerProfile::classBegin()
 {
-
+    /* Does nothing */
 }
 
 void PeerProfile::componentComplete()

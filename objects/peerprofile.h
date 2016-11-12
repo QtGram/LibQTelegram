@@ -18,7 +18,7 @@ class PeerProfile : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isContact READ isContact NOTIFY isContactChanged)
-    Q_PROPERTY(bool isMuted READ isMuted NOTIFY isMutedChanged)
+    Q_PROPERTY(bool isMuted READ isMuted WRITE setIsMuted NOTIFY isMutedChanged)
     Q_PROPERTY(bool isMe READ isMe NOTIFY isMeChanged)
     Q_PROPERTY(bool hasUsername READ hasUsername NOTIFY hasUsernameChanged)
     Q_PROPERTY(bool hasPhoneNumber READ hasPhoneNumber NOTIFY hasPhoneNumberChanged)
@@ -46,6 +46,7 @@ class PeerProfile : public QObject, public QQmlParserStatus
         QString phoneNumber() const;
         void setTelegram(Telegram* telegram);
         void setPeer(TelegramObject* peer);
+        void setIsMuted(bool ismuted);
 
     protected:
         virtual void classBegin();
