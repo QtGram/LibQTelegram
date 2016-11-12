@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _isactive(true), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -14,6 +14,7 @@ MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpee
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isBroadcastChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isMegaGroupChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isWritableChanged);
+    connect(this, &MessagesModel::isActiveChanged, this, &MessagesModel::markAsRead);
 }
 
 Dialog *MessagesModel::dialog() const
@@ -29,6 +30,15 @@ void MessagesModel::setDialog(Dialog *dialog)
     this->_dialog = dialog;
     this->telegramReady();
     emit dialogChanged();
+}
+
+void MessagesModel::setIsActive(bool isactive)
+{
+    if(this->_isactive == isactive)
+        return;
+
+    this->_isactive = isactive;
+    emit isActiveChanged();
 }
 
 QString MessagesModel::title() const
@@ -110,6 +120,11 @@ bool MessagesModel::isWritable() const
     }
 
     return true;
+}
+
+bool MessagesModel::isActive() const
+{
+    return this->_isactive;
 }
 
 bool MessagesModel::canFetchMore(const QModelIndex &) const
@@ -617,7 +632,7 @@ TLInt MessagesModel::outboxMaxId() const
 
 void MessagesModel::markAsRead()
 {
-    if(this->_initializing)
+    if(this->_initializing || !this->_isactive)
         return;
 
     MTProtoRequest* req = NULL;

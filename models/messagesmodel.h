@@ -13,6 +13,7 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
     Q_PROPERTY(int newMessageIndex READ newMessageIndex NOTIFY newMessageIndexChanged)
+    Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
     Q_PROPERTY(bool isChat READ isChat NOTIFY isChatChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
@@ -57,7 +58,6 @@ class MessagesModel : public TelegramModel
     public:
         explicit MessagesModel(QObject *parent = 0);
         Dialog* dialog() const;
-        void setDialog(Dialog* dialog);
         QString title() const;
         QString statusText() const;
         int newMessageIndex() const;
@@ -65,6 +65,9 @@ class MessagesModel : public TelegramModel
         bool isBroadcast() const;
         bool isMegaGroup() const;
         bool isWritable() const;
+        bool isActive() const;
+        void setDialog(Dialog* dialog);
+        void setIsActive(bool isactive);
 
     public: // Overrides
         virtual bool canFetchMore(const QModelIndex&) const;
@@ -92,6 +95,7 @@ class MessagesModel : public TelegramModel
         void onDeleteMessage(Message *message);
         void onUpdateMessage(Message *message);
         void resetAction();
+        void markAsRead();
 
     private:
         TLConstructor getAction(int action);
@@ -103,7 +107,6 @@ class MessagesModel : public TelegramModel
         QString messageFrom(Message *message) const;
         void sendMessage(const QString& text, TLInt replymsgid);
         void setFirstNewMessage();
-        void markAsRead();
         bool ownMessage(Message* message) const;
         void createInput();
         void terminateInitialization();
@@ -117,6 +120,7 @@ class MessagesModel : public TelegramModel
         void isBroadcastChanged();
         void isMegaGroupChanged();
         void isWritableChanged();
+        void isActiveChanged();
         void newMessageIndexChanged();
 
     private:
@@ -128,6 +132,7 @@ class MessagesModel : public TelegramModel
         QTimer* _timaction;
         TLInt _newmessageindex;
         TLInt _newmessageid;
+        bool _isactive;
         bool _fetchmore;
         bool _atstart;
         int _loadcount;
