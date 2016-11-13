@@ -460,6 +460,16 @@ void QQuickMediaMessageItem::initialize()
         this->setVisible(false);
         return;
     }
+    else if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
+    {
+        if(TelegramHelper::messageIsWebPagePending(this->_message))
+        {
+            connect(messagemedia, &MessageMedia::webpageChanged, this, &QQuickMediaMessageItem::initialize);
+            return;
+        }
+
+        disconnect(messagemedia, &MessageMedia::webpageChanged, this, 0);
+    }
 
     switch(messagemedia->constructorId())
     {

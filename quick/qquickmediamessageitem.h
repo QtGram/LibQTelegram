@@ -73,6 +73,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void scaleToImage();
         void scaleToColumn();
         void scaleToFree();
+        void initialize();
 
     private:
         qreal calcAspectRatio(const QSize &imagesize) const;
@@ -83,7 +84,6 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void createWebPageElement();
         void createAudioElement();
         void createFileElement();
-        void initialize();
 
     protected:
         virtual void componentComplete();
