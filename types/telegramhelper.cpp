@@ -389,10 +389,10 @@ bool TelegramHelper::isChannel(Peer *peer)
 
 bool TelegramHelper::messageIsWebPagePending(Message *message)
 {
-    if(!message || !message->media() || (message->media()->constructorId() != TLTypes::WebPagePending))
+    if(!message || !message->media() || (message->media()->constructorId() != TLTypes::MessageMediaWebPage))
         return false;
 
-    return true;
+    return message->media()->webpage()->constructorId() == TLTypes::WebPagePending;
 }
 
 bool TelegramHelper::messageIsAction(Message *message)
