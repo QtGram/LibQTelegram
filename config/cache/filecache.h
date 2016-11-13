@@ -23,8 +23,8 @@ class FileCache : public QObject
     private:
         QString createFileId(FileLocation* filelocation);
         QString createFileId(Document* document);
-        FileObject* fileObject(TelegramObject* tgobj, bool autodownload);
-        FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool autodownload);
+        FileObject* fileObject(TelegramObject* tgobj, bool ismovable, bool autodownload);
+        FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool ismovable, bool autodownload);
 
     private slots:
         void processQueue();
