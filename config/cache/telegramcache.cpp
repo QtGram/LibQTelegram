@@ -539,7 +539,7 @@ int TelegramCache::checkUnreadMessages(Dialog *dialog)
     if(!message || message->isOut() || (dialog->topMessage() == dialog->readInboxMaxId()))
         return 0;
 
-    return dialog->topMessage() - (dialog->readInboxMaxId() + 1);
+    return this->_database->messages()->messagesCount(dialog, dialog->readInboxMaxId(), dialog->topMessage());
 }
 
 TelegramCache *TelegramCache::cache()

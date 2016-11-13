@@ -15,6 +15,7 @@ class MessagesTable : public DatabaseTable
         Message* topMessage(Dialog* dialog, QHash<MessageId, Message*>& messages, QObject* parent);
         QList<Message*> messagesForDialog(Dialog* dialog, QHash<MessageId, Message *> &messages, int offset, int limit, QObject* parent) const;
         QList<Message*> lastMessagesForDialog(Dialog* dialog, QHash<MessageId, Message *> &messages, QObject* parent) const;
+        TLInt messagesCount(Dialog *dialog, TLInt minid, TLInt maxid) const;
 
     private:
         bool prepareDelete(TLInt dialogid, TLVector<MessageId> &messages);

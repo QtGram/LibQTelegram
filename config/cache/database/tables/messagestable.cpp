@@ -96,6 +96,32 @@ QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<Mess
     return result;
 }
 
+TLInt MessagesTable::messagesCount(Dialog* dialog, TLInt minid, TLInt maxid) const
+{
+    CreateQuery(queryobj);
+
+    TLInt messageminid = TelegramHelper::identifier(minid, dialog);
+    TLInt messagemaxid = TelegramHelper::identifier(maxid, dialog);
+
+    if(!this->prepare(queryobj, "SELECT id FROM " + this->name() + " WHERE dialogid = :dialogid AND id >= :minid AND id < :maxid"))
+        return 0;
+
+    TLInt dialogid = TelegramHelper::identifier(dialog);
+    queryobj.bindValue(":dialogid", dialogid);
+    queryobj.bindValue(":minid", messageminid);
+    queryobj.bindValue(":maxid", messagemaxid);
+
+    if(!this->execute(queryobj))
+        return 0;
+
+    int count = 0;
+
+    while(queryobj.next())
+        count++;
+
+    return count;
+}
+
 bool MessagesTable::prepareDelete(TLInt dialogid, TLVector<MessageId> &deletedmessages)
 {
     CreateQuery(queryobj);
