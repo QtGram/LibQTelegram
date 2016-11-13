@@ -277,7 +277,7 @@ void DialogsModel::doRemoveDialog(int index)
 int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
 {
     if(!insdialog->topMessage())
-        return this->_dialogs.length();
+        return this->_dialogs.length() - 1;
 
     Message* msg1 = TelegramCache_message(insdialog->topMessage(), insdialog);
 
@@ -295,7 +295,7 @@ int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
     }
 
     if(fromidx == -1)
-        return this->_dialogs.length();
+        return this->_dialogs.length() - 1;
 
     return fromidx;
 }
