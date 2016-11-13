@@ -438,8 +438,10 @@ void MessagesModel::onNewMessage(Message *message)
     if(!this->ownMessage(message))
         return;
 
-    this->beginInsertRows(QModelIndex(), 0, 0);
-    this->_messages.prepend(message);
+    int idx = this->insertionPoint(message);
+
+    this->beginInsertRows(QModelIndex(), idx, idx);
+    this->_messages.insert(idx, message);
     this->endInsertRows();
 
     this->markAsRead();
@@ -551,6 +553,17 @@ TLConstructor MessagesModel::getAction(int action)
     }
 
     return 0;
+}
+
+int MessagesModel::insertionPoint(Message *message) const
+{
+    for(int i = 0; i < this->_messages.length(); i++)
+    {
+        if(this->_messages[i]->id() < message->id())
+            return i;
+    }
+
+    return this->_messages.length() - 1;
 }
 
 void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)

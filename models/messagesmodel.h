@@ -99,6 +99,7 @@ class MessagesModel : public TelegramModel
 
     private:
         TLConstructor getAction(int action);
+        int insertionPoint(Message* message) const;
         int loadHistoryFromCache();
         int indexOf(Message* message) const;
         int indexOf(TLInt messageid) const;
