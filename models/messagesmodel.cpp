@@ -632,7 +632,7 @@ TLInt MessagesModel::outboxMaxId() const
 
 void MessagesModel::markAsRead()
 {
-    if(this->_initializing || !this->_isactive)
+    if(this->_initializing || !this->_isactive || !this->_dialog)
         return;
 
     MTProtoRequest* req = NULL;
