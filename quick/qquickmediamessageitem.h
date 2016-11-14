@@ -103,7 +103,6 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void webPageDescriptionChanged();
         void webPageUrlChanged();
         void webPageHasPhotoChanged();
-
         void geoPointChanged();
         void imageDelegateChanged();
         void animatedDelegateChanged();

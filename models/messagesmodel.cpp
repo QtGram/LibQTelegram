@@ -225,15 +225,37 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return true;
     }
 
-    if(role == MessagesModel::ForwardedFromUserRole)
-        if (message->fwdFrom())
+    if(role == MessagesModel::ForwardedFromPeerRole)
+    {
+        if(!message->fwdFrom())
+            return QVariant();
+
+        if(message->fwdFrom()->fromId())
             return QVariant::fromValue(TelegramCache_user(message->fwdFrom()->fromId()));
+        else if(message->fwdFrom()->channelId())
+            return QVariant::fromValue(TelegramCache_chat(message->fwdFrom()->channelId()));
+
+        return QVariant();
+    }
 
     if(role == MessagesModel::ForwardedFromNameRole)
     {
-        User* user = TelegramCache_user(message->fwdFrom()->fromId());
-        if (user) {
-            return TelegramHelper::fullName(user);
+        if(!message->fwdFrom())
+            return QVariant();
+
+        if(message->fwdFrom()->fromId())
+        {
+            User* user = TelegramCache_user(message->fwdFrom()->fromId());
+
+            if(user)
+                return TelegramHelper::fullName(user);
+        }
+        else if(message->fwdFrom()->channelId())
+        {
+            Chat* chat = TelegramCache_chat(message->fwdFrom()->channelId());
+
+            if(chat)
+                return chat->title().toString();
         }
     }
 
@@ -267,7 +289,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
     roles[MessagesModel::IsMessageEditedRole] = "isMessageEdited";
     roles[MessagesModel::NeedsPeerImageRole] = "needsPeerImage";
-    roles[MessagesModel::ForwardedFromUserRole] = "forwardedFromUser";
+    roles[MessagesModel::ForwardedFromPeerRole] = "forwardedFromPeer";
     roles[MessagesModel::ForwardedFromNameRole] = "forwardedFromName";
 
     return roles;
