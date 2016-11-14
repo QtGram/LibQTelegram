@@ -7,6 +7,7 @@ QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseIt
     this->_animatedcomponent = NULL;
     this->_locationcomponent = NULL;
     this->_webpagecomponent = NULL;
+    this->_audiocomponent = NULL;
     this->_filecomponent = NULL;
 
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isStickerChanged);
