@@ -446,7 +446,7 @@ void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings 
 
 void TelegramCache::eraseMessage(MessageId messageid)
 {
-    Message* message = this->message(messageid, NULL);
+    Message* message = this->message(messageid, NULL, true);
 
     if(!message)
         return;
