@@ -94,12 +94,7 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
     TLConstructor ctorid = messagemedia->constructorId();
 
     if(ctorid == TLTypes::MessageMediaWebPage)
-    {
-        if(!messagemedia->caption().isEmpty())
-            return messagemedia->caption();
-
-        return messagemedia->webpage()->url();
-    }
+        return messagemedia->caption();
 
     if(ctorid == TLTypes::MessageMediaDocument)
     {

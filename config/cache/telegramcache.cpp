@@ -194,8 +194,7 @@ void TelegramCache::cache(const TLVector<User *>& users)
             user->setParent(this);
             this->_users[user->id()] = user;
 
-            if(user->isContact())
-            {
+            if(user->isContact()) {
                 newcontacts = true;
                 this->_contacts << user;
             }
