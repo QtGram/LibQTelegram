@@ -52,7 +52,7 @@ TLInt DC::generateContentMsgNo()
 void DC::assignMessageId(MTProtoRequest* req)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(this->id());
-    TLLong unixtime = (static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) - dcconfig.deltaTime()) << 32LL;
+    TLLong unixtime = ((static_cast<TLLong>(QDateTime::currentDateTime().toTime_t()) - dcconfig.deltaTime()) << 32LL) + 0xAAAAAAAA;
     TLLong msgid = 0, ticks = 4 - (unixtime % 4);
 
     if(!(unixtime % 4))
@@ -218,6 +218,8 @@ void DC::onAck(const TLVector<TLLong> &msgids)
 
         MTProtoRequest* req = this->_pendingrequests[msgid];
         req->setAcked(true);
+
+        qDebug("DC %d ACK request %llx", this->id(), msgid);
     }
 }
 
