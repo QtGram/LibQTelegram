@@ -610,3 +610,16 @@ void TelegramCache::cache(Message *message)
     if(oldmessage)
         oldmessage->deleteLater();
 }
+
+void TelegramCache::cache(MessagesChatFull *messageschatfull)
+{
+    this->cache(messageschatfull->users());
+
+    this->_database->transaction([this, messageschatfull](QSqlQuery& queryobj) {
+        ChatFull* chatfull = messageschatfull->fullChat();
+        this->_database->chatUsers()->prepareInsert(queryobj);
+
+        foreach(User* user, messageschatfull->users())
+            this->_database->chatUsers()->insertQuery(queryobj, chatfull->id(), user->id());
+    });
+}

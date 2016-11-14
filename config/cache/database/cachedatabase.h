@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include "tables/chatstable.h"
+#include "tables/chatuserstable.h"
 #include "tables/dialogstable.h"
 #include "tables/messagestable.h"
 #include "tables/pendingwebpagetable.h"
@@ -17,6 +18,7 @@ class CacheDatabase : public QObject
         explicit CacheDatabase(const QString& configpath, QObject *parent = 0);
         ~CacheDatabase();
         ChatsTable* chats() const;
+        ChatUsersTable* chatUsers() const;
         DialogsTable* dialogs() const;
         MessagesTable* messages() const;
         PendingWebPageTable* pendingWebPages() const;
@@ -28,6 +30,7 @@ class CacheDatabase : public QObject
 
     private:
         ChatsTable* _chatstable;
+        ChatUsersTable* _chatuserstable;
         DialogsTable* _dialogstable;
         MessagesTable* _messagestable;
         PendingWebPageTable* _pendingwebpagestable;

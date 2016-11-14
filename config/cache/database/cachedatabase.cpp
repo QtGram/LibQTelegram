@@ -23,6 +23,11 @@ ChatsTable *CacheDatabase::chats() const
     return this->_chatstable;
 }
 
+ChatUsersTable *CacheDatabase::chatUsers() const
+{
+    return this->_chatuserstable;
+}
+
 DialogsTable *CacheDatabase::dialogs() const
 {
     return this->_dialogstable;
@@ -68,12 +73,14 @@ CacheDatabase::~CacheDatabase()
 void CacheDatabase::loadTables()
 {
     this->_chatstable = new ChatsTable(this);
+    this->_chatuserstable = new ChatUsersTable(this);
     this->_dialogstable = new DialogsTable(this);
     this->_messagestable = new MessagesTable(this);
     this->_pendingwebpagestable = new PendingWebPageTable(this);
     this->_userstable = new UsersTable(this);
 
     this->_chatstable->createSchema();
+    this->_chatuserstable->createSchema();
     this->_dialogstable->createSchema();
     this->_messagestable->createSchema();
     this->_pendingwebpagestable->createSchema();

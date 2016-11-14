@@ -24,14 +24,14 @@ class DatabaseTable : public QObject
         template<typename T> bool contains(T id) const;
         void prepareInsert(QSqlQuery& insertquery);
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
-        void insert(TelegramObject* telegramobject);
+        virtual void insert(TelegramObject* telegramobject);
         void remove(TLInt id);
 
     private:
         void parseFields(const QString& fields);
 
     protected:
-        void createTable(const QString &fields, const QString& defaultfield);
+        void createTable(const QString &fields, const QString& defaultfield, const QString& extradata = QString());
         bool query(QSqlQuery& queryobj, const QString& query) const;
         bool query(const QString& query);
         bool prepare(QSqlQuery &queryobj, const QString& query) const;

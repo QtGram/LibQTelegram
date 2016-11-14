@@ -73,14 +73,13 @@ bool DatabaseTable::execute(QSqlQuery &queryobj) const
     return true;
 }
 
-void DatabaseTable::createTable(const QString& fields, const QString& defaultfield)
+void DatabaseTable::createTable(const QString& fields, const QString& defaultfield, const QString &extradata)
 {
     this->_defaultfield = defaultfield;
     this->parseFields(fields);
 
-    this->query("CREATE TABLE IF NOT EXISTS " +
-                this->_name +
-                "(" + fields + ")");
+    QString params = extradata.isEmpty() ? QString() : (", " + extradata);
+    this->query("CREATE TABLE IF NOT EXISTS " + this->_name + "(" + fields + params + ")");
 }
 
 void DatabaseTable::prepareInsert(QSqlQuery &insertquery)
@@ -89,7 +88,6 @@ void DatabaseTable::prepareInsert(QSqlQuery &insertquery)
                                " (" + this->_fields.join(",") + ") " +
                                "VALUES (" + this->_values.join(",") + ")");
 }
-
 
 bool DatabaseTable::query(QSqlQuery &queryobj, const QString &query) const
 {

@@ -188,6 +188,18 @@ InputChannel *TelegramHelper::inputChannel(Dialog *dialog, TLLong accesshash, QO
     return inputchannel;
 }
 
+InputChannel *TelegramHelper::inputChannel(Chat *chat, QObject *parent)
+{
+    if(!TelegramHelper::isChannel(chat))
+        return NULL;
+
+    InputChannel* inputchannel = new InputChannel(parent);
+    inputchannel->setConstructorId(TLTypes::InputChannel);
+    inputchannel->setChannelId(chat->id());
+    inputchannel->setAccessHash(chat->accessHash());
+    return inputchannel;
+}
+
 InputUser *TelegramHelper::inputUser(User *user, QObject *parent)
 {
     InputUser* inputuser = new InputUser(parent);
@@ -385,6 +397,11 @@ bool TelegramHelper::isChat(Peer *peer)
 bool TelegramHelper::isChannel(Peer *peer)
 {
     return peer->constructorId() == TLTypes::PeerChannel;
+}
+
+bool TelegramHelper::isChannel(Chat *chat)
+{
+    return (chat->constructorId() == TLTypes::Channel) || (chat->constructorId() == TLTypes::ChannelForbidden);
 }
 
 bool TelegramHelper::messageIsWebPagePending(Message *message)

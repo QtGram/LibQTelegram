@@ -62,6 +62,7 @@ class TelegramCache: public QObject
         void cache(User* user);
         void cache(Chat* chat);
         void cache(Message* message);
+        void cache(MessagesChatFull* messageschatfull);
         void cache(const TLVector<Dialog *> &dialogs);
         void cache(const TLVector<User *> &users);
         void cache(const TLVector<Chat *> &chats);
