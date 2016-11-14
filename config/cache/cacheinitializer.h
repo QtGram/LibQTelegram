@@ -15,8 +15,7 @@ class CacheInitializer : public QObject
             RequestState = First,
             RequestContacts,
             RequestDialogs,
-            RequestFullDialogs,
-            Last = RequestFullDialogs,
+            Last = RequestDialogs,
         };
 
     public:
@@ -27,7 +26,6 @@ class CacheInitializer : public QObject
         void requestState() const;
         void requestContacts() const;
         void requestDialogs();
-        void requestFullDialogs();
         bool seekDialogs(MessagesDialogs *messagesdialogs);
         Message* findMessage(MessagesDialogs* messagesdialogs, TLInt messageid) const;
         Chat* findChat(MessagesDialogs* messagesdialogs, TLInt chatid) const;
@@ -37,7 +35,6 @@ class CacheInitializer : public QObject
         void onRequestStateReplied(MTProtoReply* mtreply);
         void onRequestContactsReplied(MTProtoReply* mtreply);
         void onRequestDialogsReplied(MTProtoReply* mtreply);
-        void onRequestChatFullReplied(MTProtoReply* mtreply);
 
     signals:
         void initialized();
@@ -49,7 +46,6 @@ class CacheInitializer : public QObject
         TLInt _dialogsoffsetdate;
         TLInt _dialogsoffsetid;
         InputPeer _dialogoffsetpeer;
-        TLVector<Chat*> _pendingfullchats;
 };
 
 #endif // CACHEINITIALIZER_H

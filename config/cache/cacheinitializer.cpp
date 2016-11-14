@@ -23,8 +23,6 @@ void CacheInitializer::initialize()
         this->requestContacts();
     else if(this->_state == CacheInitializer::RequestDialogs)
         this->requestDialogs();
-    else if(this->_state == CacheInitializer::RequestFullDialogs)
-        this->requestFullDialogs();
 
     if(this->_state > CacheInitializer::Last)
         emit initialized();
@@ -52,30 +50,6 @@ void CacheInitializer::requestDialogs()
                                                           &this->_dialogoffsetpeer, limit);
 
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestDialogsReplied);
-}
-
-void CacheInitializer::requestFullDialogs()
-{
-    if(this->_pendingfullchats.isEmpty())
-    {
-        this->_state++;
-        this->initialize();
-        return;
-    }
-
-    MTProtoRequest* req = NULL;
-    Chat* chat = this->_pendingfullchats.takeFirst();
-
-    if(TelegramHelper::isChannel(chat))
-    {
-        InputChannel* inputchannel = TelegramHelper::inputChannel(chat);
-        req = TelegramAPI::channelsGetFullChannel(DC_MainSession, inputchannel);
-        inputchannel->deleteLater();
-    }
-    else
-        req = TelegramAPI::messagesGetFullChat(DC_MainSession, chat->id());
-
-    connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestChatFullReplied);
 }
 
 bool CacheInitializer::seekDialogs(MessagesDialogs* messagesdialogs)
@@ -191,8 +165,6 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     TelegramCache_store(messagesdialogs.chats());
     TelegramCache_store(messagesdialogs.messages());
 
-    this->_pendingfullchats << messagesdialogs.chats();
-
     if(messagesdialogs.constructorId() == TLTypes::MessagesDialogsSlice)
     {
         this->_totaldialogs = messagesdialogs.count();
@@ -204,14 +176,5 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     else
         this->_state++;
 
-    this->initialize();
-}
-
-void CacheInitializer::onRequestChatFullReplied(MTProtoReply *mtreply)
-{
-    MessagesChatFull messageschatfull;
-    messageschatfull.read(mtreply);
-
-    TelegramCache_store(&messageschatfull);
     this->initialize();
 }

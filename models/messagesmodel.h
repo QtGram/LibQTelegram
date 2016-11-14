@@ -89,11 +89,11 @@ class MessagesModel : public TelegramModel
         void onReadHistoryReplied(MTProtoReply* mtreply);
         void onReadHistory(Dialog* dialog);
         void onTitleChanged(Dialog* dialog);
-        void onSendStatusUpdated(Dialog* dialog);
         void onNewMessage(Message* message);
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
         void onUpdateMessage(Message *message);
+        void updateStatusText(Dialog* dialog);
         void resetAction();
         void markAsRead();
 

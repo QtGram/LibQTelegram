@@ -12,6 +12,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
     connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
     connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
+    connect(this->_fetcher, SIGNAL(chatFullReceived(ChatFull*)), this, SLOT(cache(ChatFull*)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
     connect(UpdateHandler_instance, SIGNAL(newUser(User*)), this, SLOT(cache(User*)));
@@ -26,9 +27,9 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     connect(UpdateHandler_instance, SIGNAL(editMessage(Message*)), this, SLOT(onEditMessage(Message*)));
     connect(UpdateHandler_instance, SIGNAL(deleteMessages(TLVector<TLInt>)), this, SLOT(onDeleteMessages(TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
+    connect(UpdateHandler_instance, SIGNAL(notifySettings(NotifyPeer*,PeerNotifySettings*)), this, SLOT(onNotifySettings(NotifyPeer*,PeerNotifySettings*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
     connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
-    connect(UpdateHandler_instance, SIGNAL(notifySettings(NotifyPeer*,PeerNotifySettings*)), this, SLOT(onNotifySettings(NotifyPeer*,PeerNotifySettings*)));
 }
 
 QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
@@ -69,6 +70,30 @@ Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
     }
 
     return this->_chats[id];
+}
+
+ChatFull *TelegramCache::chatFull(TLInt id, bool ignoreerror)
+{
+    if(!this->_chatfull.contains(id))
+    {
+        ChatFull* chatfull = this->_database->chatFull()->get<ChatFull>(id, "chatfull", ignoreerror, this);
+
+        if(!chatfull)
+        {
+            Chat* chat = this->chat(id);
+
+            if(!chat)
+                return NULL;
+
+            this->_fetcher->getFullChat(chat);
+        }
+        else
+            this->_chatfull[chatfull->id()] = chatfull;
+
+        return chatfull;
+    }
+
+    return this->_chatfull[id];
 }
 
 Message *TelegramCache::message(MessageId messageid, Dialog *dialog, bool ignoreerror)
@@ -422,6 +447,11 @@ void TelegramCache::onWebPage(WebPage *webpage)
     emit messageUpdated(message);
 }
 
+void TelegramCache::onChatFullReceived(ChatFull *chatfull)
+{
+
+}
+
 void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings *notifysettings)
 {
     if(notifypeer->constructorId() != TLTypes::NotifyPeer)
@@ -611,15 +641,19 @@ void TelegramCache::cache(Message *message)
         oldmessage->deleteLater();
 }
 
-void TelegramCache::cache(MessagesChatFull *messageschatfull)
+void TelegramCache::cache(ChatFull *chatfull)
 {
-    this->cache(messageschatfull->users());
+    if(this->_chatfull.contains(chatfull->id()))
+        return;
 
-    this->_database->transaction([this, messageschatfull](QSqlQuery& queryobj) {
-        ChatFull* chatfull = messageschatfull->fullChat();
-        this->_database->chatUsers()->prepareInsert(queryobj);
+    chatfull->setParent(this);
+    this->_chatfull[chatfull->id()] = chatfull;
+    this->_database->chatFull()->insert(chatfull);
 
-        foreach(User* user, messageschatfull->users())
-            this->_database->chatUsers()->insertQuery(queryobj, chatfull->id(), user->id());
-    });
+    Dialog* dialog = this->dialog(chatfull->id());
+
+    if(!dialog)
+        return;
+
+    emit chatFullChanged(dialog);
 }

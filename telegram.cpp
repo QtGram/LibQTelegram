@@ -267,19 +267,21 @@ QString Telegram::dialogStatusText(Dialog *dialog) const
     if(!dialog)
         return QString();
 
-    TLInt id = TelegramHelper::identifier(dialog);
+    TLInt dialogid = TelegramHelper::identifier(dialog);
 
-    if(TelegramHelper::isChannel(dialog) || TelegramHelper::isChat(dialog))
+    if(TelegramHelper::isChannel(dialog))
     {
-        Chat* chat = TelegramCache_chat(id);
-
-        if(!chat)
-            return QString();
-
-        return tr("%1 members").arg(chat->participantsCount());
+        ChatFull* chatfull = TelegramCache_chatFull(dialogid);
+        return tr("%1 members").arg(chatfull ? chatfull->participantsCount() : 0);
     }
 
-    User* user = TelegramCache_user(id);
+    if(TelegramHelper::isChat(dialog))
+    {
+        Chat* chat = TelegramCache_chat(dialogid);
+        return tr("%1 members").arg(chat ? chat->participantsCount() : 0);
+    }
+
+    User* user = TelegramCache_user(dialogid);
 
     if(user)
         return TelegramHelper::statusText(user);

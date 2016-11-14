@@ -16,6 +16,7 @@
 #define TelegramCache_dialog(dialogid) TelegramCache::cache()->dialog(dialogid)
 #define TelegramCache_user(userid) TelegramCache::cache()->user(userid)
 #define TelegramCache_chat(chatid) TelegramCache::cache()->chat(chatid)
+#define TelegramCache_chatFull(chatid) TelegramCache::cache()->chatFull(chatid)
 #define TelegramCache_message(messageid, dialog) TelegramCache::cache()->message(messageid, dialog)
 
 #define TelegramCache_insert(obj) TelegramCache::cache()->insert(obj)
@@ -50,6 +51,7 @@ class TelegramCache: public QObject
         QList<Message*> lastDialogMessages(Dialog* dialog);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
+        ChatFull *chatFull(TLInt id, bool ignoreerror = false);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
@@ -62,11 +64,11 @@ class TelegramCache: public QObject
         void cache(User* user);
         void cache(Chat* chat);
         void cache(Message* message);
-        void cache(MessagesChatFull* messageschatfull);
+        void cache(ChatFull* chatfull);
         void cache(const TLVector<Dialog *> &dialogs);
+        void cache(const TLVector<Message *> &messages);
         void cache(const TLVector<User *> &users);
         void cache(const TLVector<Chat *> &chats);
-        void cache(const TLVector<Message *> &messages);
         void insert(Message* message);
         void insert(Dialog* dialog);
         void remove(Dialog* dialog);
@@ -78,10 +80,11 @@ class TelegramCache: public QObject
         void onNewMessages(const TLVector<Message*>& messages);
         void onDeleteMessages(const TLVector<TLInt>& messageids);
         void onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt>& messageids);
+        void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
         void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
         void onWebPage(WebPage* webpage);
-        void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
+        void onChatFullReceived(ChatFull* chatfull);
 
     private:
         void eraseMessage(MessageId messageid);
@@ -104,6 +107,8 @@ class TelegramCache: public QObject
         void deleteMessage(Message* message);
         void messageUpdated(Message* message);
         void readHistory(Dialog* dialog);
+        void chatFullChanged(Dialog* dialog);
+        void participantsCountChanged();
         void contactsUpdated();
 
     private:
@@ -111,6 +116,7 @@ class TelegramCache: public QObject
         QList<User*> _contacts;
         QHash<TLInt, Chat*> _chats;
         QHash<TLInt, User*> _users;
+        QHash<TLInt, ChatFull*> _chatfull;
         QHash<MessageId, Message*> _messages;
         CacheDatabase* _database;
         CacheFetcher* _fetcher;

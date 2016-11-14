@@ -425,7 +425,7 @@ void MessagesModel::onTitleChanged(Dialog *dialog)
     emit titleChanged();
 }
 
-void MessagesModel::onSendStatusUpdated(Dialog *dialog)
+void MessagesModel::updateStatusText(Dialog *dialog)
 {
     if(this->_dialog != dialog)
         return;
@@ -737,8 +737,9 @@ void MessagesModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::editMessage, this, &MessagesModel::onEditMessage);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &MessagesModel::onReadHistory);
     connect(TelegramCache_instance, &TelegramCache::titleChanged, this, &MessagesModel::onTitleChanged);
+    connect(TelegramCache_instance, &TelegramCache::chatFullChanged, this, &MessagesModel::updateStatusText);
 
-    connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::onSendStatusUpdated);
+    connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::updateStatusText);
 
     if(TelegramHelper::isChannel(this->_dialog) || (TelegramHelper::isChat(this->_dialog)))
     {
