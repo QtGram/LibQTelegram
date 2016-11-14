@@ -394,16 +394,11 @@ void TelegramCache::onReadHistory(Update *update)
         return;
 
     if(!isout)
-    {
         dialog->setReadInboxMaxId(update->maxId());
-        dialog->setUnreadCount(this->checkUnreadMessages(dialog));
-    }
     else
         dialog->setReadOutboxMaxId(update->maxId());
 
-    if(dialog->readOutboxMaxId() > dialog->readInboxMaxId())
-        dialog->setUnreadCount(0);
-
+    dialog->setUnreadCount(this->checkUnreadMessages(dialog));
     this->cache(dialog);
 
     emit readHistory(dialog);
@@ -527,11 +522,12 @@ void TelegramCache::checkMessageAction(Message *message)
 void TelegramCache::updateUnreadMessages(Dialog *dialog, int amount)
 {
     dialog->setUnreadCount(dialog->unreadCount() + amount);
+    emit dialogUnreadCountChanged(dialog);
 }
 
 int TelegramCache::checkUnreadMessages(Dialog *dialog)
 {
-    if(!dialog->topMessage() || (dialog->readOutboxMaxId() > dialog->readInboxMaxId()))
+    if(!dialog->topMessage() || (dialog->readOutboxMaxId() >= dialog->topMessage()))
         return 0;
 
     Message* message = this->message(dialog->topMessage(), dialog);
