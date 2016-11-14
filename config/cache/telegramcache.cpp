@@ -72,11 +72,11 @@ Chat *TelegramCache::chat(TLInt id, bool ignoreerror)
     return this->_chats[id];
 }
 
-ChatFull *TelegramCache::chatFull(TLInt id, bool ignoreerror)
+ChatFull *TelegramCache::chatFull(TLInt id)
 {
     if(!this->_chatfull.contains(id))
     {
-        ChatFull* chatfull = this->_database->chatFull()->get<ChatFull>(id, "chatfull", ignoreerror, this);
+        ChatFull* chatfull = this->_database->chatFull()->get<ChatFull>(id, "chatfull", true, this);
 
         if(!chatfull)
         {

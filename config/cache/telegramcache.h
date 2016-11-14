@@ -51,7 +51,7 @@ class TelegramCache: public QObject
         QList<Message*> lastDialogMessages(Dialog* dialog);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
-        ChatFull *chatFull(TLInt id, bool ignoreerror = false);
+        ChatFull *chatFull(TLInt id);
         Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;

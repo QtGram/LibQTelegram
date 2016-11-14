@@ -7,7 +7,7 @@ ChatFullTable::ChatFullTable(QObject *parent) : DatabaseTable("chat_full", paren
 
 void ChatFullTable::createSchema()
 {
-    this->createTable("dialogid INTEGER PRIMARY KEY, chatfull BLOB, pinnedmessageid INTEGER", "chatfull");
+    this->createTable("id INTEGER PRIMARY KEY, chatfull BLOB, pinnedmessageid INTEGER", "chatfull");
 }
 
 void ChatFullTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
@@ -17,7 +17,7 @@ void ChatFullTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     QByteArray data;
     chatfull->serialize(data);
 
-    queryobj.bindValue(":dialogid", chatfull->id());
+    queryobj.bindValue(":id", chatfull->id());
     queryobj.bindValue(":chatfull", data);
     queryobj.bindValue(":pinnedmessageid", chatfull->pinnedMsgId());
 
