@@ -7,7 +7,7 @@ UsersTable::UsersTable(QObject *parent) : DatabaseTable("users", parent)
 
 void UsersTable::createSchema()
 {
-    this->createTable("id INTEGER PRIMARY KEY, iscontact INTEGER, user BLOB", "user");
+    this->createTable("id INTEGER PRIMARY KEY, iscontact INTEGER, name TEXT, username TEXT, user BLOB", "user");
 }
 
 void UsersTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
@@ -18,6 +18,8 @@ void UsersTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject
     telegramobject->serialize(data);
 
     queryobj.bindValue(":id", TelegramHelper::identifier(user));
+    queryobj.bindValue(":name", TelegramHelper::fullName(user));
+    queryobj.bindValue(":username", user->username().toString());
     queryobj.bindValue(":iscontact", user->isContact());
     queryobj.bindValue(":user", data);
 
@@ -28,7 +30,7 @@ void UsersTable::populateContacts(QList<User *> &contacts, QObject *parent) cons
 {
     CreateQuery(queryobj);
 
-    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE iscontact=1"))
+    if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE iscontact = 1"))
         return;
 
     this->execute(queryobj);

@@ -7,7 +7,7 @@ MessagesTable::MessagesTable(QObject *parent) : DatabaseTable("messages", parent
 
 void MessagesTable::createSchema()
 {
-    this->createTable("id INTEGER PRIMARY KEY, dialogid INTEGER, date INTEGER, message BLOB", "message");
+    this->createTable("id INTEGER PRIMARY KEY, dialogid INTEGER, date INTEGER, isout INTEGER, message BLOB", "message");
 }
 
 void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
@@ -20,6 +20,7 @@ void MessagesTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobj
     queryobj.bindValue(":id", TelegramHelper::identifier(message));
     queryobj.bindValue(":dialogid", TelegramHelper::messageToDialog(message));
     queryobj.bindValue(":date", message->date());
+    queryobj.bindValue(":isout", message->isOut());
     queryobj.bindValue(":message", data);
 
     this->execute(queryobj);
@@ -103,7 +104,7 @@ TLInt MessagesTable::messagesCount(Dialog* dialog, TLInt minid, TLInt maxid) con
     TLInt messageminid = TelegramHelper::identifier(minid, dialog);
     TLInt messagemaxid = TelegramHelper::identifier(maxid, dialog);
 
-    if(!this->prepare(queryobj, "SELECT id FROM " + this->name() + " WHERE dialogid = :dialogid AND id >= :minid AND id < :maxid"))
+    if(!this->prepare(queryobj, "SELECT id FROM " + this->name() + " WHERE dialogid = :dialogid AND isout = 0 AND id >= :minid AND id < :maxid"))
         return 0;
 
     TLInt dialogid = TelegramHelper::identifier(dialog);
