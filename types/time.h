@@ -12,6 +12,7 @@
 #define Future10Years                (QDateTime::currentDateTime().addYears(10).toTime_t())
 #define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 #define CurrentTimeStamp              QDateTime::currentDateTime().toTime_t()
+#define CurrentTimeStampMillis        QDateTime::currentMSecsSinceEpoch()
 #define CurrentDateTime               QDateTime::currentDateTime()
 
 #endif // TIME_H
