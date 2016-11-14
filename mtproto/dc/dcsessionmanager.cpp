@@ -65,6 +65,7 @@ void DCSessionManager::doSessionReady(DCSession *dcsession)
         dc->send(keptreq);
     }
 
+    qDebug("DC %d Client Session Created (session_id: %llx)", dc->id(), dcsession->sessionId());
     emit sessionReady(dcsession);
     emit dcsession->ready();
 }
@@ -94,6 +95,8 @@ void DCSessionManager::closeSession(DCSession *dcsession)
 {
     DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
+
+    qDebug("DC %d Client Session Destroyed (session_id: %llx)", dc->id(), dcsession->sessionId());
 
     if(dcsession->ownedDc())
     {

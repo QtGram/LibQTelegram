@@ -215,7 +215,7 @@ void MTProtoServiceHandler::handleNewSessionCreated(MTProtoReply *mtreply)
     NewSession newsession;
     newsession.read(mtreply);
 
-    qDebug("DC %d New Session (first_msg_id: %llx)", this->_dcid, newsession.firstMsgId());
+    qDebug("DC %d New Server Session (first_msg_id: %llx)", this->_dcid, newsession.firstMsgId());
 }
 
 void MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)
