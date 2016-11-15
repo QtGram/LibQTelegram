@@ -356,7 +356,8 @@ bool TelegramHelper::isVideo(Document *document)
 
 bool TelegramHelper::isAudio(Document *document)
 {
-    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAudio) != NULL;
+    return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAudio) != NULL &&
+           TelegramHelper::documentHas(document, TLTypes::DocumentAttributeFilename) == NULL;
 }
 
 bool TelegramHelper::isFile(Document *document)

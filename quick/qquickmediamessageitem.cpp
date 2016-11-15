@@ -31,7 +31,7 @@ bool QQuickMediaMessageItem::isSticker() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return TelegramHelper::isSticker(messagemedia->document());
+    return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeSticker) != NULL;
 }
 
 bool QQuickMediaMessageItem::isAnimated() const
@@ -44,7 +44,7 @@ bool QQuickMediaMessageItem::isAnimated() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return TelegramHelper::isAnimated(messagemedia->document());
+    return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeAnimated) != NULL;
 }
 
 bool QQuickMediaMessageItem::isAudio() const
@@ -57,7 +57,7 @@ bool QQuickMediaMessageItem::isAudio() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return TelegramHelper::isAudio(messagemedia->document());
+    return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeAudio) != NULL;
 }
 
 bool QQuickMediaMessageItem::isVideo() const
@@ -70,7 +70,7 @@ bool QQuickMediaMessageItem::isVideo() const
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
-    return TelegramHelper::isVideo(messagemedia->document());
+    return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeVideo) != NULL;
 }
 
 qreal QQuickMediaMessageItem::size() const
