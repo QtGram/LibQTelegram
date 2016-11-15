@@ -34,12 +34,16 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
     return this->fileObject(tgobj, false, false);
 }
 
+void FileCache::upload(InputPeer* inputpeer, const QString &filepath)
+{
+    //TelegramAPI::messagesSendMedia(DC_MainSession, inputpeer, 0, )
+}
+
 QString FileCache::createFileId(FileLocation *filelocation)
 {
     QByteArray indata, outdata;
-    TLLong id = filelocation->localId();
 
-    indata.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
+    filelocation->serialize(indata);
     outdata = md5_hash(indata);
     return outdata.toHex();
 }
@@ -82,12 +86,12 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
     else if(tgobj->constructorId() == TLTypes::ChatPhoto)
     {
         ChatPhoto* chatphoto = qobject_cast<ChatPhoto*>(tgobj);
-        return this->fileObject(chatphoto->photoSmall(), chatphoto->photoBig(), ismovable, autodownload);
+        return this->fileObject(chatphoto->photoBig(), chatphoto->photoSmall(), ismovable, autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::UserProfilePhoto)
     {
         UserProfilePhoto* userprofilephoto = qobject_cast<UserProfilePhoto*>(tgobj);
-        return this->fileObject(userprofilephoto->photoSmall(), userprofilephoto->photoBig(), ismovable, autodownload);
+        return this->fileObject(userprofilephoto->photoBig(), userprofilephoto->photoSmall(), ismovable, autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::Document)
     {
@@ -134,12 +138,13 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     else
          fileid = this->createFileId(qobject_cast<FileLocation*>(locationobj));
 
+
     if(this->_filemap.contains(fileid))
         return this->_filemap[fileid];
 
     FileObject* fileobject = new FileObject(this->_cachepath, this);
     fileobject->setAutoDownload(autodownload);
-    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
+    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processDownloadQueue);
 
     if(ismovable)
         connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::onDownloadCompleted);
@@ -171,12 +176,12 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     this->_queue << fileobject;
 
     if(!this->_currentobject)
-        this->processQueue();
+        this->processDownloadQueue();
 
     return fileobject;
 }
 
-void FileCache::processQueue()
+void FileCache::processDownloadQueue()
 {
     if(this->_queue.isEmpty())
     {

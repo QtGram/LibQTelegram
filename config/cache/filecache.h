@@ -19,6 +19,7 @@ class FileCache : public QObject
     public:
         static FileCache* instance();
         FileObject* fileObject(TelegramObject* tgobj);
+        void upload(InputPeer *inputpeer, const QString& filepath);
 
     private:
         QString createFileId(FileLocation* filelocation);
@@ -27,7 +28,7 @@ class FileCache : public QObject
         FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool ismovable, bool autodownload);
 
     private slots:
-        void processQueue();
+        void processDownloadQueue();
         void onDownloadCompleted();
 
     private:
