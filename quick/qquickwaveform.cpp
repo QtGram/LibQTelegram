@@ -4,8 +4,11 @@
 #include <QSGClipNode>
 #include <QSGNode>
 
-#define WaveformSkip  1  // px
-#define WaveformWidth 2  // px
+#define WaveformSkip              1  // px
+#define WaveformWidth             2  // px
+#define WaveformFallbackValue     1
+#define WaveformFallbackMax       20
+#define WaveformFallbackLength    63
 
 QQuickWaveform::QQuickWaveform(QQuickItem *parent): QQuickItem(parent), _wavemax(0), _barwidth(WaveformWidth), _barcolor("black"), _message(NULL)
 {
@@ -81,17 +84,25 @@ void QQuickWaveform::decodeWaveform(const QByteArray &encoded5bit)
         this->_waveform.clear();
     }
 
-    this->_waveform.fill(0x00, (encoded5bit.size() * 8) / 5);
-
-    for(qint32 i = 0, l = this->_waveform.size(); i < l; i++)
+    if(!encoded5bit.isEmpty())
     {
-        qint32 byte = (i * 5) / 8, shift = (i * 5) % 8;
-        uchar wave = ((*(reinterpret_cast<const quint16*>(encoded5bit.constData() + byte)) >> shift) & 0x1F);
+        for(qint32 i = 0, l = this->_waveform.size(); i < l; i++)
+        {
+            qint32 byte = (i * 5) / 8, shift = (i * 5) % 8;
+            uchar wave = ((*(reinterpret_cast<const quint16*>(encoded5bit.constData() + byte)) >> shift) & 0x1F);
 
-        if(wave > this->_wavemax)
-            this->_wavemax = wave;
+            if(wave > this->_wavemax)
+                this->_wavemax = wave;
 
-        this->_waveform[i] = wave;
+            this->_waveform[i] = wave;
+        }
+
+        this->_waveform.fill(0x00, (encoded5bit.size() * 8) / 5);
+    }
+    else
+    {
+        this->_wavemax = WaveformFallbackMax;
+        this->_waveform.fill(WaveformFallbackValue, WaveformFallbackLength * 8 / 5);
     }
 
     this->setImplicitWidth(this->contentWidth());
