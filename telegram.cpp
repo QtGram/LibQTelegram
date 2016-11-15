@@ -16,6 +16,8 @@ Telegram::~Telegram()
         return;
 
     DC_CloseSession(DC_MainSession);
+    DCSessionManager_instance->deleteLater();
+    TelegramCache_instance->deleteLater();
 }
 
 TelegramInitializer *Telegram::initializer() const
