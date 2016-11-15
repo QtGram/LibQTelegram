@@ -135,6 +135,7 @@ class MessagesModel : public TelegramModel
         QTimer* _timaction;
         TLInt _newmessageindex;
         TLInt _newmessageid;
+        TLInt _lastreadedinbox;
         bool _isactive;
         bool _fetchmore;
         int _loadcount;

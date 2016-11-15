@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _lastreadedinbox(0), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -671,13 +671,20 @@ void MessagesModel::markAsRead()
     if(this->_initializing || !this->_isactive || !this->_dialog)
         return;
 
+    TLInt inboxmaxid = this->inboxMaxId();
+
+    if(this->_lastreadedinbox >= inboxmaxid)
+        return;
+
+    this->_lastreadedinbox = inboxmaxid;
+
     MTProtoRequest* req = NULL;
     this->createInput();
 
     if(TelegramHelper::isChannel(this->_dialog))
-        req = TelegramAPI::channelsReadHistory(DC_MainSession, this->_inputchannel, this->inboxMaxId());
+        req = TelegramAPI::channelsReadHistory(DC_MainSession, this->_inputchannel, inboxmaxid);
     else
-        req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, this->inboxMaxId());
+        req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, inboxmaxid);
 
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
 }
