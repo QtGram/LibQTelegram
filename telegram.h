@@ -39,6 +39,7 @@ class Telegram : public QObject
         void resendCode() const;
 
     private:
+        QString userList(const TLVector<TLInt> users) const;
         QString messageMediaText(MessageMedia* messagemedia) const;
         QString messageActionText(Message *message) const;
 

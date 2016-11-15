@@ -211,8 +211,8 @@ QString Telegram::messageActionText(Message* message) const
 
     if(ctorid == TLTypes::MessageActionChatAddUser)
     {
-        if(inviteruser)
-            return tr("«%1» added «%2» ").arg(inviterfullname, fullname);
+        if(messageaction->users().length() > 0)
+            return tr("«%1» added «%2» ").arg(fromfullname, this->userList(messageaction->users()));
 
         return tr("«%1» has joined the group").arg(fullname);
     }
@@ -373,4 +373,24 @@ void Telegram::sendPassword(const QString &password) const
 void Telegram::resendCode() const
 {
     this->_initializer->resendCode();
+}
+
+QString Telegram::userList(const TLVector<TLInt> users) const
+{
+    QString s;
+
+    foreach(TLInt userid, users)
+    {
+        User* user = TelegramCache_user(userid);
+
+        if(!user)
+            continue;
+
+        if(!s.isEmpty())
+            s += ", ";
+
+        s += TelegramHelper::fullName(user);
+    }
+
+    return s;
 }
