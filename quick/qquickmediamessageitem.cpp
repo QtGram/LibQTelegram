@@ -73,6 +73,15 @@ bool QQuickMediaMessageItem::isVideo() const
     return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeVideo) != NULL;
 }
 
+bool QQuickMediaMessageItem::isWebPage() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+    return messagemedia->constructorId() != TLTypes::MessageMediaWebPage;
+}
+
 qreal QQuickMediaMessageItem::size() const
 {
     return this->_size;
@@ -407,6 +416,7 @@ void QQuickMediaMessageItem::createWebPageElement()
     emit webPageDescriptionChanged();
     emit webPageUrlChanged();
     emit webPageHasPhotoChanged();
+    emit isWebPageChanged();
 
     this->scaleToFree();
 }

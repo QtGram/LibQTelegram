@@ -170,6 +170,14 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::MessageTextRole)
         return this->_telegram->messageText(message);
 
+    if(role == MessagesModel::MessageCaptionRole)
+    {
+        if(!message->media())
+            return QString();
+
+        return message->media()->caption().toString();
+    }
+
     if(role == MessagesModel::ReplyItemRole)
         return message->replyToMsgId() ? QVariant::fromValue(TelegramCache_message(message->replyToMsgId(), this->_dialog)) : QVariant();
 
@@ -276,6 +284,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
     roles[MessagesModel::MessageFromRole] = "messageFrom";
     roles[MessagesModel::MessageTextRole] = "messageText";
+    roles[MessagesModel::MessageCaptionRole] = "messageCaption";
     roles[MessagesModel::MessageDateRole] = "messageDate";
     roles[MessagesModel::MessageHasReplyRole] = "messageHasReply";
     roles[MessagesModel::ReplyItemRole] = "replyItem";

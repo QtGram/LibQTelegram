@@ -38,6 +38,7 @@ class MessagesModel : public TelegramModel
         enum MessageRoles {
             MessageFromRole = Qt::UserRole + 10,
             MessageTextRole,
+            MessageCaptionRole,
             MessageDateRole,
             MessageHasReplyRole,
             ReplyItemRole,
