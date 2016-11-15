@@ -10,6 +10,14 @@ Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::syncingChanged, this, &Telegram::syncingChanged);
 }
 
+Telegram::~Telegram()
+{
+    if(!this->connected())
+        return;
+
+    DC_CloseSession(DC_MainSession);
+}
+
 TelegramInitializer *Telegram::initializer() const
 {
     return this->_initializer;

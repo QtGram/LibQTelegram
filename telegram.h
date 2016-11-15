@@ -16,6 +16,7 @@ class Telegram : public QObject
 
     public:
         explicit Telegram(QObject *parent = 0);
+        ~Telegram();
         TelegramInitializer* initializer() const;
         User* me() const;
         int apiLayer() const;
