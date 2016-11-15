@@ -245,7 +245,7 @@ QString FileObject::extension(const UploadFile *uploadfile)
 
 void FileObject::createDownloadSession(int dcid)
 {
-    this->_dcsession = DC_CreateSession(dcid);
+    this->_dcsession = DC_CreateFileSession(dcid);
     connect(this->_dcsession, &DCSession::ready, this, &FileObject::sendDownloadRequest);
     DC_InitializeSession(this->_dcsession);
 }

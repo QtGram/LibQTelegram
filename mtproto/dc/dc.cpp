@@ -7,7 +7,7 @@
 
 TLLong DC::_lastclientmsgid = 0;
 
-DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0)
+DC::DC(const QString &address, qint16 port, int dcid, bool filedc, QObject *parent): DCConnection(address, port, dcid, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0), _filedc(filedc)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcid, this);
 
@@ -25,6 +25,11 @@ DC::DC(const QString &address, qint16 port, int dcid, QObject *parent): DCConnec
 
     connect(this, &DC::connected, this, &DC::onDCConnected);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
+}
+
+bool DC::fileDc() const
+{
+    return this->_filedc;
 }
 
 MTProtoRequest *DC::lastRequest() const
@@ -324,7 +329,7 @@ void DC::removeSessionRef()
 
     if(this->_ownedsessions == 0)
     {
-        if(DCConfig_mainDcId == this->id() || (this->_timcloseconnection > 0)) // Main DC or timer is already running
+        if((!this->_filedc && (DCConfig_mainDcId == this->id())) || (this->_timcloseconnection > 0)) // Main DC or timer is already running
             return;
 
         if(this->_pendingrequests.count() > 0)

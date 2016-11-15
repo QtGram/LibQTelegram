@@ -8,7 +8,8 @@
 
 #define DCSessionManager_instance DCSessionManager::instance()
 #define DC_MainSession DCSessionManager::instance()->mainSession()
-#define DC_CreateSession(dcid) DCSessionManager::instance()->createSession(dcid)
+#define DC_CreateSession(dcid) DCSessionManager::instance()->createSession(dcid, false)
+#define DC_CreateFileSession(dcid) DCSessionManager::instance()->createSession(dcid, true)
 #define DC_CloseSession(dcsession) DCSessionManager::instance()->closeSession(dcsession)
 #define DC_InitializeSession(dcsession) DCSessionManager::instance()->initializeSession(dcsession)
 
@@ -18,8 +19,8 @@ class DCSessionManager: public QObject
 
     private:
         DCSessionManager(QObject* parent = 0);
-        DC* createDC(const QString& host, qint16 port, int id);
-        DC* createDC(int id);
+        DC* createDC(const QString& host, qint16 port, int id, bool filedc);
+        DC* createDC(int id, bool filedc);
         void updateMainDc(int maindcid);
         void doAuthorization(DCSession* dcsession);
         void doSessionReady(DCSession* dcsession);
@@ -32,7 +33,7 @@ class DCSessionManager: public QObject
         DCSession* createMainSession(const DCConfig& dcconfig);
         DCSession* createMainSession(const QString& host, qint16 port, int dcid);
         DCSession* createMainSession(int dcid);
-        DCSession* createSession(int dcid);
+        DCSession* createSession(int dcid, bool filedc);
         void initializeSession(DCSession* dcsession);
         void closeSession(DCSession* dcsession);
 
@@ -54,6 +55,7 @@ class DCSessionManager: public QObject
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;
         QHash<int, DC*> _dclist;
+        QHash<int, DC*> _filedclist;
         DCSession* _mainsession;
 
     private:

@@ -15,7 +15,8 @@ class DC : public DCConnection
     Q_OBJECT
 
     public:
-        explicit DC(const QString& address, qint16 port, int dcid, QObject *parent = 0);
+        explicit DC(const QString& address, qint16 port, int dcid, bool filedc, QObject *parent = 0);
+        bool fileDc() const;
         MTProtoRequest* lastRequest() const;
         void sendPlain(MTProtoStream* mtstream);
         void send(MTProtoRequest *req);
@@ -68,6 +69,7 @@ class DC : public DCConnection
         int _dcid;
         int _ownedsessions;
         int _timcloseconnection;
+        bool _filedc;
 
     private:
         static TLLong _lastclientmsgid;

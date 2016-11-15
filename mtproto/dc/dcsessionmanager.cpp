@@ -6,18 +6,23 @@ DCSessionManager::DCSessionManager(QObject *parent): QObject(parent), _mainsessi
 {
 }
 
-DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
+DC *DCSessionManager::createDC(const QString &host, qint16 port, int id, bool filedc)
 {
-    if(this->_dclist.contains(id))
+    if(filedc && this->_filedclist.contains(id))
+        return this->_filedclist[id];
+    else if(!filedc && this->_dclist.contains(id))
         return this->_dclist[id];
 
-    qDebug("DC %d created", id);
+    if(filedc)
+        qDebug("DC %d created (file transfer)", id);
+    else
+        qDebug("DC %d created", id);
 
     DCConfig& dcconfig = DCConfig_fromDcId(id);
     dcconfig.setHost(host);
     dcconfig.setPort(port);
 
-    DC* dc = new DC(host, port, id, this);
+    DC* dc = new DC(host, port, id, filedc, this);
     connect(dc, &DC::disconnected, this, &DCSessionManager::onDCDisconnected);
     connect(dc, &DC::authorizationReply, this, &DCSessionManager::onAuthorizationReply);
     connect(dc, &DC::migrateDC, this, &DCSessionManager::onMigrateDC);
@@ -26,14 +31,18 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id)
     connect(dc, &DC::invalidPassword, this, &DCSessionManager::invalidPassword);
     connect(dc, &DC::sessionPasswordNeeded, this, &DCSessionManager::sessionPasswordNeeded);
 
-    this->_dclist[id] = dc;
+    if(filedc)
+        this->_filedclist[id] = dc;
+    else
+        this->_dclist[id] = dc;
+
     return dc;
 }
 
-DC *DCSessionManager::createDC(int id)
+DC *DCSessionManager::createDC(int id, bool filedc)
 {
     DCConfig& dcconfig = DCConfig_fromDcId(id);
-    return this->createDC(dcconfig.host(), dcconfig.port(), id);
+    return this->createDC(dcconfig.host(), dcconfig.port(), id, filedc);
 }
 
 void DCSessionManager::doAuthorization(DCSession *dcsession)
@@ -100,9 +109,18 @@ void DCSessionManager::closeSession(DCSession *dcsession)
 
     if(dcsession->ownedDc())
     {
-        qDebug("DC %d closed", dc->id());
         dc->close();
-        this->_dclist.remove(dc->id());
+
+        if(dc->fileDc())
+        {
+            qDebug("DC %d closed (file transfer)", dc->id());
+            this->_filedclist.remove(dc->id());
+        }
+        else
+        {
+            qDebug("DC %d closed", dc->id());
+            this->_dclist.remove(dc->id());
+        }
     }
 
     dcsession->deleteLater();
@@ -129,7 +147,7 @@ DCSession *DCSessionManager::createMainSession(const DCConfig &dcconfig)
 DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port, int dcid)
 {
     DCSession* oldsession = this->_mainsession;
-    DC* dc = this->createDC(host, port, dcid);
+    DC* dc = this->createDC(host, port, dcid, false);
 
     this->_mainsession = new DCSession(dc, this);
     this->_mainsession->setOwnedDC(true);
@@ -166,9 +184,9 @@ DCSession *DCSessionManager::createMainSession(int dcid)
     return this->createMainSession(dcconfig.host(), dcconfig.port(), dcid);
 }
 
-DCSession *DCSessionManager::createSession(int dcid)
+DCSession *DCSessionManager::createSession(int dcid, bool filedc)
 {
-    DC* dc = this->createDC(dcid);
+    DC* dc = this->createDC(dcid, filedc);
     DCSession* dcsession = new DCSession(dc, this);
 
     connect(dcsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
