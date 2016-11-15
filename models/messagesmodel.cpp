@@ -6,7 +6,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _isactive(true), _fetchmore(true), _atstart(false), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -304,7 +304,7 @@ int MessagesModel::loadHistoryFromCache()
 
     this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + newmessages.count()) - 1);
 
-    for(int i = 0; i < newmessages.count() - 1; i++)
+    for(int i = 0; i < newmessages.count(); i++)
         this->_messages.append(newmessages[i]);
 
     this->endInsertRows();
@@ -387,16 +387,17 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
     MessagesMessages messages;
     messages.read(mtreply);
 
-    if(messages.constructorId() == TLTypes::MessagesMessages)
-        this->_fetchmore = false;
-    else
-        this->_fetchmore = (this->_messages.count() < messages.count());
-
     TelegramCache_store(messages.users());
     TelegramCache_store(messages.chats());
     TelegramCache_store(messages.messages());
 
     this->loadHistoryFromCache();
+
+    if(messages.constructorId() == TLTypes::MessagesMessages)
+        this->_fetchmore = false;
+    else
+        this->_fetchmore = (this->_messages.count() < messages.count());
+
     this->terminateInitialization();
     this->setLoading(false);
 }

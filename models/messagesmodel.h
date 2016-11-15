@@ -137,7 +137,6 @@ class MessagesModel : public TelegramModel
         TLInt _newmessageid;
         bool _isactive;
         bool _fetchmore;
-        bool _atstart;
         int _loadcount;
 };
 
