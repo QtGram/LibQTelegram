@@ -97,7 +97,7 @@ void FileUploader::upload(const QUrl &filepath)
         this->_file.reset();
     }
 
-    this->_dcsession = DC_CreateFileSession(DCConfig_mediaDcConfig);
+    this->_dcsession = DC_CreateFileSession(DCConfig_mainConfig);
     connect(this->_dcsession, &DCSession::ready, this, &FileUploader::uploadPart);
     DC_InitializeSession(this->_dcsession);
 }
@@ -161,7 +161,7 @@ void FileUploader::onSaveFilePartReplied(MTProtoReply *mtreply)
 
     this->_partnum++;
 
-    if(this->_partnum > this->_partscount)
+    if(this->_partnum >= this->_partscount)
     {
         emit completed();
         return;
