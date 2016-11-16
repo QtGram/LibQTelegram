@@ -122,8 +122,10 @@ void MTProtoRequest::build(QByteArray &request, const QByteArray &requestbody)
 
     if(len > 0x7E)
     {
-        len |= 0x7F000000;
-        request.append(reinterpret_cast<const char*>(&len), sizeof(TLInt));
+        request.append(static_cast<qint8>(0x7F));
+        request.append(*(reinterpret_cast<qint8*>(&len)));
+        request.append(*(reinterpret_cast<qint8*>(&len) + 1));
+        request.append(*(reinterpret_cast<qint8*>(&len) + 2));
     }
     else
         request.append(static_cast<qint8>(len));
