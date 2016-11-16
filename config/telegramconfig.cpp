@@ -114,6 +114,18 @@ DCConfig* TelegramConfig::mainConfig() const
     return NULL;
 }
 
+DCConfig *TelegramConfig::mediaDcConfig() const
+{
+    foreach(DCConfig* dcconfig, this->_dcconfig.values())
+    {
+        if(dcconfig->option()->isMediaOnly())
+            return dcconfig;
+    }
+
+    qWarning("Cannot find media DC");
+    return NULL;
+}
+
 DCConfig *TelegramConfig::dcConfig(DCConfig::Id id)
 {
     return this->_dcconfig[id];

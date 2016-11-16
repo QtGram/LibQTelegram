@@ -7,7 +7,7 @@ QHash<int, bool> MTProtoRequest::_firstmap;
 
 MTProtoRequest::MTProtoRequest(DCConfig *dcconfig, QObject *parent) : QObject(parent), _needsinit(false), _acked(false), _sessionid(0), _messageid(0), _seqno(0), _dcconfig(dcconfig), _body(NULL)
 {
-    Try_InitFirst(dcconfig->dcid());
+    Try_InitFirst(dcconfig->id());
 }
 
 MTProtoRequest::~MTProtoRequest()

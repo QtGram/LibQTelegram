@@ -1,13 +1,13 @@
 #ifndef MTPROTOREQUEST_H
 #define MTPROTOREQUEST_H
 
-#define Try_InitFirst(dcid) \
-    if(!MTProtoRequest::_firstmap.contains(dcid)) \
-        MTProtoRequest::_firstmap[dcid] = true;
+#define Try_InitFirst(configid) \
+    if(!MTProtoRequest::_firstmap.contains(configid)) \
+        MTProtoRequest::_firstmap[configid] = true;
 
-#define IsFirst(dcid) MTProtoRequest::_firstmap[dcid]
-#define UnsetFirst(dcid) MTProtoRequest::_firstmap[dcid] = false;
-#define ResetFirst(dcid) MTProtoRequest::_firstmap[dcid] = true;
+#define IsFirst(configid) MTProtoRequest::_firstmap[configid]
+#define UnsetFirst(configid) MTProtoRequest::_firstmap[configid] = false;
+#define ResetFirst(configid) MTProtoRequest::_firstmap[configid] = true;
 
 #include <QObject>
 #include "mtprotostream.h"

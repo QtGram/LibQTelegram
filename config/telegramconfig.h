@@ -12,6 +12,7 @@
 #define TelegramConfig_setDebugMode(debugmode) TelegramConfig::config()->setDebugMode(debugmode)
 
 #define DCConfig_mainConfig (TelegramConfig::config() ? TelegramConfig::config()->mainConfig() : NULL)
+#define DCConfig_mediaDcConfig TelegramConfig::config()->mediaDcConfig()
 #define DCConfig_needsConfiguration TelegramConfig::config()->needsConfiguration()
 #define DCConfig_isIPv6 TelegramConfig::config()->isIpv6()
 #define DCConfig_isLoggedIn (TelegramConfig::config() ? TelegramConfig::config()->isLoggedIn() : false)
@@ -54,6 +55,7 @@ class TelegramConfig: public QObject
         bool debugMode() const;
         bool isIPv6() const;
         DCConfig *mainConfig() const;
+        DCConfig* mediaDcConfig() const;
         UpdatesState* updateState();
         Config* serverConfig();
         User* me();
