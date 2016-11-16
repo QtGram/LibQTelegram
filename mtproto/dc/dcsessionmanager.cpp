@@ -6,23 +6,19 @@ DCSessionManager::DCSessionManager(QObject *parent): QObject(parent), _mainsessi
 {
 }
 
-DC *DCSessionManager::createDC(const QString &host, qint16 port, int id, bool filedc)
+DC *DCSessionManager::createDC(DCConfig *dcconfig, bool filedc)
 {
-    if(filedc && this->_filedclist.contains(id))
-        return this->_filedclist[id];
-    else if(!filedc && this->_dclist.contains(id))
-        return this->_dclist[id];
+    if(filedc && this->_filedclist.contains(dcconfig->id()))
+        return this->_filedclist[dcconfig->id()];
+    else if(!filedc && this->_dclist.contains(dcconfig->id()))
+        return this->_dclist[dcconfig->id()];
 
     if(filedc)
-        qDebug("DC %d created (file transfer)", id);
+        qDebug("DC %d created (file transfer)", dcconfig->dcid());
     else
-        qDebug("DC %d created", id);
+        qDebug("DC %d created", dcconfig->dcid());
 
-    DCConfig& dcconfig = DCConfig_fromDcId(id);
-    dcconfig.setHost(host);
-    dcconfig.setPort(port);
-
-    DC* dc = new DC(host, port, id, filedc, this);
+    DC* dc = new DC(dcconfig, filedc, this);
     connect(dc, &DC::disconnected, this, &DCSessionManager::onDCDisconnected);
     connect(dc, &DC::authorizationReply, this, &DCSessionManager::onAuthorizationReply);
     connect(dc, &DC::migrateDC, this, &DCSessionManager::onMigrateDC);
@@ -32,17 +28,11 @@ DC *DCSessionManager::createDC(const QString &host, qint16 port, int id, bool fi
     connect(dc, &DC::sessionPasswordNeeded, this, &DCSessionManager::sessionPasswordNeeded);
 
     if(filedc)
-        this->_filedclist[id] = dc;
+        this->_filedclist[dcconfig->id()] = dc;
     else
-        this->_dclist[id] = dc;
+        this->_dclist[dcconfig->id()] = dc;
 
     return dc;
-}
-
-DC *DCSessionManager::createDC(int id, bool filedc)
-{
-    DCConfig& dcconfig = DCConfig_fromDcId(id);
-    return this->createDC(dcconfig.host(), dcconfig.port(), id, filedc);
 }
 
 void DCSessionManager::doAuthorization(DCSession *dcsession)
@@ -50,8 +40,8 @@ void DCSessionManager::doAuthorization(DCSession *dcsession)
     if(this->_dcauthorizations.contains(SessionToDC(dcsession))) // Do not authorize the same DC multiple times
         return;
 
-    DCConfig& dcconfig = DCConfig_fromSession(dcsession);
-    dcconfig.setAuthorization(DCConfig::NotAuthorized); // Reset undefined authorization state (if any)
+    DCConfig* dcconfig = SessionToDcConfig(dcsession);
+    dcconfig->setAuthorization(DCConfig::NotAuthorized); // Reset undefined authorization state (if any)
 
     DCAuthorization* dcauthorization = new DCAuthorization(dcsession, this);
     connect(dcauthorization, &DCAuthorization::authorized, this, &DCSessionManager::onAuthorized);
@@ -74,7 +64,7 @@ void DCSessionManager::doSessionReady(DCSession *dcsession)
         dc->send(keptreq);
     }
 
-    qDebug("DC %d Client Session Created (session_id: %llx)", dc->id(), dcsession->sessionId());
+    qDebug("DC %d Client Session Created (session_id: %llx)", dc->config()->dcid(), dcsession->sessionId());
     emit sessionReady(dcsession);
     emit dcsession->ready();
 }
@@ -92,9 +82,9 @@ void DCSessionManager::initializeSession(DCSession *dcsession)
         return;
     }
 
-    DCConfig& dcconfig = DCConfig_fromDc(dc);
+    DCConfig* dcconfig = SessionToDcConfig(dcsession);
 
-    if(dcconfig.authorization() < DCConfig::Authorized)
+    if(dcconfig->authorization() < DCConfig::Authorized)
         this->doAuthorization(dcsession);
     else
         this->doSessionReady(dcsession);
@@ -105,7 +95,7 @@ void DCSessionManager::closeSession(DCSession *dcsession)
     DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
 
-    qDebug("DC %d Client Session Destroyed (session_id: %llx)", dc->id(), dcsession->sessionId());
+    qDebug("DC %d Client Session Destroyed (session_id: %llx)", dc->config()->dcid(), dcsession->sessionId());
 
     if(dcsession->ownedDc())
     {
@@ -113,13 +103,13 @@ void DCSessionManager::closeSession(DCSession *dcsession)
 
         if(dc->fileDc())
         {
-            qDebug("DC %d closed (file transfer)", dc->id());
-            this->_filedclist.remove(dc->id());
+            qDebug("DC %d closed (file transfer)", dc->config()->dcid());
+            this->_filedclist.remove(dc->config()->id());
         }
         else
         {
-            qDebug("DC %d closed", dc->id());
-            this->_dclist.remove(dc->id());
+            qDebug("DC %d closed", dc->config()->dcid());
+            this->_dclist.remove(dc->config()->id());
         }
     }
 
@@ -139,15 +129,10 @@ DCSession *DCSessionManager::mainSession() const
     return this->_mainsession;
 }
 
-DCSession *DCSessionManager::createMainSession(const DCConfig &dcconfig)
-{
-    return this->createMainSession(dcconfig.host(), dcconfig.port(), dcconfig.id());
-}
-
-DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port, int dcid)
+DCSession *DCSessionManager::createMainSession(DCConfig *dcconfig)
 {
     DCSession* oldsession = this->_mainsession;
-    DC* dc = this->createDC(host, port, dcid, false);
+    DC* dc = this->createDC(dcconfig, false);
 
     this->_mainsession = new DCSession(dc, this);
     this->_mainsession->setOwnedDC(true);
@@ -164,29 +149,23 @@ DCSession* DCSessionManager::createMainSession(const QString &host, qint16 port,
             disconnect(olddc, &DC::disconnected, this, 0);
         }
 
-        DCConfig& olddcconfig = DCConfig_fromSession(oldsession);
+        DCConfig* olddcconfig = SessionToDcConfig(oldsession);
 
-        if(olddcconfig.authorization() == DCConfig::Signed) // Get the last request only if the previous DC was signed
+        if(olddcconfig->authorization() == DCConfig::Signed) // Get the last request only if the previous DC was signed
             dc->keepRequest(SessionToDC(oldsession)->lastRequest());
 
         this->closeSession(oldsession);
     }
 
-    DCConfig_setMainDc(dcid);
+    DCConfig_setMainConfig(dcconfig);
     connect(dc, &DC::connected, this, &DCSessionManager::mainSessionConnectedChanged);
     connect(dc, &DC::disconnected, this, &DCSessionManager::mainSessionConnectedChanged);
     return this->_mainsession;
 }
 
-DCSession *DCSessionManager::createMainSession(int dcid)
+DCSession *DCSessionManager::createSession(DCConfig *dcconfig, bool filedc)
 {
-    DCConfig& dcconfig = DCConfig_fromDcId(dcid);
-    return this->createMainSession(dcconfig.host(), dcconfig.port(), dcid);
-}
-
-DCSession *DCSessionManager::createSession(int dcid, bool filedc)
-{
-    DC* dc = this->createDC(dcid, filedc);
+    DC* dc = this->createDC(dcconfig, filedc);
     DCSession* dcsession = new DCSession(dc, this);
 
     connect(dcsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
@@ -233,11 +212,11 @@ void DCSessionManager::onAuthorizationReply(MTProtoReply *mtreply)
     dcauthorization->authorizeReply(mtreply);
 }
 
-void DCSessionManager::onMigrateDC(int fromdcid, int todcid)
+void DCSessionManager::onMigrateDC(DCConfig* fromdcconfig, int todcid)
 {
-    qDebug("DC %d -> %d", fromdcid, todcid);
+    qDebug("DC %d -> %d", fromdcconfig->dcid(), todcid);
 
-    DCSession* session = this->createMainSession(todcid);
+    DCSession* session = this->createMainSession(DCConfig_migrateConfig(fromdcconfig, todcid));
     this->initializeSession(session);
 }
 

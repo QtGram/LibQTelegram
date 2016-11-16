@@ -2,14 +2,15 @@
 #define DCCONNECTION_H
 
 #include <QTcpSocket>
+#include "../../config/telegramconfig.h"
 
 class DCConnection : public QTcpSocket
 {
     Q_OBJECT
 
     public:
-        explicit DCConnection(const QString& address, quint16 port, int dcid, QObject *parent = 0);
-        int id() const;
+        explicit DCConnection(DCConfig *dcconfig, QObject *parent = 0);
+        DCConfig* config() const;
 
     public slots:
         void connectToDC();
@@ -24,10 +25,10 @@ class DCConnection : public QTcpSocket
         void onStateChanged(QAbstractSocket::SocketState state);
         void onError(QAbstractSocket::SocketError error);
 
+    protected:
+        DCConfig* _dcconfig;
+
     private:
-        QString _address;
-        quint16 _port;
-        int _dcid;
         int _reconnecttimerid;
 };
 

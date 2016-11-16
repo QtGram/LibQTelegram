@@ -43,7 +43,7 @@ void DCSession::setOwnedDC(bool b)
 
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 {
-    MTProtoRequest* req = new MTProtoRequest(this->_dc->id());
+    MTProtoRequest* req = new MTProtoRequest(this->_dc->config());
     req->setSessionId(this->_sessionid);
     req->setBody(mtstream); // Take ownership
 
@@ -72,7 +72,7 @@ void DCSession::sendAck()
     mtstream->writeTLConstructor(TLTypes::MsgsAck);
     mtstream->writeTLVector(this->_ackqueue);
 
-    MTProtoRequest* req = new MTProtoRequest(this->_dc->id());
+    MTProtoRequest* req = new MTProtoRequest(this->_dc->config());
     req->setSessionId(this->_sessionid);
     req->setBody(mtstream); // Take ownership
 

@@ -63,7 +63,6 @@ class FileObject : public QObject
 
     private:
         void setDownloadMode(int downloadmode);
-        QString extension(const UploadFile* uploadfile);
         void createDownloadSession(int dcid);
 
     signals:

@@ -3,18 +3,19 @@
 
 #include "mtprotostream.h"
 #include "types/mtproto/mtprotomessage.h"
+#include "../config/telegramconfig.h"
 
 class MTProtoReply : public MTProtoStream
 {
     Q_OBJECT
 
     public:
-        explicit MTProtoReply(const QByteArray& data, int dcid, QObject *parent = 0);
-        explicit MTProtoReply(MTProtoMessage* mtmessage, int dcid, QObject *parent = 0);
-        explicit MTProtoReply(const QByteArray& data, TLLong messageid, int dcid, QObject *parent = 0);
+        explicit MTProtoReply(const QByteArray& data, DCConfig* dcconfig, QObject *parent = 0);
+        explicit MTProtoReply(MTProtoMessage* mtmessage, DCConfig* dcconfig, QObject *parent = 0);
+        explicit MTProtoReply(const QByteArray& data, TLLong messageid, DCConfig* dcconfig, QObject *parent = 0);
         virtual ~MTProtoReply();
         bool isError() const;
-        int dcid() const;
+        DCConfig* config() const;
         TLInt errorCode() const;
         TLLong sessionId() const;
         TLLong messageId() const;
@@ -29,7 +30,7 @@ class MTProtoReply : public MTProtoStream
         void readEncryptedMessage();
 
     private:
-        int _dcid;
+        DCConfig* _dcconfig;
         int _bodystart;
         TLInt128 _messagekey;
         TLLong _authorizationkeyid;

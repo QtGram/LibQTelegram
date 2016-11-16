@@ -8,8 +8,9 @@
 
 #define DCSessionManager_instance DCSessionManager::instance()
 #define DC_MainSession DCSessionManager::instance()->mainSession()
-#define DC_CreateSession(dcid) DCSessionManager::instance()->createSession(dcid, false)
-#define DC_CreateFileSession(dcid) DCSessionManager::instance()->createSession(dcid, true)
+#define DC_CreateSession(dcconfig) DCSessionManager::instance()->createSession(dcconfig, false)
+#define DC_CreateFileSession(dcconfig) DCSessionManager::instance()->createSession(dcconfig, true)
+#define DC_CreateMainSession(dcconfig) DCSessionManager::instance()->createMainSession(dcconfig)
 #define DC_CloseSession(dcsession) DCSessionManager::instance()->closeSession(dcsession)
 #define DC_InitializeSession(dcsession) DCSessionManager::instance()->initializeSession(dcsession)
 
@@ -19,8 +20,7 @@ class DCSessionManager: public QObject
 
     private:
         DCSessionManager(QObject* parent = 0);
-        DC* createDC(const QString& host, qint16 port, int id, bool filedc);
-        DC* createDC(int id, bool filedc);
+        DC* createDC(DCConfig* dcconfig, bool filedc);
         void updateMainDc(int maindcid);
         void doAuthorization(DCSession* dcsession);
         void doSessionReady(DCSession* dcsession);
@@ -30,10 +30,8 @@ class DCSessionManager: public QObject
 
     public:
         DCSession* mainSession() const;
-        DCSession* createMainSession(const DCConfig& dcconfig);
-        DCSession* createMainSession(const QString& host, qint16 port, int dcid);
-        DCSession* createMainSession(int dcid);
-        DCSession* createSession(int dcid, bool filedc);
+        DCSession* createMainSession(DCConfig* dcconfig);
+        DCSession* createSession(DCConfig* dcconfig, bool filedc);
         void initializeSession(DCSession* dcsession);
         void closeSession(DCSession* dcsession);
 
@@ -41,7 +39,7 @@ class DCSessionManager: public QObject
         void onAuthorized(DC *dc);
         void onAuthorizationImported(DC *dc);
         void onAuthorizationReply(MTProtoReply *mtreply);
-        void onMigrateDC(int fromdcid, int todcid);
+        void onMigrateDC(DCConfig *fromdcconfig, int todcid);
         void onDCDisconnected();
 
     signals:
@@ -54,8 +52,8 @@ class DCSessionManager: public QObject
 
     private:
         QHash<DC*, DCAuthorization*> _dcauthorizations;
-        QHash<int, DC*> _dclist;
-        QHash<int, DC*> _filedclist;
+        QHash<DCConfig::Id, DC*> _dclist;
+        QHash<DCConfig::Id, DC*> _filedclist;
         DCSession* _mainsession;
 
     private:

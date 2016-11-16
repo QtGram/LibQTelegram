@@ -117,7 +117,7 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
         this->setSyncing(true);
 
         qDebug("DC %d differences %s: %d users, %d chats, %d messages",
-               mtreply->dcid(),
+               mtreply->config()->dcid(),
                qUtf8Printable(QDateTime::fromTime_t(updatedifference.intermediateState()->date()).toString()),
                updatedifference.users().length(),
                updatedifference.chats().length(),

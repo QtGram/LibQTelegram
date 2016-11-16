@@ -2,7 +2,8 @@
 #define DCSESSION_H
 
 #define SessionToDC(session) session->dc()
-#define SessionToDcId(session) session->dc()->id()
+#define SessionToDcConfig(session) session->dc()->config()
+#define SessionToDcId(session) session->dc()->config()->dcid()
 
 #include <QTimer>
 #include "dc.h"

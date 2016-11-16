@@ -12,16 +12,17 @@
 #include <QObject>
 #include "mtprotostream.h"
 #include "mtprotoreply.h"
+#include "../config/telegramconfig.h"
 
 class MTProtoRequest : public QObject
 {
     Q_OBJECT
 
     public:
-        explicit MTProtoRequest(int dcid, QObject *parent = 0);
+        explicit MTProtoRequest(DCConfig* dcconfig, QObject *parent = 0);
         ~MTProtoRequest();
         bool acked() const;
-        int dcId() const;
+        DCConfig* config() const;
         TLLong messageId() const;
         TLLong sessionId() const;
         bool encrypted() const;
@@ -33,7 +34,7 @@ class MTProtoRequest : public QObject
 
     public:
         void setAcked(bool b);
-        void setDcId(int dcid);
+        void setDcConfig(DCConfig* dcconfig);
         void setSessionId(TLLong sessionid);
         void setMessageId(TLLong messageid);
         void setSeqNo(TLInt seqno);
@@ -56,10 +57,10 @@ class MTProtoRequest : public QObject
     private:
         bool _needsinit;
         bool _acked;
-        int _dcid;
         TLLong _sessionid;
         TLLong _messageid;
         TLInt _seqno;
+        DCConfig* _dcconfig;
         MTProtoStream* _body;
 
     private:

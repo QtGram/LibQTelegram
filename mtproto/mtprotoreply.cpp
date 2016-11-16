@@ -1,9 +1,8 @@
 #include "mtprotoreply.h"
 #include "../crypto/aes.h"
 #include "../types/byteconverter.h"
-#include "../config/telegramconfig.h"
 
-MTProtoReply::MTProtoReply(const QByteArray &data, int dcid, QObject *parent) : MTProtoStream(data, parent), _dcid(dcid)
+MTProtoReply::MTProtoReply(const QByteArray &data, DCConfig *dcconfig, QObject *parent) : MTProtoStream(data, parent), _dcconfig(dcconfig)
 {
     this->_bodystart = 0;
     this->_sessionid = 0;
@@ -24,14 +23,14 @@ MTProtoReply::MTProtoReply(const QByteArray &data, int dcid, QObject *parent) : 
         this->readPlainMessage();
 }
 
-MTProtoReply::MTProtoReply(MTProtoMessage *mtmessage, int dcid, QObject *parent): MTProtoStream(mtmessage->body(), parent), _dcid(dcid)
+MTProtoReply::MTProtoReply(MTProtoMessage *mtmessage, DCConfig *dcconfig, QObject *parent): MTProtoStream(mtmessage->body(), parent), _dcconfig(dcconfig)
 {
     this->_bodystart = 0;
     this->_messageid = mtmessage->msgId();
     this->_constructorid = mtmessage->constructorId();
 }
 
-MTProtoReply::MTProtoReply(const QByteArray &body, TLLong messageid, int dcid, QObject *parent): MTProtoStream(body, parent), _dcid(dcid)
+MTProtoReply::MTProtoReply(const QByteArray &body, TLLong messageid, DCConfig *dcconfig, QObject *parent): MTProtoStream(body, parent), _dcconfig(dcconfig)
 {
     this->_bodystart = 0;
     this->_messageid = messageid;
@@ -47,9 +46,9 @@ bool MTProtoReply::isError() const
     return this->length() == 4;
 }
 
-int MTProtoReply::dcid() const
+DCConfig *MTProtoReply::config() const
 {
-    return this->_dcid;
+    return this->_dcconfig;
 }
 
 TLInt MTProtoReply::errorCode() const
@@ -100,12 +99,11 @@ void MTProtoReply::readPlainMessage()
 
 void MTProtoReply::readEncryptedMessage()
 {
-    Q_ASSERT(this->_dcid > 0);
+    Q_ASSERT(this->_dcconfig && (this->_dcconfig->dcid() > 0));
 
-    DCConfig& dcconfig = DCConfig_fromDcId(this->_dcid);
     TLInt128 msgkey = this->readTLInt128();
     TLBytes aeskey, aesiv, msgkeybytes = ByteConverter::serialize(msgkey);
-    Aes::calculateAesKeys(dcconfig.authorizationKey(), msgkeybytes, true, aeskey, aesiv);
+    Aes::calculateAesKeys(this->_dcconfig->authorizationKey(), msgkeybytes, true, aeskey, aesiv);
 
     // Replace encoded data with the decoded one
     this->_data.replace(this->_buffer.pos(), this->_buffer.bytesAvailable(), Aes::decrypt(this->_data.mid(this->_buffer.pos()), aeskey, aesiv));

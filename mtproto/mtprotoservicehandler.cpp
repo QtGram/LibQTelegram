@@ -1,10 +1,9 @@
 #include "mtprotoservicehandler.h"
 #include "../crypto/gzip.h"
-#include "../config/telegramconfig.h"
 #include <QRegularExpression>
 #include <QDateTime>
 
-MTProtoServiceHandler::MTProtoServiceHandler(int dcid, QObject *parent) : QObject(parent), _dcid(dcid)
+MTProtoServiceHandler::MTProtoServiceHandler(DCConfig *dcconfig, QObject *parent) : QObject(parent), _dcconfig(dcconfig)
 {
 }
 
@@ -76,7 +75,7 @@ void MTProtoServiceHandler::handleMsgContainer(MTProtoReply *mtreply)
 
     foreach(MTProtoMessage* message, mc.messages())
     {
-        MTProtoReply mtreplymsg(message, this->_dcid);
+        MTProtoReply mtreplymsg(message, this->_dcconfig);
         emit serviceHandled(&mtreplymsg);
     }
 }
@@ -86,7 +85,7 @@ void MTProtoServiceHandler::handleRpcResult(MTProtoReply *mtreply)
     RpcResult rr;
     rr.read(mtreply);
 
-    MTProtoReply mtreplymsg(rr.result(), rr.reqMsgId(), this->_dcid);
+    MTProtoReply mtreplymsg(rr.result(), rr.reqMsgId(), this->_dcconfig);
     emit serviceHandled(&mtreplymsg);
 }
 
@@ -105,15 +104,15 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
 
         if(dcnum.isNull())
         {
-            qFatal("DC %d Unknown destination DC: %s", this->_dcid, qUtf8Printable(dcnum));
+            qFatal("DC %d Unknown destination DC: %s", this->_dcconfig->dcid(), qUtf8Printable(dcnum));
             return;
         }
 
-        emit migrateDC(this->_dcid, dcnum.toInt());
+        emit migrateDC(this->_dcconfig, dcnum.toInt());
     }
     else if(re.errorMessage().contains("AUTH_KEY_"))
     {
-        qDebug("DC %d Unauthorized client, requesting new authorization...", this->_dcid);
+        qDebug("DC %d Unauthorized client, requesting new authorization...", this->_dcconfig->dcid());
         emit unauthorized();
     }
     else if(re.errorMessage().contains("FLOOD_WAIT_"))
@@ -125,11 +124,11 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
         if(!seconds.isNull())
         {
             QDateTime unlockdate = QDateTime::currentDateTime().addSecs(seconds.toInt());
-            qWarning("DC %d Flood lock enabled (unlock at: %s)", this->_dcid, qUtf8Printable(unlockdate.toString(Qt::SystemLocaleLongDate)));
+            qWarning("DC %d Flood lock enabled (unlock at: %s)", this->_dcconfig->dcid(), qUtf8Printable(unlockdate.toString(Qt::SystemLocaleLongDate)));
             emit floodLock(seconds.toInt());
         }
         else
-            qFatal("DC %d Cannot get flood duration", this->_dcid);
+            qFatal("DC %d Cannot get flood duration", this->_dcconfig->dcid());
     }
     else if(re.errorMessage().startsWith("PHONE_CODE_"))
     {
@@ -151,7 +150,7 @@ void MTProtoServiceHandler::handleRpcError(MTProtoReply *mtreply)
     else if(re.errorMessage() == "SESSION_PASSWORD_NEEDED")
         emit sessionPasswordNeeded();
     else
-        qWarning("DC %d (%llx) RPC Error %d %s", this->_dcid, mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
+        qWarning("DC %d (%llx) RPC Error %d %s", this->_dcconfig->dcid(), mtreply->messageId(), re.errorCode(), qUtf8Printable(re.errorMessage()));
 }
 
 void MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
@@ -162,36 +161,36 @@ void MTProtoServiceHandler::handleBadMsgNotification(MTProtoReply *mtreply)
     if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadMsgNotification)
     {
         if(badmsgnotification.errorCode() == 16)
-            qWarning("DC %d BadMsgNotification: msg_id too low", this->_dcid);
+            qWarning("DC %d BadMsgNotification: msg_id too low", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 17)
-            qWarning("DC %d BadMsgNotification: msg_id too high", this->_dcid);
+            qWarning("DC %d BadMsgNotification: msg_id too high", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 18)
-            qWarning("DC %d BadMsgNotification: Incorrect two lower order msg_id bits", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Incorrect two lower order msg_id bits", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 19)
-            qWarning("DC %d BadMsgNotification: Container msg_id is the same as msg_id of a previously received message", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Container msg_id is the same as msg_id of a previously received message", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 20)
-            qWarning("DC %d BadMsgNotification: Message too old", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Message too old", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 32)
-            qWarning("DC %d BadMsgNotification: msg_seqno too low", this->_dcid);
+            qWarning("DC %d BadMsgNotification: msg_seqno too low", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 33)
-            qWarning("DC %d BadMsgNotification: msg_seqno too high", this->_dcid);
+            qWarning("DC %d BadMsgNotification: msg_seqno too high", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 34)
-            qWarning("DC %d BadMsgNotification: Even msg_seqno expected", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Even msg_seqno expected", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 35)
-            qWarning("DC %d BadMsgNotification: Odd msg_seqno expected", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Odd msg_seqno expected", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 48)
-            qWarning("DC %d BadMsgNotification: Incorrect Server Salt", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Incorrect Server Salt", this->_dcconfig->dcid());
         else if(badmsgnotification.errorCode() == 64)
-            qWarning("DC %d BadMsgNotification: Invalid container", this->_dcid);
+            qWarning("DC %d BadMsgNotification: Invalid container", this->_dcconfig->dcid());
         else
-            qWarning("DC %d BadMsgNotification: unknown error code %d", this->_dcid, badmsgnotification.errorCode());
+            qWarning("DC %d BadMsgNotification: unknown error code %d", this->_dcconfig->dcid(), badmsgnotification.errorCode());
 
         emit ackRequest(badmsgnotification.badMsgId());
         this->checkRepeat(&badmsgnotification, mtreply->messageId());
     }
     else if(badmsgnotification.constructorId() == BadMsgNotification::CtorBadServerSalt)
     {
-        qDebug("DC %d New salt %llx", this->_dcid, badmsgnotification.newServerSalt());
+        qDebug("DC %d New salt %llx", this->_dcconfig->dcid(), badmsgnotification.newServerSalt());
 
         emit ackRequest(badmsgnotification.badMsgId());
         emit saltChanged(badmsgnotification.newServerSalt(), badmsgnotification.badMsgId());
@@ -205,7 +204,7 @@ void MTProtoServiceHandler::handleGzipPacked(MTProtoReply *mtreply)
 
     TLBytes packeddata = mtobj.packedData();
     TLBytes unpackeddata = GZip::uncompress(packeddata);
-    MTProtoReply mtreplymsg(unpackeddata, mtreply->messageId(), this->_dcid);
+    MTProtoReply mtreplymsg(unpackeddata, mtreply->messageId(), this->_dcconfig);
     emit serviceHandled(&mtreplymsg);
 }
 
@@ -215,7 +214,7 @@ void MTProtoServiceHandler::handleNewSessionCreated(MTProtoReply *mtreply)
     NewSession newsession;
     newsession.read(mtreply);
 
-    qDebug("DC %d New Server Session (first_msg_id: %llx)", this->_dcid, newsession.firstMsgId());
+    qDebug("DC %d New Server Session (first_msg_id: %llx)", this->_dcconfig->dcid(), newsession.firstMsgId());
 }
 
 void MTProtoServiceHandler::handleMsgAck(MTProtoReply *mtreply)

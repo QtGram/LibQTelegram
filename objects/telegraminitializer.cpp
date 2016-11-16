@@ -175,19 +175,21 @@ void TelegramInitializer::tryConnect()
         return;
 
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
-    TelegramConfig::config()->setDebugMode(true);
+    TelegramConfig_setDebugMode(true);
 
     DCSession* mainsession = NULL;
 
     if(DCConfig_isLoggedIn)
     {
         TelegramCache_load;
-        DCConfig& dcconfig = DCConfig_fromDcId(DCConfig_mainDcId);
-        mainsession = DCSessionManager_instance->createMainSession(dcconfig);
+        mainsession = DC_CreateMainSession(DCConfig_mainConfig);
         emit loginCompleted();
     }
     else
-        mainsession = DCSessionManager_instance->createMainSession(this->_host, this->_port, this->_dcid);
+    {
+        DCConfig* dcconfig = DCConfig_createConfig(this->_host, this->_port, this->_dcid);
+        mainsession = DC_CreateMainSession(dcconfig);
+    }
 
     connect(DCSessionManager_instance, &DCSessionManager::floodLock, this, &TelegramInitializer::onFloodLock, Qt::UniqueConnection);
     connect(DCSessionManager_instance, &DCSessionManager::phoneCodeError, this, &TelegramInitializer::phoneCodeError, Qt::UniqueConnection);
@@ -239,18 +241,17 @@ void TelegramInitializer::onAuthCheckPhoneReplied(MTProtoReply *mtreply)
 
 void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
 {
-    DCConfig& dcconfig = DCConfig_fromDcId(mtreply->dcid());
-
     AuthAuthorization authorization;
     authorization.read(mtreply);
 
-    dcconfig.setAuthorization(DCConfig::Signed);
+    DCConfig* dcconfig = mtreply->config();
+    dcconfig->setAuthorization(DCConfig::Signed);
 
     User* me = authorization.user();
     me->setParent(this);
 
     TelegramCache_store(me); // Cache "me"
-    TelegramConfig_instance->setMe(me);
+    TelegramConfig_setMe(me);
     TelegramConfig_save;
 
     CacheInitializer* cacheinitializer = new CacheInitializer(this);

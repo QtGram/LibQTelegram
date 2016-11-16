@@ -209,43 +209,11 @@ void FileObject::download()
     this->createDownloadSession(this->_locfile->dcId());
 }
 
-QString FileObject::extension(const UploadFile *uploadfile)
-{
-    StorageFileType* storagefile = uploadfile->type();
-
-    if(storagefile->constructorId() == TLTypes::StorageFileGif)
-        return ".gif";
-
-    if(storagefile->constructorId() == TLTypes::StorageFileJpeg)
-        return ".jpeg";
-
-    if(storagefile->constructorId() == TLTypes::StorageFileMov)
-        return ".mov";
-
-    if(storagefile->constructorId() == TLTypes::StorageFileMp3)
-        return ".mp3";
-
-    if(storagefile->constructorId() == TLTypes::StorageFileMp4)
-        return ".mp4";
-
-    if(storagefile->constructorId() == TLTypes::StorageFilePdf)
-        return ".pdf";
-
-    if(storagefile->constructorId() == TLTypes::StorageFilePng)
-        return ".png";
-
-    if(storagefile->constructorId() == TLTypes::StorageFileWebp)
-        return ".webp";
-
-    if(storagefile->constructorId() == TLTypes::StorageFilePartial)
-        return ".temp";
-
-    return QString();
-}
-
 void FileObject::createDownloadSession(int dcid)
 {
-    this->_dcsession = DC_CreateFileSession(dcid);
+    DCConfig* dcconfig = DCConfig_fromDcId(dcid);
+
+    this->_dcsession = DC_CreateFileSession(dcconfig);
     connect(this->_dcsession, &DCSession::ready, this, &FileObject::sendDownloadRequest);
     DC_InitializeSession(this->_dcsession);
 }

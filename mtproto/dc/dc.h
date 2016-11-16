@@ -15,7 +15,7 @@ class DC : public DCConnection
     Q_OBJECT
 
     public:
-        explicit DC(const QString& address, qint16 port, int dcid, bool filedc, QObject *parent = 0);
+        explicit DC(DCConfig* dcconfig, bool filedc, QObject *parent = 0);
         bool fileDc() const;
         MTProtoRequest* lastRequest() const;
         void sendPlain(MTProtoStream* mtstream);
@@ -51,7 +51,7 @@ class DC : public DCConnection
 
     signals:
         void authorizationReply(MTProtoReply* mtreply);
-        void migrateDC(int fromdcid, int dcid);
+        void migrateDC(DCConfig* fromdcconfig, int dcid);
         void floodLock(int seconds);
         void phoneCodeError(QString errormessage);
         void invalidPassword();
@@ -66,7 +66,6 @@ class DC : public DCConnection
         TLInt _lastpacketlen;
         TLInt _contentmsgno;
         TLLong _lastmsgid;
-        int _dcid;
         int _ownedsessions;
         int _timcloseconnection;
         bool _filedc;

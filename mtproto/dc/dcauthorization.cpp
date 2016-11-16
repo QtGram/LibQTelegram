@@ -39,24 +39,24 @@ void DCAuthorization::authorizeReply(MTProtoReply *mtreply)
 
 void DCAuthorization::restart()
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
-    dcconfig.setAuthorization(DCConfig::NotAuthorized); // Reset authorization state
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
+    dcconfig->setAuthorization(DCConfig::NotAuthorized); // Reset authorization state
 
-    qWarning("DC %d Repeating authorization...", dcconfig.id());
+    qWarning("DC %d Repeating authorization...", dcconfig->dcid());
     this->authorize();
 }
 
 void DCAuthorization::authorize()
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
 
-    if(dcconfig.authorization() == DCConfig::NotAuthorized)
+    if(dcconfig->authorization() == DCConfig::NotAuthorized)
         this->handleNotAuthorized();
-    else if(dcconfig.authorization() == DCConfig::PQReceived)
+    else if(dcconfig->authorization() == DCConfig::PQReceived)
         this->handlePQReceived();
-    else if(dcconfig.authorization() == DCConfig::ServerDHParamsOkReceived)
+    else if(dcconfig->authorization() == DCConfig::ServerDHParamsOkReceived)
         this->handleDHParamsOk();
-    else if(dcconfig.authorization() == DCConfig::Authorized)
+    else if(dcconfig->authorization() == DCConfig::Authorized)
         this->handleAuthorized();
     else
         Q_ASSERT(false);
@@ -166,8 +166,8 @@ void DCAuthorization::handleAuthorized()
 
 void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
-    dcconfig.setAuthorization(DCConfig::PQReceived);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
+    dcconfig->setAuthorization(DCConfig::PQReceived);
 
     if(this->_respq)
         this->_respq->deleteLater();
@@ -180,8 +180,8 @@ void DCAuthorization::onPQReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
-    dcconfig.setAuthorization(DCConfig::ServerDHParamsOkReceived);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
+    dcconfig->setAuthorization(DCConfig::ServerDHParamsOkReceived);
 
     ServerDHParams serverdhparams;
     serverdhparams.read(mtstream);
@@ -218,15 +218,15 @@ void DCAuthorization::onServerDHParamsOkReceived(MTProtoStream *mtstream)
     qToBigEndian(serverdhinnerdata.g(), reinterpret_cast<uchar*>(this->_g_b.data()));
     this->_g_b = Math::modExp(this->_g_b, serverdhinnerdata.dhPrime(), b);
 
-    dcconfig.setDeltaTime(CurrentDeltaTime(serverdhinnerdata.serverTime()));
-    dcconfig.setAuthorizationKey(Math::modExp(serverdhinnerdata.gA(), serverdhinnerdata.dhPrime(), b));
+    dcconfig->setDeltaTime(CurrentDeltaTime(serverdhinnerdata.serverTime()));
+    dcconfig->setAuthorizationKey(Math::modExp(serverdhinnerdata.gA(), serverdhinnerdata.dhPrime(), b));
 
     this->authorize();
 }
 
 void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
 
     ServerDHParams serverdhparams;
     serverdhparams.read(mtstream);
@@ -234,16 +234,16 @@ void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
     Q_ASSERT(serverdhparams.constructorId() == TLTypes::ServerDHParamsFail);
 
     if(serverdhparams.nonce() != this->_respq->nonce())
-        qWarning("DC %d ServerDHParamsFail: received nonce != sent nonce", dcconfig.id());
+        qWarning("DC %d ServerDHParamsFail: received nonce != sent nonce", dcconfig->dcid());
     else if(serverdhparams.serverNonce() != this->_respq->serverNonce())
-        qWarning("DC %d ServerDHParamsFail: received server_nonce != sent server_nonce", dcconfig.id());
+        qWarning("DC %d ServerDHParamsFail: received server_nonce != sent server_nonce", dcconfig->dcid());
     else
     {
         TLBytes newnonce = ByteConverter::serialize(this->_newnonce);
         TLBytes newnoncehash = ByteConverter::serialize(serverdhparams.newNonceHash());
 
         if(newnoncehash != sha1_hash(newnonce))
-            qWarning("DC %d ServerDHParamsFail: received new_nonce_hash != new_nonce", dcconfig.id());
+            qWarning("DC %d ServerDHParamsFail: received new_nonce_hash != new_nonce", dcconfig->dcid());
     }
 
     this->restart();
@@ -251,7 +251,7 @@ void DCAuthorization::onServerDHParamsFailReceived(MTProtoStream *mtstream)
 
 void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
 
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
@@ -262,22 +262,22 @@ void DCAuthorization::onServerDhGenFail(MTProtoStream *mtstream)
     TLBytes newnoncehash3 = ByteConverter::serialize(clientdhparamsanswer.newNonceHash3());
 
     expectedhashdata.append(static_cast<char>(3));
-    expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
+    expectedhashdata.append(dcconfig->authorizationKeyAuxHash());
 
     if(sha1_hash(expectedhashdata).mid(4) != newnoncehash3)
     {
-        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenFail)", dcconfig.id());
+        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenFail)", dcconfig->dcid());
         this->restart();
         return;
     }
 
-    this->_retryid = ByteConverter::integer<TLLong>(dcconfig.authorizationKeyAuxHash());
+    this->_retryid = ByteConverter::integer<TLLong>(dcconfig->authorizationKeyAuxHash());
     this->authorize();
 }
 
 void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
 
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
@@ -288,22 +288,22 @@ void DCAuthorization::onServerDhGenRetry(MTProtoStream *mtstream)
     TLBytes newnoncehash2 = ByteConverter::serialize(clientdhparamsanswer.newNonceHash2());
 
     expectedhashdata.append(static_cast<char>(2));
-    expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
+    expectedhashdata.append(dcconfig->authorizationKeyAuxHash());
 
     if(sha1_hash(expectedhashdata).mid(4) != newnoncehash2)
     {
-        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenRetry)", dcconfig.id());
+        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenRetry)", dcconfig->dcid());
         this->restart();
         return;
     }
 
-    this->_retryid = ByteConverter::integer<TLLong>(dcconfig.authorizationKeyAuxHash());
+    this->_retryid = ByteConverter::integer<TLLong>(dcconfig->authorizationKeyAuxHash());
     this->authorize();
 }
 
 void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
 {
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
 
     SetClientDHParamsAnswer clientdhparamsanswer;
     clientdhparamsanswer.read(mtstream);
@@ -314,38 +314,28 @@ void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
     TLBytes newnoncehash1 = ByteConverter::serialize(clientdhparamsanswer.newNonceHash1());
 
     expectedhashdata.append(static_cast<char>(1));
-    expectedhashdata.append(dcconfig.authorizationKeyAuxHash());
+    expectedhashdata.append(dcconfig->authorizationKeyAuxHash());
 
     if(sha1_hash(expectedhashdata).mid(4) != newnoncehash1)
     {
-        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenOk)", dcconfig.id());
+        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenOk)", dcconfig->dcid());
         this->restart();
         return;
     }
 
-    dcconfig.setServerSalt(this->_newnonce.lo.lo ^ clientdhparamsanswer.serverNonce().lo);
-    dcconfig.setAuthorization(DCConfig::Authorized);
+    dcconfig->setServerSalt(this->_newnonce.lo.lo ^ clientdhparamsanswer.serverNonce().lo);
+    dcconfig->setAuthorization(DCConfig::Authorized);
     this->authorize();
 }
 
 void DCAuthorization::onConfigurationReceived(MTProtoReply* mtreply)
 {
-    Config config;
-    config.read(mtreply);
+    Config* config = new Config();
+    config->read(mtreply);
 
-    foreach(const DcOption* dcoption, config.dcOptions())
-    {
-        if(dcoption->isMediaOnly()) // NOTE: "Media Only" DCs needs investigation
-            continue;
-
-        DCConfig& dcconfig = TelegramConfig::config()->setDcConfig(dcoption->id(), dcoption->isIpv6());
-
-        dcconfig.setHost(dcoption->ipAddress());
-        dcconfig.setPort(dcoption->port());
-        dcconfig.setId(dcoption->id());
-    }
-
+    TelegramConfig_setServerConfig(config);
     TelegramConfig_save;
+
     emit authorized(SessionToDC(this->_dcsession));
 }
 
@@ -362,8 +352,8 @@ void DCAuthorization::onAuthorizationImported(MTProtoReply *mtreply)
 {
     Q_UNUSED(mtreply);
 
-    DCConfig& dcconfig = DCConfig_fromSession(this->_dcsession);
-    dcconfig.setAuthorization(DCConfig::Signed);
+    DCConfig* dcconfig = SessionToDcConfig(this->_dcsession);
+    dcconfig->setAuthorization(DCConfig::Signed);
 
     TelegramConfig_save;
     emit authorizationImported(SessionToDC(this->_dcsession));

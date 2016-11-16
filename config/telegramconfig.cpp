@@ -12,16 +12,16 @@
 #define CONFIG_FOLDER "telegram"
 
 const QString TelegramConfig::DCCONFIG_FILE = "dcconfig.json";
+const QString TelegramConfig::CONFIG_FILE = "config.mtproto";
 const QString TelegramConfig::STATE_FILE = "state.mtproto";
 const QString TelegramConfig::ME_FILE = "me.user";
 
-TelegramConfig* TelegramConfig::_config = NULL;
+TelegramConfig* TelegramConfig::_instance = NULL;
 
-TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0), _me(NULL)
+TelegramConfig::TelegramConfig(QObject* parent): QObject(parent), _config(NULL), _me(NULL), _layernum(0), _debugmode(false), _isipv6(false)
 {
-    this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
     this->_updatesstate = new UpdatesState();
-
+    this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
     this->_devicemodel = QHostInfo::localHostName();
 
     if(this->_devicemodel.isEmpty())
@@ -30,101 +30,26 @@ TelegramConfig::TelegramConfig(): _debugmode(false), _ipv6(false), _layernum(0),
 
 TelegramConfig *TelegramConfig::config()
 {
-    if(!TelegramConfig::_config)
+    if(!TelegramConfig::_instance)
         return NULL;
 
-    return TelegramConfig::_config;
+    return TelegramConfig::_instance;
 }
 
 TelegramConfig *TelegramConfig::init(TLInt layernum, TLInt apiid, const QString &apihash, const QString &publickey, const QString& phonenumber)
 {
-    if(TelegramConfig::_config)
-        return TelegramConfig::_config;
+    if(TelegramConfig::_instance)
+        return TelegramConfig::_instance;
 
-    TelegramConfig::_config = new TelegramConfig();
-    TelegramConfig::_config->_layernum = layernum;
-    TelegramConfig::_config->_apiid = apiid;
-    TelegramConfig::_config->_apihash = apihash;
-    TelegramConfig::_config->_publickey = publickey;
-    TelegramConfig::_config->setPhoneNumber(phonenumber);
-    TelegramConfig::_config->load();
+    TelegramConfig::_instance = new TelegramConfig();
+    TelegramConfig::_instance->_layernum = layernum;
+    TelegramConfig::_instance->_apiid = apiid;
+    TelegramConfig::_instance->_apihash = apihash;
+    TelegramConfig::_instance->_publickey = publickey;
+    TelegramConfig::_instance->setPhoneNumber(phonenumber);
+    TelegramConfig::_instance->load();
 
-    return TelegramConfig::_config;
-}
-
-int TelegramConfig::mainDcId() const
-{
-    if(this->_ipv6)
-    {
-        foreach(const DCConfig& dcconfig, this->_dcconfigipv6.values())
-        {
-            if(dcconfig.isMain())
-                return dcconfig.id();
-        }
-    }
-    else
-    {
-        foreach(const DCConfig& dcconfig, this->_dcconfig.values())
-        {
-            if(dcconfig.isMain())
-                return dcconfig.id();
-        }
-    }
-
-    return -1;
-}
-
-DCConfig &TelegramConfig::dcConfig(int dcid)
-{
-    if(this->_ipv6)
-    {
-        if(!this->_dcconfigipv6.contains(dcid))
-            this->setDcConfig(dcid, true);
-
-        return this->_dcconfigipv6[dcid];
-    }
-
-    if(!this->_dcconfig.contains(dcid))
-        this->setDcConfig(dcid, false);
-
-    return this->_dcconfig[dcid];
-}
-
-DCConfig &TelegramConfig::setDcConfig(int dcid, bool ipv6)
-{
-    if(ipv6)
-    {
-        if(!this->_dcconfigipv6.contains(dcid))
-            this->_dcconfigipv6[dcid] = DCConfig(ipv6);
-
-        return this->_dcconfigipv6[dcid];
-    }
-
-    if(!this->_dcconfig.contains(dcid))
-        this->_dcconfig[dcid] = DCConfig(ipv6);
-
-    return this->_dcconfig[dcid];
-}
-
-void TelegramConfig::setMainDc(int maindcid)
-{
-    QList<int> dcids;
-
-    if(this->_ipv6)
-        dcids = this->_dcconfigipv6.keys();
-    else
-        dcids = this->_dcconfig.keys();
-
-    foreach(int dcid, dcids)
-    {
-        DCConfig& dcconfig = (this->_ipv6 ? this->_dcconfigipv6[dcid] : this->_dcconfig[dcid]);
-        dcconfig.setIsMain(dcid == maindcid);
-    }
-}
-
-UpdatesState *TelegramConfig::updateState()
-{
-    return this->_updatesstate;
+    return TelegramConfig::_instance;
 }
 
 User *TelegramConfig::me()
@@ -132,9 +57,83 @@ User *TelegramConfig::me()
     return this->_me;
 }
 
+DCConfig *TelegramConfig::createConfig(const QString &host, TLInt port, int dcid)
+{
+    DCConfig* dcconfig = new DCConfig(host, port, dcid, this->_isipv6, this);
+    this->_dcconfig[dcconfig->id()] = dcconfig;
+    return dcconfig;
+}
+
+DCConfig *TelegramConfig::migrateConfig(DCConfig *fromconfig, int todcid)
+{
+    DCConfig::Id configid = MakeDCConfigId(fromconfig->option()->isIpv6(),
+                                           fromconfig->option()->isMediaOnly(),
+                                           todcid);
+
+    return this->_dcconfig[configid];
+}
+
+UpdatesState *TelegramConfig::updateState()
+{
+    return this->_updatesstate;
+}
+
+Config *TelegramConfig::serverConfig()
+{
+    return this->_config;
+}
+
+void TelegramConfig::setServerConfig(Config *config)
+{
+    config->setParent(this);
+
+    this->_config = config;
+
+    foreach(DcOption* dcoption, config->dcOptions())
+    {
+        DCConfig::Id id = MakeDCConfigId(dcoption->isIpv6(), dcoption->isMediaOnly(), dcoption->id());
+
+        if(!this->_dcconfig.contains(id))
+        {
+            DCConfig* dcconfig = new DCConfig(dcoption, this);
+            this->_dcconfig[id] = dcconfig;
+        }
+        else
+            this->_dcconfig[id]->setDcOption(dcoption);
+    }
+}
+
+DCConfig* TelegramConfig::mainConfig() const
+{
+    foreach(DCConfig* dcconfig, this->_dcconfig.values())
+    {
+        if(dcconfig->isMain())
+            return dcconfig;
+    }
+
+    return NULL;
+}
+
+DCConfig *TelegramConfig::dcConfig(DCConfig::Id id)
+{
+    return this->_dcconfig[id];
+}
+
+DCConfig *TelegramConfig::fromDcId(int dcid)
+{
+    return this->dcConfig(MakeDCConfigId(this->_isipv6, false, dcid));
+}
+
+void TelegramConfig::setMainConfig(DCConfig* dcconfig)
+{
+    foreach(DCConfig* currentconfig, this->_dcconfig.values())
+        currentconfig->setIsMain(dcconfig == currentconfig);
+}
+
 void TelegramConfig::save()
 {
     this->saveDCConfig();
+    this->saveConfig();
     this->saveState();
     this->saveMe();
 }
@@ -143,50 +142,27 @@ void TelegramConfig::load()
 {
     this->loadMe();
     this->loadState();
+    this->loadConfig();
     this->loadDCConfig();
 }
 
 void TelegramConfig::reset()
 {
     this->_dcconfig.clear();
-    this->_dcconfigipv6.clear();
-}
-
-bool TelegramConfig::hasDC(int id)
-{
-    if(this->_ipv6)
-        return this->_dcconfigipv6.contains(id);
-
-    return this->_dcconfig.contains(id);
 }
 
 bool TelegramConfig::needsConfiguration() const
 {
-    if(this->_ipv6)
-        return this->_dcconfigipv6.count() <= 1;
-
     return this->_dcconfig.count() <= 1;
 }
 
 bool TelegramConfig::isLoggedIn() const
 {
-    if(this->_ipv6)
+    foreach(const DCConfig* dcconfig, this->_dcconfig.values())
     {
-        foreach(const DCConfig& dcconfig, this->_dcconfigipv6.values())
-        {
-            if(dcconfig.authorization() == DCConfig::Signed)
-                return true;
-        }
+        if(dcconfig->authorization() == DCConfig::Signed)
+            return true;
     }
-    else
-    {
-        foreach(const DCConfig& dcconfig, this->_dcconfig.values())
-        {
-            if(dcconfig.authorization() == DCConfig::Signed)
-                return true;
-        }
-    }
-
 
     return false;
 }
@@ -196,9 +172,9 @@ bool TelegramConfig::debugMode() const
     return this->_debugmode;
 }
 
-bool TelegramConfig::isIpv6() const
+bool TelegramConfig::isIPv6() const
 {
-    return this->_ipv6;
+    return this->_isipv6;
 }
 
 TLInt TelegramConfig::layerNum() const
@@ -271,7 +247,7 @@ void TelegramConfig::setDebugMode(bool dbgmode)
 
 void TelegramConfig::setIpv6(bool ipv6)
 {
-    this->_ipv6 = ipv6;
+    this->_isipv6 = ipv6;
 }
 
 void TelegramConfig::setStoragePath(const QString &storagepath)
@@ -299,16 +275,12 @@ void TelegramConfig::setMe(User *me)
 
 void TelegramConfig::saveDCConfig()
 {
-    QJsonArray dcconfig;
+    QJsonArray jsonarray;
 
-    foreach(int dcid, this->_dcconfig.keys())
-        dcconfig.append(this->_dcconfig[dcid].toJson());
+    foreach(DCConfig* dcconfig, this->_dcconfig.values())
+        jsonarray.append(dcconfig->toJson());
 
-    foreach(int dcid, this->_dcconfigipv6.keys())
-        dcconfig.append(this->_dcconfigipv6[dcid].toJson());
-
-    QJsonDocument doc(dcconfig);
-
+    QJsonDocument doc(jsonarray);
     this->write(TelegramConfig::DCCONFIG_FILE, doc.toJson());
 }
 
@@ -331,15 +303,42 @@ void TelegramConfig::loadDCConfig()
 
     for(int i = 0; i < dcconfigarray.count(); i++)
     {
-        QJsonObject dcconfigobj = dcconfigarray[i].toObject();
-        DCConfig& dcconfig = this->setDcConfig(dcconfigobj["id"].toInt(), dcconfigobj["ipv6"].toBool());
+        QJsonObject jsonobj = dcconfigarray[i].toObject();
+        DCConfig::Id id = DCConfig::configId(jsonobj);
 
-        if(!dcconfig.fromJson(dcconfigobj))
+        if(!id || !this->_dcconfig.contains(id))
         {
-            qWarning() << "Invalid DC configuration, using defaults";
-            return;
+            if(!this->_dcconfig.contains(id))
+                qWarning("Cannot find DC configuration %llx", id);
+            else
+                qWarning("Invalid DC configuration");
+
+            continue;
         }
+
+        this->_dcconfig[id]->fromJson(jsonobj);
     }
+}
+
+void TelegramConfig::saveConfig()
+{
+    QByteArray data;
+
+    this->_config->serialize(data);
+    this->write(TelegramConfig::CONFIG_FILE, data);
+}
+
+void TelegramConfig::loadConfig()
+{
+    if(!this->configExists(TelegramConfig::CONFIG_FILE))
+        return;
+
+    QByteArray data = this->read(TelegramConfig::CONFIG_FILE);
+
+    Config* config = new Config();
+    config->unserialize(data);
+
+    this->setServerConfig(config);
 }
 
 void TelegramConfig::saveState()
