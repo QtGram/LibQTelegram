@@ -34,9 +34,12 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
     return this->fileObject(tgobj, false, false);
 }
 
-void FileCache::upload(InputPeer* inputpeer, const QString &filepath)
+FileUploader *FileCache::prepareUpload(const QUrl &filepath, int mediatype)
 {
-    //TelegramAPI::messagesSendMedia(DC_MainSession, inputpeer, 0, )
+    FileUploader* fileuploader = new FileUploader(this);
+    fileuploader->setMediaType(mediatype);
+    fileuploader->upload(filepath);
+    return fileuploader;
 }
 
 QString FileCache::createFileId(FileLocation *filelocation)

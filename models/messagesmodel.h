@@ -8,6 +8,7 @@ class MessagesModel : public TelegramModel
     Q_OBJECT
 
     Q_ENUMS(MessageActions)
+    Q_ENUMS(MessageMediaTypes)
 
     Q_PROPERTY(Dialog* dialog READ dialog WRITE setDialog NOTIFY dialogChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
@@ -33,6 +34,15 @@ class MessagesModel : public TelegramModel
             ChooseContactAction,
             GamePlayAction,
             GameStopAction,
+        };
+
+        enum MessageMediaTypes {
+            MessageMediaFile,
+            MessageMediaPhoto,
+            MessageMediaVideo,
+            MessageMediaAudio,
+            MessageMediaContact,
+            MessageMediaLocation,
         };
 
         enum MessageRoles {
@@ -82,9 +92,11 @@ class MessagesModel : public TelegramModel
         void replyMessage(const QString& text, Message* replymessage);
         void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
         void editMessage(const QString& text, Message *editmessage);
+        void sendMedia(const QUrl& filepath, const QString& caption, int mediatype);
         void sendAction(int action);
 
     private slots:
+        void onUploadCompleted();
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onReadHistoryReplied(MTProtoReply* mtreply);
@@ -99,7 +111,8 @@ class MessagesModel : public TelegramModel
         void markAsRead();
 
     private:
-        TLConstructor getAction(int action);
+        TLConstructor getInputMedia(int mediatype) const;
+        TLConstructor getAction(int action) const;
         int insertionPoint(Message* message) const;
         int loadHistoryFromCache();
         int indexOf(Message* message) const;

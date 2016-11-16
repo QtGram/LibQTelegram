@@ -447,11 +447,6 @@ void TelegramCache::onWebPage(WebPage *webpage)
     emit messageUpdated(message);
 }
 
-void TelegramCache::onChatFullReceived(ChatFull *chatfull)
-{
-
-}
-
 void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings *notifysettings)
 {
     if(notifypeer->constructorId() != TLTypes::NotifyPeer)

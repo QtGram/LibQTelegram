@@ -256,7 +256,8 @@ SOURCES += \
     config/cache/database/tables/pendingwebpagetable.cpp \
     quick/qquickwaveform.cpp \
     objects/peerprofile.cpp \
-    config/cache/database/tables/chatfulltable.cpp
+    config/cache/database/tables/chatfulltable.cpp \
+    config/cache/fileuploader.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -507,4 +508,5 @@ HEADERS +=\
     types/time.h \
     quick/qquickwaveform.h \
     objects/peerprofile.h \
-    config/cache/database/tables/chatfulltable.h
+    config/cache/database/tables/chatfulltable.h \
+    config/cache/fileuploader.h

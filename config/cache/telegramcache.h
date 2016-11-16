@@ -84,7 +84,6 @@ class TelegramCache: public QObject
         void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
         void onWebPage(WebPage* webpage);
-        void onChatFullReceived(ChatFull* chatfull);
 
     private:
         void eraseMessage(MessageId messageid);

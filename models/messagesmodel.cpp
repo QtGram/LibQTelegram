@@ -1,5 +1,6 @@
 #include "messagesmodel.h"
 #include "../config/cache/telegramcache.h"
+#include "../config/cache/filecache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 #include "../crypto/math.h"
 
@@ -360,6 +361,16 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
     TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
 }
 
+void MessagesModel::sendMedia(const QUrl &filepath, const QString &caption, int mediatype)
+{
+    if(!QFile::exists(filepath.toLocalFile()))
+        return;
+
+    FileUploader* fileuploader = FileCache_prepareUpload(filepath, mediatype);
+    fileuploader->setCaption(caption);
+    connect(fileuploader, &FileUploader::completed, this, &MessagesModel::onUploadCompleted);
+}
+
 void MessagesModel::sendAction(int action)
 {
     if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
@@ -389,6 +400,18 @@ void MessagesModel::sendAction(int action)
 
     this->_timaction->start();
     TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
+}
+
+void MessagesModel::onUploadCompleted()
+{
+    FileUploader* fileuploader = qobject_cast<FileUploader*>(this->sender());
+    TLLong randomid = Math::randomize<TLLong>();
+
+    this->createInput();
+
+    InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileuploader);
+    TelegramAPI::messagesSendMedia(DC_MainSession, this->_inputpeer, 0, inputmedia, randomid, NULL);
+    inputmedia->deleteLater();
 }
 
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
@@ -540,7 +563,7 @@ void MessagesModel::resetAction()
     TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
 }
 
-TLConstructor MessagesModel::getAction(int action)
+TLConstructor MessagesModel::getAction(int action) const
 {
     switch(action)
     {
@@ -696,6 +719,32 @@ void MessagesModel::markAsRead()
         req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, inboxmaxid);
 
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
+}
+
+TLConstructor MessagesModel::getInputMedia(int mediatype) const
+{
+    switch(mediatype)
+    {
+        case MessagesModel::MessageMediaPhoto:
+            return TLTypes::InputMediaUploadedPhoto;
+
+        case MessagesModel::MessageMediaVideo:
+            break;
+
+        case MessagesModel::MessageMediaAudio:
+            break;
+
+        case MessagesModel::MessageMediaContact:
+            return TLTypes::InputMediaContact;
+
+        case MessagesModel::MessageMediaLocation:
+            return TLTypes::InputMediaGeoPoint;
+
+        default:
+            break;
+    }
+
+    return TLTypes::InputMediaDocument;
 }
 
 int MessagesModel::indexOf(Message *message) const
