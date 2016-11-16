@@ -28,7 +28,6 @@ typedef QByteArray TLObject;
 
 // Internal types
 typedef quint64 MessageId;
-typedef quint64 DcIdentifier;
 
 /*
  * Message ID value:
