@@ -34,10 +34,9 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
     return this->fileObject(tgobj, false, false);
 }
 
-FileUploader *FileCache::prepareUpload(const QUrl &filepath, int mediatype)
+FileUploader *FileCache::prepareUpload(const QUrl &filepath)
 {
     FileUploader* fileuploader = new FileUploader(this);
-    fileuploader->setMediaType(mediatype);
     fileuploader->upload(filepath);
     return fileuploader;
 }

@@ -361,14 +361,14 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
     TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
 }
 
-void MessagesModel::sendMedia(const QUrl &filepath, const QString &caption, int mediatype)
+void MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 {
     if(!QFile::exists(filepath.toLocalFile()))
         return;
 
-    FileUploader* fileuploader = FileCache_prepareUpload(filepath, mediatype);
+    FileUploader* fileuploader = FileCache_prepareUpload(filepath);
     fileuploader->setCaption(caption);
-    connect(fileuploader, &FileUploader::completed, this, &MessagesModel::onUploadCompleted);
+    connect(fileuploader, &FileUploader::completed, this, &MessagesModel::onUploadPhotoCompleted);
 }
 
 void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
@@ -408,7 +408,7 @@ void MessagesModel::sendAction(int action)
     TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
 }
 
-void MessagesModel::onUploadCompleted()
+void MessagesModel::onUploadPhotoCompleted()
 {
     FileUploader* fileuploader = qobject_cast<FileUploader*>(this->sender());
     InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileuploader);
@@ -730,32 +730,6 @@ void MessagesModel::sendMedia(InputMedia *inputmedia, TLInt replytomsgid)
 
     TLLong randomid = Math::randomize<TLLong>();
     TelegramAPI::messagesSendMedia(DC_MainSession, this->_inputpeer, replytomsgid, inputmedia, randomid, NULL);
-}
-
-TLConstructor MessagesModel::getInputMedia(int mediatype) const
-{
-    switch(mediatype)
-    {
-        case MessagesModel::MessageMediaPhoto:
-            return TLTypes::InputMediaUploadedPhoto;
-
-        case MessagesModel::MessageMediaVideo:
-            break;
-
-        case MessagesModel::MessageMediaAudio:
-            break;
-
-        case MessagesModel::MessageMediaContact:
-            return TLTypes::InputMediaContact;
-
-        case MessagesModel::MessageMediaLocation:
-            return TLTypes::InputMediaGeoPoint;
-
-        default:
-            break;
-    }
-
-    return TLTypes::InputMediaDocument;
 }
 
 int MessagesModel::indexOf(Message *message) const

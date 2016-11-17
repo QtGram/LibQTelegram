@@ -18,10 +18,8 @@ class FileUploader : public QObject
         QString fileName() const;
         QString md5hash() const;
         TLInt partsCount() const;
-        int mediaType() const;
         bool isBigFile() const;
         void setCaption(const QString& caption);
-        void setMediaType(int mediatype);
         void upload(const QUrl &filepath);
 
     private:
@@ -43,7 +41,6 @@ class FileUploader : public QObject
         QString _caption;
         QString _filename;
         QString _md5hash;
-        int _mediatype;
         bool _isbigfile;
         QFile _file;
         TLLong _fileid;

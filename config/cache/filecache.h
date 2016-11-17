@@ -3,7 +3,7 @@
 
 #define FileCache_instance FileCache::instance()
 #define FileCache_fileObject(obj) FileCache::instance()->fileObject(obj)
-#define FileCache_prepareUpload(filepath, mediatype) FileCache::instance()->prepareUpload(filepath, mediatype)
+#define FileCache_prepareUpload(filepath) FileCache::instance()->prepareUpload(filepath)
 
 #include <QObject>
 #include <QMimeDatabase>
@@ -21,7 +21,7 @@ class FileCache : public QObject
     public:
         static FileCache* instance();
         FileObject* fileObject(TelegramObject* tgobj);
-        FileUploader* prepareUpload(const QUrl &filepath, int mediatype);
+        FileUploader* prepareUpload(const QUrl &filepath);
 
     private:
         QString createFileId(FileLocation* filelocation);

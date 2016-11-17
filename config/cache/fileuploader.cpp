@@ -8,7 +8,7 @@
 #define BlockSize    (32 * 1024)
 #define TenMegaBytes (10 * 1024 * 1024)
 
-FileUploader::FileUploader(QObject *parent) : QObject(parent), _dcsession(NULL), _mediatype(0), _isbigfile(false), _fileid(0), _partsize(BlockSize), _partscount(0), _partnum(0)
+FileUploader::FileUploader(QObject *parent) : QObject(parent), _dcsession(NULL), _isbigfile(false), _fileid(0), _partsize(BlockSize), _partscount(0), _partnum(0)
 {
 
 }
@@ -50,11 +50,6 @@ TLInt FileUploader::partsCount() const
     return this->_partscount;
 }
 
-int FileUploader::mediaType() const
-{
-    return this->_mediatype;
-}
-
 bool FileUploader::isBigFile() const
 {
     return this->_isbigfile;
@@ -63,11 +58,6 @@ bool FileUploader::isBigFile() const
 void FileUploader::setCaption(const QString &caption)
 {
     this->_caption = caption;
-}
-
-void FileUploader::setMediaType(int mediatype)
-{
-    this->_mediatype = mediatype;
 }
 
 void FileUploader::upload(const QUrl &filepath)
