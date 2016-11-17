@@ -60,9 +60,9 @@ void FileUploader::setCaption(const QString &caption)
     this->_caption = caption;
 }
 
-void FileUploader::upload(const QUrl &filepath)
+void FileUploader::upload(const QString &filepath)
 {
-    QFileInfo fileinfo(filepath.toLocalFile());
+    QFileInfo fileinfo(filepath);
 
     if(!this->calculatePartsLength(&fileinfo))
         return;
@@ -72,11 +72,11 @@ void FileUploader::upload(const QUrl &filepath)
     this->_isbigfile = (fileinfo.size() > TenMegaBytes);
     this->_filename = fileinfo.fileName();
     this->_fileid = Math::randomize<TLLong>();
-    this->_file.setFileName(filepath.toLocalFile());
+    this->_file.setFileName(filepath);
 
     if(!this->_file.open(QFile::ReadWrite))
     {
-        qWarning("UPLOAD Cannot open %s", qUtf8Printable(filepath.toLocalFile()));
+        qWarning("UPLOAD Cannot open %s", qUtf8Printable(filepath));
         emit failed();
         return;
     }

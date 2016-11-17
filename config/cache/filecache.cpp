@@ -34,11 +34,13 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj)
     return this->fileObject(tgobj, false, false);
 }
 
-FileUploader *FileCache::prepareUpload(const QUrl &filepath)
+FileObject *FileCache::upload(const QString &filepath, const QString &caption)
 {
-    FileUploader* fileuploader = new FileUploader(this);
-    fileuploader->upload(filepath);
-    return fileuploader;
+    FileObject* fileobject = new FileObject(filepath, caption, this->_cachepath, this);
+    connect(fileobject, &FileObject::uploadCompleted, this, &FileCache::processQueue);
+
+    this->enqueue(fileobject);
+    return fileobject;
 }
 
 QString FileCache::createFileId(FileLocation *filelocation)
@@ -140,13 +142,12 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     else
          fileid = this->createFileId(qobject_cast<FileLocation*>(locationobj));
 
-
     if(this->_filemap.contains(fileid))
         return this->_filemap[fileid];
 
     FileObject* fileobject = new FileObject(this->_cachepath, this);
     fileobject->setAutoDownload(autodownload);
-    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processDownloadQueue);
+    connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
 
     if(ismovable)
         connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::onDownloadCompleted);
@@ -175,15 +176,19 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     if(fileobject->loadCache())
         return fileobject;
 
-    this->_queue << fileobject;
-
-    if(!this->_currentobject)
-        this->processDownloadQueue();
-
+    this->enqueue(fileobject);
     return fileobject;
 }
 
-void FileCache::processDownloadQueue()
+void FileCache::enqueue(FileObject *fileobject)
+{
+    this->_queue << fileobject;
+
+    if(!this->_currentobject)
+        this->processQueue();
+}
+
+void FileCache::processQueue()
 {
     if(this->_queue.isEmpty())
     {
@@ -192,7 +197,11 @@ void FileCache::processDownloadQueue()
     }
 
     this->_currentobject = this->_queue.takeFirst();
-    this->_currentobject->downloadThumbnail();
+
+    if(this->_currentobject->isUpload())
+        this->_currentobject->upload();
+    else
+        this->_currentobject->downloadThumbnail();
 }
 
 void FileCache::onDownloadCompleted()

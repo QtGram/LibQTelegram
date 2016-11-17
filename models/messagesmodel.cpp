@@ -366,9 +366,8 @@ void MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
     if(!QFile::exists(filepath.toLocalFile()))
         return;
 
-    FileUploader* fileuploader = FileCache_prepareUpload(filepath);
-    fileuploader->setCaption(caption);
-    connect(fileuploader, &FileUploader::completed, this, &MessagesModel::onUploadPhotoCompleted);
+    FileObject* fileobject = FileCache_upload(filepath.toLocalFile(), caption);
+    connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadPhotoCompleted);
 }
 
 void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
@@ -410,8 +409,8 @@ void MessagesModel::sendAction(int action)
 
 void MessagesModel::onUploadPhotoCompleted()
 {
-    FileUploader* fileuploader = qobject_cast<FileUploader*>(this->sender());
-    InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileuploader);
+    FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
+    InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileobject->uploader());
 
     this->sendMedia(inputmedia);
     inputmedia->deleteLater();

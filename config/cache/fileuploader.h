@@ -20,7 +20,7 @@ class FileUploader : public QObject
         TLInt partsCount() const;
         bool isBigFile() const;
         void setCaption(const QString& caption);
-        void upload(const QUrl &filepath);
+        void upload(const QString &filepath);
 
     private:
         bool calculatePartsLength(const QFileInfo* fileinfo);

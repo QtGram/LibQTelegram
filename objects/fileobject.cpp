@@ -1,12 +1,13 @@
 #include "fileobject.h"
 #include "../types/telegramhelper.h"
+#include <QFileInfo>
 #include <QDir>
 
 #define BLOCK_SIZE (128 * 1024)
 
 FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath), _autodownload(false)
 {
-    this->_downloadmode = FileObject::None;
+    this->_transfermode = FileObject::None;
     this->_document = NULL;
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
@@ -14,9 +15,35 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_dcsession = NULL;
     this->_file = NULL;
     this->_filesize = 0;
+    this->_fileuploader = NULL;
 
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
+}
+
+FileObject::FileObject(const QString &filepath, const QString& caption, const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath), _autodownload(false)
+{
+    this->_filepath = filepath;
+    this->_transfermode = FileObject::Upload;
+    this->_document = NULL;
+    this->_locthumbnail = NULL;
+    this->_locfile = NULL;
+    this->_inputfilelocation = NULL;
+    this->_dcsession = NULL;
+    this->_file = NULL;
+    this->_filesize = QFileInfo(filepath).size();
+
+    this->_fileuploader = new FileUploader(this);
+    this->_fileuploader->setCaption(caption);
+
+    connect(this->_fileuploader, &FileUploader::completed, this, &FileObject::onUploaderCompleted);
+    connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
+    connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
+}
+
+FileUploader *FileObject::uploader() const
+{
+    return this->_fileuploader;
 }
 
 Document *FileObject::document() const
@@ -24,9 +51,14 @@ Document *FileObject::document() const
     return this->_document;
 }
 
+bool FileObject::isUpload() const
+{
+    return this->_transfermode == FileObject::Upload;
+}
+
 bool FileObject::downloading() const
 {
-    return (this->_downloadmode == FileObject::DownloadThumbnail) || (this->_downloadmode == FileObject::Download);
+    return (this->_transfermode == FileObject::DownloadThumbnail) || (this->_transfermode == FileObject::Download);
 }
 
 bool FileObject::downloaded() const
@@ -209,6 +241,11 @@ void FileObject::download()
     this->createDownloadSession(this->_locfile->dcId());
 }
 
+void FileObject::upload()
+{
+    this->_fileuploader->upload(this->_filepath);
+}
+
 void FileObject::createDownloadSession(int dcid)
 {
     DCConfig* dcconfig = DCConfig_fromDcId(dcid);
@@ -222,12 +259,12 @@ void FileObject::sendDownloadRequest()
 {
     TLInt offset = (this->_file ? this->_file->size() : 0);
     MTProtoRequest* req = TelegramAPI::uploadGetFile(this->_dcsession, this->_inputfilelocation, offset, BLOCK_SIZE);
-    connect(req, &MTProtoRequest::replied, this, &FileObject::onUploadFile);
+    connect(req, &MTProtoRequest::replied, this, &FileObject::onUploadGetFileReplied);
 }
 
-void FileObject::onUploadFile(MTProtoReply *mtreply)
+void FileObject::onUploadGetFileReplied(MTProtoReply *mtreply)
 {
-    Q_ASSERT(this->_downloadmode != FileObject::None);
+    Q_ASSERT(this->_transfermode != FileObject::None);
 
     UploadFile uploadfile;
     uploadfile.read(mtreply);
@@ -235,7 +272,7 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
     if(!this->_file)
     {
         QDir dir(this->_storagepath);
-        QString filename = (this->_downloadmode == FileObject::DownloadThumbnail) ?
+        QString filename = (this->_transfermode == FileObject::DownloadThumbnail) ?
                            this->_thumbnailid : this->_fileid;
 
         this->_file = new QFile(dir.absoluteFilePath(filename));
@@ -258,7 +295,7 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
 
     this->_file->close();
 
-    if(this->_downloadmode == FileObject::DownloadThumbnail)
+    if(this->_transfermode == FileObject::DownloadThumbnail)
     {
         this->_thumbnail = this->_file->fileName();
         emit thumbnailChanged();
@@ -284,11 +321,19 @@ void FileObject::onUploadFile(MTProtoReply *mtreply)
     emit downloadCompleted();
 }
 
+void FileObject::onUploaderCompleted()
+{
+    emit uploadCompleted();
+
+    this->_fileuploader->deleteLater();
+    this->_fileuploader = NULL;
+}
+
 void FileObject::setDownloadMode(int downloadmode)
 {
-    if(this->_downloadmode == downloadmode)
+    if(this->_transfermode == downloadmode)
         return;
 
-    this->_downloadmode = downloadmode;
+    this->_transfermode = downloadmode;
     emit downloadingChanged();
 }
