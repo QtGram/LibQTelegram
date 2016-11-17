@@ -354,7 +354,7 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
 
 void MessagesModel::editMessage(const QString& text, Message* editmessage)
 {
-    if(!editmessage)
+    if(!editmessage || text.isEmpty())
         return;
 
     this->createInput();
