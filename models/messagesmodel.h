@@ -82,12 +82,14 @@ class MessagesModel : public TelegramModel
         void replyMessage(const QString& text, Message* replymessage);
         void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
         void editMessage(const QString& text, Message *editmessage);
+        void sendFile(const QUrl& filepath, const QString &caption);
         void sendPhoto(const QUrl& filepath, const QString& caption);
         void sendLocation(TLDouble latitude, TLDouble longitude);
         void sendAction(int action);
 
     private slots:
         void onUploadPhotoCompleted();
+        void onUploadFileCompleted();
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
         void onReadHistoryReplied(MTProtoReply* mtreply);

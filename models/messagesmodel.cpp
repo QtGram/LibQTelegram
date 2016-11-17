@@ -361,6 +361,15 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
     TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
 }
 
+void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)
+{
+    if(!QFile::exists(filepath.toLocalFile()))
+        return;
+
+    FileObject* fileobject = FileCache_upload(filepath.toLocalFile(), caption);
+    connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadFileCompleted);
+}
+
 void MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 {
     if(!QFile::exists(filepath.toLocalFile()))
@@ -411,6 +420,15 @@ void MessagesModel::onUploadPhotoCompleted()
 {
     FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
     InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileobject->uploader());
+
+    this->sendMedia(inputmedia);
+    inputmedia->deleteLater();
+}
+
+void MessagesModel::onUploadFileCompleted()
+{
+    FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
+    InputMedia* inputmedia = TelegramHelper::inputMediaFile(fileobject->uploader());
 
     this->sendMedia(inputmedia);
     inputmedia->deleteLater();

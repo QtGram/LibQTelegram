@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QFileInfo>
+#include <QMimeDatabase>
 #include "../../types/basic.h"
 #include "../../mtproto/dc/dcsessionmanager.h"
 
@@ -17,6 +18,7 @@ class FileUploader : public QObject
         QString caption() const;
         QString fileName() const;
         QString md5hash() const;
+        QString mimeType() const;
         TLInt partsCount() const;
         bool isBigFile() const;
         void setCaption(const QString& caption);
@@ -41,12 +43,16 @@ class FileUploader : public QObject
         QString _caption;
         QString _filename;
         QString _md5hash;
+        QString _mimetype;
         bool _isbigfile;
         QFile _file;
         TLLong _fileid;
         TLLong _partsize;
         TLInt _partscount;
         TLInt _partnum;
+
+    private:
+        static QMimeDatabase _mimedb;
 };
 
 #endif // FILEUPLOADER_H

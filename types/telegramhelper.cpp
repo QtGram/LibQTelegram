@@ -200,6 +200,21 @@ InputChannel *TelegramHelper::inputChannel(Chat *chat, QObject *parent)
     return inputchannel;
 }
 
+InputMedia *TelegramHelper::inputMediaFile(FileUploader *fileuploader, QObject *parent)
+{
+    InputMedia* inputmedia = new InputMedia(parent);
+    inputmedia->setConstructorId(TLTypes::InputMediaUploadedDocument);
+    inputmedia->setFile(TelegramHelper::inputFile(fileuploader));
+    inputmedia->setMimeType(ToTLString(fileuploader->mimeType()));
+    inputmedia->setCaption(fileuploader->caption());
+
+    TLVector<DocumentAttribute*> attributes;
+    attributes << TelegramHelper::createDocumentAttribute(fileuploader->fileName(), inputmedia);
+
+    inputmedia->setAttributes(attributes);
+    return inputmedia;
+}
+
 InputMedia *TelegramHelper::inputMediaPhoto(FileUploader *fileuploader, QObject *parent)
 {
     InputMedia* inputmedia = new InputMedia(parent);
@@ -366,6 +381,14 @@ QString TelegramHelper::statusText(User *user)
     }
 
     return QObject::tr("Long time ago");
+}
+
+DocumentAttribute *TelegramHelper::createDocumentAttribute(const QString &filename, QObject* parent)
+{
+    DocumentAttribute* documentattribute = new DocumentAttribute(parent);
+    documentattribute->setConstructorId(TLTypes::DocumentAttributeFilename);
+    documentattribute->setFileName(filename);
+    return documentattribute;
 }
 
 DocumentAttribute *TelegramHelper::documentHas(Document *document, TLConstructor attributector)

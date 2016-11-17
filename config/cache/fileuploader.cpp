@@ -8,9 +8,11 @@
 #define BlockSize    (32 * 1024)
 #define TenMegaBytes (10 * 1024 * 1024)
 
-FileUploader::FileUploader(QObject *parent) : QObject(parent), _dcsession(NULL), _isbigfile(false), _fileid(0), _partsize(BlockSize), _partscount(0), _partnum(0)
-{
+QMimeDatabase FileUploader::_mimedb;
 
+FileUploader::FileUploader(QObject *parent) : QObject(parent), _dcsession(NULL), _isbigfile(false), _partsize(BlockSize), _partscount(0), _partnum(0)
+{
+    this->_fileid = Math::randomize<TLLong>();
 }
 
 FileUploader::~FileUploader()
@@ -45,6 +47,11 @@ QString FileUploader::md5hash() const
     return this->_md5hash;
 }
 
+QString FileUploader::mimeType() const
+{
+    return this->_mimetype;
+}
+
 TLInt FileUploader::partsCount() const
 {
     return this->_partscount;
@@ -71,7 +78,7 @@ void FileUploader::upload(const QString &filepath)
 
     this->_isbigfile = (fileinfo.size() > TenMegaBytes);
     this->_filename = fileinfo.fileName();
-    this->_fileid = Math::randomize<TLLong>();
+    this->_mimetype = FileUploader::_mimedb.mimeTypeForFile(filepath).name();
     this->_file.setFileName(filepath);
 
     if(!this->_file.open(QFile::ReadWrite))

@@ -24,6 +24,7 @@ class TelegramHelper
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static InputChannel* inputChannel(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputChannel* inputChannel(Chat* chat, QObject* parent = 0);
+        static InputMedia* inputMediaFile(FileUploader* fileuploader, QObject* parent = 0);
         static InputMedia* inputMediaPhoto(FileUploader* fileuploader, QObject* parent = 0);
         static InputMedia* inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject* parent = 0);
         static InputFile* inputFile(FileUploader* fileuploader, QObject* parent = 0);
@@ -36,6 +37,7 @@ class TelegramHelper
         static QString fileSize(TLDouble size);
         static QString fullName(User* user);
         static QString statusText(User* user);
+        static DocumentAttribute* createDocumentAttribute(const QString& filename, QObject *parent = 0);
         static DocumentAttribute* documentHas(Document* document, TLConstructor attributector);
         static bool isSticker(Document* document);
         static bool isAnimated(Document* document);
