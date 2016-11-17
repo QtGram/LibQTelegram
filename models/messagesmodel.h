@@ -14,6 +14,7 @@ class MessagesModel : public TelegramModel
     Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
     Q_PROPERTY(int newMessageIndex READ newMessageIndex NOTIFY newMessageIndexChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
+    Q_PROPERTY(bool isMuted READ isMuted WRITE setIsMuted NOTIFY isMutedChanged)
     Q_PROPERTY(bool isChat READ isChat NOTIFY isChatChanged)
     Q_PROPERTY(bool isBroadcast READ isBroadcast NOTIFY isBroadcastChanged)
     Q_PROPERTY(bool isMegaGroup READ isMegaGroup NOTIFY isMegaGroupChanged)
@@ -67,8 +68,10 @@ class MessagesModel : public TelegramModel
         bool isMegaGroup() const;
         bool isWritable() const;
         bool isActive() const;
+        bool isMuted() const;
         void setDialog(Dialog* dialog);
         void setIsActive(bool isactive);
+        void setIsMuted(bool ismuted);
 
     public: // Overrides
         virtual bool canFetchMore(const QModelIndex&) const;
@@ -99,6 +102,7 @@ class MessagesModel : public TelegramModel
         void onEditMessage(Message* message);
         void onDeleteMessage(Message *message);
         void onUpdateMessage(Message *message);
+        void onNotifySettingsChanged(Dialog* dialog);
         void updateStatusText(Dialog* dialog);
         void resetAction();
         void markAsRead();
@@ -131,6 +135,7 @@ class MessagesModel : public TelegramModel
         void isMegaGroupChanged();
         void isWritableChanged();
         void isActiveChanged();
+        void isMutedChanged();
         void newMessageIndexChanged();
 
     private:

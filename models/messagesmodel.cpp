@@ -42,6 +42,15 @@ void MessagesModel::setIsActive(bool isactive)
     emit isActiveChanged();
 }
 
+void MessagesModel::setIsMuted(bool ismuted)
+{
+    if(!this->_telegram || !this->_dialog || (TelegramHelper::isMuted(this->_dialog) == ismuted))
+        return;
+
+    this->_telegram->muteDialog(this->_dialog, ismuted);
+    emit isMutedChanged();
+}
+
 QString MessagesModel::title() const
 {
     if(!this->_telegram)
@@ -126,6 +135,14 @@ bool MessagesModel::isWritable() const
 bool MessagesModel::isActive() const
 {
     return this->_isactive;
+}
+
+bool MessagesModel::isMuted() const
+{
+    if(!this->_dialog)
+        return false;
+
+    return TelegramHelper::isMuted(this->_dialog);
 }
 
 bool MessagesModel::canFetchMore(const QModelIndex &) const
@@ -571,8 +588,16 @@ void MessagesModel::onUpdateMessage(Message *message)
         return;
     }
 
-    Emit_DataChangedRoles(idx,  MessagesModel::ItemRole <<
-                                MessagesModel::IsMessageMediaRole);
+    Emit_DataChangedRoles(idx, MessagesModel::ItemRole <<
+                               MessagesModel::IsMessageMediaRole);
+}
+
+void MessagesModel::onNotifySettingsChanged(Dialog *dialog)
+{
+    if(this->_dialog != dialog)
+        return;
+
+    emit isMutedChanged();
 }
 
 void MessagesModel::resetAction()
@@ -828,6 +853,7 @@ void MessagesModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &MessagesModel::onReadHistory);
     connect(TelegramCache_instance, &TelegramCache::titleChanged, this, &MessagesModel::onTitleChanged);
     connect(TelegramCache_instance, &TelegramCache::chatFullChanged, this, &MessagesModel::updateStatusText);
+    connect(TelegramCache_instance, &TelegramCache::dialogNotifySettingsChanged, this, &MessagesModel::onNotifySettingsChanged, Qt::UniqueConnection);
 
     connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &MessagesModel::updateStatusText);
 
