@@ -209,6 +209,19 @@ InputMedia *TelegramHelper::inputMediaPhoto(FileUploader *fileuploader, QObject 
     return inputmedia;
 }
 
+InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject *parent)
+{
+    InputGeoPoint* inputgeopoint = new InputGeoPoint();
+    inputgeopoint->setConstructorId(TLTypes::InputGeoPoint);
+    inputgeopoint->setLatitude(latitude);
+    inputgeopoint->setLongitude(longitude);
+
+    InputMedia* inputmedia = new InputMedia(parent);
+    inputmedia->setConstructorId(TLTypes::InputMediaGeoPoint);
+    inputmedia->setGeoPoint(inputgeopoint);
+    return inputmedia;
+}
+
 InputFile *TelegramHelper::inputFile(FileUploader *fileuploader, QObject *parent)
 {
     InputFile* inputfile = new InputFile(parent);

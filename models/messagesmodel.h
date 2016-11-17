@@ -93,6 +93,7 @@ class MessagesModel : public TelegramModel
         void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
         void editMessage(const QString& text, Message *editmessage);
         void sendMedia(const QUrl& filepath, const QString& caption, int mediatype);
+        void sendLocation(TLDouble latitude, TLDouble longitude);
         void sendAction(int action);
 
     private slots:
@@ -111,6 +112,7 @@ class MessagesModel : public TelegramModel
         void markAsRead();
 
     private:
+        void sendMedia(InputMedia* inputmedia, TLInt replytomsgid = 0);
         TLConstructor getInputMedia(int mediatype) const;
         TLConstructor getAction(int action) const;
         int insertionPoint(Message* message) const;

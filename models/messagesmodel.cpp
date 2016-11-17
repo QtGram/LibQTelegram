@@ -371,6 +371,12 @@ void MessagesModel::sendMedia(const QUrl &filepath, const QString &caption, int 
     connect(fileuploader, &FileUploader::completed, this, &MessagesModel::onUploadCompleted);
 }
 
+void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
+{
+    InputMedia* inputgeopoint = TelegramHelper::inputMediaGeoPoint(latitude, longitude);
+    this->sendMedia(inputgeopoint);
+}
+
 void MessagesModel::sendAction(int action)
 {
     if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
@@ -405,12 +411,9 @@ void MessagesModel::sendAction(int action)
 void MessagesModel::onUploadCompleted()
 {
     FileUploader* fileuploader = qobject_cast<FileUploader*>(this->sender());
-    TLLong randomid = Math::randomize<TLLong>();
-
-    this->createInput();
-
     InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileuploader);
-    TelegramAPI::messagesSendMedia(DC_MainSession, this->_inputpeer, 0, inputmedia, randomid, NULL);
+
+    this->sendMedia(inputmedia);
     inputmedia->deleteLater();
 }
 
@@ -719,6 +722,14 @@ void MessagesModel::markAsRead()
         req = TelegramAPI::messagesReadHistory(DC_MainSession, this->_inputpeer, inboxmaxid);
 
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
+}
+
+void MessagesModel::sendMedia(InputMedia *inputmedia, TLInt replytomsgid)
+{
+    this->createInput();
+
+    TLLong randomid = Math::randomize<TLLong>();
+    TelegramAPI::messagesSendMedia(DC_MainSession, this->_inputpeer, replytomsgid, inputmedia, randomid, NULL);
 }
 
 TLConstructor MessagesModel::getInputMedia(int mediatype) const

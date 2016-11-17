@@ -25,6 +25,7 @@ class TelegramHelper
         static InputChannel* inputChannel(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputChannel* inputChannel(Chat* chat, QObject* parent = 0);
         static InputMedia* inputMediaPhoto(FileUploader* fileuploader, QObject* parent = 0);
+        static InputMedia* inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject* parent = 0);
         static InputFile* inputFile(FileUploader* fileuploader, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
         static PhotoSize* photoSmall(Photo* photo);
