@@ -47,7 +47,7 @@ class DialogsModel : public TelegramModel
 
     private:
         void doRemoveDialog(int index);
-        int insertionPoint(Dialog* insdialog, int fromidx = -1) const;
+        int insertionPoint(Dialog* insdialog) const;
         int indexOf(TLInt dialogid) const;
         QString messageFrom(Message *message) const;
         QString firstMessageLine(Message* message) const;

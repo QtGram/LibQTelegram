@@ -274,18 +274,21 @@ void DialogsModel::doRemoveDialog(int index)
     this->endRemoveRows();
 }
 
-int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
+int DialogsModel::insertionPoint(Dialog *insdialog) const
 {
     if(!insdialog->topMessage())
         return this->_dialogs.length() - 1;
 
     Message* msg1 = TelegramCache_message(insdialog->topMessage(), insdialog);
 
-    for(int i = fromidx + 1; i < this->_dialogs.length(); i++)
+    if(!msg1)
+        return this->_dialogs.length() - 1;
+
+    for(int i = 0; i < this->_dialogs.length(); i++)
     {
         Dialog* dialog = this->_dialogs[i];
 
-        if(!dialog->topMessage())
+        if((dialog == insdialog) || !dialog->topMessage())
             return i;
 
         Message* msg2 = TelegramCache_message(dialog->topMessage(), dialog);
@@ -294,10 +297,7 @@ int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
             return i;
     }
 
-    if(fromidx == -1)
-        return this->_dialogs.length() - 1;
-
-    return fromidx;
+    return this->_dialogs.length() - 1;
 }
 
 int DialogsModel::indexOf(TLInt dialogid) const
@@ -419,12 +419,13 @@ void DialogsModel::onDialogNewMessage(Dialog *dialog)
         return;
 
     Emit_DataChanged(idx);
+    int newidx = this->insertionPoint(dialog);
 
-    if(idx == 0)
+    if(idx == newidx)
         return;
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), 0);
-    this->_dialogs.move(idx, 0);
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
+    this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
 
@@ -445,12 +446,12 @@ void DialogsModel::onDialogNewDraftMessage(Dialog *dialog)
     }
 
     Emit_DataChanged(idx);
-    int newidx = this->insertionPoint(dialog, idx);
+    int newidx = this->insertionPoint(dialog);
 
     if(idx == newidx)
         return;
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx + 1);
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
@@ -463,12 +464,12 @@ void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
         return;
 
     Emit_DataChanged(idx);
-    int newidx = this->insertionPoint(dialog, idx);
+    int newidx = this->insertionPoint(dialog);
 
     if(idx == newidx)
         return;
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), newidx + 1);
+    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
@@ -516,6 +517,9 @@ void DialogsModel::onTitleChanged(Dialog *dialog)
 
 void DialogsModel::telegramReady()
 {
+    this->_dialogs = TelegramCache_dialogs;
+    this->sortDialogs();
+
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::titleChanged, this, &DialogsModel::onTitleChanged, Qt::UniqueConnection);
@@ -528,6 +532,4 @@ void DialogsModel::telegramReady()
 
     connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &DialogsModel::onSendStatusUpdated, Qt::UniqueConnection);
 
-    this->_dialogs = TelegramCache_dialogs;
-    this->sortDialogs();
 }
