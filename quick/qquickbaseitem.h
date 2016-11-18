@@ -73,9 +73,6 @@ class QQuickBaseItem : public QQuickItem
 
     protected:
         QQuickItem* _mediaelement;
-
-    private:
-        static QHash<QByteArray, QQmlComponent*> _components;
 };
 
 #endif // QQUICKBASEITEM_H

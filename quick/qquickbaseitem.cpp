@@ -1,7 +1,4 @@
 #include "qquickbaseitem.h"
-#include "../crypto/hash.h"
-
-QHash<QByteArray, QQmlComponent*> QQuickBaseItem::_components;
 
 QQuickBaseItem::QQuickBaseItem(QQuickItem *parent) : QQuickItem(parent), _fileobject(NULL), _mediaelement(NULL)
 {
@@ -145,29 +142,19 @@ QString QQuickBaseItem::escape(const TLString &s)
 void QQuickBaseItem::createComponent(const QString &componentcode)
 {
     QQmlComponent* component = NULL;
-    QByteArray hash = md5_hash(componentcode.toUtf8());
+    QQmlEngine *engine = qmlEngine(this);
 
-    if(!QQuickBaseItem::_components.contains(hash))
+    if(!engine)
     {
-        QQmlEngine *engine = qmlEngine(this);
-
-        if(!engine)
-        {
-            qFatal("Cannot get QML engine instance");
-            return;
-        }
-
-        component = new QQmlComponent(engine); // TODO: When I need to deallocate these?
-
-        component->setData(QString("import QtQuick %1\n"
-                                   "import QtMultimedia 5.0\n"
-                                   "import QtGraphicalEffects 1.0\n"
-                                   "%2").arg(this->_version, componentcode).toUtf8(), QUrl());
-
-        QQuickBaseItem::_components[hash] = component;
+        qFatal("Cannot get QML engine instance");
+        return;
     }
-    else
-        component = QQuickBaseItem::_components[hash];
+
+    component = new QQmlComponent(engine, this);
+    component->setData(QString("import QtQuick %1\n"
+                               "import QtMultimedia 5.0\n"
+                               "import QtGraphicalEffects 1.0\n"
+                               "%2").arg(this->_version, componentcode).toUtf8(), QUrl());
 
     QQmlContext *context = qmlContext(this);
 
