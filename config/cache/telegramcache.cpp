@@ -8,10 +8,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent)
     this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
     this->_fetcher = new CacheFetcher(this);
 
-    connect(this->_fetcher, SIGNAL(dialogsReceived(TLVector<Dialog*>)), this, SLOT(onDialogsReceived(TLVector<Dialog*>)));
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
-    connect(this->_fetcher, SIGNAL(chatsReceived(TLVector<Chat*>)), this, SLOT(cache(TLVector<Chat*>)));
-    connect(this->_fetcher, SIGNAL(messagesReceived(TLVector<Message*>)), this, SLOT(cache(TLVector<Message*>)));
     connect(this->_fetcher, SIGNAL(chatFullReceived(ChatFull*)), this, SLOT(cache(ChatFull*)));
 
     connect(UpdateHandler_instance, SIGNAL(newUserStatus(Update*)), this, SLOT(onNewUserStatus(Update*)));
@@ -280,20 +277,20 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         TLInt dialogid = TelegramHelper::messageToDialog(message);
         Dialog* dialog = this->dialog(dialogid, true);
 
-        if(dialog)
+        if(!dialog)
         {
-            dialog->setTopMessage(message->id());
-
-            if(!message->isOut())
-                this->updateUnreadMessages(dialog, 1);
-
-            this->cache(dialog);
-
-            emit newMessage(message);
-            emit dialogNewMessage(dialog);
+            dialog = TelegramHelper::createDialog(message);
+            this->insert(dialog);
         }
-        else if(!this->hasDialog(dialogid))
-            this->_fetcher->getDialog(TelegramHelper::inputPeer(message));
+
+        dialog->setTopMessage(message->id());
+
+        if(!message->isOut())
+            this->updateUnreadMessages(dialog, 1);
+
+        this->cache(dialog);
+        emit newMessage(message);
+        emit dialogNewMessage(dialog);
     }
 }
 
@@ -334,12 +331,6 @@ void TelegramCache::remove(Dialog *dialog)
         emit deleteMessage(message);
         message->deleteLater();
     }
-}
-
-void TelegramCache::onDialogsReceived(const TLVector<Dialog *> &dialogs)
-{
-    this->cache(dialogs);
-    emit newDialogs(dialogs);
 }
 
 void TelegramCache::onNewUserStatus(Update *update)

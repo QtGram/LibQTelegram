@@ -65,14 +65,19 @@ Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer
 
 Dialog *TelegramHelper::createDialog(User *user, QObject *parent)
 {
-    Peer* peer = new Peer();
-    peer->setConstructorId(TLTypes::PeerUser);
-    peer->setUserId(user->id());
-
     Dialog* dialog = new Dialog(parent);
-    dialog->setConstructorId(TLTypes::Dialog);
-    dialog->setPeer(peer);
 
+    dialog->setConstructorId(TLTypes::Dialog);
+    dialog->setPeer(TelegramHelper::peer(user));
+    return dialog;
+}
+
+Dialog *TelegramHelper::createDialog(Message *message, QObject *parent)
+{
+    Dialog* dialog = new Dialog(parent);
+
+    dialog->setConstructorId(TLTypes::Dialog);
+    dialog->setPeer(TelegramHelper::peer(message));
     return dialog;
 }
 
@@ -174,6 +179,39 @@ InputPeer *TelegramHelper::inputPeer(Message *message, QObject *parent)
     }
 
     return inputpeer;
+}
+
+Peer *TelegramHelper::peer(User *user, QObject *parent)
+{
+    Peer* peer = new Peer(parent);
+    peer->setConstructorId(TLTypes::PeerUser);
+    peer->setUserId(user->id());
+
+    return peer;
+}
+
+Peer *TelegramHelper::peer(Message *message, QObject *parent)
+{
+    Peer* peer = new Peer(parent);
+    TLInt dialogid = TelegramHelper::messageToDialog(message);
+
+    if(TelegramHelper::isChannel(message->toId()))
+    {
+        peer->setConstructorId(TLTypes::PeerChannel);
+        peer->setChannelId(dialogid);
+    }
+    else if(TelegramHelper::isChat(message->toId()))
+    {
+        peer->setConstructorId(TLTypes::PeerChat);
+        peer->setChatId(dialogid);
+    }
+    else
+    {
+        peer->setConstructorId(TLTypes::PeerUser);
+        peer->setUserId(dialogid);
+    }
+
+    return peer;
 }
 
 InputChannel *TelegramHelper::inputChannel(Dialog *dialog, TLLong accesshash, QObject *parent)

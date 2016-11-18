@@ -15,6 +15,7 @@ class TelegramHelper
         static Message* createMessage(Updates *updates, User *me);
         static Message* createMessage(const QString& text, User *me, Peer *peer);
         static Dialog* createDialog(User* user, QObject* parent = 0);
+        static Dialog* createDialog(Message* message, QObject* parent = 0);
         static InputFileLocation* inputFileLocation(FileLocation *filelocation);
         static InputFileLocation* inputFileLocation(Document* document);
         static InputNotifyPeer* inputNotifyPeer(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
@@ -22,6 +23,8 @@ class TelegramHelper
         static InputPeer* inputPeer(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash = 0, QObject* parent = 0);
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
+        static Peer* peer(User* user, QObject* parent = 0);
+        static Peer* peer(Message* message, QObject* parent = 0);
         static InputChannel* inputChannel(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputChannel* inputChannel(Chat* chat, QObject* parent = 0);
         static InputMedia* inputMediaFile(FileUploader* fileuploader, QObject* parent = 0);

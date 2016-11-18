@@ -9,13 +9,6 @@ CacheFetcher::CacheFetcher(QObject *parent) : QObject(parent), _update(NULL)
 
 }
 
-void CacheFetcher::getDialog(InputPeer* inputpeer)
-{
-    MTProtoRequest* req = TelegramAPI::messagesGetDialogs(DC_MainSession, 0, 0, inputpeer, 1);
-    inputpeer->deleteLater();
-    connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onMessagesDialogs);
-}
-
 void CacheFetcher::getFullChat(Chat *chat)
 {
     if(TelegramHelper::isChannel(chat))
@@ -29,17 +22,6 @@ void CacheFetcher::getFullChat(Chat *chat)
 
     MTProtoRequest* req = TelegramAPI::messagesGetFullChat(DC_MainSession, chat->id());
     connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onChatFull);
-}
-
-void CacheFetcher::onMessagesDialogs(MTProtoReply *mtreply)
-{
-    MessagesDialogs messagesdialogs;
-    messagesdialogs.read(mtreply);
-
-    emit dialogsReceived(messagesdialogs.dialogs());
-    emit usersReceived(messagesdialogs.users());
-    emit chatsReceived(messagesdialogs.chats());
-    emit messagesReceived(messagesdialogs.messages());
 }
 
 void CacheFetcher::onChatFull(MTProtoReply *mtreply)

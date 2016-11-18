@@ -81,7 +81,6 @@ class TelegramCache: public QObject
         void onDeleteMessages(const TLVector<TLInt>& messageids);
         void onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt>& messageids);
         void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
-        void onDialogsReceived(const TLVector<Dialog *> &dialogs);
         void onReadHistory(Update* update);
         void onWebPage(WebPage* webpage);
 
