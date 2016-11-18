@@ -83,7 +83,7 @@ bool Telegram::muteDialog(Dialog *dialog, bool mute)
 {
     PeerNotifySettings* notifysettings = dialog->notifySettings();
 
-    if(notifysettings->isSilent() == mute)
+    if(TelegramHelper::isMuted(dialog) == mute)
         return false;
 
     notifysettings->setIsSilent(mute);
