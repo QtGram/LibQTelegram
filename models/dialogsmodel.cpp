@@ -274,7 +274,7 @@ void DialogsModel::doRemoveDialog(int index)
     this->endRemoveRows();
 }
 
-int DialogsModel::insertionPoint(Dialog *insdialog) const
+int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
 {
     if(!insdialog->topMessage())
         return this->_dialogs.length() - 1;
@@ -284,7 +284,7 @@ int DialogsModel::insertionPoint(Dialog *insdialog) const
     if(!msg1)
         return this->_dialogs.length() - 1;
 
-    for(int i = 0; i < this->_dialogs.length(); i++)
+    for(int i = fromidx + 1; i < this->_dialogs.length(); i++)
     {
         Dialog* dialog = this->_dialogs[i];
 
@@ -464,13 +464,13 @@ void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
         return;
 
     Emit_DataChanged(idx);
-    int newidx = this->insertionPoint(dialog);
+    int newidx = this->insertionPoint(dialog, idx);
 
     if(idx == newidx)
         return;
 
     this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
-    this->_dialogs.move(idx, newidx);
+    this->_dialogs.move(idx, newidx - 1);
     this->endMoveRows();
 }
 
