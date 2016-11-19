@@ -50,6 +50,14 @@ void MessagesModel::setIsMuted(bool ismuted)
     emit isMutedChanged();
 }
 
+Message *MessagesModel::get(int index) const
+{
+    if (index >= 0 && index < _messages.count()) {
+        return _messages.at(index);
+    }
+    return nullptr;
+}
+
 QString MessagesModel::title() const
 {
     if(!this->_telegram)
