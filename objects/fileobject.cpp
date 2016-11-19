@@ -1,5 +1,6 @@
 #include "fileobject.h"
 #include "../types/telegramhelper.h"
+#include <QImageReader>
 #include <QFileInfo>
 #include <QDir>
 
@@ -16,12 +17,14 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_file = NULL;
     this->_filesize = 0;
     this->_fileuploader = NULL;
+    this->_inputmedia = NULL;
+    this->_messagemedia = NULL;
 
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
 }
 
-FileObject::FileObject(const QString &filepath, const QString& caption, const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath), _autodownload(false)
+FileObject::FileObject(FileUploader::MediaType mediatype, const QString &filepath, const QString& caption, const QString &storagepath, QObject *parent): QObject(parent), _storagepath(storagepath), _autodownload(false)
 {
     this->_filepath = filepath;
     this->_transfermode = FileObject::Upload;
@@ -31,14 +34,67 @@ FileObject::FileObject(const QString &filepath, const QString& caption, const QS
     this->_inputfilelocation = NULL;
     this->_dcsession = NULL;
     this->_file = NULL;
-    this->_filesize = QFileInfo(filepath).size();
+    this->_inputmedia = NULL;
+    this->_messagemedia = NULL;
 
-    this->_fileuploader = new FileUploader(this);
+    this->analyzeFile(filepath);
+
+    this->_fileuploader = new FileUploader(mediatype, this);
     this->_fileuploader->setCaption(caption);
 
     connect(this->_fileuploader, &FileUploader::completed, this, &FileObject::onUploaderCompleted);
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
+}
+
+InputMedia *FileObject::inputMedia()
+{
+    if(!this->_fileuploader)
+    {
+        qWarning("Uploader not available");
+        return NULL;
+    }
+
+    if(!this->_inputmedia)
+    {
+        if(this->_fileuploader->mediaType() == FileUploader::Photo)
+            this->_inputmedia = TelegramHelper::inputMediaPhoto(this->_fileuploader, this);
+        else
+            this->_inputmedia = TelegramHelper::inputMediaFile(this->_fileuploader, this);
+    }
+
+    return this->_inputmedia;
+}
+
+MessageMedia *FileObject::messageMedia()
+{
+    if(!this->_fileuploader)
+    {
+        qWarning("Uploader not available");
+        return NULL;
+    }
+
+    InputMedia* inputmedia = this->inputMedia();
+
+    if(!this->_messagemedia)
+    {
+        this->_messagemedia = new MessageMedia(this);
+        this->_messagemedia->setCaption(inputmedia->caption());
+
+        if(inputmedia->constructorId() == TLTypes::InputMediaUploadedPhoto)
+        {
+            Photo* photo = new Photo();
+            photo->setConstructorId(TLTypes::PhotoEmpty);
+            photo->setId(this->_fileuploader->localFileId());
+
+            this->_messagemedia->setConstructorId(TLTypes::MessageMediaPhoto);
+            this->_messagemedia->setPhoto(photo);
+        }
+        else
+            qWarning("Unhandled InputMedia (%08x)", inputmedia->constructorId());
+    }
+
+    return this->_messagemedia;
 }
 
 FileUploader *FileObject::uploader() const
@@ -253,6 +309,16 @@ void FileObject::createDownloadSession(int dcid)
     this->_dcsession = DC_CreateFileSession(dcconfig);
     connect(this->_dcsession, &DCSession::ready, this, &FileObject::sendDownloadRequest);
     DC_InitializeSession(this->_dcsession);
+}
+
+void FileObject::analyzeFile(const QString &filepath)
+{
+    QFileInfo fileinfo(filepath);
+
+    this->_filesize = fileinfo.size();
+
+    if(!QImageReader::imageFormat(filepath).isEmpty())
+        this->_imagesize = QImageReader(filepath).size();
 }
 
 void FileObject::sendDownloadRequest()

@@ -23,6 +23,7 @@ class MTProtoRequest : public QObject
         ~MTProtoRequest();
         bool acked() const;
         DCConfig* config() const;
+        TLLong requestId() const;
         TLLong messageId() const;
         TLLong sessionId() const;
         bool encrypted() const;
@@ -57,6 +58,7 @@ class MTProtoRequest : public QObject
     private:
         bool _needsinit;
         bool _acked;
+        TLLong _requestid;
         TLLong _sessionid;
         TLLong _messageid;
         TLInt _seqno;
@@ -65,6 +67,7 @@ class MTProtoRequest : public QObject
 
     private:
         static QHash<int, bool> _firstmap;
+        static TLLong _clientrequestid;
 };
 
 #endif // MTPROTOREQUEST_H

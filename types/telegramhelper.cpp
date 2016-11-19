@@ -278,7 +278,7 @@ InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longi
 InputFile *TelegramHelper::inputFile(FileUploader *fileuploader, QObject *parent)
 {
     InputFile* inputfile = new InputFile(parent);
-    inputfile->setId(fileuploader->fileId());
+    inputfile->setId(fileuploader->localFileId());
     inputfile->setParts(fileuploader->partsCount());
     inputfile->setName(ToTLString(fileuploader->fileName()));
 

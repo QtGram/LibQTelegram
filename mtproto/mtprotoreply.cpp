@@ -4,6 +4,7 @@
 
 MTProtoReply::MTProtoReply(const QByteArray &data, DCConfig *dcconfig, QObject *parent) : MTProtoStream(data, parent), _dcconfig(dcconfig)
 {
+    this->_requestid = 0;
     this->_bodystart = 0;
     this->_sessionid = 0;
 
@@ -25,6 +26,7 @@ MTProtoReply::MTProtoReply(const QByteArray &data, DCConfig *dcconfig, QObject *
 
 MTProtoReply::MTProtoReply(MTProtoMessage *mtmessage, DCConfig *dcconfig, QObject *parent): MTProtoStream(mtmessage->body(), parent), _dcconfig(dcconfig)
 {
+    this->_requestid = 0;
     this->_bodystart = 0;
     this->_messageid = mtmessage->msgId();
     this->_constructorid = mtmessage->constructorId();
@@ -32,6 +34,7 @@ MTProtoReply::MTProtoReply(MTProtoMessage *mtmessage, DCConfig *dcconfig, QObjec
 
 MTProtoReply::MTProtoReply(const QByteArray &body, TLLong messageid, DCConfig *dcconfig, QObject *parent): MTProtoStream(body, parent), _dcconfig(dcconfig)
 {
+    this->_requestid = 0;
     this->_bodystart = 0;
     this->_messageid = messageid;
     this->_constructorid = this->peekTLConstructor();
@@ -54,6 +57,11 @@ DCConfig *MTProtoReply::config() const
 TLInt MTProtoReply::errorCode() const
 {
     return this->_errorcode;
+}
+
+TLLong MTProtoReply::requestId() const
+{
+    return this->_requestid;
 }
 
 TLLong MTProtoReply::sessionId() const
@@ -84,6 +92,11 @@ QByteArray MTProtoReply::body()
 void MTProtoReply::seekToBody()
 {
     this->seek(this->_bodystart);
+}
+
+void MTProtoReply::setRequestId(TLLong requestid)
+{
+    this->_requestid = requestid;
 }
 
 void MTProtoReply::readPlainMessage()

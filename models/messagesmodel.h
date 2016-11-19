@@ -2,6 +2,7 @@
 #define MESSAGESMODEL_H
 
 #include "abstract/telegrammodel.h"
+#include "../config/cache/filecache.h"
 
 class MessagesModel : public TelegramModel
 {
@@ -52,6 +53,7 @@ class MessagesModel : public TelegramModel
             IsMessageMediaRole,
             IsMessageUnreadRole,
             IsMessageEditedRole,
+            IsMessagePendingRole,
             NeedsPeerImageRole,
             ForwardedFromPeerRole,
             ForwardedFromNameRole,
@@ -91,10 +93,9 @@ class MessagesModel : public TelegramModel
         void sendAction(int action);
 
     private slots:
-        void onUploadPhotoCompleted();
-        void onUploadFileCompleted();
         void onMessagesGetHistoryReplied(MTProtoReply* mtreply);
         void onMessagesSendMessageReplied(MTProtoReply* mtreply);
+        void onMessagesSendMediaReplied(MTProtoReply* mtreply);
         void onReadHistoryReplied(MTProtoReply* mtreply);
         void onReadHistory(Dialog* dialog);
         void onTitleChanged(Dialog* dialog);
@@ -103,12 +104,12 @@ class MessagesModel : public TelegramModel
         void onDeleteMessage(Message *message);
         void onUpdateMessage(Message *message);
         void onNotifySettingsChanged(Dialog* dialog);
+        void onUploadCompleted();
         void updateStatusText(Dialog* dialog);
         void resetAction();
         void markAsRead();
 
     private:
-        void sendMedia(InputMedia* inputmedia, TLInt replytomsgid = 0);
         TLConstructor getAction(int action) const;
         int insertionPoint(Message* message) const;
         int loadHistoryFromCache();
@@ -117,11 +118,13 @@ class MessagesModel : public TelegramModel
         TLInt inboxMaxId() const;
         TLInt outboxMaxId() const;
         QString messageFrom(Message *message) const;
+        void sendMedia(const QUrl& filepath, const QString& caption, FileUploader::MediaType mediatype);
         void sendMessage(const QString& text, TLInt replymsgid);
+        void insertMessage(TLInt localmessageid, Message* message);
         void setFirstNewMessage();
-        bool ownMessage(Message* message) const;
         void createInput();
         void terminateInitialization();
+        bool ownMessage(Message* message) const;
 
     protected:
         virtual void telegramReady();
@@ -140,7 +143,7 @@ class MessagesModel : public TelegramModel
 
     private:
         TLVector<Message*> _messages;
-        QList<Message*> _pendingmessages;
+        QHash<TLInt, Message*> _pendingmessages;
         InputPeer* _inputpeer;
         InputChannel* _inputchannel;
         Dialog* _dialog;

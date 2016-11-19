@@ -15,6 +15,7 @@
 #define SET_FLAG_BIT(flags, bitno) flags |= (1 << bitno)
 #define UNSET_FLAG_BIT(flags, bitno) flags & ~(1 << bitno)
 #define SET_FLAG_BIT_VALUE(flags, bitno, v) flags |= ((v ? 1 : 0) << bitno)
+
 #define ToTLString(s) s.toUtf8()
 
 typedef quint32 TLConstructor;
@@ -68,5 +69,17 @@ struct TLInt256
     bool operator ==(const TLInt256& rhs) const { return  (rhs.hi == hi) && (rhs.lo == lo); }
     bool operator !=(const TLInt256& rhs) const { return  (rhs.hi != hi) || (rhs.lo != lo); }
 };
+
+inline bool is_local_messageid(TLInt messageid) { return messageid < 0; }
+
+inline TLInt local_messageid(TLLong tempid)
+{
+    TLInt lotempid = static_cast<TLInt>(tempid) & 0xFFFFFFFF;
+
+    if(lotempid < 0)
+        return lotempid;
+
+    return -lotempid;
+}
 
 #endif // BASIC_H

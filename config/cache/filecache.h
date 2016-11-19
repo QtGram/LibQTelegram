@@ -3,7 +3,7 @@
 
 #define FileCache_instance FileCache::instance()
 #define FileCache_fileObject(obj) FileCache::instance()->fileObject(obj)
-#define FileCache_upload(filepath, caption) FileCache::instance()->upload(filepath, caption)
+#define FileCache_upload(mediatype, filepath, caption) FileCache::instance()->upload(mediatype, filepath, caption)
 
 #include <QObject>
 #include <QMimeDatabase>
@@ -21,11 +21,12 @@ class FileCache : public QObject
     public:
         static FileCache* instance();
         FileObject* fileObject(TelegramObject* tgobj);
-        FileObject* upload(const QString& filepath, const QString& caption);
+        FileObject* upload(FileUploader::MediaType mediatype, const QString& filepath, const QString& caption);
 
     private:
         QString createFileId(FileLocation* filelocation);
         QString createFileId(Document* document);
+        FileObject* localFileObject(TelegramObject* tgobj);
         FileObject* fileObject(TelegramObject* tgobj, bool ismovable, bool autodownload);
         FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool ismovable, bool autodownload);
         void enqueue(FileObject* fileobject);

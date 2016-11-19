@@ -9,6 +9,7 @@
 #define ReconnectionTimeout 5000  //  5 seconds
 
 #define ServerTime(messageid)        (messageid >> 32LL)
+#define ClientTime(messageid)        (messageid >> 32LL)
 #define Future10Years                (QDateTime::currentDateTime().addYears(10).toTime_t())
 #define CurrentDeltaTime(servertime) (QDateTime::currentDateTime().toTime_t() - servertime)
 #define CurrentTimeStamp              QDateTime::currentDateTime().toTime_t()

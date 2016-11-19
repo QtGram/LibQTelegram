@@ -10,9 +10,10 @@
 
 QMimeDatabase FileUploader::_mimedb;
 
-FileUploader::FileUploader(QObject *parent) : QObject(parent), _dcsession(NULL), _isbigfile(false), _partsize(BlockSize), _partscount(0), _partnum(0)
+FileUploader::FileUploader(MediaType mediatype, QObject *parent) : QObject(parent), _dcsession(NULL), _isbigfile(false), _partsize(BlockSize), _partscount(0), _partnum(0)
 {
-    this->_fileid = Math::randomize<TLLong>();
+    this->_mediatype = mediatype;
+    this->_localfileid = Math::randomize<TLLong>();
 }
 
 FileUploader::~FileUploader()
@@ -27,9 +28,14 @@ FileUploader::~FileUploader()
         this->_file.close();
 }
 
-TLLong FileUploader::fileId() const
+FileUploader::MediaType FileUploader::mediaType() const
 {
-    return this->_fileid;
+    return this->_mediatype;
+}
+
+TLLong FileUploader::localFileId() const
+{
+    return this->_localfileid;
 }
 
 QString FileUploader::caption() const
@@ -55,6 +61,16 @@ QString FileUploader::mimeType() const
 TLInt FileUploader::partsCount() const
 {
     return this->_partscount;
+}
+
+qreal FileUploader::progress() const
+{
+    return this->_partnum / static_cast<qreal>(this->_partscount);
+}
+
+bool FileUploader::uploading() const
+{
+    return (this->_partnum) > 0 && (this->_partnum < this->_partscount);
 }
 
 bool FileUploader::isBigFile() const
@@ -138,11 +154,12 @@ void FileUploader::uploadPart()
     MTProtoRequest* req = NULL;
 
     if(!this->_isbigfile)
-        req = TelegramAPI::uploadSaveFilePart(this->_dcsession, this->_fileid, this->_partnum, partdata);
+        req = TelegramAPI::uploadSaveFilePart(this->_dcsession, this->_localfileid, this->_partnum, partdata);
     else
-        req = TelegramAPI::uploadSaveBigFilePart(this->_dcsession, this->_fileid, this->_partnum, this->_partscount, partdata);
+        req = TelegramAPI::uploadSaveBigFilePart(this->_dcsession, this->_localfileid, this->_partnum, this->_partscount, partdata);
 
     connect(req, &MTProtoRequest::replied, this, &FileUploader::onSaveFilePartReplied);
+    emit uploadingChanged();
 }
 
 void FileUploader::onSaveFilePartReplied(MTProtoReply *mtreply)
@@ -157,9 +174,11 @@ void FileUploader::onSaveFilePartReplied(MTProtoReply *mtreply)
     }
 
     this->_partnum++;
+    emit progressChanged();
 
     if(this->_partnum >= this->_partscount)
     {
+        emit uploadingChanged();
         emit completed();
         return;
     }

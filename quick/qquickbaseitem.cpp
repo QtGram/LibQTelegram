@@ -66,6 +66,14 @@ qreal QQuickBaseItem::fontPixelSize() const
     return this->_pixelsize;
 }
 
+qreal QQuickBaseItem::progress() const
+{
+    if(!this->_fileobject || !this->_fileobject->isUpload())
+        return 0.0;
+
+    return this->_fileobject->uploader()->progress();
+}
+
 bool QQuickBaseItem::downloaded() const
 {
     if(!this->_fileobject)
@@ -80,6 +88,14 @@ bool QQuickBaseItem::downloading() const
         return false;
 
     return this->_fileobject->downloading();
+}
+
+bool QQuickBaseItem::uploading() const
+{
+    if(!this->_fileobject || !this->_fileobject->isUpload())
+        return false;
+
+    return this->_fileobject->uploader()->uploading();
 }
 
 bool QQuickBaseItem::hasThumbnail() const
@@ -224,6 +240,12 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
     connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
     connect(this->_fileobject, &FileObject::fileNameChanged, this, &QQuickBaseItem::fileNameChanged);
     connect(this->_fileobject, &FileObject::downloadedChanged, this, &QQuickBaseItem::downloadedChanged);
+
+    if(this->_fileobject->isUpload())
+    {
+        connect(this->_fileobject->uploader(), &FileUploader::uploadingChanged, this, &QQuickBaseItem::uploadingChanged);
+        connect(this->_fileobject->uploader(), &FileUploader::progressChanged, this, &QQuickBaseItem::progressChanged);
+    }
 
     return this->_fileobject;
 }

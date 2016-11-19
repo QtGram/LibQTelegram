@@ -12,17 +12,29 @@ class FileUploader : public QObject
     Q_OBJECT
 
     public:
-        explicit FileUploader(QObject *parent = 0);
+        enum MediaType {
+            Document = 0,
+            Photo = 1,
+        };
+
+    public:
+        explicit FileUploader(MediaType mediatype, QObject *parent = 0);
         ~FileUploader();
-        TLLong fileId() const;
+        MediaType mediaType() const;
+        TLLong localFileId() const;
         QString caption() const;
-        QString fileName() const;
         QString md5hash() const;
-        QString mimeType() const;
         TLInt partsCount() const;
+        qreal progress() const;
+        bool uploading() const;
         bool isBigFile() const;
         void setCaption(const QString& caption);
         void upload(const QString &filepath);
+
+    public: // File info
+        QString fileName() const;
+        QString mimeType() const;
+        QSize imageSize() const;
 
     private:
         bool calculatePartsLength(const QFileInfo* fileinfo);
@@ -34,11 +46,14 @@ class FileUploader : public QObject
         void onSaveFilePartReplied(MTProtoReply* mtreply);
 
     signals:
+        void progressChanged();
+        void uploadingChanged();
         void failed();
         void pending();
         void completed();
 
     private:
+        MediaType _mediatype;
         DCSession* _dcsession;
         QString _caption;
         QString _filename;
@@ -46,7 +61,7 @@ class FileUploader : public QObject
         QString _mimetype;
         bool _isbigfile;
         QFile _file;
-        TLLong _fileid;
+        TLLong _localfileid;
         TLLong _partsize;
         TLInt _partscount;
         TLInt _partnum;

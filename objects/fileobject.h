@@ -32,7 +32,9 @@ class FileObject : public QObject
 
     public:
         explicit FileObject(const QString& storagepath, QObject *parent = 0);
-        explicit FileObject(const QString& filepath, const QString &caption, const QString& storagepath, QObject *parent = 0);
+        explicit FileObject(FileUploader::MediaType mediatype, const QString& filepath, const QString &caption, const QString& storagepath, QObject *parent = 0);
+        InputMedia* inputMedia();
+        MessageMedia* messageMedia();
         FileUploader* uploader() const;
         Document* document() const;
         bool isUpload() const;
@@ -70,6 +72,7 @@ class FileObject : public QObject
     private:
         void setDownloadMode(int downloadmode);
         void createDownloadSession(int dcid);
+        void analyzeFile(const QString& filepath);
 
     signals:
         void fileSizeChanged();
@@ -82,6 +85,11 @@ class FileObject : public QObject
         void hasThumbnailChanged();
         void downloadCompleted();
         void uploadCompleted();
+
+
+    private: // Uploads
+        InputMedia* _inputmedia;
+        MessageMedia* _messagemedia;
 
     private:
         QString _storagepath;

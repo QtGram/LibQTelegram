@@ -17,8 +17,10 @@ class QQuickBaseItem : public QQuickItem
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(qreal fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
+    Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(bool downloaded READ downloaded NOTIFY downloadedChanged)
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
+    Q_PROPERTY(bool uploading READ uploading NOTIFY uploadingChanged)
     Q_PROPERTY(bool hasThumbnail READ hasThumbnail NOTIFY hasThumbnailChanged)
 
     public:
@@ -31,8 +33,10 @@ class QQuickBaseItem : public QQuickItem
         QColor backgroundColor() const;
         QColor foregroundColor() const;
         qreal fontPixelSize() const;
+        qreal progress() const;
         bool downloaded() const;
         bool downloading() const;
+        bool uploading() const;
         bool hasThumbnail() const;
         void setVersion(const QString& version);
         void setBackgroundColor(const QColor& color);
@@ -62,7 +66,9 @@ class QQuickBaseItem : public QQuickItem
         void imageSizeChanged();
         void downloadedChanged();
         void downloadingChanged();
+        void uploadingChanged();
         void hasThumbnailChanged();
+        void progressChanged();
 
     private:
         FileObject* _fileobject;

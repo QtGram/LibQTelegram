@@ -1,6 +1,5 @@
 #include "messagesmodel.h"
 #include "../config/cache/telegramcache.h"
-#include "../config/cache/filecache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 #include "../crypto/math.h"
 
@@ -237,6 +236,9 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::IsMessageEditedRole)
         return message->editDate() != 0;
 
+    if(role == MessagesModel::IsMessagePendingRole)
+        return is_local_messageid(message->id());
+
     if(role == MessagesModel::NeedsPeerImageRole)
     {
         if(message->constructorId() == TLTypes::MessageService)
@@ -315,6 +317,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::IsMessageMediaRole] = "isMessageMedia";
     roles[MessagesModel::IsMessageUnreadRole] = "isMessageUnread";
     roles[MessagesModel::IsMessageEditedRole] = "isMessageEdited";
+    roles[MessagesModel::IsMessagePendingRole] = "isMessagePending";
     roles[MessagesModel::NeedsPeerImageRole] = "needsPeerImage";
     roles[MessagesModel::ForwardedFromPeerRole] = "forwardedFromPeer";
     roles[MessagesModel::ForwardedFromNameRole] = "forwardedFromName";
@@ -380,26 +383,27 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
 
 void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)
 {
-    if(!QFile::exists(filepath.toLocalFile()))
-        return;
-
-    FileObject* fileobject = FileCache_upload(filepath.toLocalFile(), caption);
-    connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadFileCompleted);
+    this->sendMedia(filepath, caption, FileUploader::Document);
 }
 
 void MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 {
-    if(!QFile::exists(filepath.toLocalFile()))
-        return;
-
-    FileObject* fileobject = FileCache_upload(filepath.toLocalFile(), caption);
-    connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadPhotoCompleted);
+    this->sendMedia(filepath, caption, FileUploader::Photo);
 }
 
 void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
 {
     InputMedia* inputgeopoint = TelegramHelper::inputMediaGeoPoint(latitude, longitude);
-    this->sendMedia(inputgeopoint);
+
+    this->createInput();
+
+    // NOTE: Duplicate call
+    TelegramAPI::messagesSendMedia(DC_MainSession,
+                                   this->_inputpeer,
+                                   0, // TODO: Handle reply_to_msgid
+                                   inputgeopoint,
+                                   Math::randomize<TLLong>(),
+                                   NULL);
 }
 
 void MessagesModel::sendAction(int action)
@@ -433,22 +437,22 @@ void MessagesModel::sendAction(int action)
     TelegramAPI::messagesSetTyping(DC_MainSession, this->_inputpeer, &sendmessageaction);
 }
 
-void MessagesModel::onUploadPhotoCompleted()
+void MessagesModel::onUploadCompleted()
 {
     FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
-    InputMedia* inputmedia = TelegramHelper::inputMediaPhoto(fileobject->uploader());
+    this->createInput();
 
-    this->sendMedia(inputmedia);
-    inputmedia->deleteLater();
-}
+    MTProtoRequest* req = TelegramAPI::messagesSendMedia(DC_MainSession,
+                                                         this->_inputpeer,
+                                                         0, // TODO: Handle reply_to_msgid
+                                                         fileobject->inputMedia(),
+                                                         Math::randomize<TLLong>(),
+                                                         NULL);
 
-void MessagesModel::onUploadFileCompleted()
-{
-    FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
-    InputMedia* inputmedia = TelegramHelper::inputMediaFile(fileobject->uploader());
+    Message* message = this->_pendingmessages[local_messageid(fileobject->uploader()->localFileId())];
+    this->insertMessage(local_messageid(req->requestId()), message);
 
-    this->sendMedia(inputmedia);
-    inputmedia->deleteLater();
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMediaReplied);
 }
 
 void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
@@ -473,20 +477,53 @@ void MessagesModel::onMessagesGetHistoryReplied(MTProtoReply *mtreply)
 
 void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
 {
-    if(this->_pendingmessages.isEmpty())
+    TLInt tempmsgid = local_messageid(mtreply->requestId());
+
+    if(!this->_pendingmessages.contains(tempmsgid))
+    {
+        qWarning("Cannot find pending message with temporary-id %d", tempmsgid);
         return;
+    }
 
     Updates updates;
     updates.read(mtreply);
 
     Q_ASSERT(updates.constructorId() == TLTypes::UpdateShortSentMessage);
 
-    Message* message = this->_pendingmessages.takeFirst();
+    Message* message = this->_pendingmessages.take(tempmsgid);
+
     message->setId(updates.id());
     message->setFlags(updates.flags());
     message->setMedia(updates.media());
 
+    this->_pendingmessages[message->id()] = message; // Keep it in order to avoid double insertions
     TelegramCache_insert(message);
+}
+
+void MessagesModel::onMessagesSendMediaReplied(MTProtoReply *mtreply)
+{
+    TLInt tempmsgid = local_messageid(mtreply->requestId());
+
+    if(!this->_pendingmessages.contains(tempmsgid))
+    {
+        qWarning("Cannot find pending media message with temporary-id %d", tempmsgid);
+        return;
+    }
+
+    Message* message = this->_pendingmessages.take(tempmsgid);
+    int idx = this->_messages.indexOf(message);
+
+    if(idx == -1)
+    {
+        qWarning("Cannot find media message %d", message->id());
+        return;
+    }
+
+    this->beginRemoveRows(QModelIndex(), idx, idx);
+    this->_messages.removeAt(idx);
+    this->endRemoveRows();
+
+    message->deleteLater();
 }
 
 void MessagesModel::onReadHistoryReplied(MTProtoReply *mtreply)
@@ -530,11 +567,25 @@ void MessagesModel::onNewMessage(Message *message)
     if(!this->ownMessage(message))
         return;
 
-    int idx = this->insertionPoint(message);
+    if(this->_pendingmessages.contains(message->id()))
+    {
+        this->_pendingmessages.remove(message->id());
+        int idx = this->_messages.indexOf(message);
 
-    this->beginInsertRows(QModelIndex(), idx, idx);
-    this->_messages.insert(idx, message);
-    this->endInsertRows();
+        if(idx != -1)
+            Emit_DataChanged(idx);
+        else
+            qWarning("Cannot find message %d", message->id());
+    }
+    else
+    {
+
+        int idx = this->insertionPoint(message);
+
+        this->beginInsertRows(QModelIndex(), idx, idx);
+        this->_messages.insert(idx, message);
+        this->endInsertRows();
+    }
 
     this->markAsRead();
 }
@@ -671,17 +722,22 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
     if(!this->_dialog || text.trimmed().isEmpty())
         return;
 
-    this->createInput();
-
-    TLLong randomid = Math::randomize<TLLong>();
     Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
 
     if(replymsgid)
         message->setReplyToMsgId(replymsgid);
 
-    this->_pendingmessages << message;
+    this->createInput();
 
-    MTProtoRequest* req = TelegramAPI::messagesSendMessage(DC_MainSession, this->_inputpeer, replymsgid, text.trimmed(), randomid, NULL, TLVector<MessageEntity*>());
+    MTProtoRequest* req = TelegramAPI::messagesSendMessage(DC_MainSession,
+                                                           this->_inputpeer,
+                                                           message->replyToMsgId(),
+                                                           message->message(),
+                                                           Math::randomize<TLLong>(),
+                                                           NULL,
+                                                           TLVector<MessageEntity*>());
+
+    this->insertMessage(local_messageid(req->requestId()), message);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMessageReplied);
 }
 
@@ -766,14 +822,6 @@ void MessagesModel::markAsRead()
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onReadHistoryReplied);
 }
 
-void MessagesModel::sendMedia(InputMedia *inputmedia, TLInt replytomsgid)
-{
-    this->createInput();
-
-    TLLong randomid = Math::randomize<TLLong>();
-    TelegramAPI::messagesSendMedia(DC_MainSession, this->_inputpeer, replytomsgid, inputmedia, randomid, NULL);
-}
-
 int MessagesModel::indexOf(Message *message) const
 {
     return this->indexOf(message->id());
@@ -820,6 +868,20 @@ QString MessagesModel::messageFrom(Message *message) const
     return QString();
 }
 
+void MessagesModel::sendMedia(const QUrl &filepath, const QString &caption, FileUploader::MediaType mediatype)
+{
+    if(!this->_telegram || !this->_dialog || !QFile::exists(filepath.toLocalFile()))
+        return;
+
+    FileObject* fileobject = FileCache_upload(mediatype, filepath.toLocalFile(), caption);
+    connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadCompleted);
+
+    Message* message = TelegramHelper::createMessage(QString(), TelegramConfig_me, this->_dialog->peer());
+    message->setMedia(fileobject->messageMedia());
+
+    this->insertMessage(local_messageid(fileobject->uploader()->localFileId()), message);
+}
+
 void MessagesModel::createInput()
 {
     if(!this->_dialog)
@@ -840,6 +902,16 @@ void MessagesModel::terminateInitialization()
     this->beginResetModel();
     this->setInitializing(false);
     this->endResetModel();
+}
+
+void MessagesModel::insertMessage(TLInt localmessageid, Message *message)
+{
+    message->setId(localmessageid);
+    this->_pendingmessages[localmessageid] = message;
+
+    this->beginInsertRows(QModelIndex(), 0, 0);
+    this->_messages.prepend(message);
+    this->endInsertRows();
 }
 
 void MessagesModel::telegramReady()

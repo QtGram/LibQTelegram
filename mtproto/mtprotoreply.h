@@ -17,12 +17,16 @@ class MTProtoReply : public MTProtoStream
         bool isError() const;
         DCConfig* config() const;
         TLInt errorCode() const;
+        TLLong requestId() const;
         TLLong sessionId() const;
         TLLong messageId() const;
         TLConstructor constructorId() const;
         QByteArray cbody() const;
         QByteArray body();
         void seekToBody();
+
+    public:
+        void setRequestId(TLLong requestid);
 
     private:
         MTProtoReply(int dcid, QObject* parent = 0);
@@ -33,6 +37,7 @@ class MTProtoReply : public MTProtoStream
         DCConfig* _dcconfig;
         int _bodystart;
         TLInt128 _messagekey;
+        TLLong _requestid;
         TLLong _authorizationkeyid;
         TLLong _sessionid;
         TLLong _messageid;

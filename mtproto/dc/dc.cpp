@@ -123,7 +123,12 @@ void DC::repeatRequest(TLLong msgid)
 
     MTProtoRequest* req = this->_pendingrequests.take(msgid);
     req->setAcked(false);
-    this->send(req);
+    this->send(req, true);
+}
+
+void DC::onRequestTimeout(TLLong messageid)
+{
+    qDebug("DC %d request %llx timed-out...", this->_dcconfig->dcid(), messageid);
 }
 
 void DC::onDCConnected()
@@ -197,7 +202,10 @@ void DC::handleReply(MTProtoReply *mtreply)
             mtreply->seekToBody(); // Prepare buffer to be handled in "replied" slots
 
         if(req)
+        {
+            mtreply->setRequestId(req->requestId());
             emit req->replied(mtreply);
+        }
         else if(!handled)
             qWarning("DC %d Request for msg_id %llx not found", this->_dcconfig->dcid(), mtreply->messageId());
     }
@@ -252,37 +260,7 @@ void DC::onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid)
 
 void DC::send(MTProtoRequest *req)
 {
-    if(this->state() != DC::ConnectedState)
-    {
-        qWarning("DC %d Not connected, cannot send queries", this->_dcconfig->dcid());
-        return;
-    }
-
-    this->assignMessageId(req);
-
-    if(req->encrypted())
-    {
-        this->_pendingrequests[req->messageId()] = req;
-
-        if(this->_dcconfig->authorization() < DCConfig::Authorized)
-        {
-            qWarning("DC %d Cannot send encrypted requests", this->_dcconfig->dcid());
-            return;
-        }
-
-        req->setSeqNo(this->generateContentMsgNo());
-    }
-
-    QByteArray reqpayload = req->build();
-    this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
-
-    if(req->encrypted())
-    {
-        connect(req, &MTProtoRequest::timeout, this, &DC::repeatRequest, Qt::UniqueConnection);
-        req->startTimer(QueryTimeout);
-    }
-
-    this->write(reqpayload);
+    this->send(req, true);
 }
 
 void DC::keepRequest(MTProtoRequest *req)
@@ -342,6 +320,42 @@ void DC::timerEvent(QTimerEvent *event)
         killTimer(event->timerId());
         this->_timcloseconnection = 0;
     }
+}
+
+void DC::send(MTProtoRequest *req, bool assignmsgid)
+{
+    if(this->state() != DC::ConnectedState)
+    {
+        qWarning("DC %d Not connected, cannot send queries", this->_dcconfig->dcid());
+        return;
+    }
+
+    if(assignmsgid)
+        this->assignMessageId(req);
+
+    if(req->encrypted())
+    {
+        this->_pendingrequests[req->messageId()] = req;
+
+        if(this->_dcconfig->authorization() < DCConfig::Authorized)
+        {
+            qWarning("DC %d Cannot send encrypted requests", this->_dcconfig->dcid());
+            return;
+        }
+
+        req->setSeqNo(this->generateContentMsgNo());
+    }
+
+    QByteArray reqpayload = req->build();
+    this->decompile(MTProtoDecompiler::DIRECTION_OUT, req->messageId(), req->body());
+
+    if(req->encrypted())
+    {
+        connect(req, &MTProtoRequest::timeout, this, &DC::onRequestTimeout, Qt::UniqueConnection);
+        req->startTimer(QueryTimeout);
+    }
+
+    this->write(reqpayload);
 }
 
 void DC::freeOwnedRequests()

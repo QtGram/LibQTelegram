@@ -159,6 +159,15 @@ void PeerProfile::findObjects(TelegramObject *telegramobject)
 
     switch(telegramobject->constructorId())
     {
+        case TLTypes::Message:
+        case TLTypes::MessageService:
+        {
+            Message* message = qobject_cast<Message*>(telegramobject);
+            TLInt dialogid = TelegramHelper::messageToDialog(message);
+            this->findObjects(TelegramCache_dialog(dialogid));
+            break;
+        }
+
         case TLTypes::Dialog:
         {
             this->_dialog = qobject_cast<Dialog*>(telegramobject);

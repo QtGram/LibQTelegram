@@ -29,6 +29,7 @@ class DC : public DCConnection
         virtual void timerEvent(QTimerEvent *event);
 
     private:
+        void send(MTProtoRequest *req, bool assignmsgid);
         void freeOwnedRequests();
         void decompile(int direction, TLLong messageid, const QByteArray &body);
         void handleReply(const QByteArray& message);
@@ -45,6 +46,7 @@ class DC : public DCConnection
         void onServerSaltChanged(TLLong newserversalt, TLLong reqmsgid);
         void onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid);
         void onDcFloodClock(int seconds);
+        void onRequestTimeout(TLLong messageid);
         void onDCUnauthorized();
         void onDCReadyRead();
         void onDCConnected();
