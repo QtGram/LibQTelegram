@@ -2,6 +2,7 @@
 #include "../config/cache/telegramcache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 #include "../crypto/math.h"
+#include <QImageReader>
 
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
@@ -394,9 +395,16 @@ void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)
     this->sendMedia(filepath, caption, FileUploader::Document);
 }
 
-void MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
+bool MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 {
+    if(QImageReader::imageFormat(filepath).isEmpty())
+    {
+        qWarning("Invalid image: %s", qUtf8Printable(filepath.toLocalFile()));
+        return false;
+    }
+
     this->sendMedia(filepath, caption, FileUploader::Photo);
+    return true;
 }
 
 void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)

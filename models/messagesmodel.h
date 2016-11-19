@@ -89,7 +89,7 @@ class MessagesModel : public TelegramModel
         void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
         void editMessage(const QString& text, Message *editmessage);
         void sendFile(const QUrl& filepath, const QString &caption);
-        void sendPhoto(const QUrl& filepath, const QString& caption);
+        bool sendPhoto(const QUrl& filepath, const QString& caption);
         void sendLocation(TLDouble latitude, TLDouble longitude);
         void sendAction(int action);
 
