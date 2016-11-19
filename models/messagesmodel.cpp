@@ -458,7 +458,7 @@ void MessagesModel::onUploadCompleted()
                                                          NULL);
 
     Message* message = this->_pendingmessages[local_messageid(fileobject->uploader()->localFileId())];
-    this->insertMessage(local_messageid(req->requestId()), message);
+    this->updateMessage(local_messageid(req->requestId()), message);
 
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMediaReplied);
 }
@@ -587,7 +587,6 @@ void MessagesModel::onNewMessage(Message *message)
     }
     else
     {
-
         int idx = this->insertionPoint(message);
 
         this->beginInsertRows(QModelIndex(), idx, idx);
@@ -747,6 +746,21 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
 
     this->insertMessage(local_messageid(req->requestId()), message);
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMessageReplied);
+}
+
+void MessagesModel::updateMessage(TLInt localmessageid, Message *message)
+{
+    message->setId(localmessageid);
+    this->_pendingmessages[localmessageid] = message;
+}
+
+void MessagesModel::insertMessage(TLInt localmessageid, Message *message)
+{
+    this->updateMessage(localmessageid, message);
+
+    this->beginInsertRows(QModelIndex(), 0, 0);
+    this->_messages.prepend(message);
+    this->endInsertRows();
 }
 
 void MessagesModel::setFirstNewMessage()
@@ -910,16 +924,6 @@ void MessagesModel::terminateInitialization()
     this->beginResetModel();
     this->setInitializing(false);
     this->endResetModel();
-}
-
-void MessagesModel::insertMessage(TLInt localmessageid, Message *message)
-{
-    message->setId(localmessageid);
-    this->_pendingmessages[localmessageid] = message;
-
-    this->beginInsertRows(QModelIndex(), 0, 0);
-    this->_messages.prepend(message);
-    this->endInsertRows();
 }
 
 void MessagesModel::telegramReady()

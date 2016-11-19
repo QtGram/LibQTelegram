@@ -121,6 +121,7 @@ class MessagesModel : public TelegramModel
         QString messageFrom(Message *message) const;
         void sendMedia(const QUrl& filepath, const QString& caption, FileUploader::MediaType mediatype);
         void sendMessage(const QString& text, TLInt replymsgid);
+        void updateMessage(TLInt localmessageid, Message* message);
         void insertMessage(TLInt localmessageid, Message* message);
         void setFirstNewMessage();
         void createInput();
