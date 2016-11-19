@@ -91,7 +91,7 @@ void FileUploader::setCaption(const QString &caption)
 void FileUploader::upload(QString filepath)
 {
     if((this->_mediatype == FileUploader::Photo))
-        this->scaleImageIfNeeded(filepath);
+        filepath = this->scaleImageIfNeeded(filepath);
 
     QFileInfo fileinfo(filepath);
 
@@ -148,12 +148,12 @@ void FileUploader::calculatePartsCount(const QFileInfo* fileinfo)
         this->_partscount++;
 }
 
-void FileUploader::scaleImageIfNeeded(QString &filepath)
+QString FileUploader::scaleImageIfNeeded(const QString &filepath)
 {
     QImage image(filepath);
 
     if(qMax(image.width(), image.height()) <= ImageMaxResolution)
-        return;
+        return filepath;
 
     if(image.width() > image.height())
         image = image.scaledToWidth(ImageMaxResolution);
@@ -162,10 +162,11 @@ void FileUploader::scaleImageIfNeeded(QString &filepath)
 
     QFileInfo fileinfo(filepath);
     QDir dir(this->_storagepath);
-    filepath = dir.absoluteFilePath(md5_hash_hex(filepath.toUtf8())) + "." + fileinfo.suffix();
-    image.save(filepath);
+    QString scaledfilepath = dir.absoluteFilePath(md5_hash_hex(filepath.toUtf8())) + "." + fileinfo.suffix();
+    image.save(scaledfilepath);
 
     this->_deleteoncompleted = true;
+    return scaledfilepath;
 }
 
 void FileUploader::getNextPart(TLBytes &data)

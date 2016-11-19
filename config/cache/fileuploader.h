@@ -39,7 +39,7 @@ class FileUploader : public QObject
     private:
         bool calculatePartsLength(const QFileInfo* fileinfo);
         void calculatePartsCount(const QFileInfo* fileinfo);
-        void scaleImageIfNeeded(QString& filepath);
+        QString scaleImageIfNeeded(const QString &filepath);
         void getNextPart(TLBytes &data);
 
     private slots:
