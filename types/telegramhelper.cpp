@@ -511,9 +511,6 @@ bool TelegramHelper::isChannel(Chat *chat)
 
 bool TelegramHelper::imageNeedsCompression(const QString &filepath)
 {
-    if(QImageReader::imageFormat(filepath).isEmpty())
-        return false;
-
     QImageReader imagereader(filepath);
     return sqrt(imagereader.size().width() * imagereader.size().height()) > ImageCompressionTreshold;
 }
