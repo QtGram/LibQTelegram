@@ -156,9 +156,9 @@ QString FileUploader::scaleImageIfNeeded(const QString &filepath)
         return filepath;
 
     if(image.width() > image.height())
-        image = image.scaledToWidth(ImageMaxResolution);
+        image = image.scaledToWidth(ImageMaxResolution, Qt::SmoothTransformation);
     else
-        image = image.scaledToHeight(ImageMaxResolution);
+        image = image.scaledToHeight(ImageMaxResolution, Qt::SmoothTransformation);
 
     QFileInfo fileinfo(filepath);
     QDir dir(this->_storagepath);
