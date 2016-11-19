@@ -39,7 +39,7 @@ FileObject::FileObject(FileUploader::MediaType mediatype, const QString &filepat
 
     this->analyzeFile(filepath);
 
-    this->_fileuploader = new FileUploader(mediatype, this);
+    this->_fileuploader = new FileUploader(mediatype, storagepath, this);
     this->_fileuploader->setCaption(caption);
 
     connect(this->_fileuploader, &FileUploader::completed, this, &FileObject::onUploaderCompleted);

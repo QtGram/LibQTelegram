@@ -397,7 +397,7 @@ void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)
 
 bool MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 {
-    if(QImageReader::imageFormat(filepath).isEmpty())
+    if(QImageReader::imageFormat(filepath.toLocalFile()).isEmpty())
     {
         qWarning("Invalid image: %s", qUtf8Printable(filepath.toLocalFile()));
         return false;

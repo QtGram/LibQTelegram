@@ -1,10 +1,7 @@
 #include "telegramhelper.h"
 #include "../crypto/hash.h"
 #include "../config/telegramconfig.h"
-#include <QImageReader>
 #include <QDateTime>
-
-#define ImageCompressionTreshold 5000
 
 TelegramHelper::TelegramHelper()
 {
@@ -507,12 +504,6 @@ bool TelegramHelper::isChannel(Peer *peer)
 bool TelegramHelper::isChannel(Chat *chat)
 {
     return (chat->constructorId() == TLTypes::Channel) || (chat->constructorId() == TLTypes::ChannelForbidden);
-}
-
-bool TelegramHelper::imageNeedsCompression(const QString &filepath)
-{
-    QImageReader imagereader(filepath);
-    return sqrt(imagereader.size().width() * imagereader.size().height()) > ImageCompressionTreshold;
 }
 
 bool TelegramHelper::messageIsWebPagePending(Message *message)

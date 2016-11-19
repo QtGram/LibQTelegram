@@ -18,7 +18,7 @@ class FileUploader : public QObject
         };
 
     public:
-        explicit FileUploader(MediaType mediatype, QObject *parent = 0);
+        explicit FileUploader(MediaType mediatype, const QString& storagepath, QObject *parent = 0);
         ~FileUploader();
         MediaType mediaType() const;
         TLLong localFileId() const;
@@ -29,7 +29,7 @@ class FileUploader : public QObject
         bool uploading() const;
         bool isBigFile() const;
         void setCaption(const QString& caption);
-        void upload(const QString &filepath);
+        void upload(QString filepath);
 
     public: // File info
         QString fileName() const;
@@ -39,6 +39,7 @@ class FileUploader : public QObject
     private:
         bool calculatePartsLength(const QFileInfo* fileinfo);
         void calculatePartsCount(const QFileInfo* fileinfo);
+        void scaleImageIfNeeded(QString& filepath);
         void getNextPart(TLBytes &data);
 
     private slots:
@@ -55,11 +56,13 @@ class FileUploader : public QObject
     private:
         MediaType _mediatype;
         DCSession* _dcsession;
+        QString _storagepath;
         QString _caption;
         QString _filename;
         QString _md5hash;
         QString _mimetype;
         bool _isbigfile;
+        bool _deleteoncompleted;
         QFile _file;
         TLLong _localfileid;
         TLLong _partsize;
