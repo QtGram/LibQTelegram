@@ -264,6 +264,11 @@ void DialogsModel::clearHistory(int index)
     });
 }
 
+QString DialogsModel::dialogTitle(Dialog *dialog) const
+{
+    return this->_telegram->dialogTitle(dialog);
+}
+
 void DialogsModel::doRemoveDialog(int index)
 {
     Dialog* dialog = this->_dialogs[index];
