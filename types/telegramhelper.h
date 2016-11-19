@@ -54,6 +54,7 @@ class TelegramHelper
         static bool isChat(Peer* peer);
         static bool isChannel(Peer* peer);
         static bool isChannel(Chat* chat);
+        static bool imageNeedsCompression(const QString& filepath);
         static bool messageIsWebPagePending(Message* message);
         static bool messageIsAction(Message* message);
         static MessageId identifier(TLInt messageid, TLInt channelid);
