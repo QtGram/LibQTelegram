@@ -72,6 +72,7 @@ class MessagesModel : public TelegramModel
         void setDialog(Dialog* dialog);
         void setIsActive(bool isactive);
         void setIsMuted(bool ismuted);
+        Q_INVOKABLE Message* get(int index) const;
 
     public: // Overrides
         virtual bool canFetchMore(const QModelIndex&) const;
