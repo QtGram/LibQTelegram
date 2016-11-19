@@ -70,7 +70,7 @@ qreal FileUploader::progress() const
 
 bool FileUploader::uploading() const
 {
-    return (this->_partnum) > 0 && (this->_partnum < this->_partscount);
+    return (this->_partnum > 0) && (this->_partnum < this->_partscount);
 }
 
 bool FileUploader::isBigFile() const

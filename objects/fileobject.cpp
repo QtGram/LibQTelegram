@@ -109,7 +109,7 @@ Document *FileObject::document() const
 
 bool FileObject::isUpload() const
 {
-    return this->_transfermode == FileObject::Upload;
+    return this->_fileuploader != NULL;
 }
 
 bool FileObject::downloading() const
