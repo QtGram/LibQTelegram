@@ -44,6 +44,7 @@ class DialogsModel : public TelegramModel
         Dialog* getDialog(TLInt dialogid) const;
         void removeDialog(int index);
         void clearHistory(int index);
+        QString dialogTitle(Dialog* dialog) const;
 
     private:
         void doRemoveDialog(int index);
