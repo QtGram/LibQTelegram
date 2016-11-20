@@ -1,7 +1,7 @@
 #include "telegraminitializer.h"
 #include "mtproto/mtprotoupdatehandler.h"
-#include "config/cache/cacheinitializer.h"
-#include "config/cache/telegramcache.h"
+#include "cache/cacheinitializer.h"
+#include "cache/telegramcache.h"
 #include <QDebug>
 
 TelegramInitializer::TelegramInitializer(QObject *parent) : QObject(parent), _apiid(0), _port(0), _dcid(0), _debugmode(false), _accountpassword(NULL), _floodlocktimer(0)

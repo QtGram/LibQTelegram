@@ -1,5 +1,5 @@
 #include "messagesmodel.h"
-#include "../config/cache/telegramcache.h"
+#include "../cache/telegramcache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 #include "../crypto/math.h"
 #include <QImageReader>

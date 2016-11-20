@@ -1,5 +1,5 @@
 #include "dialogsmodel.h"
-#include "../config/cache/telegramcache.h"
+#include "../cache/telegramcache.h"
 #include "../objects/sendstatus/sendstatushandler.h"
 
 DialogsModel::DialogsModel(QObject *parent) : TelegramModel(parent), _clouddialog(NULL)

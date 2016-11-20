@@ -1,7 +1,7 @@
 #include "telegram.h"
 #include "mtproto/mtprotoupdatehandler.h"
-#include "config/cache/telegramcache.h"
-#include "config/cache/filecache.h"
+#include "cache/telegramcache.h"
+#include "cache/file/filecache.h"
 #include "types/telegramhelper.h"
 
 Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false)

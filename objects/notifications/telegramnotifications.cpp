@@ -1,6 +1,6 @@
 #include "telegramnotifications.h"
 #include "../../mtproto/mtprotoupdatehandler.h"
-#include "../../config/cache/telegramcache.h"
+#include "../../cache/telegramcache.h"
 
 TelegramNotifications::TelegramNotifications(QObject *parent) : QObject(parent), _telegram(NULL), _currentdialog(NULL), _mute(false)
 {

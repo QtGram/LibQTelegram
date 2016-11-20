@@ -1,6 +1,6 @@
 #include "sendstatushandler.h"
 #include "../../mtproto/mtprotoupdatehandler.h"
-#include "../../config/cache/telegramcache.h"
+#include "../../cache/telegramcache.h"
 
 SendStatusHandler* SendStatusHandler::_instance = NULL;
 

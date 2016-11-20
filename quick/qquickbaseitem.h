@@ -3,7 +3,7 @@
 
 #include <QtQuick>
 #include <QHash>
-#include "../config/cache/filecache.h"
+#include "../cache/file/filecache.h"
 #include "../types/telegramhelper.h"
 
 class QQuickBaseItem : public QQuickItem

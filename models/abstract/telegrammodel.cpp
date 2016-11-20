@@ -1,6 +1,6 @@
 #include "telegrammodel.h"
 #include "../../config/telegramconfig.h"
-#include "../../config/cache/telegramcache.h"
+#include "../../cache/telegramcache.h"
 
 TelegramModel::TelegramModel(QObject *parent) : QAbstractListModel(parent), _telegram(NULL), _initializing(false), _loading(false)
 {

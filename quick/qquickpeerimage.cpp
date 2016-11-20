@@ -1,5 +1,5 @@
 #include "qquickpeerimage.h"
-#include "../config/cache/telegramcache.h"
+#include "../cache/telegramcache.h"
 
 QQuickPeerImage::QQuickPeerImage(QQuickItem* parent): QQuickBaseItem(parent), _peer(NULL), _size(0)
 {

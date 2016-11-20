@@ -1,6 +1,6 @@
 #include "peerprofile.h"
 #include "../types/telegramhelper.h"
-#include "../config/cache/telegramcache.h"
+#include "../cache/telegramcache.h"
 
 PeerProfile::PeerProfile(QObject *parent) : QObject(parent), _telegram(NULL), _peer(NULL), _dialog(NULL), _chat(NULL), _user(NULL)
 {

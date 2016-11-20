@@ -1,5 +1,5 @@
 #include "contactsmodel.h"
-#include "../config/cache/telegramcache.h"
+#include "cache/telegramcache.h"
 
 ContactsModel::ContactsModel(QObject *parent) : TelegramModel(parent), _pendingdialogid(0)
 {

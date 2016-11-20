@@ -1,5 +1,5 @@
 #include "telegramcache.h"
-#include "../../mtproto/mtprotoupdatehandler.h"
+#include "../mtproto/mtprotoupdatehandler.h"
 
 TelegramCache* TelegramCache::_instance = NULL;
 

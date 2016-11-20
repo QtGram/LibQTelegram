@@ -2,7 +2,7 @@
 #define MESSAGESMODEL_H
 
 #include "abstract/telegrammodel.h"
-#include "../config/cache/filecache.h"
+#include "../cache/file/filecache.h"
 
 class MessagesModel : public TelegramModel
 {
