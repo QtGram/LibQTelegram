@@ -259,8 +259,8 @@ void DialogsModel::clearHistory(int index)
     connect(req, &MTProtoRequest::replied, [this, dialog, inputpeer, index](MTProtoReply*) {
         inputpeer->deleteLater();
 
-        TelegramCache_clearHistory(dialog);
         TelegramAPI::messagesDeleteHistory(DC_MainSession, inputpeer, dialog->topMessage());
+        TelegramCache_clearHistory(dialog);
     });
 }
 
