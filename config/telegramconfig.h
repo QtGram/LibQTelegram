@@ -9,6 +9,8 @@
 #define TelegramConfig_save TelegramConfig::config()->save()
 #define TelegramConfig_me TelegramConfig::config()->me()
 #define TelegramConfig_setMe(me) TelegramConfig::config()->setMe(me);
+#define TelegramConfig_autoDownload (TelegramConfig::config() ? TelegramConfig::config()->autoDownload() : false)
+#define TelegramConfig_setAutoDownload(autodownload) TelegramConfig::config()->setAutoDownload(autodownload)
 #define TelegramConfig_setDebugMode(debugmode) TelegramConfig::config()->setDebugMode(debugmode)
 
 #define DCConfig_mainConfig (TelegramConfig::config() ? TelegramConfig::config()->mainConfig() : NULL)
@@ -21,6 +23,7 @@
 #define DCConfig_setMainConfig(configid) TelegramConfig::config()->setMainConfig(configid)
 #define DCConfig_createConfig(host, port, dcid) TelegramConfig::config()->createConfig(host, port, dcid)
 #define DCConfig_migrateConfig(fromdcconfig, todcid) TelegramConfig::config()->migrateConfig(fromdcconfig, todcid)
+
 
 #include <QObject>
 #include <QString>
@@ -54,6 +57,7 @@ class TelegramConfig: public QObject
         bool isLoggedIn() const;
         bool debugMode() const;
         bool isIPv6() const;
+        bool autoDownload() const;
         DCConfig *mainConfig() const;
         DCConfig* mediaDcConfig() const;
         UpdatesState* updateState();
@@ -67,6 +71,7 @@ class TelegramConfig: public QObject
         void setMainConfig(DCConfig *dcconfig);
         void setDebugMode(bool dbgmode);
         void setIpv6(bool ipv6);
+        void setAutoDownload(bool autodownload);
         void setDefaultDcId(int dcid);
         void setStoragePath(const QString& storagepath);
         void setDeviceModel(const QString& devicemodel);
@@ -111,6 +116,7 @@ class TelegramConfig: public QObject
         TLInt _apiid;
         bool _debugmode;
         bool _isipv6;
+        bool _autodownload;
 
     private:
         static TelegramConfig* _instance;

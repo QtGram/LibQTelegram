@@ -18,7 +18,7 @@ const QString TelegramConfig::ME_FILE = "me.user";
 
 TelegramConfig* TelegramConfig::_instance = NULL;
 
-TelegramConfig::TelegramConfig(QObject* parent): QObject(parent), _config(NULL), _me(NULL), _layernum(0), _debugmode(false), _isipv6(false)
+TelegramConfig::TelegramConfig(QObject* parent): QObject(parent), _config(NULL), _me(NULL), _layernum(0), _debugmode(false), _isipv6(false), _autodownload(false)
 {
     this->_updatesstate = new UpdatesState();
     this->_storagepath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + CONFIG_FOLDER;
@@ -189,6 +189,11 @@ bool TelegramConfig::isIPv6() const
     return this->_isipv6;
 }
 
+bool TelegramConfig::autoDownload() const
+{
+    return this->_autodownload;
+}
+
 TLInt TelegramConfig::layerNum() const
 {
     return this->_layernum;
@@ -260,6 +265,11 @@ void TelegramConfig::setDebugMode(bool dbgmode)
 void TelegramConfig::setIpv6(bool ipv6)
 {
     this->_isipv6 = ipv6;
+}
+
+void TelegramConfig::setAutoDownload(bool autodownload)
+{
+    this->_autodownload = autodownload;
 }
 
 void TelegramConfig::setStoragePath(const QString &storagepath)

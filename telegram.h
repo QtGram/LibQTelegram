@@ -13,6 +13,7 @@ class Telegram : public QObject
     Q_PROPERTY(int apiLayer READ apiLayer CONSTANT FINAL)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
     Q_PROPERTY(bool syncing READ syncing NOTIFY syncingChanged)
+    Q_PROPERTY(bool autoDownload READ autoDownload WRITE setAutoDownload NOTIFY autoDownloadChanged)
 
     public:
         explicit Telegram(QObject *parent = 0);
@@ -22,7 +23,9 @@ class Telegram : public QObject
         int apiLayer() const;
         bool connected() const;
         bool syncing() const;
+        bool autoDownload() const;
         void setInitializer(TelegramInitializer* initializer);
+        void setAutoDownload(bool b);
 
     public: // C++ side API
         bool muteDialog(Dialog* dialog, bool mute);
@@ -38,6 +41,9 @@ class Telegram : public QObject
         void sendPassword(const QString& password) const;
         void resendCode() const;
 
+    private slots:
+        void onConfigurationReady();
+
     private:
         QString userList(const TLVector<TLInt> users) const;
         QString messageMediaText(MessageMedia* messagemedia) const;
@@ -46,10 +52,11 @@ class Telegram : public QObject
     signals:
         void initializerChanged();
         void syncingChanged();
+        void autoDownloadChanged();
+        void connectedChanged();
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
-        void connectedChanged();
         void invalidPassword();
         void floodLock(int seconds);
         void sessionPasswordNeeded(QString hint);
@@ -57,6 +64,7 @@ class Telegram : public QObject
 
     private:
         TelegramInitializer* _initializer;
+        bool _autodownload;
 };
 
 #endif // TELEGRAM_H

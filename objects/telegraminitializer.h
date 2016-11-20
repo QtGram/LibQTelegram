@@ -77,6 +77,7 @@ class TelegramInitializer : public QObject
         void portChanged();
         void dcIdChanged();
         void debugModeChanged();
+        void configurationReady();
 
     private:
         QString _publickey;

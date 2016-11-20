@@ -4,7 +4,7 @@
 #include "config/cache/filecache.h"
 #include "types/telegramhelper.h"
 
-Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL)
+Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false)
 {
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::syncingChanged, this, &Telegram::syncingChanged);
@@ -49,6 +49,11 @@ bool Telegram::syncing() const
     return UpdateHandler_syncing;
 }
 
+bool Telegram::autoDownload() const
+{
+    return this->_autodownload;
+}
+
 void Telegram::setInitializer(TelegramInitializer *initializer)
 {
     if(this->_initializer == initializer)
@@ -56,6 +61,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
     if(this->_initializer)
     {
+        disconnect(this->_initializer, &TelegramInitializer::configurationReady, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::floodLock, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::phoneCodeError, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signUpRequested, this, 0);
@@ -67,6 +73,7 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
     this->_initializer = initializer;
 
+    connect(this->_initializer, &TelegramInitializer::configurationReady, this, &Telegram::onConfigurationReady);
     connect(this->_initializer, &TelegramInitializer::floodLock, this, &Telegram::floodLock);
     connect(this->_initializer, &TelegramInitializer::phoneCodeError, this, &Telegram::phoneCodeError);
     connect(this->_initializer, &TelegramInitializer::signUpRequested, this, &Telegram::signUpRequested);
@@ -77,6 +84,19 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
     connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
 
     emit initializerChanged();
+}
+
+void Telegram::setAutoDownload(bool b)
+{
+    if(this->_autodownload == b)
+        return;
+
+    this->_autodownload = b;
+
+    if(TelegramConfig_instance)
+        TelegramConfig_setAutoDownload(b);
+
+    emit autoDownloadChanged();
 }
 
 bool Telegram::muteDialog(Dialog *dialog, bool mute)
@@ -370,6 +390,11 @@ void Telegram::sendPassword(const QString &password) const
 void Telegram::resendCode() const
 {
     this->_initializer->resendCode();
+}
+
+void Telegram::onConfigurationReady()
+{
+    TelegramConfig_setAutoDownload(this->_autodownload);
 }
 
 QString Telegram::userList(const TLVector<TLInt> users) const

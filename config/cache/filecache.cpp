@@ -134,7 +134,7 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
         WebPage* webpage = qobject_cast<WebPage*>(tgobj);
 
         if(webpage->photo())
-            return this->fileObject(webpage->photo(), ismovable, true);
+            return this->fileObject(webpage->photo(), ismovable, autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::Message)
     {
@@ -150,11 +150,11 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
     else if((tgobj->constructorId() == TLTypes::User))
         return this->fileObject(qobject_cast<User*>(tgobj)->photo(), false, autodownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaPhoto)
-        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo(), true, autodownload);
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo(), true, TelegramConfig_autoDownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaDocument)
         return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->document(), ismovable, autodownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaWebPage)
-        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->webpage(), false, autodownload);
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->webpage(), false, true);
     else if(tgobj->constructorId() == TLTypes::FileLocation) // Direct access for debugging purpose
         return this->fileObject(qobject_cast<FileLocation*>(tgobj), qobject_cast<FileLocation*>(tgobj), autodownload);
 

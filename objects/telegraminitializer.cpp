@@ -176,6 +176,7 @@ void TelegramInitializer::tryConnect()
 
     TelegramConfig::init(TELEGRAM_API_LAYER, this->_apiid, this->_apihash, this->_publickey, this->_phonenumber);
     TelegramConfig_setDebugMode(true);
+    emit configurationReady();
 
     DCSession* mainsession = NULL;
 
