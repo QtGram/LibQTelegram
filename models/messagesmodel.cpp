@@ -584,24 +584,28 @@ void MessagesModel::onNewMessage(Message *message)
     if(!this->ownMessage(message))
         return;
 
+    int idx = -1;
+
     if(this->_pendingmessages.contains(message->id()))
     {
         this->_pendingmessages.remove(message->id());
-        int idx = this->_messages.indexOf(message);
+        idx = this->_messages.indexOf(message);
 
         if(idx != -1)
-            Emit_DataChanged(idx);
+        {
+            this->beginRemoveRows(QModelIndex(), idx, idx);
+            this->_messages.removeAt(idx);
+            this->endRemoveRows();
+        }
         else
             qWarning("Cannot find message %d", message->id());
     }
-    else
-    {
-        int idx = this->insertionPoint(message);
 
-        this->beginInsertRows(QModelIndex(), idx, idx);
-        this->_messages.insert(idx, message);
-        this->endInsertRows();
-    }
+    idx = this->insertionPoint(message);
+
+    this->beginInsertRows(QModelIndex(), idx, idx);
+    this->_messages.insert(idx, message);
+    this->endInsertRows();
 
     this->markAsRead();
 }
