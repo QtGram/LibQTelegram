@@ -372,6 +372,7 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
 
     TLVector<TLInt> msgids;
     msgids << forwardmessage->id();
+    std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
 
     TLVector<TLLong> randomids;
     randomids << Math::randomize<TLLong>();
