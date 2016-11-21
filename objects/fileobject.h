@@ -72,7 +72,6 @@ class FileObject : public QObject
     private:
         void setDownloadMode(int downloadmode);
         void createDownloadSession(int dcid);
-        void analyzeFile(const QString& filepath);
 
     signals:
         void fileSizeChanged();

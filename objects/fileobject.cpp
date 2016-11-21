@@ -312,16 +312,6 @@ void FileObject::createDownloadSession(int dcid)
     DC_InitializeSession(this->_dcsession);
 }
 
-void FileObject::analyzeFile(const QString &filepath)
-{
-    QFileInfo fileinfo(filepath);
-
-    this->_filesize = fileinfo.size();
-
-    if(!QImageReader::imageFormat(filepath).isEmpty())
-        this->_imagesize = QImageReader(filepath).size();
-}
-
 void FileObject::sendDownloadRequest()
 {
     TLInt offset = (this->_file ? this->_file->size() : 0);
