@@ -7,7 +7,7 @@
 QHash<int, bool> MTProtoRequest::_firstmap;
 TLLong MTProtoRequest::_clientrequestid = 0;
 
-MTProtoRequest::MTProtoRequest(DCConfig *dcconfig, QObject *parent) : QObject(parent), _needsinit(false), _acked(false), _sessionid(0), _messageid(0), _seqno(0), _dcconfig(dcconfig), _body(NULL)
+MTProtoRequest::MTProtoRequest(DCConfig *dcconfig, QObject *parent) : QObject(parent), _needsinit(false), _needsreply(true), _acked(false), _sessionid(0), _messageid(0), _seqno(0), _dcconfig(dcconfig), _body(NULL)
 {
     Try_InitFirst(dcconfig->id());
 
@@ -47,6 +47,11 @@ TLLong MTProtoRequest::sessionId() const
 bool MTProtoRequest::encrypted() const
 {
     return this->_sessionid != 0;
+}
+
+bool MTProtoRequest::needsReply() const
+{
+    return this->_needsreply;
 }
 
 const QByteArray &MTProtoRequest::body() const
@@ -97,6 +102,11 @@ void MTProtoRequest::resetFirst(int dcid)
 void MTProtoRequest::setAcked(bool b)
 {
     this->_acked = b;
+}
+
+void MTProtoRequest::setNeedsReply(bool b)
+{
+    this->_needsreply = b;
 }
 
 void MTProtoRequest::setDcConfig(DCConfig *dcconfig)

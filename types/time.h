@@ -4,6 +4,7 @@
 #include <QDateTime>
 
 #define QueryTimeout       15000  // 15 seconds
+#define DCTimeout          30000  // 30 seconds
 #define AckTimeout         16000  // 16 seconds
 #define CloseDCTimeout      5000  //  5 seconds
 #define ReconnectionTimeout 5000  //  5 seconds

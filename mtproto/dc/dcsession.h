@@ -23,6 +23,7 @@ class DCSession : public QObject
         TLLong sessionId() const;
         DC* dc() const;
         void setOwnedDC(bool b);
+        void repeatRequests();
         MTProtoRequest* sendEncrypted(MTProtoStream *mtstream);
 
     private:

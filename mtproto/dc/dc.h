@@ -21,6 +21,7 @@ class DC : public DCConnection
         void sendPlain(MTProtoStream* mtstream);
         void send(MTProtoRequest *req);
         void keepRequest(MTProtoRequest *req);
+        void repeatRequests(TLLong sessionid);
         MTProtoRequest* giveRequest();
         void addSessionRef();
         void removeSessionRef();
@@ -29,7 +30,6 @@ class DC : public DCConnection
         virtual void timerEvent(QTimerEvent *event);
 
     private:
-        void send(MTProtoRequest *req, bool assignmsgid);
         void freeOwnedRequests();
         void decompile(int direction, TLLong messageid, const QByteArray &body);
         void handleReply(const QByteArray& message);
@@ -39,7 +39,7 @@ class DC : public DCConnection
         TLInt getPacketLength();
 
     private slots:
-        void repeatRequest(TLLong messageid);
+        void repeatRequest(TLLong messageid, TLLong newsessionid = 0);
         void handleReply(MTProtoReply* mtreply);
         void onAck(const TLVector<TLLong>& msgids);
         void onAckRequest(TLLong reqmsgid);
@@ -59,6 +59,7 @@ class DC : public DCConnection
         void invalidPassword();
         void sessionPasswordNeeded();
         void unauthorized();
+        void timeout();
 
     private:
         QHash<TLLong, MTProtoRequest*> _pendingrequests; // Queries sent and waiting for ACKs

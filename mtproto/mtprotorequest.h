@@ -21,12 +21,13 @@ class MTProtoRequest : public QObject
     public:
         explicit MTProtoRequest(DCConfig* dcconfig, QObject *parent = 0);
         ~MTProtoRequest();
-        bool acked() const;
         DCConfig* config() const;
         TLLong requestId() const;
         TLLong messageId() const;
         TLLong sessionId() const;
+        bool acked() const;
         bool encrypted() const;
+        bool needsReply() const;
         const QByteArray& body() const;
         QByteArray build();
 
@@ -35,6 +36,7 @@ class MTProtoRequest : public QObject
 
     public:
         void setAcked(bool b);
+        void setNeedsReply(bool b);
         void setDcConfig(DCConfig* dcconfig);
         void setSessionId(TLLong sessionid);
         void setMessageId(TLLong messageid);
@@ -57,6 +59,7 @@ class MTProtoRequest : public QObject
 
     private:
         bool _needsinit;
+        bool _needsreply;
         bool _acked;
         TLLong _requestid;
         TLLong _sessionid;

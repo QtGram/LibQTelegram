@@ -41,6 +41,11 @@ void DCSession::setOwnedDC(bool b)
     this->_dc->setParent(b ? this : NULL);
 }
 
+void DCSession::repeatRequests()
+{
+    this->_dc->repeatRequests(this->_sessionid);
+}
+
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 {
     MTProtoRequest* req = new MTProtoRequest(this->_dc->config());
@@ -74,11 +79,11 @@ void DCSession::sendAck()
 
     MTProtoRequest* req = new MTProtoRequest(this->_dc->config());
     req->setSessionId(this->_sessionid);
+    req->setNeedsReply(false);
     req->setBody(mtstream); // Take ownership
 
     this->_dc->send(req);
     this->_ackqueue.clear();
-    req->deleteLater();
 }
 
 void DCSession::queueAck(MTProtoReply* mtreply)

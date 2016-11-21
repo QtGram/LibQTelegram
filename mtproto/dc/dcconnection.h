@@ -25,11 +25,15 @@ class DCConnection : public QTcpSocket
         void onStateChanged(QAbstractSocket::SocketState state);
         void onError(QAbstractSocket::SocketError error);
 
+    signals:
+        void failed();
+
     protected:
         DCConfig* _dcconfig;
 
     private:
         int _reconnecttimerid;
+        int _dctimeouttimerid;
 };
 
 #endif // DCCONNECTION_H

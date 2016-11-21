@@ -2,7 +2,7 @@
 #include "../../types/time.h"
 #include <QTimerEvent>
 
-DCConnection::DCConnection(DCConfig* dcconfig, QObject *parent): QTcpSocket(parent), _dcconfig(dcconfig), _reconnecttimerid(0)
+DCConnection::DCConnection(DCConfig* dcconfig, QObject *parent): QTcpSocket(parent), _dcconfig(dcconfig), _reconnecttimerid(0), _dctimeouttimerid(0)
 {
     connect(this, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
@@ -29,6 +29,17 @@ void DCConnection::timerEvent(QTimerEvent *event)
         this->killTimer(event->timerId());
         this->_reconnecttimerid = 0;
     }
+    else if(event->timerId() == this->_dctimeouttimerid)
+    {
+        this->killTimer(event->timerId());
+        this->_dctimeouttimerid = 0;
+
+        if(this->state() == DCConnection::ConnectedState)
+            return;
+
+        this->abort();
+        emit failed();
+    }
 }
 
 void DCConnection::reconnectToDC()
@@ -50,6 +61,7 @@ void DCConnection::onStateChanged(SocketState state)
 
         case QAbstractSocket::ConnectingState:
             qWarning("DC %d connecting", this->_dcconfig->dcid());
+            this->_dctimeouttimerid = this->startTimer(DCTimeout);
             break;
 
         case QAbstractSocket::ConnectedState:
@@ -110,6 +122,7 @@ void DCConnection::onError(QAbstractSocket::SocketError error)
 
         case QAbstractSocket::NetworkError:
             qWarning("DC %d ERROR: Network error", this->_dcconfig->dcid());
+            emit failed();
             break;
 
         case QAbstractSocket::AddressInUseError:

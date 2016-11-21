@@ -43,6 +43,7 @@ class Telegram : public QObject
         void signIn(const QString& phonecode) const;
         void signUp(const QString& firstname, const QString& lastname, const QString& phonecode) const;
         void sendPassword(const QString& password) const;
+        void reconnect() const;
         void resendCode() const;
 
     private slots:
@@ -65,6 +66,7 @@ class Telegram : public QObject
         void invalidPassword();
         void unreadCountChanged();
         void floodLock(int seconds);
+        void connectionTimeout(int retryseconds);
         void sessionPasswordNeeded(QString hint);
         void phoneCodeError(QString errormessage);
 

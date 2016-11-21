@@ -111,7 +111,19 @@ TLInt DC::getPacketLength()
     return 0;
 }
 
-void DC::repeatRequest(TLLong msgid)
+void DC::repeatRequests(TLLong sessionid)
+{
+    if(this->_pendingrequests.isEmpty())
+        return;
+
+    QList<TLLong> messageids = this->_pendingrequests.keys();
+    std::sort(messageids.begin(), messageids.end(), std::less<TLLong>());
+
+    foreach(TLLong messageid, messageids)
+        this->repeatRequest(messageid, sessionid);
+}
+
+void DC::repeatRequest(TLLong msgid, TLLong newsessionid)
 {
     if(!this->_pendingrequests.contains(msgid))
     {
@@ -123,12 +135,22 @@ void DC::repeatRequest(TLLong msgid)
 
     MTProtoRequest* req = this->_pendingrequests.take(msgid);
     req->setAcked(false);
-    this->send(req, true);
+
+    if(newsessionid)
+        req->setSessionId(newsessionid);
+
+    this->send(req);
 }
 
 void DC::onRequestTimeout(TLLong messageid)
 {
     qDebug("DC %d request %llx timed-out...", this->_dcconfig->dcid(), messageid);
+
+    if(this->state() == DC::UnconnectedState)
+        return;
+
+    this->abort();
+    emit timeout();
 }
 
 void DC::onDCConnected()
@@ -258,11 +280,6 @@ void DC::onDeltaTimeChanged(TLLong deltatime, TLLong reqmsgid)
     this->repeatRequest(reqmsgid);
 }
 
-void DC::send(MTProtoRequest *req)
-{
-    this->send(req, true);
-}
-
 void DC::keepRequest(MTProtoRequest *req)
 {
     if(!req)
@@ -322,20 +339,21 @@ void DC::timerEvent(QTimerEvent *event)
     }
 }
 
-void DC::send(MTProtoRequest *req, bool assignmsgid)
+void DC::send(MTProtoRequest *req)
 {
     if(this->state() != DC::ConnectedState)
     {
+        req->deleteLater();
         qWarning("DC %d Not connected, cannot send queries", this->_dcconfig->dcid());
         return;
     }
 
-    if(assignmsgid)
-        this->assignMessageId(req);
+    this->assignMessageId(req);
 
     if(req->encrypted())
     {
-        this->_pendingrequests[req->messageId()] = req;
+        if(req->needsReply())
+            this->_pendingrequests[req->messageId()] = req;
 
         if(this->_dcconfig->authorization() < DCConfig::Authorized)
         {
@@ -356,6 +374,9 @@ void DC::send(MTProtoRequest *req, bool assignmsgid)
     }
 
     this->write(reqpayload);
+
+    if(!req->needsReply())
+        req->deleteLater();
 }
 
 void DC::freeOwnedRequests()

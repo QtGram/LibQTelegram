@@ -32,6 +32,7 @@ class DCSessionManager: public QObject
         DCSession* mainSession() const;
         DCSession* createMainSession(DCConfig* dcconfig);
         DCSession* createSession(DCConfig* dcconfig, bool filedc);
+        void restoreMainSession();
         void initializeSession(DCSession* dcsession);
         void closeSession(DCSession* dcsession);
 
@@ -40,7 +41,11 @@ class DCSessionManager: public QObject
         void onAuthorizationImported(DC *dc);
         void onAuthorizationReply(MTProtoReply *mtreply);
         void onMigrateDC(DCConfig *fromdcconfig, int todcid);
+        void onMainSessionDisconnected();
         void onDCDisconnected();
+
+    protected:
+        virtual void timerEvent(QTimerEvent *event);
 
     signals:
         void sessionReady(DCSession* session);
@@ -48,6 +53,7 @@ class DCSessionManager: public QObject
         void floodLock(int seconds);
         void invalidPassword();
         void sessionPasswordNeeded();
+        void mainSessionTimeout(int retryseconds);
         void mainSessionConnectedChanged();
 
     private:
@@ -55,6 +61,8 @@ class DCSessionManager: public QObject
         QHash<DCConfig::Id, DC*> _dclist;
         QHash<DCConfig::Id, DC*> _filedclist;
         DCSession* _mainsession;
+        int _reconnectiontimer;
+        int _reconnectiontimeout;
 
     private:
         static DCSessionManager* _sessionmanager;

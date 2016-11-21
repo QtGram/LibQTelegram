@@ -7,6 +7,7 @@
 Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false), _loggedin(false)
 {
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
+    connect(DCSessionManager_instance, &DCSessionManager::mainSessionTimeout, this, &Telegram::connectionTimeout);
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::syncingChanged, this, &Telegram::syncingChanged);
 
     connect(this, &Telegram::loginCompleted, this, &Telegram::loggedInChanged);
@@ -400,6 +401,11 @@ void Telegram::signUp(const QString &firstname, const QString &lastname, const Q
 void Telegram::sendPassword(const QString &password) const
 {
     this->_initializer->sendPassword(password);
+}
+
+void Telegram::reconnect() const
+{
+    DCSessionManager_instance->restoreMainSession();
 }
 
 void Telegram::resendCode() const
