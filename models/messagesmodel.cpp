@@ -393,7 +393,7 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
 
 void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)
 {
-    this->sendMedia(filepath, caption, FileUploader::Document);
+    this->sendMedia(filepath, caption, FileUploader::MediaDocument);
 }
 
 bool MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
@@ -404,7 +404,7 @@ bool MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
         return false;
     }
 
-    this->sendMedia(filepath, caption, FileUploader::Photo);
+    this->sendMedia(filepath, caption, FileUploader::MediaPhoto);
     return true;
 }
 

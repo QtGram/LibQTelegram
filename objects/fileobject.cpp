@@ -16,7 +16,7 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_dcsession = NULL;
     this->_file = NULL;
     this->_filesize = 0;
-    this->_fileuploader = NULL;
+    this->_uploader = NULL;
     this->_inputmedia = NULL;
     this->_messagemedia = NULL;
 
@@ -37,19 +37,17 @@ FileObject::FileObject(FileUploader::MediaType mediatype, const QString &filepat
     this->_inputmedia = NULL;
     this->_messagemedia = NULL;
 
-    this->analyzeFile(filepath);
+    this->_uploader = new FileUploader(filepath, mediatype, storagepath, this);
+    this->_uploader->setCaption(caption);
 
-    this->_fileuploader = new FileUploader(mediatype, storagepath, this);
-    this->_fileuploader->setCaption(caption);
-
-    connect(this->_fileuploader, &FileUploader::completed, this, &FileObject::onUploaderCompleted);
+    connect(this->_uploader, &FileUploader::completed, this, &FileObject::onUploaderCompleted);
     connect(this, &FileObject::filePathChanged, this, &FileObject::downloadedChanged);
     connect(this, &FileObject::thumbnailChanged, this, &FileObject::hasThumbnailChanged);
 }
 
 InputMedia *FileObject::inputMedia()
 {
-    if(!this->_fileuploader)
+    if(!this->_uploader)
     {
         qWarning("Uploader not available");
         return NULL;
@@ -57,10 +55,8 @@ InputMedia *FileObject::inputMedia()
 
     if(!this->_inputmedia)
     {
-        if(this->_fileuploader->mediaType() == FileUploader::Photo)
-            this->_inputmedia = TelegramHelper::inputMediaPhoto(this->_fileuploader, this);
-        else
-            this->_inputmedia = TelegramHelper::inputMediaFile(this->_fileuploader, this);
+        this->_inputmedia = this->_uploader->createInputMedia();
+        this->_inputmedia->setParent(this);
     }
 
     return this->_inputmedia;
@@ -68,7 +64,7 @@ InputMedia *FileObject::inputMedia()
 
 MessageMedia *FileObject::messageMedia()
 {
-    if(!this->_fileuploader)
+    if(!this->_uploader)
     {
         qWarning("Uploader not available");
         return NULL;
@@ -83,12 +79,13 @@ MessageMedia *FileObject::messageMedia()
 
         if(inputmedia->constructorId() == TLTypes::InputMediaUploadedPhoto)
         {
-            Photo* photo = new Photo();
-            photo->setConstructorId(TLTypes::PhotoEmpty);
-            photo->setId(this->_fileuploader->localFileId());
-
             this->_messagemedia->setConstructorId(TLTypes::MessageMediaPhoto);
-            this->_messagemedia->setPhoto(photo);
+            this->_messagemedia->setPhoto(this->_uploader->createPhoto());
+        }
+        else if(inputmedia->constructorId() == TLTypes::InputMediaUploadedDocument)
+        {
+            this->_messagemedia->setConstructorId(TLTypes::MessageMediaDocument);
+            this->_messagemedia->setDocument(this->_uploader->createDocument());
         }
         else
             qWarning("Unhandled InputMedia (%08x)", inputmedia->constructorId());
@@ -99,7 +96,7 @@ MessageMedia *FileObject::messageMedia()
 
 FileUploader *FileObject::uploader() const
 {
-    return this->_fileuploader;
+    return this->_uploader;
 }
 
 Document *FileObject::document() const
@@ -109,7 +106,7 @@ Document *FileObject::document() const
 
 bool FileObject::isUpload() const
 {
-    return this->_fileuploader != NULL;
+    return this->_uploader != NULL;
 }
 
 bool FileObject::downloading() const
@@ -299,7 +296,11 @@ void FileObject::download()
 
 void FileObject::upload()
 {
-    this->_fileuploader->upload(this->_filepath);
+    this->_uploader->upload();
+
+    // Update FileObject's data
+    this->_filepath = this->_uploader->filePath();
+    this->_imagesize = this->_uploader->imageSize();
 }
 
 void FileObject::createDownloadSession(int dcid)
@@ -391,8 +392,8 @@ void FileObject::onUploaderCompleted()
 {
     emit uploadCompleted();
 
-    this->_fileuploader->deleteLater();
-    this->_fileuploader = NULL;
+    this->_uploader->deleteLater();
+    this->_uploader = NULL;
 }
 
 void FileObject::setDownloadMode(int downloadmode)

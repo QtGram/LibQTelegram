@@ -95,7 +95,7 @@ class FileObject : public QObject
         QString _storagepath;
         bool _autodownload;
         int _transfermode;
-        FileUploader* _fileuploader;
+        FileUploader* _uploader;
         Document* _document;
         FileLocation* _locthumbnail;
         FileLocation* _locfile;

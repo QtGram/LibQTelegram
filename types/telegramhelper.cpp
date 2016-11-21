@@ -238,30 +238,6 @@ InputChannel *TelegramHelper::inputChannel(Chat *chat, QObject *parent)
     return inputchannel;
 }
 
-InputMedia *TelegramHelper::inputMediaFile(FileUploader *fileuploader, QObject *parent)
-{
-    InputMedia* inputmedia = new InputMedia(parent);
-    inputmedia->setConstructorId(TLTypes::InputMediaUploadedDocument);
-    inputmedia->setFile(TelegramHelper::inputFile(fileuploader));
-    inputmedia->setMimeType(ToTLString(fileuploader->mimeType()));
-    inputmedia->setCaption(fileuploader->caption());
-
-    TLVector<DocumentAttribute*> attributes;
-    attributes << TelegramHelper::createDocumentAttribute(fileuploader->fileName(), inputmedia);
-
-    inputmedia->setAttributes(attributes);
-    return inputmedia;
-}
-
-InputMedia *TelegramHelper::inputMediaPhoto(FileUploader *fileuploader, QObject *parent)
-{
-    InputMedia* inputmedia = new InputMedia(parent);
-    inputmedia->setConstructorId(TLTypes::InputMediaUploadedPhoto);
-    inputmedia->setCaption(ToTLString(fileuploader->caption()));
-    inputmedia->setFile(TelegramHelper::inputFile(fileuploader));
-    return inputmedia;
-}
-
 InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject *parent)
 {
     InputGeoPoint* inputgeopoint = new InputGeoPoint();
@@ -273,24 +249,6 @@ InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longi
     inputmedia->setConstructorId(TLTypes::InputMediaGeoPoint);
     inputmedia->setGeoPoint(inputgeopoint);
     return inputmedia;
-}
-
-InputFile *TelegramHelper::inputFile(FileUploader *fileuploader, QObject *parent)
-{
-    InputFile* inputfile = new InputFile(parent);
-    inputfile->setId(fileuploader->localFileId());
-    inputfile->setParts(fileuploader->partsCount());
-    inputfile->setName(ToTLString(fileuploader->fileName()));
-
-    if(!fileuploader->isBigFile())
-    {
-        inputfile->setConstructorId(TLTypes::InputFile);
-        inputfile->setMd5Checksum(ToTLString(fileuploader->md5hash()));
-    }
-    else
-        inputfile->setConstructorId(TLTypes::InputFileBig);
-
-    return inputfile;
 }
 
 InputUser *TelegramHelper::inputUser(User *user, QObject *parent)

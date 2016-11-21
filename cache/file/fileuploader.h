@@ -2,7 +2,8 @@
 #define FILEUPLOADER_H
 
 #include <QObject>
-#include <QFileInfo>
+#include <QSize>
+#include <QFile>
 #include <QMimeDatabase>
 #include "../../types/basic.h"
 #include "../../mtproto/dc/dcsessionmanager.h"
@@ -13,33 +14,34 @@ class FileUploader : public QObject
 
     public:
         enum MediaType {
-            Document = 0,
-            Photo = 1,
+            MediaDocument = 0,
+            MediaPhoto    = 1,
         };
 
     public:
-        explicit FileUploader(MediaType mediatype, const QString& storagepath, QObject *parent = 0);
+        explicit FileUploader(const QString& filepath, MediaType mediatype, const QString& storagepath, QObject *parent = 0);
         ~FileUploader();
-        MediaType mediaType() const;
         TLLong localFileId() const;
-        QString caption() const;
-        QString md5hash() const;
-        TLInt partsCount() const;
+        const QString& filePath() const;
+        const QSize& imageSize() const;
         qreal progress() const;
         bool uploading() const;
-        bool isBigFile() const;
         void setCaption(const QString& caption);
-        void upload(QString filepath);
+        void upload();
 
-    public: // File info
-        QString fileName() const;
-        QString mimeType() const;
-        QSize imageSize() const;
+    public: // Telegram Types
+        InputMedia* createInputMedia() const;
+        Photo* createPhoto() const;
+        Document* createDocument() const;
 
     private:
-        bool calculatePartsLength(const QFileInfo* fileinfo);
-        void calculatePartsCount(const QFileInfo* fileinfo);
-        QString scaleImageIfNeeded(const QString &filepath);
+        InputFile* createInputFile() const;
+        InputMedia* createInputMediaPhoto() const;
+        InputMedia* createInputMediaDocument() const;
+        void scaleImageIfNeeded();
+        bool calculatePartsLength();
+        void calculatePartsCount();
+        void analyzeFile(const QString &filepath);
         void getNextPart(TLBytes &data);
 
     private slots:
@@ -54,18 +56,23 @@ class FileUploader : public QObject
         void completed();
 
     private:
-        MediaType _mediatype;
-        DCSession* _dcsession;
-        QString _storagepath;
         QString _caption;
+        QString _filepath;
         QString _filename;
         QString _md5hash;
         QString _mimetype;
-        bool _isbigfile;
-        bool _deleteoncompleted;
-        QFile _file;
-        TLLong _localfileid;
+        QSize _imagesize;
         TLLong _partsize;
+        TLInt _filesize;
+
+    private:
+        int _mediatype;
+        DCSession* _dcsession;
+        QString _storagepath;
+        QFile _file;
+        bool _deleteoncompleted;
+        bool _isbigfile;
+        TLLong _localfileid;
         TLInt _partscount;
         TLInt _partnum;
 
