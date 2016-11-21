@@ -137,6 +137,9 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
         if((attribute = TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker)))
             return tr("%1 Sticker").arg(attribute->alt().toString());
 
+        if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeVideo))
+            return tr("Video file");
+
         if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeAudio))
             return tr("Audio recording");
 
