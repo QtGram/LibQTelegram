@@ -26,6 +26,7 @@ class CacheInitializer : public QObject
         void requestState() const;
         void requestContacts() const;
         void requestDialogs();
+        void updateUnreadCount(MessagesDialogs* messagesdialogs);
         bool seekDialogs(MessagesDialogs *messagesdialogs);
         Message* findMessage(MessagesDialogs* messagesdialogs, TLInt messageid) const;
         Chat* findChat(MessagesDialogs* messagesdialogs, TLInt chatid) const;
@@ -37,12 +38,13 @@ class CacheInitializer : public QObject
         void onRequestDialogsReplied(MTProtoReply* mtreply);
 
     signals:
-        void initialized();
+        void initialized(int unreadcount);
 
     private:
         int _state;
         int _totaldialogs;
         int _loadeddialogs;
+        int _unreadcount;
         TLInt _dialogsoffsetdate;
         TLInt _dialogsoffsetid;
         InputPeer _dialogoffsetpeer;

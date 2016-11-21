@@ -256,7 +256,8 @@ void TelegramInitializer::onLoginCompleted(MTProtoReply *mtreply)
 
     CacheInitializer* cacheinitializer = new CacheInitializer(this);
 
-    connect(cacheinitializer, &CacheInitializer::initialized, [this, cacheinitializer] {
+    connect(cacheinitializer, &CacheInitializer::initialized, [this, cacheinitializer](int unreadcount) {
+        TelegramCache_setUnreadCount(unreadcount);
         emit this->loginCompleted();
         cacheinitializer->deleteLater();
     });

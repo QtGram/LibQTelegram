@@ -10,7 +10,6 @@
 #define TelegramCache_clearHistory(dialog) TelegramCache::cache()->clearHistory(dialog)
 #define TelegramCache_accessHash(dialog) TelegramCache::cache()->accessHash(dialog)
 
-#define TelegramCache_unreadCount TelegramCache::cache()->unreadCount()
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
 
@@ -22,6 +21,9 @@
 
 #define TelegramCache_insert(obj) TelegramCache::cache()->insert(obj)
 #define TelegramCache_remove(obj) TelegramCache::cache()->remove(obj)
+
+#define TelegramCache_unreadCount TelegramCache::cache()->unreadCount()
+#define TelegramCache_setUnreadCount(unreadcount) TelegramCache::cache()->setUnreadCount(unreadcount)
 
 #define TelegramCache_messages(dialog, offset, limit) TelegramCache::cache()->dialogMessages(dialog, offset, limit)
 #define TelegramCache_lastDialogMessages(dialog) TelegramCache::cache()->lastDialogMessages(dialog)
@@ -58,6 +60,7 @@ class TelegramCache: public QObject
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
         TLLong accessHash(Dialog* dialog);
+        void setUnreadCount(int unreadcount);
 
     public slots:
         void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);

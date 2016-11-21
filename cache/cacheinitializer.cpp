@@ -12,6 +12,7 @@ CacheInitializer::CacheInitializer(QObject *parent) : QObject(parent), _state(Ca
     this->_dialogsoffsetid = 0;
     this->_totaldialogs = 0;
     this->_loadeddialogs = 0;
+    this->_unreadcount = 0;
     this->_dialogoffsetpeer.setConstructorId(TLTypes::InputPeerEmpty);
 }
 
@@ -25,7 +26,7 @@ void CacheInitializer::initialize()
         this->requestDialogs();
 
     if(this->_state > CacheInitializer::Last)
-        emit initialized();
+        emit initialized(this->_unreadcount);
 }
 
 void CacheInitializer::requestState() const
@@ -50,6 +51,12 @@ void CacheInitializer::requestDialogs()
                                                           &this->_dialogoffsetpeer, limit);
 
     connect(req, &MTProtoRequest::replied, this, &CacheInitializer::onRequestDialogsReplied);
+}
+
+void CacheInitializer::updateUnreadCount(MessagesDialogs *messagesdialogs)
+{
+    foreach(Dialog* dialog, messagesdialogs->dialogs())
+        this->_unreadcount += dialog->unreadCount();
 }
 
 bool CacheInitializer::seekDialogs(MessagesDialogs* messagesdialogs)
@@ -96,6 +103,7 @@ bool CacheInitializer::seekDialogs(MessagesDialogs* messagesdialogs)
     this->_dialogsoffsetid = message->id();
     return true;
 }
+
 
 Message *CacheInitializer::findMessage(MessagesDialogs *messagesdialogs, TLInt messageid) const
 {
@@ -164,6 +172,8 @@ void CacheInitializer::onRequestDialogsReplied(MTProtoReply *mtreply)
     TelegramCache_store(messagesdialogs.users());
     TelegramCache_store(messagesdialogs.chats());
     TelegramCache_store(messagesdialogs.messages());
+
+    this->updateUnreadCount(&messagesdialogs);
 
     if(messagesdialogs.constructorId() == TLTypes::MessagesDialogsSlice)
     {

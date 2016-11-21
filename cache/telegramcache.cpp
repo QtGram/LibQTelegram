@@ -3,7 +3,7 @@
 
 TelegramCache* TelegramCache::_instance = NULL;
 
-TelegramCache::TelegramCache(QObject* parent): QObject(parent)
+TelegramCache::TelegramCache(QObject* parent): QObject(parent), _unreadcount(0)
 {
     this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
     this->_fetcher = new CacheFetcher(this);
@@ -156,6 +156,15 @@ TLLong TelegramCache::accessHash(Dialog *dialog)
     }
 
     return 0;
+}
+
+void TelegramCache::setUnreadCount(int unreadcount)
+{
+    if(this->_unreadcount == unreadcount)
+        return;
+
+    this->_unreadcount = unreadcount;
+    emit unreadCountChanged();
 }
 
 void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
