@@ -11,9 +11,11 @@ class Telegram : public QObject
     Q_PROPERTY(TelegramInitializer* initializer READ initializer WRITE setInitializer NOTIFY initializerChanged)
     Q_PROPERTY(User* me READ me CONSTANT FINAL)
     Q_PROPERTY(int apiLayer READ apiLayer CONSTANT FINAL)
+    Q_PROPERTY(bool loggedIn READ loggedIn NOTIFY loggedInChanged)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
     Q_PROPERTY(bool syncing READ syncing NOTIFY syncingChanged)
     Q_PROPERTY(bool autoDownload READ autoDownload WRITE setAutoDownload NOTIFY autoDownloadChanged)
+    Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged)
 
     public:
         explicit Telegram(QObject *parent = 0);
@@ -21,9 +23,11 @@ class Telegram : public QObject
         TelegramInitializer* initializer() const;
         User* me() const;
         int apiLayer() const;
+        bool loggedIn() const;
         bool connected() const;
         bool syncing() const;
         bool autoDownload() const;
+        int unreadCount() const;
         void setInitializer(TelegramInitializer* initializer);
         void setAutoDownload(bool b);
 
@@ -42,7 +46,7 @@ class Telegram : public QObject
         void resendCode() const;
 
     private slots:
-        void onConfigurationReady();
+        void onLoginCompleted();
 
     private:
         QString userList(const TLVector<TLInt> users) const;
@@ -53,11 +57,13 @@ class Telegram : public QObject
         void initializerChanged();
         void syncingChanged();
         void autoDownloadChanged();
+        void loggedInChanged();
         void connectedChanged();
         void signUpRequested();
         void signInRequested();
         void loginCompleted();
         void invalidPassword();
+        void unreadCountChanged();
         void floodLock(int seconds);
         void sessionPasswordNeeded(QString hint);
         void phoneCodeError(QString errormessage);
@@ -65,6 +71,7 @@ class Telegram : public QObject
     private:
         TelegramInitializer* _initializer;
         bool _autodownload;
+        bool _loggedin;
 };
 
 #endif // TELEGRAM_H

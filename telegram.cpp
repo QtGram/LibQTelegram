@@ -4,10 +4,12 @@
 #include "cache/file/filecache.h"
 #include "types/telegramhelper.h"
 
-Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false)
+Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false), _loggedin(false)
 {
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::syncingChanged, this, &Telegram::syncingChanged);
+
+    connect(this, &Telegram::loginCompleted, this, &Telegram::loggedInChanged);
 }
 
 Telegram::~Telegram()
@@ -35,6 +37,11 @@ int Telegram::apiLayer() const
     return TELEGRAM_API_LAYER;
 }
 
+bool Telegram::loggedIn() const
+{
+    return this->_loggedin;
+}
+
 bool Telegram::connected() const
 {
     if(!DC_MainSession)
@@ -54,6 +61,14 @@ bool Telegram::autoDownload() const
     return this->_autodownload;
 }
 
+int Telegram::unreadCount() const
+{
+    if(!this->_loggedin)
+        return 0;
+
+    return TelegramCache_unreadCount;
+}
+
 void Telegram::setInitializer(TelegramInitializer *initializer)
 {
     if(this->_initializer == initializer)
@@ -61,27 +76,24 @@ void Telegram::setInitializer(TelegramInitializer *initializer)
 
     if(this->_initializer)
     {
-        disconnect(this->_initializer, &TelegramInitializer::configurationReady, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::floodLock, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::phoneCodeError, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signUpRequested, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::signInRequested, this, 0);
-        disconnect(this->_initializer, &TelegramInitializer::loginCompleted, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::invalidPassword, this, 0);
         disconnect(this->_initializer, &TelegramInitializer::sessionPasswordNeeded, this, 0);
+        disconnect(this->_initializer, &TelegramInitializer::loginCompleted, this, 0);
     }
 
     this->_initializer = initializer;
 
-    connect(this->_initializer, &TelegramInitializer::configurationReady, this, &Telegram::onConfigurationReady);
     connect(this->_initializer, &TelegramInitializer::floodLock, this, &Telegram::floodLock);
     connect(this->_initializer, &TelegramInitializer::phoneCodeError, this, &Telegram::phoneCodeError);
     connect(this->_initializer, &TelegramInitializer::signUpRequested, this, &Telegram::signUpRequested);
     connect(this->_initializer, &TelegramInitializer::signInRequested, this, &Telegram::signInRequested);
-    connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
     connect(this->_initializer, &TelegramInitializer::invalidPassword, this, &Telegram::invalidPassword);
     connect(this->_initializer, &TelegramInitializer::sessionPasswordNeeded, this, &Telegram::sessionPasswordNeeded);
-    connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::loginCompleted);
+    connect(this->_initializer, &TelegramInitializer::loginCompleted, this, &Telegram::onLoginCompleted);
 
     emit initializerChanged();
 }
@@ -395,9 +407,15 @@ void Telegram::resendCode() const
     this->_initializer->resendCode();
 }
 
-void Telegram::onConfigurationReady()
+void Telegram::onLoginCompleted()
 {
+    this->_loggedin = true;
+
     TelegramConfig_setAutoDownload(this->_autodownload);
+    connect(TelegramCache_instance, &TelegramCache::unreadCountChanged, this, &Telegram::unreadCountChanged);
+
+    emit loginCompleted();
+    emit unreadCountChanged();
 }
 
 QString Telegram::userList(const TLVector<TLInt> users) const

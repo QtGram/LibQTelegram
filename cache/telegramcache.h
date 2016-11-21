@@ -10,6 +10,7 @@
 #define TelegramCache_clearHistory(dialog) TelegramCache::cache()->clearHistory(dialog)
 #define TelegramCache_accessHash(dialog) TelegramCache::cache()->accessHash(dialog)
 
+#define TelegramCache_unreadCount TelegramCache::cache()->unreadCount()
 #define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
 
@@ -45,6 +46,7 @@ class TelegramCache: public QObject
     public:
         static TelegramCache* cache();
         void load();
+        int unreadCount();
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
         QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
@@ -87,7 +89,7 @@ class TelegramCache: public QObject
     private:
         void eraseMessage(MessageId messageid);
         void checkMessageAction(Message* message);
-        void updateUnreadMessages(Dialog* dialog, int amount);
+        void updateUnreadCount(Dialog* dialog, TLInt unreadcount);
         int checkUnreadMessages(Dialog* dialog);
 
     signals:
@@ -108,6 +110,7 @@ class TelegramCache: public QObject
         void chatFullChanged(Dialog* dialog);
         void participantsCountChanged();
         void contactsUpdated();
+        void unreadCountChanged();
 
     private:
         QList<Dialog*> _dialogs;
@@ -118,6 +121,7 @@ class TelegramCache: public QObject
         QHash<MessageId, Message*> _messages;
         CacheDatabase* _database;
         CacheFetcher* _fetcher;
+        int _unreadcount;
 
     private:
         static TelegramCache* _instance;

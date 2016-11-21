@@ -21,12 +21,14 @@ void DialogsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobje
     this->execute(queryobj);
 }
 
-void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent) const
+int DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent) const
 {
     CreateQuery(queryobj);
 
     if(!this->query(queryobj, "SELECT * FROM " + this->name()))
-        return;
+        return 0;
+
+    int unreadcount = 0;
 
     while(queryobj.next())
     {
@@ -35,5 +37,9 @@ void DialogsTable::populate(QList<Dialog *>& dialogs, QObject *parent) const
 
         dialog->unserialize(data);
         dialogs << dialog;
+
+        unreadcount += dialog->unreadCount();
     }
+
+    return unreadcount;
 }

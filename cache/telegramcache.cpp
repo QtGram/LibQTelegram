@@ -162,16 +162,18 @@ void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
 {
     dialog->setReadInboxMaxId(inmaxid);
     dialog->setReadOutboxMaxId(outmaxid);
-    dialog->setUnreadCount(this->checkUnreadMessages(dialog));
 
+    this->updateUnreadCount(dialog, this->checkUnreadMessages(dialog));
     this->cache(dialog);
+
     emit dialogUnreadCountChanged(dialog);
 }
 
 void TelegramCache::clearHistory(Dialog *dialog)
 {
-    dialog->setUnreadCount(0);
     dialog->setTopMessage(0);
+
+    this->updateUnreadCount(dialog, 0);
     this->cache(dialog);
 
     TLVector<MessageId> deletedmessages;
@@ -286,7 +288,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         dialog->setTopMessage(message->id());
 
         if(!message->isOut())
-            this->updateUnreadMessages(dialog, 1);
+            this->updateUnreadCount(dialog, dialog->unreadCount() + 1);
 
         this->cache(dialog);
         emit newMessage(message);
@@ -413,7 +415,7 @@ void TelegramCache::onReadHistory(Update *update)
     else
         dialog->setReadOutboxMaxId(update->maxId());
 
-    dialog->setUnreadCount(this->checkUnreadMessages(dialog));
+    this->updateUnreadCount(dialog, this->checkUnreadMessages(dialog));
     this->cache(dialog);
 
     emit readHistory(dialog);
@@ -473,7 +475,8 @@ void TelegramCache::eraseMessage(MessageId messageid)
             dialog->setReadInboxMaxId(0);
             dialog->setReadOutboxMaxId(0);
             dialog->setTopMessage(0);
-            dialog->setUnreadCount(0);
+
+            this->updateUnreadCount(dialog, 0);
         }
         else
         {
@@ -534,10 +537,14 @@ void TelegramCache::checkMessageAction(Message *message)
     }
 }
 
-void TelegramCache::updateUnreadMessages(Dialog *dialog, int amount)
+void TelegramCache::updateUnreadCount(Dialog *dialog, TLInt newunreadcount)
 {
-    dialog->setUnreadCount(dialog->unreadCount() + amount);
+    this->_unreadcount -= dialog->unreadCount();
+    this->_unreadcount += newunreadcount;
+
+    dialog->setUnreadCount(newunreadcount);
     emit dialogUnreadCountChanged(dialog);
+    emit unreadCountChanged();
 }
 
 int TelegramCache::checkUnreadMessages(Dialog *dialog)
@@ -563,8 +570,15 @@ TelegramCache *TelegramCache::cache()
 
 void TelegramCache::load()
 {
-    this->_database->dialogs()->populate(this->_dialogs, this);
+    this->_unreadcount = this->_database->dialogs()->populate(this->_dialogs, this);
     this->_database->users()->populateContacts(this->_contacts, this);
+
+    emit unreadCountChanged();
+}
+
+int TelegramCache::unreadCount()
+{
+    return this->_unreadcount;
 }
 
 const QList<Dialog *>& TelegramCache::dialogs() const
