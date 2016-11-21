@@ -21,7 +21,7 @@ void TelegramModel::setTelegram(Telegram *telegram)
         disconnect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, this, 0);
 
     this->_telegram = telegram;
-    connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, this, [this]() { this->telegramReady(); });
+    connect(this->_telegram->initializer(), &TelegramInitializer::loginCompleted, this, &TelegramModel::telegramReady);
 
     if(DCConfig_isLoggedIn)
         this->telegramReady();

@@ -941,8 +941,16 @@ void MessagesModel::terminateInitialization()
 
 void MessagesModel::telegramReady()
 {
-    if(!this->_dialog)
+    if(!this->_dialog || !this->_telegram)
         return;
+
+    if(this->_telegram->syncing())
+    {
+        connect(this->_telegram, &Telegram::syncingChanged, this, &MessagesModel::telegramReady);
+        return;
+    }
+
+    disconnect(this->_telegram, &Telegram::syncingChanged, this, 0);
 
     connect(TelegramCache_instance, &TelegramCache::newMessage, this, &MessagesModel::onNewMessage);
     connect(TelegramCache_instance, &TelegramCache::deleteMessage, this, &MessagesModel::onDeleteMessage);

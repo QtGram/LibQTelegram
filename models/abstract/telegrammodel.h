@@ -32,6 +32,8 @@ class TelegramModel : public QAbstractListModel
         void setInitializing(bool initializing);
         void setLoading(bool loading);
         virtual QHash<int, QByteArray> initRoles() const;
+
+    protected slots:
         virtual void telegramReady() = 0;
 
     signals:
