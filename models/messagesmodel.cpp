@@ -425,8 +425,6 @@ void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
 
 void MessagesModel::sendAction(int action)
 {
-    return;
-
     if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
         return;
 
