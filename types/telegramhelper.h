@@ -37,6 +37,7 @@ class TelegramHelper
         static QString fullName(User* user);
         static QString statusText(User* user);
         static DocumentAttribute* createDocumentAttribute(const QString& filename, QObject *parent = 0);
+        static DocumentAttribute* createDocumentAttribute(const QSize& size, QObject *parent = 0);
         static DocumentAttribute* documentHas(Document* document, TLConstructor attributector);
         static bool isSticker(Document* document);
         static bool isAnimated(Document* document);

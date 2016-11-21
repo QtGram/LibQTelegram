@@ -59,6 +59,11 @@ const QString &FileUploader::filePath() const
     return this->_filepath;
 }
 
+const QString &FileUploader::fileName() const
+{
+    return this->_filename;
+}
+
 const QSize &FileUploader::imageSize() const
 {
     return this->_imagesize;
@@ -92,6 +97,10 @@ Document *FileUploader::createDocument() const
     document->setDate(CurrentTimeStamp);
     document->setMimeType(this->_mimetype);
     document->setSize(this->_filesize);
+
+    TLVector<DocumentAttribute*> attributes;
+    this->createDocumentAttributes(attributes, document);
+    document->setAttributes(attributes);
 
     return document;
 }
@@ -133,10 +142,18 @@ InputMedia *FileUploader::createInputMediaDocument() const
     inputmedia->setCaption(ToTLString(this->_caption));
 
     TLVector<DocumentAttribute*> attributes;
-    attributes << TelegramHelper::createDocumentAttribute(this->_filename, inputmedia);
-
+    this->createDocumentAttributes(attributes, inputmedia);
     inputmedia->setAttributes(attributes);
+
     return inputmedia;
+}
+
+void FileUploader::createDocumentAttributes(TLVector<DocumentAttribute *> &attributes, QObject* parent) const
+{
+    attributes << TelegramHelper::createDocumentAttribute(this->_filename, parent);
+
+    if(!this->_imagesize.isEmpty())
+        attributes << TelegramHelper::createDocumentAttribute(this->_imagesize, parent);
 }
 
 qreal FileUploader::progress() const

@@ -79,10 +79,19 @@ FileObject *FileCache::localFileObject(TelegramObject *tgobj)
             return this->_filemap[LocalFileId(photo->id())];
 
     }
+    else if(tgobj->constructorId() == TLTypes::Document)
+    {
+        Document* document = qobject_cast<Document*>(tgobj);
+
+        if(this->_filemap.contains(LocalFileId(document->id())))
+            return this->_filemap[LocalFileId(document->id())];
+    }
     if(tgobj->constructorId() == TLTypes::Message)
         return this->localFileObject(qobject_cast<Message*>(tgobj)->media());
     else if(tgobj->constructorId() == TLTypes::MessageMediaPhoto)
         return this->localFileObject(qobject_cast<MessageMedia*>(tgobj)->photo());
+    else if(tgobj->constructorId() == TLTypes::MessageMediaDocument)
+        return this->localFileObject(qobject_cast<MessageMedia*>(tgobj)->document());
 
     return NULL;
 }

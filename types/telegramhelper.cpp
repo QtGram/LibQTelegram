@@ -2,6 +2,8 @@
 #include "../crypto/hash.h"
 #include "../config/telegramconfig.h"
 #include <QDateTime>
+#include <QSize>
+
 
 TelegramHelper::TelegramHelper()
 {
@@ -384,6 +386,17 @@ DocumentAttribute *TelegramHelper::createDocumentAttribute(const QString &filena
     DocumentAttribute* documentattribute = new DocumentAttribute(parent);
     documentattribute->setConstructorId(TLTypes::DocumentAttributeFilename);
     documentattribute->setFileName(filename);
+
+    return documentattribute;
+}
+
+DocumentAttribute *TelegramHelper::createDocumentAttribute(const QSize &size, QObject *parent)
+{
+    DocumentAttribute* documentattribute = new DocumentAttribute(parent);
+    documentattribute->setConstructorId(TLTypes::DocumentAttributeImageSize);
+    documentattribute->setW(size.width());
+    documentattribute->setH(size.height());
+
     return documentattribute;
 }
 

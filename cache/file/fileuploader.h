@@ -23,6 +23,7 @@ class FileUploader : public QObject
         ~FileUploader();
         TLLong localFileId() const;
         const QString& filePath() const;
+        const QString& fileName() const;
         const QSize& imageSize() const;
         qreal progress() const;
         bool uploading() const;
@@ -38,6 +39,7 @@ class FileUploader : public QObject
         InputFile* createInputFile() const;
         InputMedia* createInputMediaPhoto() const;
         InputMedia* createInputMediaDocument() const;
+        void createDocumentAttributes(TLVector<DocumentAttribute*>& attribute, QObject* parent) const;
         void scaleImageIfNeeded();
         bool calculatePartsLength();
         void calculatePartsCount();

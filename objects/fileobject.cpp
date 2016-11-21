@@ -300,6 +300,7 @@ void FileObject::upload()
 
     // Update FileObject's data
     this->_filepath = this->_uploader->filePath();
+    this->_filename = this->_uploader->fileName();
     this->_imagesize = this->_uploader->imageSize();
 }
 
