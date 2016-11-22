@@ -195,6 +195,14 @@ QString QQuickMediaMessageItem::webPageUrl() const
     return messagemedia->webpage()->url();
 }
 
+QString QQuickMediaMessageItem::videoThumbnail() const
+{
+    if(!this->_fileobject || !this->isVideo())
+        return QString();
+
+    return this->_fileobject->thumbnail();
+}
+
 bool QQuickMediaMessageItem::webPageHasPhoto() const
 {
     if(!this->_message)
@@ -384,6 +392,10 @@ void QQuickMediaMessageItem::createImageElement()
 
     this->createObject(this->_imagecomponent);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
+
+    if(this->isVideo())
+        emit videoThumbnailChanged();
+
     this->scaleToImageSize();
 }
 
@@ -484,6 +496,11 @@ void QQuickMediaMessageItem::initialize()
     {
         this->setVisible(false);
         return;
+    }
+    else if(messagemedia->constructorId() == TLTypes::MessageMediaDocument)
+    {
+        if(TelegramHelper::isVideo(messagemedia->document()))
+            connect(fileobject, &FileObject::hasThumbnailChanged, this, &QQuickMediaMessageItem::videoThumbnailChanged);
     }
     else if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
     {

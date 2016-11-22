@@ -71,13 +71,13 @@ class QQuickBaseItem : public QQuickItem
         void progressChanged();
 
     private:
-        FileObject* _fileobject;
         QString _version;
         QColor _backcolor;
         QColor _forecolor;
         qreal _pixelsize;
 
     protected:
+        FileObject* _fileobject;
         QQuickItem* _mediaelement;
 };
 

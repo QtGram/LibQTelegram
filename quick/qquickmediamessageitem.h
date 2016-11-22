@@ -22,6 +22,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(QString webPageTitle READ webPageTitle NOTIFY webPageTitleChanged)
     Q_PROPERTY(QString webPageDescription READ webPageDescription NOTIFY webPageDescriptionChanged)
     Q_PROPERTY(QString webPageUrl READ webPageUrl NOTIFY webPageUrlChanged)
+    Q_PROPERTY(QString videoThumbnail READ videoThumbnail NOTIFY videoThumbnailChanged)
     Q_PROPERTY(bool webPageHasPhoto READ webPageHasPhoto NOTIFY webPageHasPhotoChanged)
     Q_PROPERTY(GeoPoint* geoPoint READ geoPoint NOTIFY geoPointChanged)
     Q_PROPERTY(QQmlComponent* imageDelegate READ imageDelegate WRITE setImageDelegate NOTIFY imageDelegateChanged)
@@ -48,6 +49,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         QString webPageTitle() const;
         QString webPageDescription() const;
         QString webPageUrl() const;
+        QString videoThumbnail() const;
         bool webPageHasPhoto() const;
         GeoPoint* geoPoint() const;
         void setMessage(Message* message);
@@ -109,6 +111,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void webPageDescriptionChanged();
         void webPageUrlChanged();
         void webPageHasPhotoChanged();
+        void videoThumbnailChanged();
         void geoPointChanged();
         void imageDelegateChanged();
         void animatedDelegateChanged();
