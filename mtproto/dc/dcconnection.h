@@ -22,7 +22,7 @@ class DCConnection : public QTcpSocket
         template<typename ...ARGS> void fatal(const QString& msg, ARGS&&... args) const;
 
     public slots:
-        void connectToDC();
+        bool connectToDC();
 
     protected:
         void reconnectTimeout();

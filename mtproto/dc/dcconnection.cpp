@@ -45,12 +45,13 @@ void DCConnection::reconnectTimeout()
     this->_reconnectiontimeout = this->_reconnectiontimeout * ReconnectionMultiplier;
 }
 
-void DCConnection::connectToDC()
+bool DCConnection::connectToDC()
 {
     if(this->state() != DCConnection::UnconnectedState)
-        return;
+        return false;
 
     this->connectToHost(this->_dcconfig->host(), this->_dcconfig->port());
+    return true;
 }
 
 void DCConnection::timerEvent(QTimerEvent *event)
@@ -60,8 +61,8 @@ void DCConnection::timerEvent(QTimerEvent *event)
         this->killTimer(event->timerId());
         this->_timreconnect = 0;
 
-        this->connectToDC();
-        this->reconnectTimeout();
+        if(this->connectToDC())
+            this->reconnectTimeout();
     }
     else if(event->timerId() == this->_timdctimeout)
     {
