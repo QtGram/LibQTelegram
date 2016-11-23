@@ -57,7 +57,7 @@ Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer
     Message* message = new Message();
     message->setConstructorId(TLTypes::Message);
     message->setMessage(text);
-    message->setDate(QDateTime::currentDateTime().toTime_t());
+    message->setDate(CurrentTimeStamp);
     message->setFromId(me->id());
     message->setIsOut(true);
     message->setToId(peer->clone<Peer>());
