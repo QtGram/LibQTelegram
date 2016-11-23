@@ -6,7 +6,7 @@
 
 TLLong DC::_lastclientmsgid = 0;
 
-DC::DC(DCConfig *dcconfig, bool filedc, QObject *parent): DCConnection(dcconfig, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0), _filedc(filedc)
+DC::DC(DCConfig *dcconfig, bool filedc, QObject *parent): DCConnection(dcconfig, filedc, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcconfig, this);
 
@@ -24,11 +24,6 @@ DC::DC(DCConfig *dcconfig, bool filedc, QObject *parent): DCConnection(dcconfig,
 
     connect(this, &DC::connected, this, &DC::onDCConnected);
     connect(this, &DC::readyRead, this, &DC::onDCReadyRead);
-}
-
-bool DC::fileDc() const
-{
-    return this->_filedc;
 }
 
 MTProtoRequest *DC::lastRequest() const
@@ -66,7 +61,7 @@ void DC::assignMessageId(MTProtoRequest* req)
     DC::_lastclientmsgid = this->_lastmsgid = msgid = qMax(msgid, DC::_lastclientmsgid + 4);
 
     if((msgid % 4) != 0)
-        qFatal("Message %llx not divisible by 4 (yields %lld)", msgid, msgid % 4);
+        this->fatal("Message %llx not divisible by 4 (yields %lld)", msgid, msgid % 4);
 
     req->setMessageId(msgid);
 }
@@ -77,9 +72,9 @@ void DC::checkSyncronization(MTProtoReply *mtreply)
     TLLong clienttime = CurrentDeltaTime(this->_dcconfig->deltaTime());
 
     if(clienttime <= (servertime - 30))
-        qWarning("DC %d Message %llx has a date at least 30 seconds in the future than current date", this->_dcconfig->dcid(), mtreply->messageId());
+        this->warning("Message %llx has a date at least 30 seconds in the future than current date", mtreply->messageId());
     else if(clienttime >= (servertime + 300))
-        qWarning("DC %d Message %llx was sent at least 300 seconds ago", this->_dcconfig->dcid(), mtreply->messageId());
+        this->warning("Message %llx was sent at least 300 seconds ago", mtreply->messageId());
 }
 
 void DC::decompile(int direction, TLLong messageid, const QByteArray& body)
@@ -107,7 +102,7 @@ TLInt DC::getPacketLength()
         return packetlength * 4;
     }
 
-    qFatal("DC %d Incorrect TCP Package", this->_dcconfig->dcid());
+    this->fatal("Incorrect TCP Package");
     return 0;
 }
 
@@ -127,11 +122,11 @@ void DC::repeatRequest(TLLong msgid, TLLong newsessionid)
 {
     if(!this->_pendingrequests.contains(msgid))
     {
-        qDebug("DC %d Expired request %llx...", this->_dcconfig->dcid(), msgid);
+        this->log("Expired request %llx...", msgid);
         return;
     }
 
-    qDebug("DC %d Repeating request %llx...", this->_dcconfig->dcid(), msgid);
+    this->log("Repeating request %llx...", msgid);
 
     MTProtoRequest* req = this->_pendingrequests.take(msgid);
     req->setAcked(false);
@@ -144,13 +139,13 @@ void DC::repeatRequest(TLLong msgid, TLLong newsessionid)
 
 void DC::onRequestTimeout(TLLong messageid)
 {
-    qDebug("DC %d request %llx timed-out...", this->_dcconfig->dcid(), messageid);
+    this->log("Request %llx timed-out", messageid);
 
     if(this->state() == DC::UnconnectedState)
         return;
 
     this->abort();
-    emit timeout();
+    this->reconnectTimeout();
 }
 
 void DC::onDCConnected()
@@ -185,7 +180,7 @@ void DC::handleReply(const QByteArray &message)
 
     if(mtreply.isError())
     {
-        qWarning("DC %d ERROR %d", this->_dcconfig->dcid(), qAbs(mtreply.errorCode()));
+        this->warning("ERROR %d", qAbs(mtreply.errorCode()));
 
         if(!this->_pendingrequests.contains(this->_lastmsgid))
             return;
@@ -198,7 +193,7 @@ void DC::handleReply(const QByteArray &message)
     }
 
     if(((mtreply.messageId() % 4) != 1) && ((mtreply.messageId() % 4) != 3))
-        qFatal("DC %d Invalid server Message %llx (yields %lld, instead of 1 or 3)", this->_dcconfig->dcid(), mtreply.messageId(), mtreply.messageId() % 4);
+        this->fatal("Invalid server Message %llx (yields %lld, instead of 1 or 3)", mtreply.messageId(), mtreply.messageId() % 4);
 
     this->handleReply(&mtreply);
 }
@@ -229,7 +224,7 @@ void DC::handleReply(MTProtoReply *mtreply)
             emit req->replied(mtreply);
         }
         else if(!handled)
-            qWarning("DC %d Request for msg_id %llx not found", this->_dcconfig->dcid(), mtreply->messageId());
+            this->warning("Request for msg_id %llx not found", mtreply->messageId());
     }
     else
         emit authorizationReply(mtreply);
@@ -248,7 +243,7 @@ void DC::onAck(const TLVector<TLLong> &msgids)
         MTProtoRequest* req = this->_pendingrequests[msgid];
         req->setAcked(true);
 
-        qDebug("DC %d ACK request %llx", this->_dcconfig->dcid(), msgid);
+        this->log("ACK request %llx", msgid);
     }
 }
 
@@ -256,7 +251,7 @@ void DC::onAckRequest(TLLong reqmsgid)
 {
     if(!this->_pendingrequests.contains(reqmsgid))
     {
-        qWarning("DC %d Cannot ACK request %llx", this->_dcconfig->dcid(), reqmsgid);
+        this->log("Cannot ACK request %llx", reqmsgid);
         return;
     }
 
@@ -344,7 +339,7 @@ void DC::send(MTProtoRequest *req)
     if(this->state() != DC::ConnectedState)
     {
         req->deleteLater();
-        qWarning("DC %d Not connected, cannot send queries", this->_dcconfig->dcid());
+        this->log("Not connected, cannot send queries");
         return;
     }
 
@@ -357,7 +352,7 @@ void DC::send(MTProtoRequest *req)
 
         if(this->_dcconfig->authorization() < DCConfig::Authorized)
         {
-            qWarning("DC %d Cannot send encrypted requests", this->_dcconfig->dcid());
+            this->log("Cannot send encrypted requests");
             return;
         }
 
@@ -403,7 +398,7 @@ void DC::onDCReadyRead()
 
         if(packetlen < 4)
         {
-            qFatal("DC %d Invalid TCP package, length: %d", this->_dcconfig->dcid(), packetlen);
+            this->fatal("Invalid TCP package, length: %d", packetlen);
             return;
         }
 

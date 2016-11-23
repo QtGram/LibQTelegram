@@ -405,7 +405,7 @@ void Telegram::sendPassword(const QString &password) const
 
 void Telegram::reconnect() const
 {
-    DCSessionManager_instance->restoreMainSession();
+    DCSessionManager_instance->restoreSessions();
 }
 
 void Telegram::resendCode() const

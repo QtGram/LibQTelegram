@@ -974,7 +974,6 @@ void MessagesModel::telegramReady()
     }
 
     this->setInitializing(true);
-
     this->_messages = TelegramCache_lastDialogMessages(this->_dialog);
 
     if(this->_messages.count() >= MessagesFirstLoad)

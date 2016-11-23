@@ -66,7 +66,7 @@ class Telegram : public QObject
         void invalidPassword();
         void unreadCountChanged();
         void floodLock(int seconds);
-        void connectionTimeout(int retryseconds);
+        void connectionTimeout(int seconds);
         void sessionPasswordNeeded(QString hint);
         void phoneCodeError(QString errormessage);
 

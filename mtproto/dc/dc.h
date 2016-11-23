@@ -16,7 +16,6 @@ class DC : public DCConnection
 
     public:
         explicit DC(DCConfig* dcconfig, bool filedc, QObject *parent = 0);
-        bool fileDc() const;
         MTProtoRequest* lastRequest() const;
         void sendPlain(MTProtoStream* mtstream);
         void send(MTProtoRequest *req);
@@ -59,7 +58,6 @@ class DC : public DCConnection
         void invalidPassword();
         void sessionPasswordNeeded();
         void unauthorized();
-        void timeout();
 
     private:
         QHash<TLLong, MTProtoRequest*> _pendingrequests; // Queries sent and waiting for ACKs
@@ -71,7 +69,6 @@ class DC : public DCConnection
         TLLong _lastmsgid;
         int _ownedsessions;
         int _timcloseconnection;
-        bool _filedc;
 
     private:
         static TLLong _lastclientmsgid;

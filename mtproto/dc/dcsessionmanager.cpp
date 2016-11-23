@@ -1,12 +1,8 @@
 #include "dcsessionmanager.h"
-#include <QTimerEvent>
-
-#define ReconnectionBase       2000 // 2 seconds
-#define ReconnectionMultiplier 2
 
 DCSessionManager* DCSessionManager::_sessionmanager = NULL;
 
-DCSessionManager::DCSessionManager(QObject *parent): QObject(parent), _mainsession(NULL), _reconnectiontimer(0), _reconnectiontimeout(ReconnectionBase)
+DCSessionManager::DCSessionManager(QObject *parent): QObject(parent), _mainsession(NULL)
 {
 }
 
@@ -17,11 +13,6 @@ DC *DCSessionManager::createDC(DCConfig *dcconfig, bool filedc)
     else if(!filedc && this->_dclist.contains(dcconfig->id()))
         return this->_dclist[dcconfig->id()];
 
-    if(filedc)
-        qDebug("DC %d created (file transfer)", dcconfig->dcid());
-    else
-        qDebug("DC %d created", dcconfig->dcid());
-
     DC* dc = new DC(dcconfig, filedc, this);
     connect(dc, &DC::disconnected, this, &DCSessionManager::onDCDisconnected);
     connect(dc, &DC::authorizationReply, this, &DCSessionManager::onAuthorizationReply);
@@ -31,12 +22,20 @@ DC *DCSessionManager::createDC(DCConfig *dcconfig, bool filedc)
     connect(dc, &DC::invalidPassword, this, &DCSessionManager::invalidPassword);
     connect(dc, &DC::sessionPasswordNeeded, this, &DCSessionManager::sessionPasswordNeeded);
 
+    dc->log("created");
+
     if(filedc)
         this->_filedclist[dcconfig->id()] = dc;
     else
         this->_dclist[dcconfig->id()] = dc;
 
     return dc;
+}
+
+void DCSessionManager::doRestoreSessions(const QList<DC *> &dclist) const
+{
+    foreach(DC* dc, dclist)
+        dc->reconnect();
 }
 
 void DCSessionManager::doAuthorization(DCSession *dcsession)
@@ -68,10 +67,7 @@ void DCSessionManager::doSessionReady(DCSession *dcsession)
         dc->send(keptreq);
     }
 
-    if(this->_mainsession == dcsession)
-        this->_reconnectiontimeout = ReconnectionBase;
-
-    qDebug("DC %d Client Session Created (session_id: %llx)", dc->config()->dcid(), dcsession->sessionId());
+    dc->log("Client Session Created (session_id: %llx)", dcsession->sessionId());
     dcsession->repeatRequests();
 
     emit sessionReady(dcsession);
@@ -104,22 +100,17 @@ void DCSessionManager::closeSession(DCSession *dcsession)
     DC* dc = SessionToDC(dcsession);
     Q_ASSERT(dc != NULL);
 
-    qDebug("DC %d Client Session Destroyed (session_id: %llx)", dc->config()->dcid(), dcsession->sessionId());
+    dc->log("Client Session Destroyed (session_id: %llx)", dcsession->sessionId());
 
     if(dcsession->ownedDc())
     {
         dc->close();
+        dc->log("closed");
 
         if(dc->fileDc())
-        {
-            qDebug("DC %d closed (file transfer)", dc->config()->dcid());
             this->_filedclist.remove(dc->config()->id());
-        }
         else
-        {
-            qDebug("DC %d closed", dc->config()->dcid());
             this->_dclist.remove(dc->config()->id());
-        }
     }
 
     dcsession->deleteLater();
@@ -156,7 +147,6 @@ DCSession *DCSessionManager::createMainSession(DCConfig *dcconfig)
         {
             disconnect(olddc, &DC::connected, this, 0);
             disconnect(olddc, &DC::disconnected, this, 0);
-            disconnect(olddc, &DC::failed, this, 0);
             disconnect(olddc, &DC::timeout, this, 0);
         }
 
@@ -171,8 +161,7 @@ DCSession *DCSessionManager::createMainSession(DCConfig *dcconfig)
     DCConfig_setMainConfig(dcconfig);
     connect(dc, &DC::connected, this, &DCSessionManager::mainSessionConnectedChanged);
     connect(dc, &DC::disconnected, this, &DCSessionManager::mainSessionConnectedChanged);
-    connect(dc, &DC::failed, this, &DCSessionManager::onMainSessionDisconnected);
-    connect(dc, &DC::timeout, this, &DCSessionManager::onMainSessionDisconnected);
+    connect(dc, &DC::timeout, this, &DCSessionManager::mainSessionTimeout);
     return this->_mainsession;
 }
 
@@ -185,18 +174,13 @@ DCSession *DCSessionManager::createSession(DCConfig *dcconfig, bool filedc)
     return dcsession;
 }
 
-void DCSessionManager::restoreMainSession()
+void DCSessionManager::restoreSessions() const
 {
-    if(!this->_mainsession)
-        return;
+    QList<DC*> dclist = this->_dclist.values();
+    this->doRestoreSessions(dclist);
 
-    if(this->_reconnectiontimer)
-    {
-        this->killTimer(this->_reconnectiontimer);
-        this->_reconnectiontimer = 0;
-    }
-
-    DC_InitializeSession(this->_mainsession);
+    dclist = this->_filedclist.values();
+    this->doRestoreSessions(dclist);
 }
 
 void DCSessionManager::onAuthorized(DC* dc)
@@ -247,16 +231,6 @@ void DCSessionManager::onMigrateDC(DCConfig* fromdcconfig, int todcid)
     this->initializeSession(session);
 }
 
-void DCSessionManager::onMainSessionDisconnected()
-{
-    this->_reconnectiontimer = this->startTimer(this->_reconnectiontimeout);
-
-    qWarning("DC %d reconnection in %d seconds", SessionToDcId(this->_mainsession), this->_reconnectiontimeout / 1000);
-    emit mainSessionTimeout(this->_reconnectiontimeout);
-
-    this->_reconnectiontimeout = this->_reconnectiontimeout * ReconnectionMultiplier;
-}
-
 void DCSessionManager::onDCDisconnected()
 {
     DC* dc = qobject_cast<DC*>(this->sender());
@@ -266,10 +240,4 @@ void DCSessionManager::onDCDisconnected()
 
     DCAuthorization* dcauthorization = this->_dcauthorizations.take(dc);
     dcauthorization->deleteLater();
-}
-
-void DCSessionManager::timerEvent(QTimerEvent *event)
-{
-    if(event->timerId() == this->_reconnectiontimer)
-        this->restoreMainSession();
 }

@@ -2,7 +2,10 @@
 #include "../../types/time.h"
 #include <QTimerEvent>
 
-DCConnection::DCConnection(DCConfig* dcconfig, QObject *parent): QTcpSocket(parent), _dcconfig(dcconfig), _reconnecttimerid(0), _dctimeouttimerid(0)
+#define ReconnectionBase       2000 // 2 seconds
+#define ReconnectionMultiplier 2
+
+DCConnection::DCConnection(DCConfig* dcconfig, bool filedc, QObject *parent): QTcpSocket(parent), _dcconfig(dcconfig), _filedc(filedc), _timreconnect(0), _timdctimeout(0), _reconnectiontimeout(ReconnectionBase)
 {
     connect(this, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
@@ -11,6 +14,35 @@ DCConnection::DCConnection(DCConfig* dcconfig, QObject *parent): QTcpSocket(pare
 DCConfig *DCConnection::config() const
 {
     return this->_dcconfig;
+}
+
+bool DCConnection::fileDc() const
+{
+    return this->_filedc;
+}
+
+void DCConnection::reconnect()
+{
+    if(this->_timreconnect != 0)
+    {
+        this->killTimer(this->_timreconnect);
+        this->_timreconnect = 0;
+    }
+
+    this->_reconnectiontimeout = ReconnectionBase;
+    this->connectToDC();
+}
+
+void DCConnection::reconnectTimeout()
+{
+    if(this->_timreconnect != 0)
+        return;
+
+    this->warning("Reconnection in %d seconds", this->_reconnectiontimeout / 1000);
+    emit timeout(this->_reconnectiontimeout);
+
+    this->_timreconnect = this->startTimer(this->_reconnectiontimeout);
+    this->_reconnectiontimeout = this->_reconnectiontimeout * ReconnectionMultiplier;
 }
 
 void DCConnection::connectToDC()
@@ -23,28 +55,25 @@ void DCConnection::connectToDC()
 
 void DCConnection::timerEvent(QTimerEvent *event)
 {
-    if(event->timerId() == this->_reconnecttimerid)
-    {
-        this->connectToDC();
-        this->killTimer(event->timerId());
-        this->_reconnecttimerid = 0;
-    }
-    else if(event->timerId() == this->_dctimeouttimerid)
+    if(event->timerId() == this->_timreconnect)
     {
         this->killTimer(event->timerId());
-        this->_dctimeouttimerid = 0;
+        this->_timreconnect = 0;
 
-        if(this->state() == DCConnection::ConnectedState)
+        this->connectToDC();
+        this->reconnectTimeout();
+    }
+    else if(event->timerId() == this->_timdctimeout)
+    {
+        this->killTimer(event->timerId());
+        this->_timdctimeout = 0;
+
+        if(this->state() != DCConnection::ConnectingState)
             return;
 
         this->abort();
-        emit failed();
+        this->reconnectTimeout();
     }
-}
-
-void DCConnection::reconnectToDC()
-{
-    this->_reconnecttimerid = this->startTimer(ReconnectionTimeout);
 }
 
 void DCConnection::onStateChanged(SocketState state)
@@ -52,37 +81,38 @@ void DCConnection::onStateChanged(SocketState state)
     switch(state)
     {
         case QAbstractSocket::UnconnectedState:
-            qWarning("DC %d unconnected", this->_dcconfig->dcid());
+            this->log("unconnected");
             break;
 
         case QAbstractSocket::HostLookupState:
-            qWarning("DC %d looking up host", this->_dcconfig->dcid());
+            this->log("looking up host");
             break;
 
         case QAbstractSocket::ConnectingState:
-            qWarning("DC %d connecting", this->_dcconfig->dcid());
-            this->_dctimeouttimerid = this->startTimer(DCTimeout);
+            this->log("connecting");
+            this->_timdctimeout = this->startTimer(DCTimeout);
             break;
 
         case QAbstractSocket::ConnectedState:
-            qWarning("DC %d connected", this->_dcconfig->dcid());
+            this->log("connected");
             this->setSocketOption(DCConnection::KeepAliveOption, 1);
+            this->_reconnectiontimeout = ReconnectionBase;
             break;
 
         case QAbstractSocket::BoundState:
-            qWarning("DC %d bound", this->_dcconfig->dcid());
+            this->log("bound");
             break;
 
         case QAbstractSocket::ClosingState:
-            qWarning("DC %d closing", this->_dcconfig->dcid());
+            this->log("closing");
             break;
 
         case QAbstractSocket::ListeningState:
-            qWarning("DC %d listening", this->_dcconfig->dcid());
+            this->log("listening");
             break;
 
         default:
-            qWarning("DC %d unhandled state", this->_dcconfig->dcid());
+            this->warning("unhandled state (%d)", state);
             break;
     }
 }
@@ -92,105 +122,105 @@ void DCConnection::onError(QAbstractSocket::SocketError error)
     switch(error)
     {
         case QAbstractSocket::ConnectionRefusedError:
-            qWarning("DC %d ERROR: Connection refused", this->_dcconfig->dcid());
+            this->warning("ERROR: Connection refused");
             break;
 
         case QAbstractSocket::RemoteHostClosedError:
-            qWarning("DC %d ERROR: Remote host closed, reconnecting in 5 seconds...", this->_dcconfig->dcid());
-            this->reconnectToDC();
+            this->warning("ERROR: Remote host closed");
+            this->reconnectTimeout();
             break;
 
         case QAbstractSocket::HostNotFoundError:
-            qWarning("DC %d ERROR: Host not found", this->_dcconfig->dcid());
+            this->warning("ERROR: Host not found");
             break;
 
         case QAbstractSocket::SocketAccessError:
-            qWarning("DC %d ERROR: Socket access error", this->_dcconfig->dcid());
+            this->warning("ERROR: Socket access error");
             break;
 
         case QAbstractSocket::SocketResourceError:
-            qWarning("DC %d ERROR: Socket resource error", this->_dcconfig->dcid());
+            this->warning("ERROR: Socket resource error");
             break;
 
         case QAbstractSocket::SocketTimeoutError:
-            qWarning("DC %d ERROR: Socket timeout", this->_dcconfig->dcid());
+            this->warning("ERROR: Socket timeout");
             break;
 
         case QAbstractSocket::DatagramTooLargeError:
-            qWarning("DC %d ERROR: Datagram too large", this->_dcconfig->dcid());
+            this->warning("ERROR: Datagram too large");
             break;
 
         case QAbstractSocket::NetworkError:
-            qWarning("DC %d ERROR: Network error", this->_dcconfig->dcid());
-            emit failed();
+            this->warning("ERROR: Network error");
+            this->reconnectTimeout();
             break;
 
         case QAbstractSocket::AddressInUseError:
-            qWarning("DC %d ERROR: Address in use", this->_dcconfig->dcid());
+            this->warning("ERROR: Address in use");
             break;
 
         case QAbstractSocket::SocketAddressNotAvailableError:
-            qWarning("DC %d ERROR: Socket address not available", this->_dcconfig->dcid());
+            this->warning("ERROR: Socket address not available");
             break;
 
         case QAbstractSocket::UnsupportedSocketOperationError:
-            qWarning("DC %d ERROR: Unsupported Socket operation", this->_dcconfig->dcid());
+            this->warning("ERROR: Unsupported Socket operation");
             break;
 
         case QAbstractSocket::ProxyAuthenticationRequiredError:
-            qWarning("DC %d ERROR: Proxy Authentication error", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy Authentication error");
             break;
 
         case QAbstractSocket::SslHandshakeFailedError:
-            qWarning("DC %d ERROR: SSL Handshake failed", this->_dcconfig->dcid());
+            this->warning("ERROR: SSL Handshake failed");
             break;
 
         case QAbstractSocket::UnfinishedSocketOperationError:
-            qWarning("DC %d ERROR: Unfinished Socket operation", this->_dcconfig->dcid());
+            this->warning("ERROR: Unfinished Socket operation");
             break;
 
         case QAbstractSocket::ProxyConnectionRefusedError:
-            qWarning("DC %d ERROR: Proxy connection refused", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy connection refused");
             break;
 
         case QAbstractSocket::ProxyConnectionClosedError:
-            qWarning("DC %d ERROR: Proxy connection closed", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy connection closed");
             break;
 
         case QAbstractSocket::ProxyConnectionTimeoutError:
-            qWarning("DC %d ERROR: Proxy connection timeout", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy connection timeout");
             break;
 
         case QAbstractSocket::ProxyNotFoundError:
-            qWarning("DC %d ERROR: Proxy not found timeout", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy not found");
             break;
 
         case QAbstractSocket::ProxyProtocolError:
-            qWarning("DC %d ERROR: Proxy protocol error", this->_dcconfig->dcid());
+            this->warning("ERROR: Proxy protocol error");
             break;
 
         case QAbstractSocket::OperationError:
-            qWarning("DC %d ERROR: Operation error", this->_dcconfig->dcid());
+            this->warning("ERROR: Operation error");
             break;
 
         case QAbstractSocket::SslInternalError:
-            qWarning("DC %d ERROR: SSL Internal error", this->_dcconfig->dcid());
+            this->warning("ERROR: SSL Internal error");
             break;
 
         case QAbstractSocket::SslInvalidUserDataError:
-            qWarning("DC %d ERROR: SSL Invalid Userdata", this->_dcconfig->dcid());
+            this->warning("ERROR: SSL Invalid Userdata");
             break;
 
         case QAbstractSocket::TemporaryError:
-            qWarning("DC %d ERROR: SSL Temporary error", this->_dcconfig->dcid());
+            this->warning("ERROR: SSL Temporary error");
             break;
 
         case QAbstractSocket::UnknownSocketError:
-            qWarning("DC %d ERROR: Unknown socket error", this->_dcconfig->dcid());
+            this->warning("ERROR: Unknown socket error");
             break;
 
         default:
-            qWarning("DC %d Unhandled error", this->_dcconfig->dcid());
+            this->warning("ERROR: Unhandled error (%d)", error);
             break;
     }
 }
