@@ -336,10 +336,9 @@ void DC::timerEvent(QTimerEvent *event)
 
 void DC::send(MTProtoRequest *req)
 {
-    if(this->state() != DC::ConnectedState)
+    if((this->state() != DC::ConnectedState) && (!req->encrypted() || !req->needsReply()))
     {
         req->deleteLater();
-        this->log("Not connected, cannot send queries");
         return;
     }
 
@@ -355,6 +354,9 @@ void DC::send(MTProtoRequest *req)
             this->log("Cannot send encrypted requests");
             return;
         }
+
+        if(this->state() != DC::ConnectedState)
+            return;
 
         req->setSeqNo(this->generateContentMsgNo());
     }
