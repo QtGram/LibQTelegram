@@ -348,12 +348,12 @@ void MessagesModel::replyMessage(const QString &text, Message *replymessage)
     this->sendMessage(text, replymessage->id());
 }
 
-void MessagesModel::forwardMessages(Dialog* fromdialog, const QVariantList& messages)
+void MessagesModel::forwardMessages(Dialog* todialog, const QVariantList& messages)
 {
-    if(!this->_telegram || !this->_dialog || !fromdialog || messages.isEmpty())
+    if(!this->_telegram || !this->_dialog || !todialog || messages.isEmpty())
         return;
 
-    InputPeer* frompeer = TelegramHelper::inputPeer(fromdialog, TelegramCache_accessHash(fromdialog), this);
+    InputPeer* topeer = TelegramHelper::inputPeer(todialog, TelegramCache_accessHash(todialog), this);
 
     TLVector<TLInt> msgids;
     TLVector<TLLong> randomids;
@@ -369,8 +369,8 @@ void MessagesModel::forwardMessages(Dialog* fromdialog, const QVariantList& mess
     std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
 
     this->createInput();
-    TelegramAPI::messagesForwardMessages(DC_MainSession, frompeer, msgids, randomids, this->_inputpeer);
-    frompeer->deleteLater();
+    TelegramAPI::messagesForwardMessages(DC_MainSession, this->_inputpeer, msgids, randomids, topeer);
+    topeer->deleteLater();
 }
 
 void MessagesModel::deleteMessages(const QVariantList &messages)
