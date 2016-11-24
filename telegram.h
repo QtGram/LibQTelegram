@@ -33,6 +33,7 @@ class Telegram : public QObject
 
     public: // C++ side API
         bool muteDialog(Dialog* dialog, bool mute);
+        bool dialogIsWritable(Dialog* dialog) const;
         QString dialogTitle(Dialog* dialog) const;
         QString dialogStatusText(Dialog* dialog) const;
         QString messagePreview(Message* message) const;

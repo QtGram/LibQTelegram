@@ -119,25 +119,10 @@ bool MessagesModel::isMegaGroup() const
 
 bool MessagesModel::isWritable() const
 {
-    if(!this->_dialog)
+    if(!this->_telegram || !this->_dialog)
         return false;
 
-    TLInt dialogid = TelegramHelper::identifier(this->_dialog);
-
-    if(this->isBroadcast())
-        return dialogid == TelegramConfig_me->id();
-
-    if(TelegramHelper::isChat(this->_dialog) || TelegramHelper::isChannel(this->_dialog))
-    {
-        Chat* chat = TelegramCache_chat(dialogid);
-
-        if(!chat)
-            return false;
-
-        return (chat->constructorId() == TLTypes::Chat) || (chat->constructorId() == TLTypes::Channel);
-    }
-
-    return true;
+    return this->_telegram->dialogIsWritable(this->_dialog);
 }
 
 bool MessagesModel::isActive() const

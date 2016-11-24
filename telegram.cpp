@@ -132,6 +132,26 @@ bool Telegram::muteDialog(Dialog *dialog, bool mute)
     return true;
 }
 
+bool Telegram::dialogIsWritable(Dialog *dialog) const
+{
+    TLInt dialogid = TelegramHelper::identifier(dialog);
+
+    if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
+    {
+        Chat* chat = TelegramCache_chat(dialogid);
+
+        if(!chat)
+            return false;
+
+        if(chat->isBroadcast())
+            return dialogid == TelegramConfig_me->id();
+
+        return (chat->constructorId() == TLTypes::Chat) || (chat->constructorId() == TLTypes::Channel);
+    }
+
+    return true;
+}
+
 QString Telegram::messageMediaText(MessageMedia *messagemedia) const
 {
     TLConstructor ctorid = messagemedia->constructorId();
