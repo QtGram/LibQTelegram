@@ -363,19 +363,25 @@ void MessagesModel::replyMessage(const QString &text, Message *replymessage)
     this->sendMessage(text, replymessage->id());
 }
 
-void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
+void MessagesModel::forwardMessages(Dialog* fromdialog, const QVariantList& messages)
 {
-    if(!this->_telegram || !this->_dialog || !fromdialog || !forwardmessage)
+    if(!this->_telegram || !this->_dialog || !fromdialog || messages.isEmpty())
         return;
 
     InputPeer* frompeer = TelegramHelper::inputPeer(fromdialog, TelegramCache_accessHash(fromdialog), this);
 
     TLVector<TLInt> msgids;
-    msgids << forwardmessage->id();
-    std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
-
     TLVector<TLLong> randomids;
-    randomids << Math::randomize<TLLong>();
+
+    foreach(QVariant v, messages)
+    {
+        Message* message = v.value<Message*>();
+
+        msgids << message->id();
+        randomids << Math::randomize<TLLong>();
+    }
+
+    std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
 
     this->createInput();
     TelegramAPI::messagesForwardMessages(DC_MainSession, frompeer, msgids, randomids, this->_inputpeer);

@@ -86,7 +86,7 @@ class MessagesModel : public TelegramModel
     public slots:
         void sendMessage(const QString& text);
         void replyMessage(const QString& text, Message* replymessage);
-        void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
+        void forwardMessages(Dialog *fromdialog, const QVariantList &messages);
         void deleteMessages(const QVariantList& messages);
         void editMessage(const QString& text, Message *editmessage);
         void sendFile(const QUrl& filepath, const QString &caption);
