@@ -87,6 +87,7 @@ class MessagesModel : public TelegramModel
         void sendMessage(const QString& text);
         void replyMessage(const QString& text, Message* replymessage);
         void forwardMessage(Dialog *fromdialog, Message* forwardmessage);
+        void deleteMessages(const QVariantList& messages);
         void editMessage(const QString& text, Message *editmessage);
         void sendFile(const QUrl& filepath, const QString &caption);
         bool sendPhoto(const QUrl& filepath, const QString& caption);

@@ -350,6 +350,11 @@ void TelegramCache::remove(Dialog *dialog)
     }
 }
 
+void TelegramCache::remove(Message *message)
+{
+    this->eraseMessage(TelegramHelper::identifier(message));
+}
+
 void TelegramCache::onNewUserStatus(Update *update)
 {
     Q_ASSERT(update->constructorId() == TLTypes::UpdateUserStatus);

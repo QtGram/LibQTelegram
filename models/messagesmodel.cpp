@@ -382,6 +382,32 @@ void MessagesModel::forwardMessage(Dialog* fromdialog, Message *forwardmessage)
     frompeer->deleteLater();
 }
 
+void MessagesModel::deleteMessages(const QVariantList &messages)
+{
+    if(!this->_telegram || !this->_dialog || messages.isEmpty())
+        return;
+
+    TLVector<TLInt> msgids;
+
+    foreach(QVariant v, messages)
+    {
+        Message* message = v.value<Message*>();
+        msgids << message->id();
+    }
+
+    std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
+
+    if(TelegramHelper::isChannel(this->_dialog))
+    {
+        this->createInput();
+        TelegramAPI::channelsDeleteMessages(DC_MainSession, this->_inputchannel, msgids);
+        return;
+    }
+
+    TelegramAPI::messagesDeleteMessages(DC_MainSession, msgids);
+
+}
+
 void MessagesModel::editMessage(const QString& text, Message* editmessage)
 {
     if(!editmessage || text.isEmpty())
