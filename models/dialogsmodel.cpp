@@ -360,32 +360,6 @@ QString DialogsModel::draftMessage(Dialog *dialog) const
     return dialog->draft()->message();
 }
 
-void DialogsModel::sortDialogs()
-{
-    this->beginResetModel();
-
-    std::sort(this->_dialogs.begin(), this->_dialogs.end(), [](Dialog* dlg1, Dialog* dlg2) {
-        if(!dlg1->topMessage())
-            return false;
-
-        if(!dlg2->topMessage())
-            return true;
-
-        Message* msg1 = TelegramCache_message(dlg1->topMessage(), dlg1);
-        Message* msg2 = TelegramCache_message(dlg2->topMessage(), dlg2);
-
-        if(!msg1)
-            return false;
-
-        if(!msg2)
-            return true;
-
-        return msg1->date() > msg2->date();
-    });
-
-    this->endResetModel();
-}
-
 void DialogsModel::onSendStatusUpdated(Dialog *dialog)
 {
     int idx = this->_dialogs.indexOf(dialog);
@@ -522,8 +496,10 @@ void DialogsModel::onTitleChanged(Dialog *dialog)
 
 void DialogsModel::telegramReady()
 {
+    this->beginResetModel();
     this->_dialogs = TelegramCache_dialogs;
-    this->sortDialogs();
+    this->_telegram->sortDialogs(this->_dialogs);
+    this->endResetModel();
 
     connect(TelegramCache_instance, &TelegramCache::newDialogs, this, &DialogsModel::onNewDialogs, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &DialogsModel::onReadHistory, Qt::UniqueConnection);

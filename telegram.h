@@ -32,6 +32,7 @@ class Telegram : public QObject
         void setAutoDownload(bool b);
 
     public: // C++ side API
+        void sortDialogs(QList<Dialog*>& dialogs) const;
         bool muteDialog(Dialog* dialog, bool mute);
         bool dialogIsWritable(Dialog* dialog) const;
         QString dialogTitle(Dialog* dialog) const;

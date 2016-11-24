@@ -55,7 +55,6 @@ class DialogsModel : public TelegramModel
         QString draftMessage(Dialog *dialog) const;
 
     private slots:
-        void sortDialogs();
         void onSendStatusUpdated(Dialog* dialog);
         void onDialogUnreadCountChanged(Dialog* dialog);
         void onDialogNotifySettingsChanged(Dialog* dialog);

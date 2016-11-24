@@ -112,6 +112,28 @@ void Telegram::setAutoDownload(bool b)
     emit autoDownloadChanged();
 }
 
+void Telegram::sortDialogs(QList<Dialog *> &dialogs) const
+{
+    std::sort(dialogs.begin(), dialogs.end(), [](Dialog* dlg1, Dialog* dlg2) {
+        if(!dlg1->topMessage())
+            return false;
+
+        if(!dlg2->topMessage())
+            return true;
+
+        Message* msg1 = TelegramCache_message(dlg1->topMessage(), dlg1);
+        Message* msg2 = TelegramCache_message(dlg2->topMessage(), dlg2);
+
+        if(!msg1)
+            return false;
+
+        if(!msg2)
+            return true;
+
+        return msg1->date() > msg2->date();
+    });
+}
+
 bool Telegram::muteDialog(Dialog *dialog, bool mute)
 {
     PeerNotifySettings* notifysettings = dialog->notifySettings();
