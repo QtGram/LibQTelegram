@@ -384,6 +384,8 @@ void MessagesModel::deleteMessages(const QVariantList &messages)
     {
         Message* message = v.value<Message*>();
         msgids << message->id();
+
+        TelegramCache_remove(message);
     }
 
     std::sort(msgids.begin(), msgids.end(), std::less<TLInt>());
@@ -396,7 +398,6 @@ void MessagesModel::deleteMessages(const QVariantList &messages)
     }
 
     TelegramAPI::messagesDeleteMessages(DC_MainSession, msgids);
-
 }
 
 void MessagesModel::editMessage(const QString& text, Message* editmessage)
