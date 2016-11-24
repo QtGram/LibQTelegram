@@ -506,6 +506,7 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
     updates.read(mtreply);
 
     Q_ASSERT(updates.constructorId() == TLTypes::UpdateShortSentMessage);
+    Q_ASSERT(this->_pendingmessages.contains(tempmsgid));
 
     Message* message = this->_pendingmessages.take(tempmsgid);
 
@@ -742,7 +743,7 @@ void MessagesModel::sendMessage(const QString &text, TLInt replymsgid)
     if(!this->_dialog || text.trimmed().isEmpty())
         return;
 
-    Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer());
+    Message* message = TelegramHelper::createMessage(text, TelegramConfig_me, this->_dialog->peer(), this);
 
     if(replymsgid)
         message->setReplyToMsgId(replymsgid);
@@ -772,7 +773,7 @@ void MessagesModel::insertMessage(TLInt localmessageid, Message *message)
     this->updateMessage(localmessageid, message);
 
     this->beginInsertRows(QModelIndex(), 0, 0);
-    this->_messages.prepend(message);
+    this->_messages.insert(0, message);
     this->endInsertRows();
 }
 
@@ -911,7 +912,7 @@ void MessagesModel::sendMedia(const QUrl &filepath, const QString &caption, File
     FileObject* fileobject = FileCache_upload(mediatype, filepath.toLocalFile(), caption);
     connect(fileobject, &FileObject::uploadCompleted, this, &MessagesModel::onUploadCompleted);
 
-    Message* message = TelegramHelper::createMessage(QString(), TelegramConfig_me, this->_dialog->peer());
+    Message* message = TelegramHelper::createMessage(QString(), TelegramConfig_me, this->_dialog->peer(), this);
     message->setMedia(fileobject->messageMedia());
 
     this->insertMessage(local_messageid(fileobject->uploader()->localFileId()), message);

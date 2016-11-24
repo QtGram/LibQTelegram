@@ -52,9 +52,9 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     return message;
 }
 
-Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer)
+Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer, QObject* parent)
 {
-    Message* message = new Message();
+    Message* message = new Message(parent);
     message->setConstructorId(TLTypes::Message);
     message->setMessage(text);
     message->setDate(CurrentTimeStamp);
