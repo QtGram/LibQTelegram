@@ -257,7 +257,8 @@ SOURCES += \
     cache/database/tables/pendingwebpagetable.cpp \
     cache/database/tables/userstable.cpp \
     cache/file/fileuploader.cpp \
-    cache/file/filecache.cpp
+    cache/file/filecache.cpp \
+    models/forwarddialogsmodel.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -509,4 +510,5 @@ HEADERS +=\
     cache/database/tables/pendingwebpagetable.h \
     cache/database/tables/userstable.h \
     cache/file/filecache.h \
-    cache/file/fileuploader.h
+    cache/file/fileuploader.h \
+    models/forwarddialogsmodel.h

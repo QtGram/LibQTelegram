@@ -5,6 +5,7 @@
 #include "models/dialogsmodel.h"
 #include "models/messagesmodel.h"
 #include "models/contactsmodel.h"
+#include "models/forwarddialogsmodel.h"
 #include "notifications/telegramnotifications.h"
 #include "notifications/notificationobject.h"
 #include "quick/qquickpeerimage.h"
@@ -41,6 +42,7 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_OBJECT(ContactsModel);
     REGISTER_OBJECT(DialogsModel);
     REGISTER_OBJECT(MessagesModel);
+    REGISTER_OBJECT(ForwardDialogsModel);
 
     // Components
     REGISTER_OBJECT_AS(QQuickPeerImage, "PeerImage");
