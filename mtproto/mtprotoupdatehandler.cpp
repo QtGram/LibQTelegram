@@ -110,7 +110,10 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     updatedifference.read(mtreply);
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceEmpty)
+    {
+        qDebug("DC %d No Differences", mtreply->config()->dcid());
         return;
+    }
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
