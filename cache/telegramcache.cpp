@@ -256,9 +256,11 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
     });
 }
 
-void TelegramCache::cache(const TLVector<Message *>& messages)
+TLVector<Message*> TelegramCache::cache(const TLVector<Message *>& messages)
 {
-    this->_database->transaction([this, messages](QSqlQuery& queryobj) {
+    TLVector<Message*> newmessages;
+
+    this->_database->transaction([this, messages, &newmessages](QSqlQuery& queryobj) {
         this->_database->messages()->prepareInsert(queryobj);
 
         foreach(Message* message, messages) {
@@ -267,18 +269,22 @@ void TelegramCache::cache(const TLVector<Message *>& messages)
             if(this->_messages.contains(messageid))
                 continue;
 
+            newmessages << message;
             message->setParent(this);
+
             this->_messages[messageid] = message;
             this->_database->messages()->insertQuery(queryobj, message);
         }
     });
+
+    return newmessages;
 }
 
 void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
 {
-    this->cache(messages);
+    TLVector<Message*> newmessages = this->cache(messages);
 
-    foreach(Message* message, messages)
+    foreach(Message* message, newmessages)
     {
         if(TelegramHelper::messageIsWebPagePending(message))
             this->_database->pendingWebPages()->insert(message);
