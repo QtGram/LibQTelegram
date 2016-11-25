@@ -209,6 +209,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit notifySettings(update->peerUpdatenotifysettings(), update->notifySettings());
             break;
 
+        case TLTypes::UpdateChannel:
         case TLTypes::UpdateMessageID:
             Nop;
             break;

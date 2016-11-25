@@ -56,7 +56,7 @@ class TelegramCache: public QObject
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
         ChatFull *chatFull(TLInt id);
-        Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
+        Message* message(MessageId messageid, Dialog* dialog);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
         TLLong accessHash(Dialog* dialog);
@@ -89,10 +89,15 @@ class TelegramCache: public QObject
         void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
         void onReadHistory(Update* update);
         void onWebPage(WebPage* webpage);
+        void onChannelUpdated(TLInt channelid);
 
     private:
+        bool canSkipMessage(Message* message);
+        TLInt checkDialogMigrated(Dialog *dialog);
+        void removeDialog(Dialog* dialog);
+        void removeChat(Chat* chat);
         void eraseMessage(MessageId messageid);
-        void checkMessageAction(Message* message);
+        void executeMessageAction(Message* message);
         void updateUnreadCount(Dialog* dialog, TLInt unreadcount);
         int checkUnreadMessages(Dialog* dialog);
 
@@ -103,6 +108,7 @@ class TelegramCache: public QObject
         void dialogNewDraftMessage(Dialog* dialog);
         void dialogDeleteMessage(Dialog* dialog);
         void dialogEditMessage(Dialog* dialog);
+        void dialogDeleted(Dialog* dialog);
         void titleChanged(Dialog* dialog);
         void photoChanged(Dialog* dialog);
         void newDialogs(const TLVector<Dialog *> &dialogs);

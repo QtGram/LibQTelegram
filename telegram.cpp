@@ -319,15 +319,7 @@ QString Telegram::messageActionText(Message* message) const
         return tr("Unhandled chat migration type");
     }
 
-    if(ctorid == TLTypes::MessageActionChannelMigrateFrom) // NOTE: MessageActionChannelMigrateFrom, untested
-    {
-        if(messageaction->channelId())
-            return tr("This supergroup was downgraded to a group");
-
-        return tr("Unhandled channel migration type");
-    }
-
-    if(ctorid == TLTypes::MessageActionGameScore) // MessageActionGameScore, unhandled and untested
+    if(ctorid == TLTypes::MessageActionGameScore) // NOTE: MessageActionGameScore, unhandled and untested
         return tr("Unhandled MessageActionGameScore");
 
     return QString("Unhandled action: %1").arg(ctorid, 0, 16);

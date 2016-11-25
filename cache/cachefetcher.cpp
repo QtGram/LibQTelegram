@@ -3,6 +3,8 @@
 #include "../mtproto/dc/dcsessionmanager.h"
 #include "../types/telegramhelper.h"
 
+#define ChannelMaxDifference 50
+
 CacheFetcher::CacheFetcher(QObject *parent) : QObject(parent), _update(NULL)
 {
 

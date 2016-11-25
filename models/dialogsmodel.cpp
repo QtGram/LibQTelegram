@@ -272,11 +272,7 @@ QString DialogsModel::dialogTitle(Dialog *dialog) const
 void DialogsModel::doRemoveDialog(int index)
 {
     Dialog* dialog = this->_dialogs[index];
-
-    this->beginRemoveRows(QModelIndex(), index, index);
-    this->_dialogs.removeAt(index);
     TelegramCache_remove(dialog);
-    this->endRemoveRows();
 }
 
 int DialogsModel::insertionPoint(Dialog *insdialog, int fromidx) const
@@ -453,6 +449,18 @@ void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
     this->endMoveRows();
 }
 
+void DialogsModel::onDialogDeleted(Dialog *dialog)
+{
+    int idx = this->_dialogs.indexOf(dialog);
+
+    if(idx == -1)
+        return;
+
+    this->beginRemoveRows(QModelIndex(), idx, idx);
+    this->_dialogs.removeAt(idx);
+    this->endRemoveRows();
+}
+
 void DialogsModel::onDialogEditMessage(Dialog *dialog)
 {
     int idx = this->_dialogs.indexOf(dialog);
@@ -510,6 +518,7 @@ void DialogsModel::telegramReady()
     connect(TelegramCache_instance, &TelegramCache::dialogNewDraftMessage, this, &DialogsModel::onDialogNewDraftMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogDeleteMessage, this, &DialogsModel::onDialogDeleteMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::dialogEditMessage, this, &DialogsModel::onDialogEditMessage, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogDeleted, this, &DialogsModel::onDialogDeleted, Qt::UniqueConnection);
 
     connect(SendStatusHandler_instance, &SendStatusHandler::sendStatusUpdated, this, &DialogsModel::onSendStatusUpdated, Qt::UniqueConnection);
 

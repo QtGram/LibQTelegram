@@ -83,6 +83,19 @@ Dialog *TelegramHelper::createDialog(Message *message, QObject *parent)
     return dialog;
 }
 
+Dialog *TelegramHelper::createChannel(TLInt channelid, QObject *parent)
+{
+    Peer* peer = new Peer();
+    peer->setConstructorId(TLTypes::PeerChannel);
+    peer->setChannelId(channelid);
+
+    Dialog* dialog = new Dialog(parent);
+    dialog->setConstructorId(TLTypes::Dialog);
+    dialog->setPeer(peer);
+
+    return dialog;
+}
+
 InputFileLocation *TelegramHelper::inputFileLocation(FileLocation *filelocation)
 {
     InputFileLocation* inputfilelocation = new InputFileLocation();

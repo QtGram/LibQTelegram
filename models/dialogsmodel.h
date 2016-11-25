@@ -61,6 +61,7 @@ class DialogsModel : public TelegramModel
         void onDialogNewMessage(Dialog* dialog);
         void onDialogNewDraftMessage(Dialog* dialog);
         void onDialogDeleteMessage(Dialog* dialog);
+        void onDialogDeleted(Dialog* dialog);
         void onDialogEditMessage(Dialog* dialog);
         void onNewDialogs(const TLVector<Dialog*>& newdialogs);
         void onReadHistory(Dialog* dialog);
