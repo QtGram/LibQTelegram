@@ -7,7 +7,7 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _lastreadedinbox(0), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _lastreadedinbox(0), _migrationmessageindex(-1), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
 {
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
@@ -225,7 +225,12 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return message->fwdFrom() != NULL;
 
     if(role == MessagesModel::IsMessageUnreadRole)
+    {
+        if((this->_migrationmessageindex != -1) && (index.row() >= this->_migrationmessageindex))
+            return false;
+
         return this->_dialog->readOutboxMaxId() < message->id();
+    }
 
     if(role == MessagesModel::IsMessageEditedRole)
         return message->editDate() != 0;
@@ -329,7 +334,12 @@ int MessagesModel::loadHistoryFromCache()
     this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + newmessages.count()) - 1);
 
     for(int i = 0; i < newmessages.count(); i++)
+    {
         this->_messages.append(newmessages[i]);
+
+        if(this->isMigrationMessage(newmessages[i]))
+            this->_migrationmessageindex = this->_messages.length() - 1;
+    }
 
     this->endInsertRows();
     return newmessages.count();
@@ -625,6 +635,9 @@ void MessagesModel::onNewMessage(Message *message)
     this->beginInsertRows(QModelIndex(), idx, idx);
     this->_messages.insert(idx, message);
     this->endInsertRows();
+
+    if(this->isMigrationMessage(message))
+        this->_migrationmessageindex = this->_messages.length() - 1;
 
     this->markAsRead();
 }
@@ -956,6 +969,14 @@ void MessagesModel::terminateInitialization()
     this->beginResetModel();
     this->setInitializing(false);
     this->endResetModel();
+}
+
+bool MessagesModel::isMigrationMessage(Message *message) const
+{
+    if(message->constructorId() != TLTypes::MessageService)
+        return false;
+
+    return message->action()->constructorId() == TLTypes::MessageActionChatMigrateTo;
 }
 
 void MessagesModel::telegramReady()

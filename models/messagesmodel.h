@@ -127,6 +127,7 @@ class MessagesModel : public TelegramModel
         void setFirstNewMessage();
         void createInput();
         void terminateInitialization();
+        bool isMigrationMessage(Message* message) const;
         bool ownMessage(Message* message) const;
 
     protected:
@@ -154,6 +155,7 @@ class MessagesModel : public TelegramModel
         TLInt _newmessageindex;
         TLInt _newmessageid;
         TLInt _lastreadedinbox;
+        TLInt _migrationmessageindex;
         bool _isactive;
         bool _fetchmore;
         int _loadcount;
