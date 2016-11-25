@@ -569,7 +569,7 @@ void TelegramCache::eraseMessage(MessageId messageid)
 
     if(dialog && (dialog->topMessage() == message->id()))
     {
-        Message* topmessage = this->_database->messages()->topMessage(dialog, this->_messages, this);
+        Message* topmessage = this->_database->messages()->topMessage(TelegramHelper::identifier(dialog), this->_messages, this);
 
         if(!topmessage) // Dialog is empty
         {

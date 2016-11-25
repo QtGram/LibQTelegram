@@ -40,9 +40,8 @@ void MessagesTable::removeDialogMessages(TLInt dialogid, TLVector<MessageId>& de
     this->execute(queryobj);
 }
 
-Message *MessagesTable::topMessage(Dialog *dialog, QHash<MessageId, Message *> &messages, QObject *parent)
+Message *MessagesTable::topMessage(TLInt dialogid, QHash<MessageId, Message *> &messages, QObject *parent)
 {
-    TLInt dialogid = TelegramHelper::identifier(dialog);
     CreateQuery(queryobj);
 
     if(!this->prepare(queryobj, "SELECT * FROM " + this->name() + " WHERE dialogid = :dialogid ORDER BY date DESC LIMIT 1"))
@@ -53,7 +52,13 @@ Message *MessagesTable::topMessage(Dialog *dialog, QHash<MessageId, Message *> &
     if(!this->execute(queryobj) || !queryobj.first())
         return NULL;
 
-    return this->loadMessage(queryobj, messages, parent);
+    Message* message = this->loadMessage(queryobj, messages, parent);
+    TLInt chatid = this->checkGroupMigrationMessage(message);
+
+    if(chatid)
+        return this->topMessage(chatid, messages, parent);
+
+    return message;
 }
 
 QList<Message *> MessagesTable::messagesForDialog(TLInt dialogid, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent) const

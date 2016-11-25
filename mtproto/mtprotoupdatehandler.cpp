@@ -171,7 +171,6 @@ void MTProtoUpdateHandler::handleUpdatesChannelDifference(MTProtoReply *mtreply)
     }
     else
         emit newMessages(updatechanneldifference.messages());
-
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
