@@ -12,9 +12,14 @@ class CacheFetcher : public QObject
 
     public:
         explicit CacheFetcher(QObject *parent = 0);
+        void getChannelDifference(Chat* chat, TLInt pts);
         void getFullChat(Chat* chat);
 
+    private:
+        void getChannelDifference(InputChannel* inputchannel, TLInt pts);
+
     private slots:
+        void onChannelDifferenceReceived(MTProtoReply* mtreply);
         void onChatFull(MTProtoReply* mtreply);
 
     signals:
@@ -23,6 +28,7 @@ class CacheFetcher : public QObject
 
      private:
         Update* _update;
+        QHash<TLLong, InputChannel*> _inputchannels;
 };
 
 #endif // CACHEFETCHER_H

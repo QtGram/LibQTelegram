@@ -533,17 +533,31 @@ void MessagesModel::onMessagesSendMessageReplied(MTProtoReply *mtreply)
     Updates updates;
     updates.read(mtreply);
 
-    Q_ASSERT(updates.constructorId() == TLTypes::UpdateShortSentMessage);
-    Q_ASSERT(this->_pendingmessages.contains(tempmsgid));
+    Q_ASSERT((updates.constructorId() == TLTypes::UpdateShortSentMessage) ||
+             (updates.constructorId() == TLTypes::Updates));
 
+    Q_ASSERT(this->_pendingmessages.contains(tempmsgid));
     Message* message = this->_pendingmessages.take(tempmsgid);
 
-    message->setId(updates.id());
-    message->setFlags(updates.flags());
-    message->setMedia(updates.media());
+    if(updates.constructorId() == TLTypes::UpdateShortSentMessage)
+    {
+        message->setId(updates.id());
+        message->setFlags(updates.flags());
+        message->setMedia(updates.media());
 
-    this->_pendingmessages[message->id()] = message; // Keep it in order to avoid double insertions
-    TelegramCache_insert(message);
+        this->_pendingmessages[message->id()] = message; // Keep it in order to avoid double insertions
+        TelegramCache_insert(message);
+        return;
+    }
+
+    Update* update = updates.updates().last();
+    Q_ASSERT(update->constructorId() == TLTypes::UpdateNewChannelMessage);
+
+    message->deleteLater();
+
+    this->beginRemoveRows(QModelIndex(), 1, 1);
+    this->_messages.removeAt(1);
+    this->endRemoveRows();
 }
 
 void MessagesModel::onMessagesSendMediaReplied(MTProtoReply *mtreply)
@@ -842,7 +856,7 @@ TLInt MessagesModel::inboxMaxId() const
     {
         Message* message = this->_messages[i];
 
-        if(message->isOut())
+        if(message->isOut() || is_local_messageid(message->id()))
             continue;
 
         return message->id();
@@ -857,7 +871,7 @@ TLInt MessagesModel::outboxMaxId() const
     {
         Message* message = this->_messages[i];
 
-        if(!message->isOut())
+        if(!message->isOut() || is_local_messageid(message->id()))
             continue;
 
         return message->id();

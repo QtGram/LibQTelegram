@@ -26,6 +26,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent), _unreadcount(0)
     connect(UpdateHandler_instance, SIGNAL(deleteChannelMessages(TLInt,TLVector<TLInt>)), this, SLOT(onDeleteChannelMessages(TLInt,TLVector<TLInt>)));
     connect(UpdateHandler_instance, SIGNAL(notifySettings(NotifyPeer*,PeerNotifySettings*)), this, SLOT(onNotifySettings(NotifyPeer*,PeerNotifySettings*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(channelTooLong(Update*)), this, SLOT(onChannelTooLong(Update*)));
     connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
 }
 
@@ -460,6 +461,18 @@ void TelegramCache::onReadHistory(Update *update)
     emit dialogUnreadCountChanged(dialog);
 }
 
+void TelegramCache::onChannelTooLong(Update *update)
+{
+    Q_ASSERT(update->constructorId() == TLTypes::UpdateChannelTooLong);
+
+    Chat* chat = this->chat(update->channelId());
+
+    if(!chat)
+        return;
+
+    this->_fetcher->getChannelDifference(chat, update->pts());
+}
+
 void TelegramCache::onWebPage(WebPage *webpage)
 {
     MessageId messageid = this->_database->pendingWebPages()->messageId(webpage);
@@ -476,12 +489,6 @@ void TelegramCache::onWebPage(WebPage *webpage)
     message->media()->setWebpage(webpage);
     this->cache(message);
     emit messageUpdated(message);
-}
-
-void TelegramCache::onChannelUpdated(TLInt channelid)
-{
-    Dialog* dialog = TelegramHelper::createChannel(channelid);
-    this->insert(dialog);
 }
 
 bool TelegramCache::canSkipMessage(Message *message)

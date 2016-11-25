@@ -88,8 +88,8 @@ class TelegramCache: public QObject
         void onDeleteChannelMessages(TLInt channelid, const TLVector<TLInt>& messageids);
         void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
         void onReadHistory(Update* update);
+        void onChannelTooLong(Update* update);
         void onWebPage(WebPage* webpage);
-        void onChannelUpdated(TLInt channelid);
 
     private:
         bool canSkipMessage(Message* message);

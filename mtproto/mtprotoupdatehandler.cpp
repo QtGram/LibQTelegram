@@ -166,7 +166,7 @@ void MTProtoUpdateHandler::handleUpdatesChannelDifference(MTProtoReply *mtreply)
 
     if(updatechanneldifference.constructorId() == TLTypes::UpdatesChannelDifference)
     {
-        emit newMessages(updatechanneldifference.messages());
+        emit newMessages(updatechanneldifference.newMessages());
         this->handleUpdates(updatechanneldifference.otherUpdates());
     }
     else
@@ -237,6 +237,10 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
 
         case TLTypes::UpdateNotifySettings:
             emit notifySettings(update->peerUpdatenotifysettings(), update->notifySettings());
+            break;
+
+        case TLTypes::UpdateChannelTooLong:
+            emit channelTooLong(update);
             break;
 
         case TLTypes::UpdateChannel:

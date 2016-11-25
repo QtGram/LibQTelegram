@@ -3,11 +3,16 @@
 #include "../mtproto/dc/dcsessionmanager.h"
 #include "../types/telegramhelper.h"
 
-#define ChannelMaxDifference 50
+#define ChannelDifferenceLimit 100
 
 CacheFetcher::CacheFetcher(QObject *parent) : QObject(parent), _update(NULL)
 {
 
+}
+
+void CacheFetcher::getChannelDifference(Chat *chat, TLInt pts)
+{
+    this->getChannelDifference(TelegramHelper::inputChannel(chat), pts);
 }
 
 void CacheFetcher::getFullChat(Chat *chat)
@@ -23,6 +28,31 @@ void CacheFetcher::getFullChat(Chat *chat)
 
     MTProtoRequest* req = TelegramAPI::messagesGetFullChat(DC_MainSession, chat->id());
     connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onChatFull);
+}
+
+void CacheFetcher::getChannelDifference(InputChannel *inputchannel, TLInt pts)
+{
+    MTProtoRequest* req = TelegramAPI::updatesGetChannelDifference(DC_MainSession, inputchannel, NULL, (!pts ? 1 : pts), ChannelDifferenceLimit);
+    this->_inputchannels[req->requestId()] = inputchannel;
+
+    connect(req, &MTProtoRequest::replied, this, &CacheFetcher::onChannelDifferenceReceived);
+}
+
+void CacheFetcher::onChannelDifferenceReceived(MTProtoReply *mtreply)
+{
+    UpdatesChannelDifference updateschanneldifference;
+    updateschanneldifference.read(mtreply);
+
+    Q_ASSERT(this->_inputchannels.contains(mtreply->requestId()));
+    InputChannel* inputchannel = this->_inputchannels.take(mtreply->requestId());
+
+    if(updateschanneldifference.constructorId() == TLTypes::UpdatesChannelDifferenceTooLong)
+    {
+        this->getChannelDifference(inputchannel, updateschanneldifference.pts());
+        return;
+    }
+
+    inputchannel->deleteLater();
 }
 
 void CacheFetcher::onChatFull(MTProtoReply *mtreply)
