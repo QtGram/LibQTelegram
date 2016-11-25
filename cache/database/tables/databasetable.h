@@ -22,10 +22,10 @@ class DatabaseTable : public QObject
     public:
         template<typename T, typename U> T* get(U id, const char* type, bool ignoreerror, QObject* parent) const;
         template<typename T> bool contains(T id) const;
+        template<typename T> void remove(T id) const;
         void prepareInsert(QSqlQuery& insertquery);
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject) = 0;
         virtual void insert(TelegramObject* telegramobject);
-        void remove(TLInt id);
 
     private:
         void parseFields(const QString& fields);
@@ -80,6 +80,17 @@ template<typename T> bool DatabaseTable::contains(T id) const
         return false;
 
     return queryobj.first();
+}
+
+template<typename T> void DatabaseTable::remove(T id) const
+{
+    CreateQuery(queryobj);
+
+    if(!this->prepare(queryobj, "DELETE FROM " + this->name() + " WHERE id = :id"))
+        return;
+
+    queryobj.bindValue(":id", id);
+    this->execute(queryobj);
 }
 
 #endif // DATABASETABLE_H

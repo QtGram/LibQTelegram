@@ -22,17 +22,6 @@ void DatabaseTable::insert(TelegramObject *telegramobject)
     this->insertQuery(queryobj, telegramobject);
 }
 
-void DatabaseTable::remove(TLInt id)
-{
-    CreateQuery(queryobj);
-
-    if(!this->prepare(queryobj, "DELETE FROM " + this->name() + " WHERE id = :id"))
-        return;
-
-    queryobj.bindValue(":id", id);
-    this->execute(queryobj);
-}
-
 void DatabaseTable::parseFields(const QString& fields)
 {
     QStringList fieldlist = fields.split(",", QString::SkipEmptyParts);
