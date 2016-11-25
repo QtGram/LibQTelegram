@@ -26,6 +26,7 @@ class MTProtoUpdateHandler : public QObject
         void setSyncing(bool b);
         void handleUpdates(MTProtoReply* mtreply);
         void handleUpdatesDifference(MTProtoReply* mtreply);
+        void handleUpdatesChannelDifference(MTProtoReply* mtreply);
 
     private:
         void handleUpdates(TLVector<Update*> updatelist);

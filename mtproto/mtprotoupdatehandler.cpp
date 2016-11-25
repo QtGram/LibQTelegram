@@ -41,6 +41,12 @@ bool MTProtoUpdateHandler::handle(MTProtoReply *mtreply)
             this->handleUpdatesDifference(mtreply);
             return true;
 
+        case TLTypes::UpdatesChannelDifference:
+        case TLTypes::UpdatesChannelDifferenceTooLong:
+        case TLTypes::UpdatesChannelDifferenceEmpty:
+            this->handleUpdatesChannelDifference(mtreply);
+            return true;
+
         default:
             break;
     }
@@ -142,6 +148,30 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
 
     this->setSyncing(false);
     TelegramConfig_save; // Update state
+}
+
+void MTProtoUpdateHandler::handleUpdatesChannelDifference(MTProtoReply *mtreply)
+{
+    UpdatesChannelDifference updatechanneldifference;
+    updatechanneldifference.read(mtreply);
+
+    if(updatechanneldifference.constructorId() == TLTypes::UpdatesChannelDifferenceEmpty)
+    {
+        qDebug("DC %d No Channel Differences", mtreply->config()->dcid());
+        return;
+    }
+
+    emit newUsers(updatechanneldifference.users());
+    emit newChats(updatechanneldifference.chats());
+
+    if(updatechanneldifference.constructorId() == TLTypes::UpdatesChannelDifference)
+    {
+        emit newMessages(updatechanneldifference.messages());
+        this->handleUpdates(updatechanneldifference.otherUpdates());
+    }
+    else
+        emit newMessages(updatechanneldifference.messages());
+
 }
 
 void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
