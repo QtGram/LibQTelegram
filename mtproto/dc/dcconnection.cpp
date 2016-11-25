@@ -39,7 +39,7 @@ void DCConnection::reconnectTimeout()
         return;
 
     this->warning("Reconnection in %d seconds", this->_reconnectiontimeout / 1000);
-    emit timeout(this->_reconnectiontimeout);
+    emit timeout(this->_reconnectiontimeout / 1000);
 
     this->_timreconnect = this->startTimer(this->_reconnectiontimeout);
     this->_reconnectiontimeout = this->_reconnectiontimeout * ReconnectionMultiplier;
