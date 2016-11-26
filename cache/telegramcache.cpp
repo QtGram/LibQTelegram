@@ -175,6 +175,19 @@ void TelegramCache::setUnreadCount(int unreadcount)
     emit unreadCountChanged();
 }
 
+void TelegramCache::loadDialogs(QList<Dialog *>& dialogs)
+{
+    foreach(Dialog* dialog, this->_dialogs)
+    {
+        TLInt dialogid = TelegramHelper::identifier(dialog);
+
+        if(this->_migrateddialogs.contains(dialogid))
+            continue;
+
+        dialogs << dialog;
+    }
+}
+
 void TelegramCache::markAsRead(Dialog *dialog, TLInt inmaxid, TLInt outmaxid)
 {
     dialog->setReadInboxMaxId(inmaxid);
@@ -252,6 +265,7 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
 {
     this->_database->transaction([this, chats](QSqlQuery& queryobj) {
         this->_database->chats()->prepareInsert(queryobj);
+        TLInt channelid = 0;
 
         foreach(Chat* chat, chats) {
             if(this->_chats.contains(chat->id())) {
@@ -259,12 +273,8 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
                 oldchat->deleteLater();
             }
 
-            if(chat->migratedTo() && (chat->migratedTo()->constructorId() == TLTypes::InputChannel)) { // Remove migrated groups
-                Dialog* dialog = this->dialog(chat->id(), true);
-
-                if(dialog)
-                    this->removeDialog(dialog);
-            }
+            if((channelid = TelegramHelper::chatIsMigrated(chat)))
+                this->migrateDialog(chat);
 
             chat->setParent(this);
             this->_chats[chat->id()] = chat;
@@ -308,9 +318,6 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         else if(TelegramHelper::messageIsAction(message))
             this->executeMessageAction(message);
 
-        if(TelegramHelper::messageIsMigratedFrom(message))
-            continue;
-
         TLInt dialogid = TelegramHelper::messageToDialog(message);
         Dialog* dialog = this->dialog(dialogid, true);
 
@@ -319,11 +326,6 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
             dialog = TelegramHelper::createDialog(message);
             this->insert(dialog);
         }
-
-        TLInt channelid = this->checkDialogMigrated(dialog);
-
-        if(channelid)
-            dialog = this->dialog(channelid);
 
         dialog->setTopMessage(message->id());
 
@@ -494,18 +496,18 @@ void TelegramCache::onWebPage(WebPage *webpage)
     emit messageUpdated(message);
 }
 
-TLInt TelegramCache::checkDialogMigrated(Dialog* dialog)
+void TelegramCache::migrateDialog(Message *migrationmessage)
 {
-    if(!TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
-        return 0;
+    TLInt dialogid = TelegramHelper::messageToDialog(migrationmessage);
 
-    TLInt dialogid = TelegramHelper::identifier(dialog);
-    Chat* chat = this->chat(dialogid);
+    this->_database->migratedDialogs()->insert(migrationmessage);
+    this->_migrateddialogs[dialogid] = migrationmessage->action()->channelId();
+}
 
-    if(chat && chat->migratedTo())
-        return chat->migratedTo()->channelId();
-
-    return 0;
+void TelegramCache::migrateDialog(Chat *migratedchat)
+{
+    this->_database->migratedDialogs()->insert(migratedchat);
+    this->_migrateddialogs[migratedchat->id()] = migratedchat->migratedTo()->channelId();
 }
 
 void TelegramCache::removeDialog(Dialog *dialog)
@@ -527,7 +529,7 @@ void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings 
     if(notifypeer->constructorId() != TLTypes::NotifyPeer)
         return;
 
-    TLInt dialogid = TelegramHelper::identifier(notifypeer->peer());;
+    TLInt dialogid = TelegramHelper::identifier(notifypeer->peer());
     Dialog* dialog = this->dialog(dialogid);
 
     if(!dialog)
@@ -617,19 +619,16 @@ void TelegramCache::executeMessageAction(Message *message)
 
         emit photoChanged(dialog);
     }
-    else if(messageaction->constructorId() == TLTypes::MessageActionChatMigrateTo)
+    else if(messageaction->constructorId() == TLTypes::MessageActionChatMigrateTo) // Remove old group, add new supergroup
     {
-        Dialog* dialog = TelegramHelper::createChannel(messageaction->channelId(), this);
+        this->migrateDialog(message);
+        Dialog* dialog = this->dialog(TelegramHelper::messageToDialog(message));
+
+        if(dialog)
+            emit dialogDeleted(dialog); // Remove old group from view, keep it in database
+
+        dialog = TelegramHelper::createDialog(messageaction->channelId(), this);
         this->insert(dialog);
-    }
-    else if(messageaction->constructorId() == TLTypes::MessageActionChannelMigrateFrom)
-    {
-        Dialog* dialog = this->dialog(messageaction->chatId());
-
-        if(!dialog)
-            return;
-
-        this->removeDialog(dialog);
     }
 }
 
@@ -666,6 +665,7 @@ TelegramCache *TelegramCache::cache()
 
 void TelegramCache::load()
 {
+    this->_database->migratedDialogs()->populate(this->_migrateddialogs);
     this->_unreadcount = this->_database->dialogs()->populate(this->_dialogs, this);
     this->_database->users()->populateContacts(this->_contacts, this);
 
@@ -675,11 +675,6 @@ void TelegramCache::load()
 int TelegramCache::unreadCount()
 {
     return this->_unreadcount;
-}
-
-const QList<Dialog *>& TelegramCache::dialogs() const
-{
-    return this->_dialogs;
 }
 
 const QList<User *> &TelegramCache::contacts() const

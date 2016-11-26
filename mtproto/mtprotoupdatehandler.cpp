@@ -242,6 +242,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
             emit channelTooLong(update);
             break;
 
+        case TLTypes::UpdateNewAuthorization:
         case TLTypes::UpdateChannel:
         case TLTypes::UpdateMessageID:
             Nop;

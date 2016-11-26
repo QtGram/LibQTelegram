@@ -9,8 +9,8 @@
 #define TelegramCache_markAsRead(dialog, inmaxid, outmaxid) TelegramCache::cache()->markAsRead(dialog, inmaxid, outmaxid)
 #define TelegramCache_clearHistory(dialog) TelegramCache::cache()->clearHistory(dialog)
 #define TelegramCache_accessHash(dialog) TelegramCache::cache()->accessHash(dialog)
+#define TelegramCache_loadDialogs(dialogs) TelegramCache::cache()->loadDialogs(dialogs)
 
-#define TelegramCache_dialogs TelegramCache::cache()->dialogs()
 #define TelegramCache_contacts TelegramCache::cache()->contacts()
 
 #define TelegramCache_dialog(dialogid) TelegramCache::cache()->dialog(dialogid)
@@ -49,7 +49,6 @@ class TelegramCache: public QObject
         static TelegramCache* cache();
         void load();
         int unreadCount();
-        const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
         QList<Message*> dialogMessages(TLInt dialogid, int offset, int limit, bool* hasmigration);
         QList<Message*> lastDialogMessages(Dialog *dialog);
@@ -63,6 +62,7 @@ class TelegramCache: public QObject
         void setUnreadCount(int unreadcount);
 
     public slots:
+        void loadDialogs(QList<Dialog *> &dialogs);
         void markAsRead(Dialog* dialog, TLInt inmaxid, TLInt outmaxid);
         void clearHistory(Dialog* dialog);
         void cache(Dialog* dialog);
@@ -92,7 +92,8 @@ class TelegramCache: public QObject
         void onWebPage(WebPage* webpage);
 
     private:
-        TLInt checkDialogMigrated(Dialog *dialog);
+        void migrateDialog(Message* migrationmessage);
+        void migrateDialog(Chat* migratedchat);
         void removeDialog(Dialog* dialog);
         void eraseMessage(MessageId messageid);
         void executeMessageAction(Message* message);
@@ -127,6 +128,7 @@ class TelegramCache: public QObject
         QHash<TLInt, User*> _users;
         QHash<TLInt, ChatFull*> _chatfull;
         QHash<MessageId, Message*> _messages;
+        QHash<TLInt, TLInt> _migrateddialogs;
         CacheDatabase* _database;
         CacheFetcher* _fetcher;
         int _unreadcount;

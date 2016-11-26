@@ -52,13 +52,7 @@ Message *MessagesTable::topMessage(TLInt dialogid, QHash<MessageId, Message *> &
     if(!this->execute(queryobj) || !queryobj.first())
         return NULL;
 
-    Message* message = this->loadMessage(queryobj, messages, parent);
-    TLInt chatid = TelegramHelper::messageIsMigratedFrom(message);
-
-    if(chatid)
-        return this->topMessage(chatid, messages, parent);
-
-    return message;
+    return this->loadMessage(queryobj, messages, parent);
 }
 
 QList<Message *> MessagesTable::messagesForDialog(TLInt dialogid, QHash<MessageId, Message *> &messages, int offset, int limit, bool* hasmigration, QObject *parent) const

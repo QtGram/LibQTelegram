@@ -56,7 +56,8 @@ void ForwardDialogsModel::telegramReady()
     if(!this->_fromdialog)
         return;
 
-    QList<Dialog*> dialogs = TelegramCache_dialogs;
+    QList<Dialog*> dialogs;
+    TelegramCache_loadDialogs(dialogs);
 
     this->beginResetModel();
     this->_dialogs.clear();

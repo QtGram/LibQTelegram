@@ -478,7 +478,10 @@ void DialogsModel::onNewDialogs(const TLVector<Dialog *> &newdialogs)
     foreach(Dialog* newdialog, newdialogs)
     {
         int idx = this->insertionPoint(newdialog);
+
+        this->beginInsertRows(QModelIndex(), idx, idx);
         this->_dialogs.insert(idx, newdialog);
+        this->endInsertRows();
     }
 }
 
@@ -505,7 +508,7 @@ void DialogsModel::onTitleChanged(Dialog *dialog)
 void DialogsModel::telegramReady()
 {
     this->beginResetModel();
-    this->_dialogs = TelegramCache_dialogs;
+    TelegramCache_loadDialogs(this->_dialogs);
     this->_telegram->sortDialogs(this->_dialogs);
     this->endResetModel();
 

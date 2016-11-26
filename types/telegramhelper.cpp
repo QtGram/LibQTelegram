@@ -83,7 +83,7 @@ Dialog *TelegramHelper::createDialog(Message *message, QObject *parent)
     return dialog;
 }
 
-Dialog *TelegramHelper::createChannel(TLInt channelid, QObject *parent)
+Dialog *TelegramHelper::createDialog(TLInt channelid, QObject *parent)
 {
     Peer* peer = new Peer();
     peer->setConstructorId(TLTypes::PeerChannel);
@@ -540,6 +540,14 @@ TLInt TelegramHelper::messageIsMigratedTo(Message *message)
     }
 
     return 0;
+}
+
+TLInt TelegramHelper::chatIsMigrated(Chat *chat)
+{
+    if(!chat->migratedTo() || (chat->migratedTo()->constructorId() != TLTypes::InputChannel))
+        return 0;
+
+    return chat->migratedTo()->channelId();
 }
 
 MessageId TelegramHelper::identifier(TLInt messageid, TLInt channelid)

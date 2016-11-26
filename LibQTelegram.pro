@@ -258,7 +258,8 @@ SOURCES += \
     cache/database/tables/userstable.cpp \
     cache/file/fileuploader.cpp \
     cache/file/filecache.cpp \
-    models/forwarddialogsmodel.cpp
+    models/forwarddialogsmodel.cpp \
+    cache/database/tables/migrateddialogstable.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -511,4 +512,5 @@ HEADERS +=\
     cache/database/tables/userstable.h \
     cache/file/filecache.h \
     cache/file/fileuploader.h \
-    models/forwarddialogsmodel.h
+    models/forwarddialogsmodel.h \
+    cache/database/tables/migrateddialogstable.h
