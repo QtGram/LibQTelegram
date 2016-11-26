@@ -86,6 +86,8 @@ void QQuickWaveform::decodeWaveform(const QByteArray &encoded5bit)
 
     if(!encoded5bit.isEmpty())
     {
+        this->_waveform.fill(0x00, (encoded5bit.size() * 8) / 5);
+
         for(qint32 i = 0, l = this->_waveform.size(); i < l; i++)
         {
             qint32 byte = (i * 5) / 8, shift = (i * 5) % 8;
@@ -96,8 +98,6 @@ void QQuickWaveform::decodeWaveform(const QByteArray &encoded5bit)
 
             this->_waveform[i] = wave;
         }
-
-        this->_waveform.fill(0x00, (encoded5bit.size() * 8) / 5);
     }
     else
     {
