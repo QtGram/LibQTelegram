@@ -36,6 +36,13 @@ typedef quint64 MessageId;
  * Channels: Channel message index + 1
  */
 
+/*
+ * Group -> Supergroup migration notes:
+ *
+ * MessageActionChatMigrateTo -> old group side, contains new channel_id
+ * MessageActionChannelMigrateFrom -> supergroup side, contains old chat_id, id: 1
+ */
+
 class TLString: public QByteArray
 {
     public:
