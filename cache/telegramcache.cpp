@@ -30,12 +30,12 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent), _unreadcount(0)
     connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
 }
 
-QList<Message *> TelegramCache::dialogMessages(Dialog *dialog, int offset, int limit)
+QList<Message *> TelegramCache::dialogMessages(TLInt dialogid, int offset, int limit, bool* hasmigration)
 {
-    return this->_database->messages()->messagesForDialog(TelegramHelper::identifier(dialog), this->_messages, offset, limit, this);
+    return this->_database->messages()->messagesForDialog(dialogid, this->_messages, offset, limit, hasmigration, this);
 }
 
-QList<Message *> TelegramCache::lastDialogMessages(Dialog *dialog)
+QList<Message *> TelegramCache::lastDialogMessages(Dialog* dialog)
 {
     return this->_database->messages()->lastMessagesForDialog(dialog, this->_messages, this);
 }
@@ -94,7 +94,7 @@ ChatFull *TelegramCache::chatFull(TLInt id)
     return this->_chatfull[id];
 }
 
-Message *TelegramCache::message(MessageId messageid, Dialog *dialog)
+Message *TelegramCache::message(MessageId messageid, Dialog *dialog, bool ignoreerror)
 {
     if(!messageid)
         return NULL;
@@ -102,30 +102,24 @@ Message *TelegramCache::message(MessageId messageid, Dialog *dialog)
     if(dialog && TelegramHelper::isChannel(dialog))
         messageid = TelegramHelper::identifier(messageid, dialog);
 
+    TLInt chatid = 0;
+    Message* message = NULL;
+
     if(!this->_messages.contains(messageid))
     {
-        Message* message = this->_database->messages()->get<Message>(messageid, "message", true, this);
+        message = this->_database->messages()->get<Message>(messageid, "message", ignoreerror, this);
 
-        if(!message && dialog && TelegramHelper::isChannel(dialog))
-        {
-            TLInt dialogid = TelegramHelper::identifier(dialog);
-            Chat* chat = this->chat(dialogid);
-
-            if(chat && chat->isMegagroup()) // Try to fetch old Chat's history
-            {
-                Message* groupmessage = this->message(TelegramHelper::messageIdentifier(messageid), NULL);
-
-                if(groupmessage)
-                    return groupmessage;
-            }
-        }
-        else if(message)
+        if(message)
             this->_messages[messageid] = message;
-
-        return message;
     }
+    else
+        message = this->_messages[messageid];
 
-    return this->_messages[messageid];
+    // We found a "migrate-from" type message, get old group's top message
+    if(message && (chatid = TelegramHelper::messageIsMigratedFrom(message)))
+        return this->_database->messages()->topMessage(chatid, this->_messages, this);
+
+    return message;
 }
 
 Dialog *TelegramCache::dialog(TLInt id, bool ignoreerror) const
@@ -260,8 +254,17 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
         this->_database->chats()->prepareInsert(queryobj);
 
         foreach(Chat* chat, chats) {
-            if(this->_chats.contains(chat->id()))
-                continue;
+            if(this->_chats.contains(chat->id())) {
+                Chat* oldchat = this->_chats.take(chat->id());
+                oldchat->deleteLater();
+            }
+
+            if(chat->migratedTo() && (chat->migratedTo()->constructorId() == TLTypes::InputChannel)) { // Remove migrated groups
+                Dialog* dialog = this->dialog(chat->id(), true);
+
+                if(dialog)
+                    this->removeDialog(dialog);
+            }
 
             chat->setParent(this);
             this->_chats[chat->id()] = chat;
@@ -305,7 +308,7 @@ void TelegramCache::onNewMessages(const TLVector<Message *> &messages)
         else if(TelegramHelper::messageIsAction(message))
             this->executeMessageAction(message);
 
-        if(this->canSkipMessage(message))
+        if(TelegramHelper::messageIsMigratedFrom(message))
             continue;
 
         TLInt dialogid = TelegramHelper::messageToDialog(message);
@@ -491,14 +494,6 @@ void TelegramCache::onWebPage(WebPage *webpage)
     emit messageUpdated(message);
 }
 
-bool TelegramCache::canSkipMessage(Message *message)
-{
-    if(message->constructorId() == TLTypes::MessageService)
-        return message->action()->constructorId() == TLTypes::MessageActionChannelMigrateFrom;
-
-    return false;
-}
-
 TLInt TelegramCache::checkDialogMigrated(Dialog* dialog)
 {
     if(!TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
@@ -523,22 +518,8 @@ void TelegramCache::removeDialog(Dialog *dialog)
     TLInt dialogid = TelegramHelper::identifier(dialog);
     this->_database->dialogs()->remove(dialogid);
 
-    Chat* chat = this->chat(dialogid);
-
-    if(chat)
-        this->removeChat(chat);
-
     emit dialogDeleted(dialog);
     dialog->deleteLater();
-}
-
-void TelegramCache::removeChat(Chat *chat)
-{
-    if(this->_chats.contains(chat->id()))
-        this->_chats.remove(chat->id());
-
-    this->_database->chats()->remove(chat->id());
-    chat->deleteLater();
 }
 
 void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings *notifysettings)
@@ -559,7 +540,7 @@ void TelegramCache::onNotifySettings(NotifyPeer *notifypeer, PeerNotifySettings 
 
 void TelegramCache::eraseMessage(MessageId messageid)
 {
-    Message* message = this->message(messageid, NULL);
+    Message* message = this->message(messageid, NULL, true);
 
     if(!message)
         return;

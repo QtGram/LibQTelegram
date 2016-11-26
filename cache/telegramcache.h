@@ -25,7 +25,7 @@
 #define TelegramCache_unreadCount TelegramCache::cache()->unreadCount()
 #define TelegramCache_setUnreadCount(unreadcount) TelegramCache::cache()->setUnreadCount(unreadcount)
 
-#define TelegramCache_messages(dialog, offset, limit) TelegramCache::cache()->dialogMessages(dialog, offset, limit)
+#define TelegramCache_messages(dialogid, offset, limit, hasmigration) TelegramCache::cache()->dialogMessages(dialogid, offset, limit, hasmigration)
 #define TelegramCache_lastDialogMessages(dialog) TelegramCache::cache()->lastDialogMessages(dialog)
 
 #include <QObject>
@@ -51,12 +51,12 @@ class TelegramCache: public QObject
         int unreadCount();
         const QList<Dialog*> &dialogs() const;
         const QList<User*> &contacts() const;
-        QList<Message*> dialogMessages(Dialog* dialog, int offset, int limit);
-        QList<Message*> lastDialogMessages(Dialog* dialog);
+        QList<Message*> dialogMessages(TLInt dialogid, int offset, int limit, bool* hasmigration);
+        QList<Message*> lastDialogMessages(Dialog *dialog);
         User* user(TLInt id, bool ignoreerror = false);
         Chat* chat(TLInt id, bool ignoreerror = false);
         ChatFull *chatFull(TLInt id);
-        Message* message(MessageId messageid, Dialog* dialog);
+        Message* message(MessageId messageid, Dialog* dialog, bool ignoreerror = false);
         Dialog* dialog(TLInt id, bool ignoreerror = false) const;
         bool hasDialog(TLInt id) const;
         TLLong accessHash(Dialog* dialog);
@@ -92,10 +92,8 @@ class TelegramCache: public QObject
         void onWebPage(WebPage* webpage);
 
     private:
-        bool canSkipMessage(Message* message);
         TLInt checkDialogMigrated(Dialog *dialog);
         void removeDialog(Dialog* dialog);
-        void removeChat(Chat* chat);
         void eraseMessage(MessageId messageid);
         void executeMessageAction(Message* message);
         void updateUnreadCount(Dialog* dialog, TLInt unreadcount);

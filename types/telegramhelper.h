@@ -22,6 +22,7 @@ class TelegramHelper
         static InputPeerNotifySettings* inputPeerNotifySettings(PeerNotifySettings* notifysettings, QObject* parent = 0);
         static InputPeer* inputPeer(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputPeer* inputPeer(Peer* peer, TLLong accesshash = 0, QObject* parent = 0);
+        static InputPeer* inputPeer(Chat* chat, QObject* parent = 0);
         static InputPeer* inputPeer(Message* message, QObject* parent = 0);
         static Peer* peer(User* user, QObject* parent = 0);
         static Peer* peer(Message* message, QObject* parent = 0);
@@ -55,6 +56,8 @@ class TelegramHelper
         static bool imageNeedsCompression(const QString& filepath);
         static bool messageIsWebPagePending(Message* message);
         static bool messageIsAction(Message* message);
+        static TLInt messageIsMigratedFrom(Message* message);
+        static TLInt messageIsMigratedTo(Message* message);
         static MessageId identifier(TLInt messageid, TLInt channelid);
         static MessageId identifier(TLInt messageid, Dialog* dialog);
         static MessageId identifier(Message* message);

@@ -172,6 +172,16 @@ InputPeer *TelegramHelper::inputPeer(Peer *peer, TLLong accesshash, QObject *par
     return inputpeer;
 }
 
+InputPeer *TelegramHelper::inputPeer(Chat *chat, QObject *parent)
+{
+    InputPeer* inputpeer = new InputPeer(parent);
+
+    inputpeer->setConstructorId(TLTypes::InputPeerChat);
+    inputpeer->setChatId(chat->id());
+
+    return inputpeer;
+}
+
 InputPeer *TelegramHelper::inputPeer(Message *message, QObject *parent)
 {
     InputPeer* inputpeer = new InputPeer(parent);
@@ -504,6 +514,32 @@ bool TelegramHelper::messageIsAction(Message *message)
         return false;
 
     return true;
+}
+
+TLInt TelegramHelper::messageIsMigratedFrom(Message *message)
+{
+    if(message->constructorId() == TLTypes::MessageService)
+    {
+        if(message->action()->constructorId() != TLTypes::MessageActionChannelMigrateFrom)
+            return 0;
+
+        return message->action()->chatId();
+    }
+
+    return 0;
+}
+
+TLInt TelegramHelper::messageIsMigratedTo(Message *message)
+{
+    if(message->constructorId() == TLTypes::MessageService)
+    {
+        if(message->action()->constructorId() != TLTypes::MessageActionChatMigrateTo)
+            return 0;
+
+        return message->action()->channelId();
+    }
+
+    return 0;
 }
 
 MessageId TelegramHelper::identifier(TLInt messageid, TLInt channelid)

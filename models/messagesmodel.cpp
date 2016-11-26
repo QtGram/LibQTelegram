@@ -7,8 +7,17 @@
 #define MessagesFirstLoad 30
 #define MessagesPerPage   50
 
-MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent), _inputpeer(NULL), _inputchannel(NULL), _dialog(NULL), _timaction(NULL), _newmessageindex(-1), _newmessageid(0), _lastreadedinbox(0), _migrationmessageindex(-1), _isactive(true), _fetchmore(true), _loadcount(MessagesFirstLoad)
+MessagesModel::MessagesModel(QObject *parent) : TelegramModel(parent)
 {
+    this->_inputpeer = this->_migratedinputpeer = NULL;
+    this->_inputchannel = NULL;
+    this->_dialog = NULL;
+    this->_timaction = NULL;
+    this->_newmessageid = this->_lastreadedinbox = this->_migratedfromchatid = 0;
+    this->_newmessageindex = this->_migrationmessageindex = -1;
+    this->_isactive = this->_fetchmore = true;
+    this->_loadcount = MessagesFirstLoad;
+
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::titleChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::statusTextChanged);
     connect(this, &MessagesModel::dialogChanged, this, &MessagesModel::isChatChanged);
@@ -161,7 +170,14 @@ void MessagesModel::fetchMore(const QModelIndex &)
     }
 
     this->createInput();
-    MTProtoRequest* req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
+
+    MTProtoRequest* req = NULL;
+
+    if(!this->_migratedinputpeer)
+        req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_inputpeer, 0, 0, this->_messages.count(), this->_loadcount, 0, 0);
+    else
+        req = TelegramAPI::messagesGetHistory(DC_MainSession, this->_migratedinputpeer, 0, 0, this->_messages.count() - this->_migrationmessageindex, this->_loadcount, 0, 0);
+
     connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesGetHistoryReplied);
 }
 
@@ -326,23 +342,39 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
 
 int MessagesModel::loadHistoryFromCache()
 {
-    QList<Message*> newmessages = TelegramCache_messages(this->_dialog, this->_messages.count(), this->_loadcount);
+    bool hasmigration = false;
+    QList<Message*> newmessages;
+
+    if(!this->_migratedfromchatid) // Take care of old group's messages, if any
+        newmessages = TelegramCache_messages(TelegramHelper::identifier(this->_dialog), this->_messages.count(), this->_loadcount, &hasmigration);
+    else
+        newmessages = TelegramCache_messages(this->_migratedfromchatid, this->_messages.count() - this->_migrationmessageindex, this->_loadcount, &hasmigration);
 
     if(newmessages.isEmpty())
         return 0;
 
-    this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + newmessages.count()) - 1);
+    int count = newmessages.count();
+
+    if(hasmigration)
+        count--;
+
+    TLInt chatid = 0;
+    this->beginInsertRows(QModelIndex(), this->_messages.count(), (this->_messages.count() + count) - 1);
 
     for(int i = 0; i < newmessages.count(); i++)
     {
-        this->_messages.append(newmessages[i]);
+        if((chatid = TelegramHelper::messageIsMigratedFrom(newmessages[i])))
+        {
+            this->_migratedfromchatid = chatid;
+            this->_migrationmessageindex = this->_messages.length();
+            continue;
+        }
 
-        if(this->isMigrationMessage(newmessages[i]))
-            this->_migrationmessageindex = this->_messages.length() - 1;
+        this->_messages.append(newmessages[i]);
     }
 
     this->endInsertRows();
-    return newmessages.count();
+    return count;
 }
 
 void MessagesModel::sendMessage(const QString &text)
@@ -650,7 +682,7 @@ void MessagesModel::onNewMessage(Message *message)
     this->_messages.insert(idx, message);
     this->endInsertRows();
 
-    if(this->isMigrationMessage(message))
+    if(TelegramHelper::messageIsMigratedFrom(message))
         this->_migrationmessageindex = this->_messages.length() - 1;
 
     this->markAsRead();
@@ -973,6 +1005,14 @@ void MessagesModel::createInput()
 
     if(!this->_inputpeer)
         this->_inputpeer = TelegramHelper::inputPeer(this->_dialog, TelegramCache_accessHash(this->_dialog), this);
+
+    if(!this->_migratedinputpeer && this->_migratedfromchatid)
+    {
+        Chat* chat = TelegramCache_chat(this->_migratedfromchatid);
+
+        if(chat)
+            this->_migratedinputpeer = TelegramHelper::inputPeer(chat, this);
+    }
 }
 
 void MessagesModel::terminateInitialization()
@@ -983,14 +1023,6 @@ void MessagesModel::terminateInitialization()
     this->beginResetModel();
     this->setInitializing(false);
     this->endResetModel();
-}
-
-bool MessagesModel::isMigrationMessage(Message *message) const
-{
-    if(message->constructorId() != TLTypes::MessageService)
-        return false;
-
-    return message->action()->constructorId() == TLTypes::MessageActionChatMigrateTo;
 }
 
 void MessagesModel::telegramReady()

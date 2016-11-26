@@ -127,7 +127,6 @@ class MessagesModel : public TelegramModel
         void setFirstNewMessage();
         void createInput();
         void terminateInitialization();
-        bool isMigrationMessage(Message* message) const;
         bool ownMessage(Message* message) const;
 
     protected:
@@ -149,6 +148,7 @@ class MessagesModel : public TelegramModel
         TLVector<Message*> _messages;
         QHash<TLInt, Message*> _pendingmessages;
         InputPeer* _inputpeer;
+        InputPeer* _migratedinputpeer;
         InputChannel* _inputchannel;
         Dialog* _dialog;
         QTimer* _timaction;
@@ -156,6 +156,7 @@ class MessagesModel : public TelegramModel
         TLInt _newmessageid;
         TLInt _lastreadedinbox;
         TLInt _migrationmessageindex;
+        TLInt _migratedfromchatid;
         bool _isactive;
         bool _fetchmore;
         int _loadcount;

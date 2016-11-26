@@ -53,7 +53,7 @@ Message *MessagesTable::topMessage(TLInt dialogid, QHash<MessageId, Message *> &
         return NULL;
 
     Message* message = this->loadMessage(queryobj, messages, parent);
-    TLInt chatid = this->checkGroupMigrationMessage(message);
+    TLInt chatid = TelegramHelper::messageIsMigratedFrom(message);
 
     if(chatid)
         return this->topMessage(chatid, messages, parent);
@@ -61,7 +61,7 @@ Message *MessagesTable::topMessage(TLInt dialogid, QHash<MessageId, Message *> &
     return message;
 }
 
-QList<Message *> MessagesTable::messagesForDialog(TLInt dialogid, QHash<MessageId, Message *> &messages, int offset, int limit, QObject *parent) const
+QList<Message *> MessagesTable::messagesForDialog(TLInt dialogid, QHash<MessageId, Message *> &messages, int offset, int limit, bool* hasmigration, QObject *parent) const
 {
     QList<Message*> result;
     CreateQuery(queryobj);
@@ -76,11 +76,7 @@ QList<Message *> MessagesTable::messagesForDialog(TLInt dialogid, QHash<MessageI
     if(!this->execute(queryobj))
         return result;
 
-    TLInt chatid = this->loadMessages(queryobj, result, messages, parent);
-
-    if(chatid && (result.length() < limit))
-        result << this->messagesForDialog(chatid, messages, offset, limit - result.length(), parent);
-
+    this->loadMessages(queryobj, result, messages, hasmigration, parent);
     return result;
 }
 
@@ -101,7 +97,7 @@ QList<Message *> MessagesTable::lastMessagesForDialog(Dialog *dialog, QHash<Mess
     if(!this->execute(queryobj))
         return result;
 
-    this->loadMessages(queryobj, result, messages, parent);
+    this->loadMessages(queryobj, result, messages, NULL, parent);
     return result;
 }
 
@@ -131,17 +127,6 @@ TLInt MessagesTable::messagesCount(Dialog* dialog, TLInt minid, TLInt maxid) con
     return count;
 }
 
-TLInt MessagesTable::checkGroupMigrationMessage(Message *message) const
-{
-    if(message->constructorId() != TLTypes::MessageService)
-        return 0;
-
-    if(message->action()->constructorId() != TLTypes::MessageActionChannelMigrateFrom)
-        return 0;
-
-    return message->action()->chatId();
-}
-
 bool MessagesTable::prepareDelete(TLInt dialogid, TLVector<MessageId> &deletedmessages)
 {
     CreateQuery(queryobj);
@@ -167,36 +152,31 @@ bool MessagesTable::prepareDelete(TLInt dialogid, TLVector<MessageId> &deletedme
     return queryobj.numRowsAffected() > 0;
 }
 
-TLInt MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, QHash<MessageId, Message *> &messages, QObject *parent) const
+void MessagesTable::loadMessages(QSqlQuery &queryobj, QList<Message*>& result, QHash<MessageId, Message *> &messages, bool* hasmigration, QObject *parent) const
 {
+    if(hasmigration)
+        *hasmigration = false;
+
     while(queryobj.next())
     {
         MessageId messageid = queryobj.value("id").toLongLong();
+        Message* message = NULL;
 
-        if(messages.contains(messageid))
+        if(!messages.contains(messageid))
         {
-            result << messages[messageid];
-            continue;
+            QByteArray data = queryobj.value("message").toByteArray();
+            message = new Message(parent);
+            message->unserialize(data);
+            messages[messageid] = message;
         }
+        else
+            message = messages[messageid];
 
-        QByteArray data = queryobj.value("message").toByteArray();
-        Message* message = new Message(parent);
-
-        message->unserialize(data);
-        messages[messageid] = message;
+        if(hasmigration && TelegramHelper::messageIsMigratedFrom(message))
+            *hasmigration = true;
 
         result << message;
     }
-
-    if(result.isEmpty())
-        return 0;
-
-    TLInt chatid = this->checkGroupMigrationMessage(result.last());
-
-    if(chatid)
-        result.removeLast();
-
-    return chatid;
 }
 
 Message *MessagesTable::loadMessage(QSqlQuery &queryobj, QHash<MessageId, Message *> &messages, QObject *parent) const
