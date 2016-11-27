@@ -289,5 +289,5 @@ void FileCache::onDownloadCompleted()
         QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(filename));
     }
     else
-        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileName()), destpath.absoluteFilePath(fileobject->fileName()));
+        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(fileobject->fileName()));
 }
