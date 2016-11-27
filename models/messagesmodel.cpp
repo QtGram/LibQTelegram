@@ -211,7 +211,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::ReplyFromRole)
     {
         if(message->replyToMsgId() == 0)
-            return QVariant();
+            return QString();
 
         return this->messageFrom(TelegramCache_message(message->replyToMsgId(), this->_dialog));
     }
