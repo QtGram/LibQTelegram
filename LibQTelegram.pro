@@ -236,7 +236,6 @@ SOURCES += \
     objects/fileobject.cpp \
     models/messagesmodel.cpp \
     quick/qquickmediamessageitem.cpp \
-    quick/qquickpeerimage.cpp \
     quick/qquickbaseitem.cpp \
     objects/notifications/telegramnotifications.cpp \
     objects/notifications/notificationobject.cpp \
@@ -259,7 +258,8 @@ SOURCES += \
     cache/file/fileuploader.cpp \
     cache/file/filecache.cpp \
     models/forwarddialogsmodel.cpp \
-    cache/database/tables/migrateddialogstable.cpp
+    cache/database/tables/migrateddialogstable.cpp \
+    quick/qquickpeerview.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -488,7 +488,6 @@ HEADERS +=\
     objects/fileobject.h \
     models/messagesmodel.h \
     quick/qquickmediamessageitem.h \
-    quick/qquickpeerimage.h \
     quick/qquickbaseitem.h \
     objects/notifications/telegramnotifications.h \
     objects/notifications/notificationobject.h \
@@ -513,4 +512,5 @@ HEADERS +=\
     cache/file/filecache.h \
     cache/file/fileuploader.h \
     models/forwarddialogsmodel.h \
-    cache/database/tables/migrateddialogstable.h
+    cache/database/tables/migrateddialogstable.h \
+    quick/qquickpeerview.h

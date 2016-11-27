@@ -8,7 +8,7 @@
 #include "models/forwarddialogsmodel.h"
 #include "notifications/telegramnotifications.h"
 #include "notifications/notificationobject.h"
-#include "quick/qquickpeerimage.h"
+#include "quick/qquickpeerview.h"
 #include "quick/qquickmediamessageitem.h"
 #include "quick/qquickwaveform.h"
 
@@ -45,7 +45,7 @@ void TelegramQmlBase::initialize(const QString &uri)
     REGISTER_OBJECT(ForwardDialogsModel);
 
     // Components
-    REGISTER_OBJECT_AS(QQuickPeerImage, "PeerImage");
+    REGISTER_OBJECT_AS(QQuickPeerView, "PeerView");
     REGISTER_OBJECT_AS(QQuickMediaMessageItem, "MediaMessageItem");
     REGISTER_OBJECT_AS(QQuickWaveform, "Waveform");
 }
