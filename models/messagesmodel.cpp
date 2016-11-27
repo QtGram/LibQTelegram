@@ -219,7 +219,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::ReplyTextRole)
     {
         if(message->replyToMsgId() == 0)
-            return QVariant();
+            return QString();
 
         Message* replymessage = TelegramCache_message(message->replyToMsgId(), this->_dialog);
 
@@ -232,14 +232,14 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
     if(role == MessagesModel::ReplyCaptionRole)
     {
         if(message->replyToMsgId() == 0)
-            return QVariant();
+            return QString();
 
         Message* replymessage = TelegramCache_message(message->replyToMsgId(), this->_dialog);
 
         if(replymessage && replymessage->media() && (replymessage->media()->constructorId() != TLTypes::MessageMediaEmpty))
             return this->_telegram->messagePreview(replymessage);
 
-        return QVariant();
+        return QString();
     }
 
     if(role == MessagesModel::IsMessageNewRole)
