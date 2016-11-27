@@ -315,6 +315,8 @@ void FileObject::createDownloadSession(int dcid)
 
 void FileObject::sendDownloadRequest()
 {
+    disconnect(this->_dcsession, &DCSession::ready, this, 0);
+
     TLInt offset = (this->_file ? this->_file->size() : 0);
     MTProtoRequest* req = TelegramAPI::uploadGetFile(this->_dcsession, this->_inputfilelocation, offset, BLOCK_SIZE);
     connect(req, &MTProtoRequest::replied, this, &FileObject::onUploadGetFileReplied);
