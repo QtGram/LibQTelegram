@@ -10,13 +10,9 @@ class QQuickBaseItem : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(QString source READ source NOTIFY sourceChanged)
     Q_PROPERTY(QString fileSize READ fileSize NOTIFY fileSizeChanged)
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
-    Q_PROPERTY(qreal fontPixelSize READ fontPixelSize WRITE setFontPixelSize NOTIFY fontPixelSizeChanged)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(bool downloaded READ downloaded NOTIFY downloadedChanged)
     Q_PROPERTY(bool downloading READ downloading NOTIFY downloadingChanged)
@@ -25,30 +21,22 @@ class QQuickBaseItem : public QQuickItem
 
     public:
         explicit QQuickBaseItem(QQuickItem *parent = 0);
-        QString version() const;
         QString source() const;
         QString fileSize() const;
         QString fileName() const;
         QSize imageSize() const;
-        QColor backgroundColor() const;
-        QColor foregroundColor() const;
-        qreal fontPixelSize() const;
         qreal progress() const;
         bool downloaded() const;
         bool downloading() const;
         bool uploading() const;
         bool hasThumbnail() const;
         void setVersion(const QString& version);
-        void setBackgroundColor(const QColor& color);
-        void setForegroundColor(const QColor& color);
-        void setFontPixelSize(qreal pixelsize);
 
     public slots:
         virtual void download();
 
     protected:
         QString escape(const TLString& s);
-        void createComponent(const QString& componentcode);
         void createObject(QQmlComponent* component);
         FileObject* createFileObject(TelegramObject* telegramobject);
         QString thumbnail() const;
@@ -58,10 +46,6 @@ class QQuickBaseItem : public QQuickItem
         void filePathChanged();
         void fileNameChanged();
         void fileSizeChanged();
-        void backgroundColorChanged();
-        void foregroundColorChanged();
-        void fontPixelSizeChanged();
-        void versionChanged();
         void sourceChanged();
         void imageSizeChanged();
         void downloadedChanged();
@@ -69,12 +53,6 @@ class QQuickBaseItem : public QQuickItem
         void uploadingChanged();
         void hasThumbnailChanged();
         void progressChanged();
-
-    private:
-        QString _version;
-        QColor _backcolor;
-        QColor _forecolor;
-        qreal _pixelsize;
 
     protected:
         FileObject* _fileobject;
