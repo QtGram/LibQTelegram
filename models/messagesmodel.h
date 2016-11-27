@@ -46,6 +46,7 @@ class MessagesModel : public TelegramModel
             ReplyItemRole,
             ReplyFromRole,
             ReplyTextRole,
+            ReplyCaptionRole,
             IsMessageForwardedRole,
             IsMessageNewRole,
             IsMessageOutRole,

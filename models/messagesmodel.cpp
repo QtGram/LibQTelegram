@@ -209,10 +209,38 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         return message->replyToMsgId() ? QVariant::fromValue(TelegramCache_message(message->replyToMsgId(), this->_dialog)) : QVariant();
 
     if(role == MessagesModel::ReplyFromRole)
+    {
+        if(message->replyToMsgId() == 0)
+            return QVariant();
+
         return this->messageFrom(TelegramCache_message(message->replyToMsgId(), this->_dialog));
+    }
 
     if(role == MessagesModel::ReplyTextRole)
-        return this->_telegram->messageText(TelegramCache_message(message->replyToMsgId(), this->_dialog));
+    {
+        if(message->replyToMsgId() == 0)
+            return QVariant();
+
+        Message* replymessage = TelegramCache_message(message->replyToMsgId(), this->_dialog);
+
+        if(replymessage && replymessage->media() && (replymessage->media()->constructorId() != TLTypes::MessageMediaEmpty))
+            return this->_telegram->messagePreview(replymessage);
+
+        return this->_telegram->messageText(replymessage);
+    }
+
+    if(role == MessagesModel::ReplyCaptionRole)
+    {
+        if(message->replyToMsgId() == 0)
+            return QVariant();
+
+        Message* replymessage = TelegramCache_message(message->replyToMsgId(), this->_dialog);
+
+        if(replymessage && replymessage->media() && (replymessage->media()->constructorId() != TLTypes::MessageMediaEmpty))
+            return this->_telegram->messagePreview(replymessage);
+
+        return QVariant();
+    }
 
     if(role == MessagesModel::IsMessageNewRole)
     {
@@ -325,6 +353,7 @@ QHash<int, QByteArray> MessagesModel::roleNames() const
     roles[MessagesModel::ReplyItemRole] = "replyItem";
     roles[MessagesModel::ReplyFromRole] = "replyFrom";
     roles[MessagesModel::ReplyTextRole] = "replyText";
+    roles[MessagesModel::ReplyCaptionRole] = "replyCaption";
     roles[MessagesModel::IsMessageForwardedRole] = "isMessageForwarded";
     roles[MessagesModel::IsMessageNewRole] = "isMessageNew";
     roles[MessagesModel::IsMessageOutRole] = "isMessageOut";
