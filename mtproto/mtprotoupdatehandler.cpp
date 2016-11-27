@@ -191,6 +191,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update, TLLong sessionid)
     {
         case TLTypes::UpdateNewMessage:
             emit newMessage(update->messageUpdatenewmessage());
+            emit newSingleMessage(update->messageUpdatenewmessage(), sessionid);
             break;
 
         case TLTypes::UpdateNewChannelMessage:
