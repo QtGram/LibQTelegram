@@ -35,6 +35,7 @@ class DCSession : public QObject
         void queueAck(MTProtoReply *);
 
     signals:
+        void sessionIdUpdated(TLLong oldsessionid);
         void unauthorized(DCSession* dcsession);
         void ready();
 

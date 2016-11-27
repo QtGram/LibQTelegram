@@ -113,7 +113,18 @@ void DCSessionManager::closeSession(DCSession *dcsession)
             this->_dclist.remove(dc->config()->id());
     }
 
+    this->_activesessions.remove(dcsession->sessionId());
     dcsession->deleteLater();
+}
+
+void DCSessionManager::updateSessionId(TLLong oldsessionid)
+{
+    DCSession* dcsession = qobject_cast<DCSession*>(this->sender());
+
+    if(this->_activesessions.contains(oldsessionid))
+        this->_activesessions.remove(oldsessionid);
+
+    this->_activesessions[dcsession->sessionId()] = dcsession;
 }
 
 DCSessionManager *DCSessionManager::instance()
@@ -137,7 +148,10 @@ DCSession *DCSessionManager::createMainSession(DCConfig *dcconfig)
     this->_mainsession = new DCSession(dc, this);
     this->_mainsession->setOwnedDC(true);
 
+    this->_activesessions[this->_mainsession->sessionId()] = this->_mainsession;
+
     connect(this->_mainsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
+    connect(this->_mainsession, &DCSession::sessionIdUpdated, this, &DCSessionManager::updateSessionId, Qt::UniqueConnection);
 
     if(oldsession)
     {
@@ -168,10 +182,18 @@ DCSession *DCSessionManager::createMainSession(DCConfig *dcconfig)
 DCSession *DCSessionManager::createSession(DCConfig *dcconfig, bool filedc)
 {
     DC* dc = this->createDC(dcconfig, filedc);
+
     DCSession* dcsession = new DCSession(dc, this);
+    this->_activesessions[dcsession->sessionId()] = dcsession;
 
     connect(dcsession, &DCSession::unauthorized, this, &DCSessionManager::initializeSession, Qt::UniqueConnection);
+    connect(dcsession, &DCSession::sessionIdUpdated, this, &DCSessionManager::updateSessionId, Qt::UniqueConnection);
     return dcsession;
+}
+
+bool DCSessionManager::ownSession(TLLong sessionid)
+{
+    return this->_activesessions.contains(sessionid);
 }
 
 void DCSessionManager::restoreSessions() const

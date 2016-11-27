@@ -60,7 +60,9 @@ MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 
 void DCSession::generateSessionId()
 {
+    TLLong oldsessionid = this->_sessionid;
     this->_sessionid = Math::randomize<TLLong>();
+    emit sessionIdUpdated(oldsessionid);
 }
 
 void DCSession::requestAuthorization()

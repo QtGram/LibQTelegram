@@ -13,6 +13,7 @@
 #define DC_CreateMainSession(dcconfig) DCSessionManager::instance()->createMainSession(dcconfig)
 #define DC_CloseSession(dcsession) DCSessionManager::instance()->closeSession(dcsession)
 #define DC_InitializeSession(dcsession) DCSessionManager::instance()->initializeSession(dcsession)
+#define DC_OwnSession(sessionid) DCSessionManager::instance()->ownSession(sessionid)
 
 class DCSessionManager: public QObject
 {
@@ -30,11 +31,13 @@ class DCSessionManager: public QObject
         DCSession* mainSession() const;
         DCSession* createMainSession(DCConfig* dcconfig);
         DCSession* createSession(DCConfig* dcconfig, bool filedc);
+        bool ownSession(TLLong sessionid);
         void restoreSessions() const;
         void initializeSession(DCSession* dcsession);
         void closeSession(DCSession* dcsession);
 
     private slots:
+        void updateSessionId(TLLong oldsessionid);
         void onAuthorized(DC *dc);
         void onAuthorizationImported(DC *dc);
         void onAuthorizationReply(MTProtoReply *mtreply);
@@ -54,6 +57,7 @@ class DCSessionManager: public QObject
         QHash<DC*, DCAuthorization*> _dcauthorizations;
         QHash<DCConfig::Id, DC*> _dclist;
         QHash<DCConfig::Id, DC*> _filedclist;
+        QHash<TLLong, DCSession*> _activesessions;
         DCSession* _mainsession;
 
     private:
