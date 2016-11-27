@@ -58,8 +58,11 @@ void TelegramNotifications::onLoginCompleted()
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
-void TelegramNotifications::onIncomingMessage(Message *message)
+void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid)
 {
+    if(UpdateHandler_syncing || !DCSessionManager_OwnSession(sessionid))
+        return;
+
     if(this->_mute || !this->_telegram || message->isOut() || (message->constructorId() != TLTypes::Message))
         return;
 

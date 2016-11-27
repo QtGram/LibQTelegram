@@ -29,15 +29,15 @@ class MTProtoUpdateHandler : public QObject
         void handleUpdatesChannelDifference(MTProtoReply* mtreply);
 
     private:
-        void handleUpdates(TLVector<Update*> updatelist);
-        void handleUpdate(Update* update);
+        void handleUpdates(TLVector<Update*> updatelist, TLLong sessionid);
+        void handleUpdate(Update* update, TLLong sessionid);
 
     signals:
         void syncingChanged();
         void newMessages(const TLVector<Message*>& messages);
         void newUsers(const TLVector<User*>& users);
         void newChats(const TLVector<Chat*>& chats);
-        void newSingleMessage(Message* message);
+        void newSingleMessage(Message* message, TLLong sessionid);
         void newMessage(Message* message);
         void editMessage(Message* message);
         void deleteMessages(const TLVector<TLInt>& messageids);

@@ -25,7 +25,7 @@ class TelegramNotifications : public QObject
 
     private slots:
         void onLoginCompleted();
-        void onIncomingMessage(Message* message);
+        void onIncomingMessage(Message* message, TLLong sessionid);
         void onReadHistory(Dialog* dialog);
 
     signals:

@@ -89,19 +89,19 @@ void MTProtoUpdateHandler::handleUpdates(MTProtoReply *mtreply)
         {
             Message* message = TelegramHelper::createMessage(&updates, TelegramConfig_me);
             emit newMessage(message);
-            emit newSingleMessage(message);
+            emit newSingleMessage(message, mtreply->sessionId());
             break;
         }
 
         case TLTypes::UpdateShort:
-            this->handleUpdate(updates.update());
+            this->handleUpdate(updates.update(), mtreply->sessionId());
             break;
 
         case TLTypes::Updates:
         case TLTypes::UpdatesCombined:
             emit newUsers(updates.users());
             emit newChats(updates.chats());
-            this->handleUpdates(updates.updates());
+            this->handleUpdates(updates.updates(), mtreply->sessionId());
             break;
 
         default:
@@ -137,7 +137,7 @@ void MTProtoUpdateHandler::handleUpdatesDifference(MTProtoReply *mtreply)
     emit newChats(updatedifference.chats());
     emit newMessages(updatedifference.newMessages());
 
-    this->handleUpdates(updatedifference.otherUpdates());
+    this->handleUpdates(updatedifference.otherUpdates(), mtreply->sessionId());
 
     if(updatedifference.constructorId() == TLTypes::UpdatesDifferenceSlice)
     {
@@ -167,13 +167,13 @@ void MTProtoUpdateHandler::handleUpdatesChannelDifference(MTProtoReply *mtreply)
     if(updatechanneldifference.constructorId() == TLTypes::UpdatesChannelDifference)
     {
         emit newMessages(updatechanneldifference.newMessages());
-        this->handleUpdates(updatechanneldifference.otherUpdates());
+        this->handleUpdates(updatechanneldifference.otherUpdates(), mtreply->sessionId());
     }
     else
         emit newMessages(updatechanneldifference.messages());
 }
 
-void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
+void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist, TLLong sessionid)
 {
     UpdatesState* clientstate = TelegramConfig_clientState;
 
@@ -181,11 +181,11 @@ void MTProtoUpdateHandler::handleUpdates(TLVector<Update *> updatelist)
     {
         Update* update = updatelist[i];
         ClientSyncManager::syncUpdate(update, clientstate);
-        this->handleUpdate(update);
+        this->handleUpdate(update, sessionid);
     }
 }
 
-void MTProtoUpdateHandler::handleUpdate(Update *update)
+void MTProtoUpdateHandler::handleUpdate(Update *update, TLLong sessionid)
 {
     switch(update->constructorId())
     {
@@ -195,6 +195,7 @@ void MTProtoUpdateHandler::handleUpdate(Update *update)
 
         case TLTypes::UpdateNewChannelMessage:
             emit newMessage(update->messageUpdatenewchannelmessage());
+            emit newSingleMessage(update->messageUpdatenewchannelmessage(), sessionid);
             break;
 
         case TLTypes::UpdateEditMessage:
