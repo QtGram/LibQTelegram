@@ -340,26 +340,19 @@ QString TelegramHelper::dateString(TLInt timestamp)
 
 QString TelegramHelper::fileSize(TLDouble size)
 {
-    int unit = 0;
+    static QString units[] = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+    int i = 0;
 
     while(size > 1024)
     {
         size /= 1024;
-        unit++;
+        i++;
     }
 
-    QString filesize = QString::number(size, 'g', 2);
+    if(size == static_cast<TLLong>(size))
+        return QString::number(static_cast<TLLong>(size)) + " " + units[i];
 
-    if(unit == 0)
-        filesize += "B";
-    else if(unit == 1)
-        filesize += "KB";
-    else if(unit == 2)
-        filesize += "MB";
-    else if(unit == 3)
-        filesize += "GB";
-
-    return filesize;
+    return QString::number(size, 'f', 2) + " " + units[i];
 }
 
 QString TelegramHelper::fullName(User *user)
