@@ -7,13 +7,13 @@
 #include "dcsession.h"
 
 #define DCSessionManager_instance DCSessionManager::instance()
+#define DCSessionManager_OwnSession(sessionid) DCSessionManager::instance()->ownSession(sessionid)
 #define DC_MainSession DCSessionManager::instance()->mainSession()
 #define DC_CreateSession(dcconfig) DCSessionManager::instance()->createSession(dcconfig, false)
 #define DC_CreateFileSession(dcconfig) DCSessionManager::instance()->createSession(dcconfig, true)
 #define DC_CreateMainSession(dcconfig) DCSessionManager::instance()->createMainSession(dcconfig)
 #define DC_CloseSession(dcsession) DCSessionManager::instance()->closeSession(dcsession)
 #define DC_InitializeSession(dcsession) DCSessionManager::instance()->initializeSession(dcsession)
-#define DC_OwnSession(sessionid) DCSessionManager::instance()->ownSession(sessionid)
 
 class DCSessionManager: public QObject
 {
