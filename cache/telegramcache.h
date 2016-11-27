@@ -89,6 +89,7 @@ class TelegramCache: public QObject
         void onNotifySettings(NotifyPeer* notifypeer, PeerNotifySettings* notifysettings);
         void onReadHistory(Update* update);
         void onChannelTooLong(Update* update);
+        void onUserPhoto(Update* update);
         void onWebPage(WebPage* webpage);
 
     private:
@@ -109,7 +110,6 @@ class TelegramCache: public QObject
         void dialogEditMessage(Dialog* dialog);
         void dialogDeleted(Dialog* dialog);
         void titleChanged(Dialog* dialog);
-        void photoChanged(Dialog* dialog);
         void newDialogs(const TLVector<Dialog *> &dialogs);
         void newMessage(Message* message);
         void editMessage(Message* message);

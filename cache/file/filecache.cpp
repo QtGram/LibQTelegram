@@ -47,23 +47,29 @@ FileObject *FileCache::upload(FileUploader::MediaType mediatype, const QString &
     return fileobject;
 }
 
-QString FileCache::createFileId(FileLocation *filelocation)
+void FileCache::removeObject(TelegramObject *tgobj)
 {
-    QByteArray indata, outdata;
+    FileObject* fileobject = this->fileObject(tgobj);
 
-    filelocation->serialize(indata);
-    outdata = md5_hash(indata);
-    return outdata.toHex();
+    if(!fileobject)
+        return;
+
+    this->dequeue(fileobject);
 }
 
-QString FileCache::createFileId(Document *document)
+QString FileCache::createFileId(TelegramObject *locationobj)
 {
-    QByteArray indata, outdata;
-    TLLong id = document->id();
+    QByteArray data;
 
-    indata.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
-    outdata = md5_hash(indata);
-    return outdata.toHex();
+    if(locationobj->constructorId() == TLTypes::Document)
+    {
+        TLLong id = qobject_cast<Document*>(locationobj)->id();
+        data.append(reinterpret_cast<const char*>(&id), sizeof(TLLong));
+    }
+    else
+        locationobj->serialize(data);
+
+    return md5_hash_hex(data);
 }
 
 FileObject *FileCache::localFileObject(TelegramObject *tgobj)
@@ -176,12 +182,7 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
              (locationobj->constructorId() == TLTypes::FileLocationUnavailable) ||
              (locationobj->constructorId() == TLTypes::Document));
 
-    QString fileid;
-
-    if(locationobj->constructorId() == TLTypes::Document)
-         fileid = this->createFileId(qobject_cast<Document*>(locationobj));
-    else
-         fileid = this->createFileId(qobject_cast<FileLocation*>(locationobj));
+    QString fileid = this->createFileId(locationobj);
 
     if(this->_filemap.contains(fileid))
         return this->_filemap[fileid];
@@ -227,6 +228,20 @@ void FileCache::enqueue(FileObject *fileobject)
 
     if(!this->_currentobject)
         this->processQueue();
+}
+
+void FileCache::dequeue(FileObject *fileobject)
+{
+    if(!this->_filemap.contains(fileobject->fileId()))
+        return;
+
+    int idx = this->_queue.indexOf(fileobject);
+
+    if(idx == -1)
+        return;
+
+    this->_queue.removeAt(idx);
+    fileobject->deleteLater();
 }
 
 void FileCache::processQueue()

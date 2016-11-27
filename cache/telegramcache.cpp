@@ -1,4 +1,5 @@
 #include "telegramcache.h"
+#include "file/filecache.h"
 #include "../mtproto/mtprotoupdatehandler.h"
 
 TelegramCache* TelegramCache::_instance = NULL;
@@ -27,6 +28,7 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent), _unreadcount(0)
     connect(UpdateHandler_instance, SIGNAL(notifySettings(NotifyPeer*,PeerNotifySettings*)), this, SLOT(onNotifySettings(NotifyPeer*,PeerNotifySettings*)));
     connect(UpdateHandler_instance, SIGNAL(readHistory(Update*)), this, SLOT(onReadHistory(Update*)));
     connect(UpdateHandler_instance, SIGNAL(channelTooLong(Update*)), this, SLOT(onChannelTooLong(Update*)));
+    connect(UpdateHandler_instance, SIGNAL(userPhoto(Update*)), this, SLOT(onUserPhoto(Update*)));
     connect(UpdateHandler_instance, SIGNAL(webPage(WebPage*)), this, SLOT(onWebPage(WebPage*)));
 }
 
@@ -266,19 +268,23 @@ void TelegramCache::cache(const TLVector<Chat *>& chats)
     this->_database->transaction([this, chats](QSqlQuery& queryobj) {
         this->_database->chats()->prepareInsert(queryobj);
         TLInt channelid = 0;
+        Chat* currentchat = NULL;
 
         foreach(Chat* chat, chats) {
             if(this->_chats.contains(chat->id())) {
-                Chat* oldchat = this->_chats.take(chat->id());
-                oldchat->deleteLater();
+                Chat* oldchat = this->_chats[chat->id()];
+                oldchat->setMigratedTo(chat->migratedTo());;
+                currentchat = oldchat;
             }
+            else
+                currentchat = chat;
 
-            if((channelid = TelegramHelper::chatIsMigrated(chat)))
-                this->migrateDialog(chat);
+            if((channelid = TelegramHelper::chatIsMigrated(currentchat)))
+                this->migrateDialog(currentchat);
 
             chat->setParent(this);
-            this->_chats[chat->id()] = chat;
-            this->_database->chats()->insertQuery(queryobj, chat);
+            this->_chats[currentchat->id()] = currentchat;
+            this->_database->chats()->insertQuery(queryobj, currentchat);
         }
     });
 }
@@ -478,6 +484,20 @@ void TelegramCache::onChannelTooLong(Update *update)
     this->_fetcher->getChannelDifference(chat, update->pts());
 }
 
+void TelegramCache::onUserPhoto(Update *update)
+{
+    Q_ASSERT(update->constructorId() == TLTypes::UpdateUserPhoto);
+
+    User* user = this->user(update->userId());
+
+    if(!user)
+        return;
+
+    FileCache_removeObject(user->photo()); // Remove old photo from file cache
+    user->setPhoto(update->photo());
+    this->cache(user);
+}
+
 void TelegramCache::onWebPage(WebPage *webpage)
 {
     MessageId messageid = this->_database->pendingWebPages()->messageId(webpage);
@@ -609,15 +629,9 @@ void TelegramCache::executeMessageAction(Message *message)
         if(!chat)
             return;
 
+        FileCache_removeObject(chat->photo()); // Remove old photo from file cache
         chat->setPhoto(TelegramHelper::chatPhoto(messageaction->photo()));
         this->cache(chat);
-
-        Dialog* dialog = this->dialog(dialogid);
-
-        if(!dialog)
-            return;
-
-        emit photoChanged(dialog);
     }
     else if(messageaction->constructorId() == TLTypes::MessageActionChatMigrateTo) // Remove old group, add new supergroup
     {
