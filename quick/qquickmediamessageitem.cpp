@@ -14,6 +14,7 @@ QQuickMediaMessageItem::QQuickMediaMessageItem(QQuickItem *parent): QQuickBaseIt
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAnimatedChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isAudioChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isImageChanged);
+    connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isFileChanged);
     connect(this, &QQuickMediaMessageItem::messageChanged, this, &QQuickMediaMessageItem::isWebPageChanged);
 }
 
@@ -88,6 +89,19 @@ bool QQuickMediaMessageItem::isImage() const
         return false;
 
     return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeImageSize) != NULL;
+}
+
+bool QQuickMediaMessageItem::isFile() const
+{
+    if(!this->_message || !this->_message->media())
+        return false;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
+        return false;
+
+    return TelegramHelper::documentHas(messagemedia->document(), TLTypes::DocumentAttributeFilename) != NULL;
 }
 
 bool QQuickMediaMessageItem::isWebPage() const

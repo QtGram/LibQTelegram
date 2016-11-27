@@ -13,6 +13,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(bool isAudio READ isAudio NOTIFY isAudioChanged)
     Q_PROPERTY(bool isVideo READ isVideo NOTIFY isVideoChanged)
     Q_PROPERTY(bool isImage READ isImage NOTIFY isImageChanged)
+    Q_PROPERTY(bool isFile READ isFile NOTIFY isFileChanged)
     Q_PROPERTY(bool isWebPage READ isWebPage NOTIFY isWebPageChanged)
     Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(qreal contentWidth READ contentWidth NOTIFY contentWidthChanged)
@@ -40,6 +41,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         bool isAudio() const;
         bool isVideo() const;
         bool isImage() const;
+        bool isFile() const;
         bool isWebPage() const;
         qreal size() const;
         qreal contentWidth() const;
@@ -101,6 +103,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void isAudioChanged();
         void isVideoChanged();
         void isImageChanged();
+        void isFileChanged();
         void isWebPageChanged();
         void sizeChanged();
         void contentWidthChanged();
