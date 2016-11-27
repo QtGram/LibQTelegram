@@ -66,7 +66,7 @@ TelegramObject *QQuickPeerView::findPeer(TelegramObject *peer)
 
             if(chat)
             {
-                connect(chat, &Chat::photoChanged, this, &QQuickPeerView::sourceChanged, Qt::UniqueConnection);
+                connect(chat, &Chat::photoChanged, this, &QQuickPeerView::updateView, Qt::UniqueConnection);
                 return chat;
             }
         }
@@ -76,7 +76,7 @@ TelegramObject *QQuickPeerView::findPeer(TelegramObject *peer)
 
             if(user)
             {
-                connect(user, &User::photoChanged, this, &QQuickPeerView::sourceChanged, Qt::UniqueConnection);
+                connect(user, &User::photoChanged, this, &QQuickPeerView::updateView, Qt::UniqueConnection);
                 return user;
             }
         }
@@ -89,6 +89,7 @@ TelegramObject *QQuickPeerView::findPeer(TelegramObject *peer)
             return peer;
 
         User* user = TelegramCache_user(message->fromId());
+        connect(user, &User::photoChanged, this, &QQuickPeerView::updateView, Qt::UniqueConnection);
 
         if(user)
             return user;
@@ -102,10 +103,15 @@ void QQuickPeerView::initialize()
     if(!this->_peer || !this->_delegate)
         return;
 
-    this->createFileObject(this->findPeer(this->_peer));
+    this->updateView();
     this->createObject(this->_delegate);
 
     emit fallbackTextChanged();
+}
+
+void QQuickPeerView::updateView()
+{
+    this->createFileObject(this->findPeer(this->_peer));
 }
 
 void QQuickPeerView::updateMetrics()

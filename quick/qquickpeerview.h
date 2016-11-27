@@ -27,10 +27,13 @@ class QQuickPeerView : public QQuickBaseItem
 
     private:
         TelegramObject* findPeer(TelegramObject* peer);
-        void initialize();
-        void updateMetrics();
         QString fallbackText(TelegramObject* telegramobject) const;
         QString fallbackTitle(const QString& title) const;
+        void updateMetrics();
+        void initialize();
+
+    private slots:
+        void updateView();
 
     protected:
         virtual void componentComplete();
