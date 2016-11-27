@@ -81,6 +81,9 @@ bool QQuickMediaMessageItem::isImage() const
 
     MessageMedia* messagemedia = this->_message->media();
 
+    if(messagemedia->constructorId() == TLTypes::MessageMediaPhoto)
+        return true;
+
     if(messagemedia->constructorId() != TLTypes::MessageMediaDocument)
         return false;
 
