@@ -138,6 +138,7 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
     connect(this->_fileobject, &FileObject::downloadingChanged, this, &QQuickBaseItem::downloadingChanged);
     connect(this->_fileobject, &FileObject::hasThumbnailChanged, this, &QQuickBaseItem::hasThumbnailChanged);
     connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::sourceChanged);
+    connect(this->_fileobject, &FileObject::thumbnailChanged, this, &QQuickBaseItem::thumbnailChanged);
     connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::filePathChanged);
     connect(this->_fileobject, &FileObject::filePathChanged, this, &QQuickBaseItem::sourceChanged);
     connect(this->_fileobject, &FileObject::fileNameChanged, this, &QQuickBaseItem::fileNameChanged);

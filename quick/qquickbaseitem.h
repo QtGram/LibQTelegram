@@ -11,6 +11,7 @@ class QQuickBaseItem : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QString source READ source NOTIFY sourceChanged)
+    Q_PROPERTY(QString thumbnail READ thumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QString fileSize READ fileSize NOTIFY fileSizeChanged)
     Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
@@ -22,6 +23,7 @@ class QQuickBaseItem : public QQuickItem
     public:
         explicit QQuickBaseItem(QQuickItem *parent = 0);
         QString source() const;
+        QString thumbnail() const;
         QString fileSize() const;
         QString fileName() const;
         QSize imageSize() const;
@@ -39,7 +41,6 @@ class QQuickBaseItem : public QQuickItem
         QString escape(const TLString& s);
         void createObject(QQmlComponent* component);
         FileObject* createFileObject(TelegramObject* telegramobject);
-        QString thumbnail() const;
         QString filePath() const;
 
     signals:
@@ -47,6 +48,7 @@ class QQuickBaseItem : public QQuickItem
         void fileNameChanged();
         void fileSizeChanged();
         void sourceChanged();
+        void thumbnailChanged();
         void imageSizeChanged();
         void downloadedChanged();
         void downloadingChanged();
