@@ -4,6 +4,7 @@
 #define FileCache_instance FileCache::instance()
 #define FileCache_fileObject(obj) FileCache::instance()->fileObject(obj)
 #define FileCache_removeObject(obj) FileCache::instance()->removeObject(obj)
+#define FileCache_saveToDownloads(obj) FileCache::instance()->saveToDownloads(obj)
 #define FileCache_upload(mediatype, filepath, caption) FileCache::instance()->upload(mediatype, filepath, caption)
 
 #include <QObject>
@@ -24,18 +25,20 @@ class FileCache : public QObject
         FileObject* fileObject(TelegramObject* tgobj);
         FileObject* upload(FileUploader::MediaType mediatype, const QString& filepath, const QString& caption);
         void removeObject(TelegramObject* tgobj);
+        void saveToDownloads(FileObject* fileobject);
 
     private:
-        QString createFileId(TelegramObject* locationobj);
+        bool isMovable(TelegramObject* tgobj) const;
+        QString createFileId(TelegramObject* locationobj) const;
         FileObject* localFileObject(TelegramObject* tgobj);
-        FileObject* fileObject(TelegramObject* tgobj, bool ismovable, bool autodownload);
-        FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool ismovable, bool autodownload);
+        FileObject* fileObject(TelegramObject* tgobj, bool autodownload);
+        FileObject* fileObject(TelegramObject *locationobj, FileLocation *locthumbnail, bool autodownload);
         void enqueue(FileObject* fileobject);
         void dequeue(FileObject* fileobject);
 
     private slots:
         void processQueue();
-        void onDownloadCompleted();
+        void saveToDownloads();
 
     private:
         QString _cachepath;

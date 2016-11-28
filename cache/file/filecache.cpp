@@ -33,7 +33,7 @@ FileCache *FileCache::instance()
 
 FileObject *FileCache::fileObject(TelegramObject *tgobj)
 {
-    return this->fileObject(tgobj, false, false);
+    return this->fileObject(tgobj, false);
 }
 
 FileObject *FileCache::upload(FileUploader::MediaType mediatype, const QString &filepath, const QString &caption)
@@ -57,7 +57,46 @@ void FileCache::removeObject(TelegramObject *tgobj)
     this->dequeue(fileobject);
 }
 
-QString FileCache::createFileId(TelegramObject *locationobj)
+void FileCache::saveToDownloads(FileObject *fileobject)
+{
+    if(!fileobject || !fileobject->downloaded())
+        return;
+
+    QString destfolder;
+    QMimeType mime = this->_mimedb.mimeTypeForFile(fileobject->filePath());
+
+    if(mime.name().startsWith("image"))
+        destfolder = "Image";
+    else if(mime.name().startsWith("video"))
+        destfolder = "Video";
+    else if(mime.name().startsWith("audio"))
+        destfolder = "Music";
+    else
+        destfolder = "Other";
+
+    QDir destpath(this->_downloadspath);
+    destpath.mkpath(destpath.absoluteFilePath(destfolder));
+    destpath.cd(destfolder);
+
+    if(fileobject->fileName().isEmpty())
+    {
+        QString filename = QString("%1_%2.%3").arg(destfolder).arg(CurrentTimeStamp).arg(mime.preferredSuffix()).toLower();
+        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(filename));
+    }
+    else
+        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(fileobject->fileName()));
+}
+
+bool FileCache::isMovable(TelegramObject *tgobj) const
+{
+    if(tgobj->constructorId() != TLTypes::Document)
+        return false;
+
+    Document* document = qobject_cast<Document*>(tgobj);
+    return !TelegramHelper::isAnimated(document) && !TelegramHelper::isSticker(document) && !TelegramHelper::isAudio(document);
+}
+
+QString FileCache::createFileId(TelegramObject *locationobj) const
 {
     QByteArray data;
 
@@ -102,7 +141,7 @@ FileObject *FileCache::localFileObject(TelegramObject *tgobj)
     return NULL;
 }
 
-FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool autodownload)
+FileObject *FileCache::fileObject(TelegramObject *tgobj, bool autodownload)
 {
     if(!tgobj)
         return NULL;
@@ -113,16 +152,16 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
         TLInt id = TelegramHelper::identifier(dialog);
 
         if(TelegramHelper::isChat(dialog) || TelegramHelper::isChannel(dialog))
-            return this->fileObject(TelegramCache_chat(id), ismovable, autodownload);
+            return this->fileObject(TelegramCache_chat(id), autodownload);
 
-        return this->fileObject(TelegramCache_user(id), ismovable, autodownload);
+        return this->fileObject(TelegramCache_user(id), autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::Photo)
     {
         Photo* photo = qobject_cast<Photo*>(tgobj);
         PhotoSize* smallphoto = TelegramHelper::photoSmall(photo);
         PhotoSize* bigphoto = TelegramHelper::photoBig(photo);
-        FileObject* fileobj = this->fileObject(bigphoto->location(), smallphoto->location(), ismovable, autodownload);
+        FileObject* fileobj = this->fileObject(bigphoto->location(), smallphoto->location(), autodownload);
 
         fileobj->setImageSize(QSize(bigphoto->w(), bigphoto->h()));
         return fileobj;
@@ -130,26 +169,25 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
     else if(tgobj->constructorId() == TLTypes::ChatPhoto)
     {
         ChatPhoto* chatphoto = qobject_cast<ChatPhoto*>(tgobj);
-        return this->fileObject(chatphoto->photoBig(), chatphoto->photoSmall(), ismovable, autodownload);
+        return this->fileObject(chatphoto->photoBig(), chatphoto->photoSmall(), autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::UserProfilePhoto)
     {
         UserProfilePhoto* userprofilephoto = qobject_cast<UserProfilePhoto*>(tgobj);
-        return this->fileObject(userprofilephoto->photoBig(), userprofilephoto->photoSmall(), ismovable, autodownload);
+        return this->fileObject(userprofilephoto->photoBig(), userprofilephoto->photoSmall(), autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::Document)
     {
         Document* document = qobject_cast<Document*>(tgobj);
         autodownload = TelegramHelper::isSticker(document) || TelegramHelper::isAnimated(document);
-        ismovable = !TelegramHelper::isAnimated(document) && !TelegramHelper::isSticker(document) && !TelegramHelper::isAudio(document);
-        return this->fileObject(document, document->thumb()->location(), ismovable, autodownload);
+        return this->fileObject(document, document->thumb()->location(), autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::WebPage)
     {
         WebPage* webpage = qobject_cast<WebPage*>(tgobj);
 
         if(webpage->photo())
-            return this->fileObject(webpage->photo(), ismovable, autodownload);
+            return this->fileObject(webpage->photo(), TelegramConfig_autoDownload);
     }
     else if(tgobj->constructorId() == TLTypes::Message)
     {
@@ -158,25 +196,25 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool ismovable, bool au
         if(is_local_messageid(message->id()))
             return this->localFileObject(message);
 
-        return this->fileObject(qobject_cast<Message*>(tgobj)->media(), false, autodownload);
+        return this->fileObject(qobject_cast<Message*>(tgobj)->media(), autodownload);
     }
     else if((tgobj->constructorId() == TLTypes::Chat) || (tgobj->constructorId() == TLTypes::Channel))
-        return this->fileObject(qobject_cast<Chat*>(tgobj)->photo(), false, autodownload);
+        return this->fileObject(qobject_cast<Chat*>(tgobj)->photo(), autodownload);
     else if((tgobj->constructorId() == TLTypes::User))
-        return this->fileObject(qobject_cast<User*>(tgobj)->photo(), false, autodownload);
+        return this->fileObject(qobject_cast<User*>(tgobj)->photo(), autodownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaPhoto)
-        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo(), true, TelegramConfig_autoDownload);
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->photo(), TelegramConfig_autoDownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaDocument)
-        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->document(), ismovable, autodownload);
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->document(), autodownload);
     else if(tgobj->constructorId() == TLTypes::MessageMediaWebPage)
-        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->webpage(), false, true);
+        return this->fileObject(qobject_cast<MessageMedia*>(tgobj)->webpage(), true);
     else if(tgobj->constructorId() == TLTypes::FileLocation) // Direct access for debugging purpose
         return this->fileObject(qobject_cast<FileLocation*>(tgobj), qobject_cast<FileLocation*>(tgobj), autodownload);
 
     return NULL;
 }
 
-FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* locthumbnail, bool ismovable, bool autodownload)
+FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* locthumbnail, bool autodownload)
 {
     Q_ASSERT((locationobj->constructorId() == TLTypes::FileLocation) ||
              (locationobj->constructorId() == TLTypes::FileLocationUnavailable) ||
@@ -191,8 +229,8 @@ FileObject *FileCache::fileObject(TelegramObject* locationobj, FileLocation* loc
     fileobject->setAutoDownload(autodownload);
     connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::processQueue);
 
-    if(ismovable)
-        connect(fileobject, &FileObject::downloadCompleted, this, &FileCache::onDownloadCompleted);
+    if(this->isMovable(locationobj))
+        connect(fileobject, SIGNAL(downloadCompleted()), this, SLOT(saveToDownloads()));
 
     if(locationobj->constructorId() == TLTypes::Document)
     {
@@ -260,34 +298,8 @@ void FileCache::processQueue()
         this->_currentobject->downloadThumbnail();
 }
 
-void FileCache::onDownloadCompleted()
+void FileCache::saveToDownloads()
 {
     FileObject* fileobject = qobject_cast<FileObject*>(this->sender());
-
-    if(!fileobject->downloaded())
-        return;
-
-    QString destfolder;
-    QMimeType mime = this->_mimedb.mimeTypeForFile(fileobject->filePath());
-
-    if(mime.name().startsWith("image"))
-        destfolder = "Image";
-    else if(mime.name().startsWith("video"))
-        destfolder = "Video";
-    else if(mime.name().startsWith("audio"))
-        destfolder = "Music";
-    else
-        destfolder = "Other";
-
-    QDir destpath(this->_downloadspath);
-    destpath.mkpath(destpath.absoluteFilePath(destfolder));
-    destpath.cd(destfolder);
-
-    if(fileobject->fileName().isEmpty())
-    {
-        QString filename = QString("%1_%2.%3").arg(destfolder).arg(CurrentTimeStamp).arg(mime.preferredSuffix()).toLower();
-        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(filename));
-    }
-    else
-        QFile::copy(QDir(this->_cachepath).absoluteFilePath(fileobject->fileId()), destpath.absoluteFilePath(fileobject->fileName()));
+    this->saveToDownloads(fileobject);
 }
