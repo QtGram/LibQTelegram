@@ -14,6 +14,7 @@ class Telegram : public QObject
     Q_PROPERTY(bool loggedIn READ loggedIn NOTIFY loggedInChanged)
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
     Q_PROPERTY(bool syncing READ syncing NOTIFY syncingChanged)
+    Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(bool autoDownload READ autoDownload WRITE setAutoDownload NOTIFY autoDownloadChanged)
     Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged)
 
@@ -27,9 +28,11 @@ class Telegram : public QObject
         bool connected() const;
         bool syncing() const;
         bool autoDownload() const;
+        bool online() const;
         int unreadCount() const;
         void setInitializer(TelegramInitializer* initializer);
         void setAutoDownload(bool b);
+        void setOnline(bool b);
 
     public: // C++ side API
         void sortDialogs(QList<Dialog*>& dialogs) const;
@@ -51,6 +54,9 @@ class Telegram : public QObject
     private slots:
         void onLoginCompleted();
 
+    protected:
+        virtual void timerEvent(QTimerEvent *event);
+
     private:
         QString userList(const TLVector<TLInt> users) const;
         QString messageMediaText(MessageMedia* messagemedia) const;
@@ -60,6 +66,7 @@ class Telegram : public QObject
         void initializerChanged();
         void syncingChanged();
         void autoDownloadChanged();
+        void onlineChanged();
         void loggedInChanged();
         void connectedChanged();
         void signUpRequested();
@@ -74,8 +81,10 @@ class Telegram : public QObject
 
     private:
         TelegramInitializer* _initializer;
+        int _timstatus;
         bool _autodownload;
         bool _loggedin;
+        bool _online;
 };
 
 #endif // TELEGRAM_H

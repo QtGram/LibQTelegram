@@ -4,7 +4,9 @@
 #include "cache/file/filecache.h"
 #include "types/telegramhelper.h"
 
-Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _autodownload(false), _loggedin(false)
+#define StatusUpdateDelay 5000 // 5 seconds
+
+Telegram::Telegram(QObject *parent) : QObject(parent), _initializer(NULL), _timstatus(0), _autodownload(false), _loggedin(false), _online(false)
 {
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionConnectedChanged, this, &Telegram::connectedChanged);
     connect(DCSessionManager_instance, &DCSessionManager::mainSessionTimeout, this, &Telegram::connectionTimeout);
@@ -62,6 +64,11 @@ bool Telegram::autoDownload() const
     return this->_autodownload;
 }
 
+bool Telegram::online() const
+{
+    return this->_online;
+}
+
 int Telegram::unreadCount() const
 {
     if(!this->_loggedin)
@@ -110,6 +117,19 @@ void Telegram::setAutoDownload(bool b)
         TelegramConfig_setAutoDownload(b);
 
     emit autoDownloadChanged();
+}
+
+void Telegram::setOnline(bool b)
+{
+    if(!this->connected() || (this->_online == b))
+        return;
+
+    this->_online = b;
+
+    if(!this->_timstatus)
+        this->_timstatus = this->startTimer(StatusUpdateDelay);
+
+    emit onlineChanged();
 }
 
 void Telegram::sortDialogs(QList<Dialog *> &dialogs) const
@@ -454,8 +474,20 @@ void Telegram::onLoginCompleted()
     TelegramConfig_setAutoDownload(this->_autodownload);
     connect(TelegramCache_instance, &TelegramCache::unreadCountChanged, this, &Telegram::unreadCountChanged);
 
+    this->setOnline(true);
+
     emit loginCompleted();
     emit unreadCountChanged();
+}
+
+void Telegram::timerEvent(QTimerEvent *event)
+{
+    if(event->timerId() == this->_timstatus)
+    {
+        TelegramAPI::accountUpdateStatus(DC_MainSession, !this->_online);
+        this->killTimer(event->timerId());
+        this->_timstatus = 0;
+    }
 }
 
 QString Telegram::userList(const TLVector<TLInt> users) const
