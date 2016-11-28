@@ -520,6 +520,15 @@ void MessagesModel::sendAction(int action)
     if(TelegramHelper::isCloud(this->_dialog)) // Don't notify myself
         return;
 
+    if(TelegramHelper::isUser(this->_dialog))
+    {
+        TLInt dialogid = TelegramHelper::identifier(this->_dialog);
+        User* user = TelegramCache_user(dialogid);
+
+        if(user && !TelegramHelper::userIsOnline(user))
+            return;
+    }
+
     TLConstructor actionctor = this->getAction(action);
 
     if(!actionctor)

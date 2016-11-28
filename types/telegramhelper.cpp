@@ -478,6 +478,11 @@ bool TelegramHelper::isChannel(Dialog *dialog)
     return TelegramHelper::isChannel(dialog->peer());
 }
 
+bool TelegramHelper::isUser(Dialog *dialog)
+{
+    return TelegramHelper::isUser(dialog->peer());
+}
+
 bool TelegramHelper::isChat(Peer *peer)
 {
     return peer->constructorId() == TLTypes::PeerChat;
@@ -488,9 +493,25 @@ bool TelegramHelper::isChannel(Peer *peer)
     return peer->constructorId() == TLTypes::PeerChannel;
 }
 
+bool TelegramHelper::isUser(Peer *peer)
+{
+    return peer->constructorId() == TLTypes::PeerUser;
+}
+
 bool TelegramHelper::isChannel(Chat *chat)
 {
     return (chat->constructorId() == TLTypes::Channel) || (chat->constructorId() == TLTypes::ChannelForbidden);
+}
+
+bool TelegramHelper::userIsOnline(User *user)
+{
+    if(TelegramConfig_me->id() == user->id()) // Ignore me
+        return false;
+
+    if(user->status()->constructorId() != TLTypes::UserStatusOnline)
+        return false;
+
+    return CurrentTimeStamp < static_cast<uint>(user->status()->expires());
 }
 
 bool TelegramHelper::messageIsWebPagePending(Message *message)

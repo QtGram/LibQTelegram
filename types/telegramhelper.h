@@ -50,9 +50,12 @@ class TelegramHelper
         static bool isCloud(Dialog* dialog);
         static bool isChat(Dialog* dialog);
         static bool isChannel(Dialog* dialog);
+        static bool isUser(Dialog* dialog);
         static bool isChat(Peer* peer);
         static bool isChannel(Peer* peer);
+        static bool isUser(Peer* peer);
         static bool isChannel(Chat* chat);
+        static bool userIsOnline(User* user);
         static bool imageNeedsCompression(const QString& filepath);
         static bool messageIsWebPagePending(Message* message);
         static bool messageIsAction(Message* message);
