@@ -517,7 +517,7 @@ void MessagesModel::sendAction(int action)
     if(!this->_telegram || !this->_dialog || (this->_timaction && this->_timaction->isActive()))
         return;
 
-    if(TelegramHelper::isCloud(this->_dialog)) // Don't notify myself
+    if(!this->_telegram->connected() || TelegramHelper::isCloud(this->_dialog)) // Don't send status when not connected and don't notify myself
         return;
 
     if(TelegramHelper::isUser(this->_dialog))
