@@ -90,6 +90,11 @@ void QQuickBaseItem::download()
     this->_fileobject->download();
 }
 
+void QQuickBaseItem::saveToDownloads()
+{
+    FileCache_saveToDownloads(this->_fileobject);
+}
+
 QString QQuickBaseItem::escape(const TLString &s)
 {
     return s.toString().replace("\"", "\\\"");

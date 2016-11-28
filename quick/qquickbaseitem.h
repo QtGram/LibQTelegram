@@ -36,6 +36,7 @@ class QQuickBaseItem : public QQuickItem
 
     public slots:
         virtual void download();
+        void saveToDownloads();
 
     protected:
         QString escape(const TLString& s);
