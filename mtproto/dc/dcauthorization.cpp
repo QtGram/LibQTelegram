@@ -318,7 +318,9 @@ void DCAuthorization::onServerDhGenOk(MTProtoStream *mtstream)
 
     if(sha1_hash(expectedhashdata).mid(4) != newnoncehash1)
     {
-        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct (ServerDhGenOk)", dcconfig->dcid());
+        qWarning("DC %d Server (newnonce + auth_key_aux_hash) hash is not correct [%s != %s] (ServerDhGenOk)", dcconfig->dcid(),
+                                                                                                               qUtf8Printable(sha1_hash_hex(expectedhashdata).mid(4)),
+                                                                                                               qUtf8Printable(newnoncehash1.toHex()));
         this->restart();
         return;
     }

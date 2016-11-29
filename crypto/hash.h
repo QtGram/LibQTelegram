@@ -12,5 +12,6 @@ inline TLBytes sha1_hash(const TLBytes& data) { return QCryptographicHash::hash(
 inline TLBytes sha256_hash(const TLBytes& data) { return QCryptographicHash::hash(data, QCryptographicHash::Sha256); }
 
 inline QString md5_hash_hex(const TLBytes& data) { return QCryptographicHash::hash(data, QCryptographicHash::Md5).toHex(); }
+inline QString sha1_hash_hex(const TLBytes& data) { return QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex(); }
 
 #endif // HASH_H
