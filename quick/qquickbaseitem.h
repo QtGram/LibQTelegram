@@ -39,10 +39,8 @@ class QQuickBaseItem : public QQuickItem
         void saveToDownloads();
 
     protected:
-        QString escape(const TLString& s);
         void createObject(QQmlComponent* component);
         FileObject* createFileObject(TelegramObject* telegramobject);
-        QString filePath() const;
 
     signals:
         void filePathChanged();

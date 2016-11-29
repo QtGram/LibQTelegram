@@ -18,6 +18,14 @@ QString QQuickBaseItem::source() const
     return QString();
 }
 
+QString QQuickBaseItem::thumbnail() const
+{
+    if(!this->_fileobject)
+        return QString();
+
+    return this->_fileobject->thumbnail();
+}
+
 QString QQuickBaseItem::fileSize() const
 {
     if(!this->_fileobject)
@@ -95,11 +103,6 @@ void QQuickBaseItem::saveToDownloads()
     FileCache_saveToDownloads(this->_fileobject);
 }
 
-QString QQuickBaseItem::escape(const TLString &s)
-{
-    return s.toString().replace("\"", "\\\"");
-}
-
 void QQuickBaseItem::createObject(QQmlComponent *component)
 {
     QQmlContext *context = qmlContext(this);
@@ -156,20 +159,4 @@ FileObject *QQuickBaseItem::createFileObject(TelegramObject *telegramobject)
     }
 
     return this->_fileobject;
-}
-
-QString QQuickBaseItem::thumbnail() const
-{
-    if(!this->_fileobject)
-        return QString();
-
-    return this->_fileobject->thumbnail();
-}
-
-QString QQuickBaseItem::filePath() const
-{
-    if(!this->_fileobject)
-        return QString();
-
-    return this->_fileobject->filePath();
 }
