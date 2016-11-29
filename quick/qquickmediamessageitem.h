@@ -27,6 +27,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     Q_PROPERTY(bool webPageHasPhoto READ webPageHasPhoto NOTIFY webPageHasPhotoChanged)
     Q_PROPERTY(GeoPoint* geoPoint READ geoPoint NOTIFY geoPointChanged)
     Q_PROPERTY(QQmlComponent* imageDelegate READ imageDelegate WRITE setImageDelegate NOTIFY imageDelegateChanged)
+    Q_PROPERTY(QQmlComponent* stickerDelegate READ stickerDelegate WRITE setStickerDelegate NOTIFY stickerDelegateChanged)
     Q_PROPERTY(QQmlComponent* animatedDelegate READ animatedDelegate WRITE setAnimatedDelegate NOTIFY animatedDelegateChanged)
     Q_PROPERTY(QQmlComponent* locationDelegate READ locationDelegate WRITE setLocationDelegate NOTIFY locationDelegateChanged)
     Q_PROPERTY(QQmlComponent* webPageDelegate READ webPageDelegate WRITE setWebPageDelegate NOTIFY webPageDelegateChanged)
@@ -60,6 +61,8 @@ class QQuickMediaMessageItem : public QQuickBaseItem
     public:
         QQmlComponent* imageDelegate() const;
         void setImageDelegate(QQmlComponent* imagecomponent);
+        QQmlComponent* stickerDelegate() const;
+        void setStickerDelegate(QQmlComponent* stickercomponent);
         QQmlComponent* animatedDelegate() const;
         void setAnimatedDelegate(QQmlComponent* animatedcomponent);
         QQmlComponent* locationDelegate() const;
@@ -87,6 +90,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         qreal calcAspectRatio(const QSize &imagesize) const;
         bool canDownload() const;
         void createImageElement();
+        void createStickerElement();
         void createAnimatedElement();
         void createLocationElement();
         void createWebPageElement();
@@ -117,6 +121,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
         void videoThumbnailChanged();
         void geoPointChanged();
         void imageDelegateChanged();
+        void stickerDelegateChanged();
         void animatedDelegateChanged();
         void locationDelegateChanged();
         void webPageDelegateChanged();
@@ -130,6 +135,7 @@ class QQuickMediaMessageItem : public QQuickBaseItem
 
     private:
         QQmlComponent* _imagecomponent;
+        QQmlComponent* _stickercomponent;
         QQmlComponent* _animatedcomponent;
         QQmlComponent* _locationcomponent;
         QQmlComponent* _webpagecomponent;

@@ -278,6 +278,20 @@ void QQuickMediaMessageItem::setImageDelegate(QQmlComponent *imagecomponent)
     emit imageDelegateChanged();
 }
 
+QQmlComponent *QQuickMediaMessageItem::stickerDelegate() const
+{
+    return this->_stickercomponent;
+}
+
+void QQuickMediaMessageItem::setStickerDelegate(QQmlComponent *stickercomponent)
+{
+    if(this->_stickercomponent == stickercomponent)
+        return;
+
+    this->_stickercomponent = stickercomponent;
+    emit stickerDelegateChanged();
+}
+
 QQmlComponent *QQuickMediaMessageItem::animatedDelegate() const
 {
     return this->_animatedcomponent;
@@ -416,6 +430,16 @@ void QQuickMediaMessageItem::createImageElement()
     this->scaleToImageSize();
 }
 
+void QQuickMediaMessageItem::createStickerElement()
+{
+    if(!this->_stickercomponent)
+        return;
+
+    this->createObject(this->_stickercomponent);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToImageSize);
+    this->scaleToImageSize();
+}
+
 void QQuickMediaMessageItem::createAnimatedElement()
 {
     if(!this->_animatedcomponent)
@@ -518,6 +542,8 @@ void QQuickMediaMessageItem::initialize()
     {
         if(TelegramHelper::isVideo(messagemedia->document()))
             connect(fileobject, &FileObject::hasThumbnailChanged, this, &QQuickMediaMessageItem::videoThumbnailChanged);
+        else if(TelegramHelper::isSticker(messagemedia->document()) && !fileobject->downloaded()) // Autodownload stickers
+            fileobject->download();
     }
     else if(messagemedia->constructorId() == TLTypes::MessageMediaWebPage)
     {
@@ -546,7 +572,7 @@ void QQuickMediaMessageItem::initialize()
             Document* document = messagemedia->document();
 
             if(TelegramHelper::isSticker(document))
-                this->createImageElement();
+                this->createStickerElement();
             else if(TelegramHelper::isAnimated(document))
                 this->createAnimatedElement();
             else if(TelegramHelper::isVideo(document))
