@@ -121,7 +121,7 @@ void Telegram::setAutoDownload(bool b)
 
 void Telegram::setOnline(bool b)
 {
-    if(!this->connected() || (this->_online == b))
+    if(!this->connected() || !this->loggedIn() || (this->_online == b))
         return;
 
     this->_online = b;
