@@ -149,6 +149,9 @@ bool MessagesModel::isMuted() const
 
 bool MessagesModel::canFetchMore(const QModelIndex &) const
 {
+    if(!this->_telegram || (this->_telegram && this->_telegram->syncing()))
+        return false;
+
     return this->_dialog && this->_fetchmore && !this->_loading;
 }
 
