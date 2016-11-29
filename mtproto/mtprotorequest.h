@@ -1,14 +1,6 @@
 #ifndef MTPROTOREQUEST_H
 #define MTPROTOREQUEST_H
 
-#define Try_InitFirst(configid) \
-    if(!MTProtoRequest::_firstmap.contains(configid)) \
-        MTProtoRequest::_firstmap[configid] = true;
-
-#define IsFirst(configid) MTProtoRequest::_firstmap[configid]
-#define UnsetFirst(configid) MTProtoRequest::_firstmap[configid] = false;
-#define ResetFirst(configid) MTProtoRequest::_firstmap[configid] = true;
-
 #include <QObject>
 #include "mtprotostream.h"
 #include "mtprotoreply.h"
@@ -32,9 +24,7 @@ class MTProtoRequest : public QObject
         QByteArray build();
 
     public:
-        static void resetFirst(int dcid);
-
-    public:
+        void setFirst(bool b);
         void setAcked(bool b);
         void setNeedsReply(bool b);
         void setDcConfig(DCConfig* dcconfig);
@@ -58,6 +48,7 @@ class MTProtoRequest : public QObject
         void error();
 
     private:
+        bool _first;
         bool _needsinit;
         bool _needsreply;
         bool _acked;
@@ -69,7 +60,6 @@ class MTProtoRequest : public QObject
         MTProtoStream* _body;
 
     private:
-        static QHash<int, bool> _firstmap;
         static TLLong _clientrequestid;
 };
 

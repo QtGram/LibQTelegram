@@ -6,7 +6,7 @@
 
 TLLong DC::_lastclientmsgid = 0;
 
-DC::DC(DCConfig *dcconfig, bool filedc, QObject *parent): DCConnection(dcconfig, filedc, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0)
+DC::DC(DCConfig *dcconfig, bool filedc, QObject *parent): DCConnection(dcconfig, filedc, parent), _mtdecompiler(NULL), _savedrequest(NULL), _lastpacketlen(0), _contentmsgno(-1), _lastmsgid(0), _ownedsessions(0), _timcloseconnection(0), _first(true)
 {
     this->_mtservicehandler = new MTProtoServiceHandler(dcconfig, this);
 
@@ -64,6 +64,12 @@ void DC::assignMessageId(MTProtoRequest* req)
         this->fatal("Message %llx not divisible by 4 (yields %lld)", msgid, msgid % 4);
 
     req->setMessageId(msgid);
+}
+
+void DC::assignFirst(MTProtoRequest *req)
+{
+    req->setFirst(this->_first);
+    this->_first = false;
 }
 
 void DC::checkSyncronization(MTProtoReply *mtreply)
@@ -150,19 +156,15 @@ void DC::onRequestTimeout(TLLong messageid)
 
 void DC::onDCConnected()
 {
-    this->_contentmsgno = -1; // Init connection to DC
-    MTProtoRequest::resetFirst(this->_dcconfig->dcid());
+    this->_first = true;      // Init protocol
+    this->_contentmsgno = -1; // Init layer
 }
 
 void DC::onDCUnauthorized()
 {
-    // Reset authorization state
-    this->_dcconfig->reset();
+    this->_dcconfig->reset(); // Reset authorization state
+    this->_contentmsgno = -1; // Init layer
 
-    qDeleteAll(this->_pendingrequests);
-    this->_pendingrequests.clear();
-
-    this->abort();
     emit unauthorized();
 }
 
@@ -342,6 +344,7 @@ void DC::send(MTProtoRequest *req)
         return;
     }
 
+    this->assignFirst(req);
     this->assignMessageId(req);
 
     if(req->encrypted())

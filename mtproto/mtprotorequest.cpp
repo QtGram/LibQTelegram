@@ -4,13 +4,10 @@
 #include "../crypto/math.h"
 #include "../crypto/aes.h"
 
-QHash<int, bool> MTProtoRequest::_firstmap;
 TLLong MTProtoRequest::_clientrequestid = 0;
 
-MTProtoRequest::MTProtoRequest(DCConfig *dcconfig, QObject *parent) : QObject(parent), _needsinit(false), _needsreply(true), _acked(false), _sessionid(0), _messageid(0), _seqno(0), _dcconfig(dcconfig), _body(NULL)
+MTProtoRequest::MTProtoRequest(DCConfig *dcconfig, QObject *parent) : QObject(parent), _first(false), _needsinit(false), _needsreply(true), _acked(false), _sessionid(0), _messageid(0), _seqno(0), _dcconfig(dcconfig), _body(NULL)
 {
-    Try_InitFirst(dcconfig->id());
-
     this->_requestid = ++MTProtoRequest::_clientrequestid;
 }
 
@@ -94,9 +91,9 @@ QByteArray MTProtoRequest::build()
     return request;
 }
 
-void MTProtoRequest::resetFirst(int dcid)
+void MTProtoRequest::setFirst(bool b)
 {
-    ResetFirst(dcid);
+    this->_first = b;
 }
 
 void MTProtoRequest::setAcked(bool b)
@@ -117,6 +114,7 @@ void MTProtoRequest::setDcConfig(DCConfig *dcconfig)
 void MTProtoRequest::initConnection(MTProtoStream &mtstream) const
 {
     TelegramConfig* config = TelegramConfig_instance;
+    qDebug("DC %d (%llx) Init connection with Layer %d", this->_dcconfig->dcid(), this->_messageid, config->layerNum());
 
     mtstream.writeTLConstructor(TLTypes::InvokeWithLayer);
     mtstream.writeTLInt(config->layerNum());
@@ -131,10 +129,10 @@ void MTProtoRequest::initConnection(MTProtoStream &mtstream) const
 
 void MTProtoRequest::build(QByteArray &request, const QByteArray &requestbody)
 {
-    if(IsFirst(this->_dcconfig->id()))
+    if(this->_first)
     {
+        qDebug("DC %d (%llx) Init protocol", this->_dcconfig->dcid(), this->_messageid);
         request.append(0xEF); // Use Abridged version
-        UnsetFirst(this->_dcconfig->id());
     }
 
     TLInt len = requestbody.length() / 4;

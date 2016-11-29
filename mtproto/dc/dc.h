@@ -33,6 +33,7 @@ class DC : public DCConnection
         void decompile(int direction, TLLong messageid, const QByteArray &body);
         void handleReply(const QByteArray& message);
         void assignMessageId(MTProtoRequest *req);
+        void assignFirst(MTProtoRequest* req);
         void checkSyncronization(MTProtoReply* mtreply);
         TLInt generateContentMsgNo();
         TLInt getPacketLength();
@@ -69,6 +70,7 @@ class DC : public DCConnection
         TLLong _lastmsgid;
         int _ownedsessions;
         int _timcloseconnection;
+        bool _first;
 
     private:
         static TLLong _lastclientmsgid;
