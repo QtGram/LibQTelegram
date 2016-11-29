@@ -99,6 +99,7 @@ class FileObject : public QObject
         FileLocation* _locthumbnail;
         FileLocation* _locfile;
         InputFileLocation* _inputfilelocation;
+        MTProtoRequest* _request;
         DCSession* _dcsession;
         QFile* _file;
         QString _thumbnail;

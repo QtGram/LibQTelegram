@@ -13,6 +13,7 @@ FileObject::FileObject(const QString &storagepath, QObject *parent): QObject(par
     this->_locthumbnail = NULL;
     this->_locfile = NULL;
     this->_inputfilelocation = NULL;
+    this->_request = NULL;
     this->_dcsession = NULL;
     this->_file = NULL;
     this->_filesize = 0;
@@ -315,11 +316,12 @@ void FileObject::createDownloadSession(int dcid)
 
 void FileObject::sendDownloadRequest()
 {
-    disconnect(this->_dcsession, &DCSession::ready, this, 0);
+    if(this->_request)  // We are already downloading this file
+        return;
 
     TLInt offset = (this->_file ? this->_file->size() : 0);
-    MTProtoRequest* req = TelegramAPI::uploadGetFile(this->_dcsession, this->_inputfilelocation, offset, BLOCK_SIZE);
-    connect(req, &MTProtoRequest::replied, this, &FileObject::onUploadGetFileReplied);
+    this->_request = TelegramAPI::uploadGetFile(this->_dcsession, this->_inputfilelocation, offset, BLOCK_SIZE);
+    connect(this->_request, &MTProtoRequest::replied, this, &FileObject::onUploadGetFileReplied);
 }
 
 void FileObject::onUploadGetFileReplied(MTProtoReply *mtreply)
@@ -347,8 +349,9 @@ void FileObject::onUploadGetFileReplied(MTProtoReply *mtreply)
 
     this->_file->write(uploadfile.bytes());
 
-    if(uploadfile.bytes().length() == BLOCK_SIZE) // NOTE: We need more data... (needs investigation)
+    if(uploadfile.bytes().length() == BLOCK_SIZE) // NOTE: We need more data?
     {
+        this->_request = NULL;
         this->sendDownloadRequest();
         return;
     }
@@ -369,6 +372,7 @@ void FileObject::onUploadGetFileReplied(MTProtoReply *mtreply)
     DC_CloseSession(this->_dcsession);
 
     this->_file = NULL;
+    this->_request = NULL;
     this->_dcsession = NULL;
 
     if(this->_inputfilelocation)
