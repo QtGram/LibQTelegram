@@ -179,7 +179,6 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool autodownload)
     else if(tgobj->constructorId() == TLTypes::Document)
     {
         Document* document = qobject_cast<Document*>(tgobj);
-        autodownload = TelegramHelper::isSticker(document) || TelegramHelper::isAnimated(document);
         return this->fileObject(document, document->thumb()->location(), autodownload);
     }
     else if(tgobj->constructorId() == TLTypes::WebPage)
