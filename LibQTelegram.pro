@@ -264,7 +264,8 @@ SOURCES += \
     cache/database/tables/stickersetstable.cpp \
     models/stickersetsmodel.cpp \
     cache/database/tables/stickersetsdatatable.cpp \
-    quick/qquickstickerview.cpp
+    quick/qquickstickerview.cpp \
+    models/stickerpackmodel.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -523,4 +524,5 @@ HEADERS +=\
     cache/database/tables/stickersetstable.h \
     models/stickersetsmodel.h \
     cache/database/tables/stickersetsdatatable.h \
-    quick/qquickstickerview.h
+    quick/qquickstickerview.h \
+    models/stickerpackmodel.h

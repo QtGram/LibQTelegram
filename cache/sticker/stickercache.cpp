@@ -71,6 +71,19 @@ void StickerCache::populateInstalled(QList<StickerSet *> &stickerssets)
     }
 }
 
+void StickerCache::populatePack(StickerSet *stickerset, QList<Document *> &stickers)
+{
+    MessagesStickerSet* messagesstickerset = this->stickerSetData(stickerset);
+
+    if(!messagesstickerset)
+    {
+        stickers.clear();
+        return;
+    }
+
+    stickers = messagesstickerset->documents();
+}
+
 MessagesStickerSet *StickerCache::stickerSetData(StickerSet *stickerset)
 {
     if(!this->_stickersetsdata.contains(stickerset->id()))

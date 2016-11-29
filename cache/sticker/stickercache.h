@@ -4,6 +4,7 @@
 #define StickerCache_instance StickerCache::instance()
 #define StickerCache_stickerPreview(stickerset) StickerCache::instance()->stickerPreview(stickerset)
 #define StickerCache_populateInstalled(stickersets) StickerCache::instance()->populateInstalled(stickersets)
+#define StickerCache_populatePack(stickerset, stickers) StickerCache::instance()->populatePack(stickerset, stickers);
 #define StickerCache_populate(allstickers) StickerCache::instance()->populate(allstickers);
 
 #include <QObject>
@@ -24,6 +25,7 @@ class StickerCache : public QObject
         Document* stickerPreview(StickerSet* stickerset);
         void populate(MessagesAllStickers* messageallstickers);
         void populateInstalled(QList<StickerSet*>& stickerssets);
+        void populatePack(StickerSet* stickerset, QList<Document*>& stickers);
 
     private:
         MessagesStickerSet* stickerSetData(StickerSet* stickerset);
