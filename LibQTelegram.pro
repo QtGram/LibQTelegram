@@ -259,7 +259,12 @@ SOURCES += \
     cache/file/filecache.cpp \
     models/forwarddialogsmodel.cpp \
     cache/database/tables/migrateddialogstable.cpp \
-    quick/qquickpeerview.cpp
+    quick/qquickpeerview.cpp \
+    cache/sticker/stickercache.cpp \
+    cache/database/tables/stickersetstable.cpp \
+    models/stickersetsmodel.cpp \
+    cache/database/tables/stickersetsdatatable.cpp \
+    quick/qquickstickerview.cpp
 
 HEADERS +=\
         libqtelegram_global.h \
@@ -513,4 +518,9 @@ HEADERS +=\
     cache/file/fileuploader.h \
     models/forwarddialogsmodel.h \
     cache/database/tables/migrateddialogstable.h \
-    quick/qquickpeerview.h
+    quick/qquickpeerview.h \
+    cache/sticker/stickercache.h \
+    cache/database/tables/stickersetstable.h \
+    models/stickersetsmodel.h \
+    cache/database/tables/stickersetsdatatable.h \
+    quick/qquickstickerview.h

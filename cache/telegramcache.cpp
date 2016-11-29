@@ -1,5 +1,6 @@
 #include "telegramcache.h"
 #include "file/filecache.h"
+#include "sticker/stickercache.h"
 #include "../mtproto/mtprotoupdatehandler.h"
 
 TelegramCache* TelegramCache::_instance = NULL;
@@ -8,6 +9,8 @@ TelegramCache::TelegramCache(QObject* parent): QObject(parent), _unreadcount(0)
 {
     this->_database = new CacheDatabase(TelegramConfig_storagePath, this);
     this->_fetcher = new CacheFetcher(this);
+
+    StickerCache::init(this->_database);
 
     connect(this->_fetcher, SIGNAL(usersReceived(TLVector<User*>)), this, SLOT(cache(TLVector<User*>)));
     connect(this->_fetcher, SIGNAL(chatFullReceived(ChatFull*)), this, SLOT(cache(ChatFull*)));

@@ -9,6 +9,8 @@
 #include "tables/messagestable.h"
 #include "tables/migrateddialogstable.h"
 #include "tables/pendingwebpagetable.h"
+#include "tables/stickersetsdatatable.h"
+#include "tables/stickersetstable.h"
 #include "tables/userstable.h"
 
 class CacheDatabase : public QObject
@@ -24,6 +26,8 @@ class CacheDatabase : public QObject
         MessagesTable* messages() const;
         MigratedDialogsTable* migratedDialogs() const;
         PendingWebPageTable* pendingWebPages() const;
+        StickerSetsDataTable* stickerSetsData() const;
+        StickerSetsTable* stickerSets() const;
         UsersTable* users() const;
         void transaction(std::function<void(QSqlQuery& queryobj)> transactionproc);
 
@@ -37,6 +41,8 @@ class CacheDatabase : public QObject
         MessagesTable* _messagestable;
         MigratedDialogsTable* _migrateddialogstable;
         PendingWebPageTable* _pendingwebpagestable;
+        StickerSetsDataTable* _stickersetsdatatable;
+        StickerSetsTable* _stickersetstable;
         UsersTable* _userstable;
 };
 

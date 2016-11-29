@@ -15,7 +15,8 @@ class CacheInitializer : public QObject
             RequestState = First,
             RequestContacts,
             RequestDialogs,
-            Last = RequestDialogs,
+            RequestStickers,
+            Last = RequestStickers,
         };
 
     public:
@@ -26,6 +27,7 @@ class CacheInitializer : public QObject
         void requestState() const;
         void requestContacts() const;
         void requestDialogs();
+        void requestStickers();
         void updateUnreadCount(MessagesDialogs* messagesdialogs);
         bool seekDialogs(MessagesDialogs *messagesdialogs);
         Message* findMessage(MessagesDialogs* messagesdialogs, TLInt messageid) const;
@@ -36,6 +38,7 @@ class CacheInitializer : public QObject
         void onRequestStateReplied(MTProtoReply* mtreply);
         void onRequestContactsReplied(MTProtoReply* mtreply);
         void onRequestDialogsReplied(MTProtoReply* mtreply);
+        void onRequestStickersReplied(MTProtoReply* mtreply);
 
     signals:
         void initialized(int unreadcount);

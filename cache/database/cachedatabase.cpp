@@ -43,6 +43,16 @@ PendingWebPageTable *CacheDatabase::pendingWebPages() const
     return this->_pendingwebpagestable;
 }
 
+StickerSetsDataTable *CacheDatabase::stickerSetsData() const
+{
+    return this->_stickersetsdatatable;
+}
+
+StickerSetsTable *CacheDatabase::stickerSets() const
+{
+    return this->_stickersetstable;
+}
+
 UsersTable *CacheDatabase::users() const
 {
     return this->_userstable;
@@ -83,6 +93,8 @@ void CacheDatabase::loadTables()
     this->_messagestable = new MessagesTable(this);
     this->_migrateddialogstable = new MigratedDialogsTable(this);
     this->_pendingwebpagestable = new PendingWebPageTable(this);
+    this->_stickersetstable = new StickerSetsTable(this);
+    this->_stickersetsdatatable = new StickerSetsDataTable(this);
     this->_userstable = new UsersTable(this);
 
     this->_chatfulltable->createSchema();
@@ -91,5 +103,7 @@ void CacheDatabase::loadTables()
     this->_messagestable->createSchema();
     this->_migrateddialogstable->createSchema();
     this->_pendingwebpagestable->createSchema();
+    this->_stickersetsdatatable->createSchema();
+    this->_stickersetstable->createSchema();
     this->_userstable->createSchema();
 }

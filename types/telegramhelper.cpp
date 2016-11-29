@@ -427,6 +427,16 @@ DocumentAttribute *TelegramHelper::documentHas(Document *document, TLConstructor
     return NULL;
 }
 
+InputStickerSet* TelegramHelper::inputStickerSet(StickerSet *stickerset, QObject* parent)
+{
+    InputStickerSet* inputstickerset = new InputStickerSet(parent);
+
+    inputstickerset->setConstructorId(TLTypes::InputStickerSetID);
+    inputstickerset->setId(stickerset->id());
+    inputstickerset->setAccessHash(stickerset->accessHash());
+    return inputstickerset;
+}
+
 bool TelegramHelper::isSticker(Document *document)
 {
     return TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker) != NULL;
