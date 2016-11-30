@@ -189,7 +189,13 @@ FileObject *FileCache::fileObject(TelegramObject *tgobj, bool autodownload)
         WebPage* webpage = qobject_cast<WebPage*>(tgobj);
 
         if(webpage->photo())
-            return this->fileObject(webpage->photo(), TelegramConfig_autoDownload);
+        {
+            PhotoSize* bigphoto = TelegramHelper::photoBig(webpage->photo());
+            FileObject* fileobj = this->fileObject(webpage->photo(), TelegramConfig_autoDownload);
+
+            fileobj->setImageSize(QSize(bigphoto->w(), bigphoto->h()));
+            return fileobj;
+        }
     }
     else if(tgobj->constructorId() == TLTypes::Message)
     {
