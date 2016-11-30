@@ -12,6 +12,7 @@ class TelegramHelper
 
     public:
         static Message* createMessage(Updates *updates, User *me);
+        static Message* createMessage(Document* sticker, User *me, Peer *peer, QObject* parent = 0);
         static Message* createMessage(const QString& text, User *me, Peer *peer, QObject *parent = 0);
         static Dialog* createDialog(User* user, QObject* parent = 0);
         static Dialog* createDialog(Message* message, QObject* parent = 0);
@@ -28,7 +29,9 @@ class TelegramHelper
         static Peer* peer(Message* message, QObject* parent = 0);
         static InputChannel* inputChannel(Dialog* dialog, TLLong accesshash = 0, QObject* parent = 0);
         static InputChannel* inputChannel(Chat* chat, QObject* parent = 0);
-        static InputMedia* inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject* parent = 0);
+        static InputDocument* inputDocument(Document* document, QObject* parent = 0);
+        static InputMedia* inputMedia(TLDouble latitude, TLDouble longitude, QObject* parent = 0);
+        static InputMedia* inputMedia(Document* document, QObject* parent = 0);
         static InputUser* inputUser(User* user, QObject* parent = 0);
         static PhotoSize* photoSmall(Photo* photo);
         static PhotoSize* photoBig(Photo* photo);

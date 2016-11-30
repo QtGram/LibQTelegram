@@ -502,7 +502,7 @@ bool MessagesModel::sendPhoto(const QUrl &filepath, const QString &caption)
 
 void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
 {
-    InputMedia* inputgeopoint = TelegramHelper::inputMediaGeoPoint(latitude, longitude);
+    InputMedia* inputgeopoint = TelegramHelper::inputMedia(latitude, longitude);
 
     this->createInput();
 
@@ -513,6 +513,25 @@ void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
                                    inputgeopoint,
                                    Math::randomize<TLLong>(),
                                    NULL);
+}
+
+void MessagesModel::sendSticker(Document *sticker)
+{
+    Message* message = TelegramHelper::createMessage(sticker, TelegramConfig_me, this->_dialog->peer(), this);
+    InputMedia* inputmedia = TelegramHelper::inputMedia(sticker);
+
+    this->createInput();
+
+    MTProtoRequest* req = TelegramAPI::messagesSendMedia(DC_MainSession,
+                                                         this->_inputpeer,
+                                                         message->replyToMsgId(),
+                                                         inputmedia,
+                                                         Math::randomize<TLLong>(),
+                                                         NULL);
+
+    this->insertMessage(local_messageid(req->requestId()), message);
+    connect(req, &MTProtoRequest::replied, this, &MessagesModel::onMessagesSendMediaReplied);
+    inputmedia->deleteLater();
 }
 
 void MessagesModel::sendAction(int action)

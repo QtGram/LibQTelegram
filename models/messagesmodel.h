@@ -93,6 +93,7 @@ class MessagesModel : public TelegramModel
         void sendFile(const QUrl& filepath, const QString &caption);
         bool sendPhoto(const QUrl& filepath, const QString& caption);
         void sendLocation(TLDouble latitude, TLDouble longitude);
+        void sendSticker(Document* sticker);
         void sendAction(int action);
 
     private slots:

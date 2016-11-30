@@ -128,6 +128,9 @@ FileObject *FileCache::localFileObject(TelegramObject *tgobj)
     {
         Document* document = qobject_cast<Document*>(tgobj);
 
+        if(TelegramHelper::isSticker(document))
+            return this->fileObject(document);
+
         if(this->_filemap.contains(LocalFileId(document->id())))
             return this->_filemap[LocalFileId(document->id())];
     }

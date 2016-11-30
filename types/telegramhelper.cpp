@@ -52,6 +52,23 @@ Message *TelegramHelper::createMessage(Updates *updates, User* me)
     return message;
 }
 
+Message *TelegramHelper::createMessage(Document *sticker, User *me, Peer* peer, QObject *parent)
+{
+    MessageMedia* messagemedia = new MessageMedia();
+    messagemedia->setConstructorId(TLTypes::MessageMediaDocument);
+    messagemedia->setDocument(sticker->clone<Document>());
+
+    Message* message = new Message(parent);
+    message->setConstructorId(TLTypes::Message);
+    message->setDate(CurrentTimeStamp);
+    message->setFromId(me->id());
+    message->setIsOut(true);
+    message->setToId(peer->clone<Peer>());
+    message->setMedia(messagemedia);
+
+    return message;
+}
+
 Message *TelegramHelper::createMessage(const QString &text, User* me, Peer* peer, QObject* parent)
 {
     Message* message = new Message(parent);
@@ -263,7 +280,17 @@ InputChannel *TelegramHelper::inputChannel(Chat *chat, QObject *parent)
     return inputchannel;
 }
 
-InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longitude, QObject *parent)
+InputDocument *TelegramHelper::inputDocument(Document *document, QObject *parent)
+{
+    InputDocument* inputdocument = new InputDocument(parent);
+
+    inputdocument->setConstructorId(TLTypes::InputDocument);
+    inputdocument->setId(document->id());
+    inputdocument->setAccessHash(document->accessHash());
+    return inputdocument;
+}
+
+InputMedia *TelegramHelper::inputMedia(TLDouble latitude, TLDouble longitude, QObject *parent)
 {
     InputGeoPoint* inputgeopoint = new InputGeoPoint();
     inputgeopoint->setConstructorId(TLTypes::InputGeoPoint);
@@ -273,6 +300,15 @@ InputMedia *TelegramHelper::inputMediaGeoPoint(TLDouble latitude, TLDouble longi
     InputMedia* inputmedia = new InputMedia(parent);
     inputmedia->setConstructorId(TLTypes::InputMediaGeoPoint);
     inputmedia->setGeoPoint(inputgeopoint);
+    return inputmedia;
+}
+
+InputMedia *TelegramHelper::inputMedia(Document *document, QObject *parent)
+{
+    InputMedia* inputmedia = new InputMedia(parent);
+
+    inputmedia->setConstructorId(TLTypes::InputMediaDocument);
+    inputmedia->setIdInputmediadocument(TelegramHelper::inputDocument(document));
     return inputmedia;
 }
 
