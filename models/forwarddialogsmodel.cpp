@@ -64,7 +64,7 @@ void ForwardDialogsModel::telegramReady()
 
     foreach(Dialog* dialog, dialogs)
     {
-        if(!this->_telegram->dialogIsWritable(dialog) || (dialog == this->_fromdialog))
+        if(!this->_telegram->dialogIsWritable(dialog))
             continue;
 
         this->_dialogs << dialog;
