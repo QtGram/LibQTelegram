@@ -513,6 +513,8 @@ void MessagesModel::sendLocation(TLDouble latitude, TLDouble longitude)
                                    inputgeopoint,
                                    Math::randomize<TLLong>(),
                                    NULL);
+
+    inputgeopoint->deleteLater();
 }
 
 void MessagesModel::sendSticker(Document *sticker)
