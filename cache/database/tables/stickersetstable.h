@@ -11,7 +11,7 @@ class StickerSetsTable : public DatabaseTable
         explicit StickerSetsTable(QObject *parent = 0);
         virtual void createSchema();
         virtual void insertQuery(QSqlQuery& queryobj, TelegramObject* telegramobject);
-        void populate(QHash<TLLong, StickerSet *> &stickersets, QObject* parent) const;
+        void populate(QHash<TLLong, StickerSet *> &stickersets, QList<StickerSet *> &stickers, QObject* parent) const;
 
     public:
         void prepareOrder(QSqlQuery& orderquery);

@@ -5,7 +5,7 @@ StickerCache* StickerCache::_instance = NULL;
 
 StickerCache::StickerCache(CacheDatabase *cachedatabase, QObject *parent) : QObject(parent), _updating(false), _cachedatabase(cachedatabase)
 {
-    cachedatabase->stickerSets()->populate(this->_stickersets, this);
+    cachedatabase->stickerSets()->populate(this->_stickersets, this->_stickers, this);
 }
 
 StickerCache *StickerCache::instance()

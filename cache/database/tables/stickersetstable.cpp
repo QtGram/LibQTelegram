@@ -45,7 +45,7 @@ void StickerSetsTable::order(StickerSet *stickerset, int index)
     this->orderQuery(queryobj, stickerset, index);
 }
 
-void StickerSetsTable::populate(QHash<TLLong, StickerSet *> &stickersets, QObject *parent) const
+void StickerSetsTable::populate(QHash<TLLong, StickerSet *> &stickersets, QList<StickerSet*>& stickers, QObject *parent) const
 {
     CreateQuery(queryobj);
 
@@ -59,6 +59,7 @@ void StickerSetsTable::populate(QHash<TLLong, StickerSet *> &stickersets, QObjec
 
         stickerset->unserialize(data);
         stickersets[stickerset->id()] = stickerset;
+        stickers << stickerset;
     }
 }
 
