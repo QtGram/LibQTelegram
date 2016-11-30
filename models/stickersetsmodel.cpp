@@ -46,6 +46,8 @@ QHash<int, QByteArray> StickerSetsModel::roleNames() const
 
 void StickerSetsModel::telegramReady()
 {
+    connect(StickerCache_instance, &StickerCache::stickerCacheUpdated, this, &StickerSetsModel::telegramReady);
+
     this->beginResetModel();
     StickerCache_populateInstalled(this->_stickersets);
     this->endResetModel();

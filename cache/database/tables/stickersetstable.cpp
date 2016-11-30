@@ -7,7 +7,7 @@ StickerSetsTable::StickerSetsTable(QObject *parent) : DatabaseTable("sticker_set
 
 void StickerSetsTable::createSchema()
 {
-    this->createTable("id INTEGER PRIMARY KEY, title TEXT, shortname TEXT, stickerset BLOB", "stickerset");
+    this->createTable("id INTEGER PRIMARY KEY, position INTEGER, title TEXT, shortname TEXT, stickerset BLOB", "stickerset");
 }
 
 void StickerSetsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject)
@@ -20,6 +20,7 @@ void StickerSetsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegram
     StickerSet* stickerset = qobject_cast<StickerSet*>(telegramobject);
 
     queryobj.bindValue(":id", stickerset->id());
+    queryobj.bindValue(":position", -1);
     queryobj.bindValue(":title", stickerset->title().toString());
     queryobj.bindValue(":shortname", stickerset->shortName().toString());
     queryobj.bindValue(":stickerset", data);
@@ -27,11 +28,28 @@ void StickerSetsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegram
     this->execute(queryobj);
 }
 
+void StickerSetsTable::orderQuery(QSqlQuery &queryobj, StickerSet *stickerset, int index)
+{
+    Q_ASSERT(stickerset != NULL);
+
+    queryobj.bindValue(":id", stickerset->id());
+    queryobj.bindValue(":position", index);
+
+    this->execute(queryobj);
+}
+
+void StickerSetsTable::order(StickerSet *stickerset, int index)
+{
+    CreateQuery(queryobj);
+    this->prepareOrder(queryobj);
+    this->orderQuery(queryobj, stickerset, index);
+}
+
 void StickerSetsTable::populate(QHash<TLLong, StickerSet *> &stickersets, QObject *parent) const
 {
     CreateQuery(queryobj);
 
-    if(!this->query(queryobj, "SELECT * FROM " + this->name()))
+    if(!this->query(queryobj, "SELECT * FROM " + this->name() + " ORDER BY position ASC"))
         return;
 
     while(queryobj.next())
@@ -42,4 +60,9 @@ void StickerSetsTable::populate(QHash<TLLong, StickerSet *> &stickersets, QObjec
         stickerset->unserialize(data);
         stickersets[stickerset->id()] = stickerset;
     }
+}
+
+void StickerSetsTable::prepareOrder(QSqlQuery &orderquery)
+{
+    this->prepare(orderquery, "UPDATE " + this->name() + " SET position=:position WHERE id=:id");
 }

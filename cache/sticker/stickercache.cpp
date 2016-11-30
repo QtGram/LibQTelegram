@@ -3,7 +3,7 @@
 
 StickerCache* StickerCache::_instance = NULL;
 
-StickerCache::StickerCache(CacheDatabase *cachedatabase, QObject *parent) : QObject(parent), _cachedatabase(cachedatabase)
+StickerCache::StickerCache(CacheDatabase *cachedatabase, QObject *parent) : QObject(parent), _updating(false), _cachedatabase(cachedatabase)
 {
     cachedatabase->stickerSets()->populate(this->_stickersets, this);
 }
@@ -23,7 +23,7 @@ void StickerCache::init(CacheDatabase *cachedatabase)
 
 Document *StickerCache::stickerPreview(StickerSet *stickerset)
 {
-    if(stickerset->count() <= 0)
+    if(this->_updating || (stickerset->count() <= 0))
         return NULL;
 
     MessagesStickerSet* messagesstickerset = this->stickerSetData(stickerset);
@@ -42,6 +42,8 @@ void StickerCache::populate(MessagesAllStickers *messageallstickers)
     if(messageallstickers->constructorId() == TLTypes::MessagesAllStickersNotModified)
         return;
 
+    this->_updating = true;
+
     this->_cachedatabase->transaction([this, messageallstickers](QSqlQuery& queryobj) {
         this->_cachedatabase->stickerSets()->prepareInsert(queryobj);
 
@@ -49,10 +51,20 @@ void StickerCache::populate(MessagesAllStickers *messageallstickers)
             stickerset->setParent(this);
 
             this->_pendingdata << stickerset;
+            this->_stickers << stickerset;
 
             this->_stickersets[stickerset->id()] = stickerset;
             this->_cachedatabase->stickerSets()->insertQuery(queryobj, stickerset);
         }
+
+    });
+
+    this->_cachedatabase->transaction([this, messageallstickers](QSqlQuery& queryobj) {
+        int index = 0;
+        this->_cachedatabase->stickerSets()->prepareOrder(queryobj);
+
+        foreach(StickerSet* stickerset, messageallstickers->sets())
+            this->_cachedatabase->stickerSets()->orderQuery(queryobj, stickerset, index++);
 
         this->populateStickerData();
     });
@@ -60,9 +72,12 @@ void StickerCache::populate(MessagesAllStickers *messageallstickers)
 
 void StickerCache::populateInstalled(QList<StickerSet *> &stickerssets)
 {
+    if(this->_updating)
+        return;
+
     stickerssets.clear();
 
-    foreach(StickerSet* stickerset, this->_stickersets)
+    foreach(StickerSet* stickerset, this->_stickers)
     {
         if(!stickerset->isInstalled() || stickerset->isArchived())
             continue;
@@ -102,7 +117,11 @@ MessagesStickerSet *StickerCache::stickerSetData(StickerSet *stickerset)
 void StickerCache::populateStickerData()
 {
     if(this->_pendingdata.isEmpty())
+    {
+        this->_updating = false;
+        emit stickerCacheUpdated();
         return;
+    }
 
     StickerSet* stickerset = this->_pendingdata.takeFirst();
     InputStickerSet* inputstickerset = TelegramHelper::inputStickerSet(stickerset);

@@ -35,12 +35,14 @@ class StickerCache : public QObject
         void onStickerSetDataReceived(MTProtoReply* mtreply);
 
     signals:
-        void stickerSetReady(StickerSet* stickerset);
+        void stickerCacheUpdated();
 
     private:
+        bool _updating;
         CacheDatabase* _cachedatabase;
         QHash<TLLong, StickerSet*> _stickersets;
         QHash<TLLong, MessagesStickerSet*> _stickersetsdata;
+        QList<StickerSet*> _stickers;
         QList<StickerSet*> _pendingdata;
 
     private:
