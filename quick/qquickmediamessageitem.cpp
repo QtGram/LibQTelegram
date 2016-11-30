@@ -212,6 +212,20 @@ QString QQuickMediaMessageItem::webPageUrl() const
     return messagemedia->webpage()->url();
 }
 
+qreal QQuickMediaMessageItem::webPageThumbnailHeight() const
+{
+    if(!this->_message)
+        return 0;
+
+    MessageMedia* messagemedia = this->_message->media();
+
+    if(!messagemedia || (messagemedia->constructorId() != TLTypes::MessageMediaWebPage))
+        return 0;
+
+    qreal aspectratio = this->calcAspectRatio(this->imageSize());
+    return this->_size / aspectratio;
+}
+
 QString QQuickMediaMessageItem::videoThumbnail() const
 {
     if(!this->_fileobject || !this->isVideo())
@@ -407,6 +421,7 @@ bool QQuickMediaMessageItem::canDownload() const
     {
         case TLTypes::MessageMediaPhoto:
         case TLTypes::MessageMediaDocument:
+        case TLTypes::MessageMediaWebPage:
             return true;
 
         default:
@@ -478,12 +493,14 @@ void QQuickMediaMessageItem::createWebPageElement()
     connect(this->_mediaelement, &QQuickItem::heightChanged, this, &QQuickMediaMessageItem::scaleToFree);
     connect(this->_mediaelement, &QQuickItem::widthChanged, this, &QQuickMediaMessageItem::scaleToFree);
     connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::scaleToFree);
+    connect(this, &QQuickMediaMessageItem::sizeChanged, this, &QQuickMediaMessageItem::webPageThumbnailHeightChanged);
 
     emit webPageTitleChanged();
     emit webPageDescriptionChanged();
     emit webPageUrlChanged();
     emit webPageHasPhotoChanged();
     emit isWebPageChanged();
+    emit webPageThumbnailHeightChanged();
 
     this->scaleToFree();
 }
