@@ -291,7 +291,7 @@ void MTProtoStream::writeTLBytes(const TLBytes &val)
 
 void MTProtoStream::writeTLString(const TLString &val)
 {
-    this->writeTLBytes(val);
+    this->writeTLBytes(val.toUtf8());
 }
 
 void MTProtoStream::writeRaw(const QByteArray &data, bool prependlength)

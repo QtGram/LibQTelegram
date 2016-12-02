@@ -21,8 +21,8 @@ void StickerSetsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegram
 
     queryobj.bindValue(":id", stickerset->id());
     queryobj.bindValue(":position", -1);
-    queryobj.bindValue(":title", stickerset->title().toString());
-    queryobj.bindValue(":shortname", stickerset->shortName().toString());
+    queryobj.bindValue(":title", stickerset->title());
+    queryobj.bindValue(":shortname", stickerset->shortName());
     queryobj.bindValue(":stickerset", data);
 
     this->execute(queryobj);

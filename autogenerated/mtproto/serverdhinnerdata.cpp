@@ -22,8 +22,8 @@ void ServerDHInnerData::read(MTProtoStream* mtstream)
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_g = mtstream->readTLInt();
-		this->_dh_prime = mtstream->readTLString();
-		this->_g_a = mtstream->readTLString();
+		this->_dh_prime = mtstream->readTLBytes();
+		this->_g_a = mtstream->readTLBytes();
 		this->_server_time = mtstream->readTLInt();
 	}
 }
@@ -40,8 +40,8 @@ void ServerDHInnerData::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLInt(this->_g);
-		mtstream->writeTLString(this->_dh_prime);
-		mtstream->writeTLString(this->_g_a);
+		mtstream->writeTLBytes(this->_dh_prime);
+		mtstream->writeTLBytes(this->_g_a);
 		mtstream->writeTLInt(this->_server_time);
 	}
 }
@@ -93,12 +93,12 @@ void ServerDHInnerData::setG(TLInt g)
 	emit gChanged();
 }
 
-TLString ServerDHInnerData::dhPrime() const
+TLBytes ServerDHInnerData::dhPrime() const
 {
 	return this->_dh_prime;
 }
 
-void ServerDHInnerData::setDhPrime(TLString dh_prime) 
+void ServerDHInnerData::setDhPrime(TLBytes dh_prime) 
 {
 	if(this->_dh_prime == dh_prime)
 		return;
@@ -107,12 +107,12 @@ void ServerDHInnerData::setDhPrime(TLString dh_prime)
 	emit dhPrimeChanged();
 }
 
-TLString ServerDHInnerData::gA() const
+TLBytes ServerDHInnerData::gA() const
 {
 	return this->_g_a;
 }
 
-void ServerDHInnerData::setGA(TLString g_a) 
+void ServerDHInnerData::setGA(TLBytes g_a) 
 {
 	if(this->_g_a == g_a)
 		return;

@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
+#include "inputstickerset.h"
 #include "../../types/telegramobject.h"
 #include "maskcoords.h"
-#include "inputstickerset.h"
 
 class DocumentAttribute: public TelegramObject
 {

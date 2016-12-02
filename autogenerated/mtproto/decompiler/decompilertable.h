@@ -5,9 +5,9 @@
 // DO NOT EDIT!!!
 
 #include <QHash>
-#include "../../tltypes.h"
-#include <QObject>
 #include "../../../types/basic.h"
+#include <QObject>
+#include "../../tltypes.h"
 
 class DecompilerTable: public QObject
 {

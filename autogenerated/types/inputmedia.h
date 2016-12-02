@@ -6,12 +6,12 @@
 
 #include "../../types/basic.h"
 #include "../../types/telegramobject.h"
+#include "inputgame.h"
 #include "documentattribute.h"
 #include "inputphoto.h"
 #include "inputgeopoint.h"
 #include "inputfile.h"
 #include "inputdocument.h"
-#include "inputgame.h"
 
 class InputMedia: public TelegramObject
 {

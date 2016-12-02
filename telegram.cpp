@@ -210,7 +210,7 @@ QString Telegram::messageMediaText(MessageMedia *messagemedia) const
             return tr("GIF");
 
         if((attribute = TelegramHelper::documentHas(document, TLTypes::DocumentAttributeSticker)))
-            return tr("%1 Sticker").arg(attribute->alt().toString());
+            return tr("%1 Sticker").arg(attribute->alt());
 
         if(TelegramHelper::documentHas(document, TLTypes::DocumentAttributeVideo))
             return tr("Video file");
@@ -280,17 +280,17 @@ QString Telegram::messageActionText(Message* message) const
         Chat* chat = TelegramCache_chat(TelegramHelper::identifier(message->toId()));
 
         if(messageaction->channelId())
-            return tr("%1 created channel «%2»").arg(fromfullname, (chat ? chat->title().toString() : QString()));
+            return tr("%1 created channel «%2»").arg(fromfullname, (chat ? chat->title() : QString()));
 
-        return tr("%1 created group «%2»").arg(fromfullname, (chat ? chat->title().toString() : QString()));
+        return tr("%1 created group «%2»").arg(fromfullname, (chat ? chat->title() : QString()));
     }
 
     if(ctorid == TLTypes::MessageActionChatEditTitle)
     {
         if(message->isPost())
-            return tr("Channel name changed to «%1»").arg(messageaction->title().toString());
+            return tr("Channel name changed to «%1»").arg(messageaction->title());
 
-        return tr("«%1» changed group name to «%2»").arg(fromfullname, messageaction->title().toString());
+        return tr("«%1» changed group name to «%2»").arg(fromfullname, messageaction->title());
     }
 
     if(ctorid == TLTypes::MessageActionChatEditPhoto)
@@ -329,7 +329,7 @@ QString Telegram::messageActionText(Message* message) const
         return tr("«%1» has joined the group via invite link").arg(fromfullname);
 
     if(ctorid == TLTypes::MessageActionChannelCreate)
-        return tr("Channel «%1» created").arg(messageaction->title().toString());
+        return tr("Channel «%1» created").arg(messageaction->title());
 
     if(ctorid == TLTypes::MessageActionChatMigrateTo)
     {

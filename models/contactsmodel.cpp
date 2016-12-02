@@ -26,14 +26,14 @@ void ContactsModel::createChat(const QString& title, const QVariantList& users)
     foreach(QVariant user, users)
         inputusers << TelegramHelper::inputUser(user.value<User*>(), this);
 
-    MTProtoRequest* req = TelegramAPI::messagesCreateChat(DC_MainSession, inputusers, ToTLString(title));
+    MTProtoRequest* req = TelegramAPI::messagesCreateChat(DC_MainSession, inputusers, title);
     connect(req, &MTProtoRequest::replied, this, &ContactsModel::onCreateChannelOrChatReplied);
     qDeleteAll(inputusers);
 }
 
 void ContactsModel::createChannel(const QString &title, const QString& description)
 {
-    MTProtoRequest* req = TelegramAPI::channelsCreateChannel(DC_MainSession, ToTLString(title), ToTLString(description));
+    MTProtoRequest* req = TelegramAPI::channelsCreateChannel(DC_MainSession, title, description);
     connect(req, &MTProtoRequest::replied, this, &ContactsModel::onCreateChannelOrChatReplied);
 }
 

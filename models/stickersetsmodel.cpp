@@ -17,10 +17,10 @@ QVariant StickerSetsModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(stickerset);
 
     if(role == StickerSetsModel::TitleRole)
-        return stickerset->title().toString();
+        return stickerset->title();
 
     if(role == StickerSetsModel::ShortNameRole)
-        return stickerset->shortName().toString();
+        return stickerset->shortName();
 
     if(role == StickerSetsModel::StickerPreviewRole)
         return QVariant::fromValue(StickerCache_stickerPreview(stickerset));

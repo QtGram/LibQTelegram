@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
 #include "privacyrule.h"
+#include "../../types/telegramobject.h"
 #include "user.h"
 
 class AccountPrivacyRules: public TelegramObject

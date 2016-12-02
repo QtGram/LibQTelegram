@@ -19,7 +19,7 @@ void ResPQ::read(MTProtoStream* mtstream)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
-		this->_pq = mtstream->readTLString();
+		this->_pq = mtstream->readTLBytes();
 		mtstream->readTLVector<TLLong>(this->_server_public_key_fingerprints, false);
 	}
 }
@@ -35,7 +35,7 @@ void ResPQ::write(MTProtoStream* mtstream)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
-		mtstream->writeTLString(this->_pq);
+		mtstream->writeTLBytes(this->_pq);
 		mtstream->writeTLVector(this->_server_public_key_fingerprints, false);
 	}
 }
@@ -73,12 +73,12 @@ void ResPQ::setServerNonce(TLInt128 server_nonce)
 	emit serverNonceChanged();
 }
 
-TLString ResPQ::pq() const
+TLBytes ResPQ::pq() const
 {
 	return this->_pq;
 }
 
-void ResPQ::setPq(TLString pq) 
+void ResPQ::setPq(TLBytes pq) 
 {
 	if(this->_pq == pq)
 		return;

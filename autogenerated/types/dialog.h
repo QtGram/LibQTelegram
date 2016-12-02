@@ -6,9 +6,9 @@
 
 #include "../../types/basic.h"
 #include "../../types/telegramobject.h"
+#include "peernotifysettings.h"
 #include "draftmessage.h"
 #include "peer.h"
-#include "peernotifysettings.h"
 
 class Dialog: public TelegramObject
 {

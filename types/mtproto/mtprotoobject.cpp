@@ -12,7 +12,7 @@ void MTProtoObject::read(MTProtoStream *mtstream)
     Q_ASSERT((this->_constructorid == MTProtoObject::ctorGzipPacked));
 
     if(this->_constructorid == MTProtoObject::ctorGzipPacked)
-        this->_packeddata = mtstream->readTLString();
+        this->_packeddata = mtstream->readTLBytes();
 }
 
 void MTProtoObject::write(MTProtoStream *mtstream)
@@ -25,12 +25,12 @@ void MTProtoObject::write(MTProtoStream *mtstream)
         mtstream->writeTLString(this->_packeddata);
 }
 
-const TLString &MTProtoObject::packedData()
+const TLBytes &MTProtoObject::packedData()
 {
     return this->_packeddata;
 }
 
-void MTProtoObject::setPackedData(const TLString &packeddata)
+void MTProtoObject::setPackedData(const TLBytes &packeddata)
 {
     if(this->_packeddata == packeddata)
         return;

@@ -125,12 +125,12 @@ QString SendStatusObject::createUserPrefix() const
     if(this->_users.count() == 1)
     {
         QList<User*> users = this->_users.toList();
-        return tr("%1 is %2").arg(users.first()->firstName().toString());
+        return tr("%1 is %2").arg(users.first()->firstName());
     }
     else if(this->_users.count() == 2)
     {
         QList<User*> users = this->_users.toList();
-        return tr("%1 and %2 are %3").arg(users.first()->firstName().toString(), users.last()->firstName().toString());
+        return tr("%1 and %2 are %3").arg(users.first()->firstName(), users.last()->firstName());
     }
 
     return tr("%1 users are %2").arg(this->_users.count());

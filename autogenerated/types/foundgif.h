@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
 #include "document.h"
+#include "../../types/telegramobject.h"
 #include "photo.h"
 
 class FoundGif: public TelegramObject

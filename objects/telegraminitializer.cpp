@@ -289,7 +289,7 @@ void TelegramInitializer::onAccountGetPasswordReplied(MTProtoReply *mtreply)
         return;
     }
 
-    emit sessionPasswordNeeded(this->_accountpassword->hint().toString());
+    emit sessionPasswordNeeded(this->_accountpassword->hint());
 }
 
 void TelegramInitializer::onFloodLock(int seconds)

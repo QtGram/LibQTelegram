@@ -17,9 +17,9 @@ void PQInnerData::read(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == PQInnerData::CtorPQInnerData)
 	{
-		this->_pq = mtstream->readTLString();
-		this->_p = mtstream->readTLString();
-		this->_q = mtstream->readTLString();
+		this->_pq = mtstream->readTLBytes();
+		this->_p = mtstream->readTLBytes();
+		this->_q = mtstream->readTLBytes();
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_new_nonce = mtstream->readTLInt256();
@@ -35,9 +35,9 @@ void PQInnerData::write(MTProtoStream* mtstream)
 	
 	if(this->_constructorid == PQInnerData::CtorPQInnerData)
 	{
-		mtstream->writeTLString(this->_pq);
-		mtstream->writeTLString(this->_p);
-		mtstream->writeTLString(this->_q);
+		mtstream->writeTLBytes(this->_pq);
+		mtstream->writeTLBytes(this->_p);
+		mtstream->writeTLBytes(this->_q);
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLInt256(this->_new_nonce);
@@ -49,12 +49,12 @@ void PQInnerData::compileFlags()
 	
 }
 
-TLString PQInnerData::pq() const
+TLBytes PQInnerData::pq() const
 {
 	return this->_pq;
 }
 
-void PQInnerData::setPq(TLString pq) 
+void PQInnerData::setPq(TLBytes pq) 
 {
 	if(this->_pq == pq)
 		return;
@@ -63,12 +63,12 @@ void PQInnerData::setPq(TLString pq)
 	emit pqChanged();
 }
 
-TLString PQInnerData::p() const
+TLBytes PQInnerData::p() const
 {
 	return this->_p;
 }
 
-void PQInnerData::setP(TLString p) 
+void PQInnerData::setP(TLBytes p) 
 {
 	if(this->_p == p)
 		return;
@@ -77,12 +77,12 @@ void PQInnerData::setP(TLString p)
 	emit pChanged();
 }
 
-TLString PQInnerData::q() const
+TLBytes PQInnerData::q() const
 {
 	return this->_q;
 }
 
-void PQInnerData::setQ(TLString q) 
+void PQInnerData::setQ(TLBytes q) 
 {
 	if(this->_q == q)
 		return;

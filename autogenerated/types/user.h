@@ -6,8 +6,8 @@
 
 #include "../../types/basic.h"
 #include "../../types/telegramobject.h"
-#include "userprofilephoto.h"
 #include "userstatus.h"
+#include "userprofilephoto.h"
 
 class User: public TelegramObject
 {

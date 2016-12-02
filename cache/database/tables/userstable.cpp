@@ -19,7 +19,7 @@ void UsersTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject
 
     queryobj.bindValue(":id", TelegramHelper::identifier(user));
     queryobj.bindValue(":name", TelegramHelper::fullName(user));
-    queryobj.bindValue(":username", user->username().toString());
+    queryobj.bindValue(":username", user->username());
     queryobj.bindValue(":iscontact", user->isContact());
     queryobj.bindValue(":user", data);
 

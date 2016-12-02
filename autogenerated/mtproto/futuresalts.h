@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
 #include "futuresalt.h"
+#include "../../types/telegramobject.h"
 
 class FutureSalts: public TelegramObject
 {

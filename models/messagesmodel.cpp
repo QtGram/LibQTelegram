@@ -205,7 +205,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
         if(!message->media())
             return QString();
 
-        return message->media()->caption().toString();
+        return message->media()->caption();
     }
 
     if(role == MessagesModel::ReplyItemRole)
@@ -329,7 +329,7 @@ QVariant MessagesModel::data(const QModelIndex &index, int role) const
             Chat* chat = TelegramCache_chat(message->fwdFrom()->channelId());
 
             if(chat)
-                return chat->title().toString();
+                return chat->title();
         }
     }
 
@@ -480,7 +480,7 @@ void MessagesModel::editMessage(const QString& text, Message* editmessage)
         return;
 
     this->createInput();
-    TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), ToTLString(text), NULL, TLVector<MessageEntity*>());
+    TelegramAPI::messagesEditMessage(DC_MainSession, this->_inputpeer, editmessage->id(), text, NULL, TLVector<MessageEntity*>());
 }
 
 void MessagesModel::sendFile(const QUrl &filepath, const QString& caption)

@@ -14,7 +14,7 @@ class ServerDHParams: public TelegramObject
 	Q_PROPERTY(TLInt128 nonce READ nonce WRITE setNonce NOTIFY nonceChanged)
 	Q_PROPERTY(TLInt128 serverNonce READ serverNonce WRITE setServerNonce NOTIFY serverNonceChanged)
 	Q_PROPERTY(TLInt128 newNonceHash READ newNonceHash WRITE setNewNonceHash NOTIFY newNonceHashChanged)
-	Q_PROPERTY(TLString encryptedAnswer READ encryptedAnswer WRITE setEncryptedAnswer NOTIFY encryptedAnswerChanged)
+	Q_PROPERTY(TLBytes encryptedAnswer READ encryptedAnswer WRITE setEncryptedAnswer NOTIFY encryptedAnswerChanged)
 
 	Q_ENUMS(Constructors)
 
@@ -37,8 +37,8 @@ class ServerDHParams: public TelegramObject
 		void setServerNonce(TLInt128 server_nonce);
 		TLInt128 newNonceHash() const;
 		void setNewNonceHash(TLInt128 new_nonce_hash);
-		TLString encryptedAnswer() const;
-		void setEncryptedAnswer(TLString encrypted_answer);
+		TLBytes encryptedAnswer() const;
+		void setEncryptedAnswer(TLBytes encrypted_answer);
 
 	signals:
 		void nonceChanged();
@@ -50,7 +50,7 @@ class ServerDHParams: public TelegramObject
 		TLInt128 _nonce;
 		TLInt128 _server_nonce;
 		TLInt128 _new_nonce_hash;
-		TLString _encrypted_answer;
+		TLBytes _encrypted_answer;
 
 };
 

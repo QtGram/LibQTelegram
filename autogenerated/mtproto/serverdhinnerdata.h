@@ -14,8 +14,8 @@ class ServerDHInnerData: public TelegramObject
 	Q_PROPERTY(TLInt128 nonce READ nonce WRITE setNonce NOTIFY nonceChanged)
 	Q_PROPERTY(TLInt128 serverNonce READ serverNonce WRITE setServerNonce NOTIFY serverNonceChanged)
 	Q_PROPERTY(TLInt g READ g WRITE setG NOTIFY gChanged)
-	Q_PROPERTY(TLString dhPrime READ dhPrime WRITE setDhPrime NOTIFY dhPrimeChanged)
-	Q_PROPERTY(TLString gA READ gA WRITE setGA NOTIFY gAChanged)
+	Q_PROPERTY(TLBytes dhPrime READ dhPrime WRITE setDhPrime NOTIFY dhPrimeChanged)
+	Q_PROPERTY(TLBytes gA READ gA WRITE setGA NOTIFY gAChanged)
 	Q_PROPERTY(TLInt serverTime READ serverTime WRITE setServerTime NOTIFY serverTimeChanged)
 
 	Q_ENUMS(Constructors)
@@ -38,10 +38,10 @@ class ServerDHInnerData: public TelegramObject
 		void setServerNonce(TLInt128 server_nonce);
 		TLInt g() const;
 		void setG(TLInt g);
-		TLString dhPrime() const;
-		void setDhPrime(TLString dh_prime);
-		TLString gA() const;
-		void setGA(TLString g_a);
+		TLBytes dhPrime() const;
+		void setDhPrime(TLBytes dh_prime);
+		TLBytes gA() const;
+		void setGA(TLBytes g_a);
 		TLInt serverTime() const;
 		void setServerTime(TLInt server_time);
 
@@ -57,8 +57,8 @@ class ServerDHInnerData: public TelegramObject
 		TLInt128 _nonce;
 		TLInt128 _server_nonce;
 		TLInt _g;
-		TLString _dh_prime;
-		TLString _g_a;
+		TLBytes _dh_prime;
+		TLBytes _g_a;
 		TLInt _server_time;
 
 };

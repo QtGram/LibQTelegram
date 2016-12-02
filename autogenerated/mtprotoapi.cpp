@@ -17,29 +17,29 @@ void MTProtoAPI::reqPq(DC* dc, TLInt128 nonce)
 	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::reqDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLString p, TLString q, TLLong public_key_fingerprint, TLString encrypted_data) 
+void MTProtoAPI::reqDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLBytes p, TLBytes q, TLLong public_key_fingerprint, TLBytes encrypted_data) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::reqDHParams);
 	mtstream->writeTLInt128(nonce);
 	mtstream->writeTLInt128(server_nonce);
-	mtstream->writeTLString(p);
-	mtstream->writeTLString(q);
+	mtstream->writeTLBytes(p);
+	mtstream->writeTLBytes(q);
 	mtstream->writeTLLong(public_key_fingerprint);
-	mtstream->writeTLString(encrypted_data);
+	mtstream->writeTLBytes(encrypted_data);
 	
 	dc->sendPlain(mtstream);
 }
 
-void MTProtoAPI::setClientDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLString encrypted_data) 
+void MTProtoAPI::setClientDHParams(DC* dc, TLInt128 nonce, TLInt128 server_nonce, TLBytes encrypted_data) 
 {
 	MTProtoStream* mtstream = new MTProtoStream();
 	
 	mtstream->writeTLConstructor(TLTypes::setClientDHParams);
 	mtstream->writeTLInt128(nonce);
 	mtstream->writeTLInt128(server_nonce);
-	mtstream->writeTLString(encrypted_data);
+	mtstream->writeTLBytes(encrypted_data);
 	
 	dc->sendPlain(mtstream);
 }

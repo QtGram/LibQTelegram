@@ -21,7 +21,7 @@ void ClientDHInnerData::read(MTProtoStream* mtstream)
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
 		this->_retry_id = mtstream->readTLLong();
-		this->_g_b = mtstream->readTLString();
+		this->_g_b = mtstream->readTLBytes();
 	}
 }
 
@@ -37,7 +37,7 @@ void ClientDHInnerData::write(MTProtoStream* mtstream)
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
 		mtstream->writeTLLong(this->_retry_id);
-		mtstream->writeTLString(this->_g_b);
+		mtstream->writeTLBytes(this->_g_b);
 	}
 }
 
@@ -88,12 +88,12 @@ void ClientDHInnerData::setRetryId(TLLong retry_id)
 	emit retryIdChanged();
 }
 
-TLString ClientDHInnerData::gB() const
+TLBytes ClientDHInnerData::gB() const
 {
 	return this->_g_b;
 }
 
-void ClientDHInnerData::setGB(TLString g_b) 
+void ClientDHInnerData::setGB(TLBytes g_b) 
 {
 	if(this->_g_b == g_b)
 		return;

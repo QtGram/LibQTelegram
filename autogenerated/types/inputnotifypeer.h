@@ -5,8 +5,8 @@
 // DO NOT EDIT!!!
 
 #include "../../types/basic.h"
-#include "../../types/telegramobject.h"
 #include "inputpeer.h"
+#include "../../types/telegramobject.h"
 
 class InputNotifyPeer: public TelegramObject
 {

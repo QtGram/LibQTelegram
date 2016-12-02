@@ -26,7 +26,7 @@ void ServerDHParams::read(MTProtoStream* mtstream)
 	{
 		this->_nonce = mtstream->readTLInt128();
 		this->_server_nonce = mtstream->readTLInt128();
-		this->_encrypted_answer = mtstream->readTLString();
+		this->_encrypted_answer = mtstream->readTLBytes();
 	}
 }
 
@@ -48,7 +48,7 @@ void ServerDHParams::write(MTProtoStream* mtstream)
 	{
 		mtstream->writeTLInt128(this->_nonce);
 		mtstream->writeTLInt128(this->_server_nonce);
-		mtstream->writeTLString(this->_encrypted_answer);
+		mtstream->writeTLBytes(this->_encrypted_answer);
 	}
 }
 
@@ -99,12 +99,12 @@ void ServerDHParams::setNewNonceHash(TLInt128 new_nonce_hash)
 	emit newNonceHashChanged();
 }
 
-TLString ServerDHParams::encryptedAnswer() const
+TLBytes ServerDHParams::encryptedAnswer() const
 {
 	return this->_encrypted_answer;
 }
 
-void ServerDHParams::setEncryptedAnswer(TLString encrypted_answer) 
+void ServerDHParams::setEncryptedAnswer(TLBytes encrypted_answer) 
 {
 	if(this->_encrypted_answer == encrypted_answer)
 		return;

@@ -16,8 +16,6 @@
 #define UNSET_FLAG_BIT(flags, bitno) flags & ~(1 << bitno)
 #define SET_FLAG_BIT_VALUE(flags, bitno, v) flags |= ((v ? 1 : 0) << bitno)
 
-#define ToTLString(s) s.toUtf8()
-
 typedef quint32 TLConstructor;
 typedef bool TLTrue;
 typedef bool TLBool;
@@ -25,7 +23,7 @@ typedef qint32 TLInt;
 typedef qint64 TLLong;
 typedef double TLDouble;
 typedef QByteArray TLBytes;
-typedef QByteArray TLObject;
+typedef QString TLString;
 
 // Internal types
 typedef quint64 MessageId;
@@ -42,18 +40,6 @@ typedef quint64 MessageId;
  * MessageActionChatMigrateTo -> old group side, contains new channel_id
  * MessageActionChannelMigrateFrom -> supergroup side, contains old chat_id, id: 1
  */
-
-class TLString: public QByteArray
-{
-    public:
-        TLString(): QByteArray() { }
-        TLString(const QByteArray& rhs): QByteArray(rhs) { }
-        TLString(const QString& rhs): QByteArray(rhs.toUtf8()) { }
-        QString toString() const { return QString::fromUtf8(*this); }
-};
-
-
-Q_DECLARE_METATYPE(TLString)
 
 template<typename T> using TLVector = QList<T>;
 

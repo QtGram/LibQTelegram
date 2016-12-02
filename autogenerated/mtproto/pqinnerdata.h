@@ -11,9 +11,9 @@ class PQInnerData: public TelegramObject
 {
 	Q_OBJECT
 
-	Q_PROPERTY(TLString pq READ pq WRITE setPq NOTIFY pqChanged)
-	Q_PROPERTY(TLString p READ p WRITE setP NOTIFY pChanged)
-	Q_PROPERTY(TLString q READ q WRITE setQ NOTIFY qChanged)
+	Q_PROPERTY(TLBytes pq READ pq WRITE setPq NOTIFY pqChanged)
+	Q_PROPERTY(TLBytes p READ p WRITE setP NOTIFY pChanged)
+	Q_PROPERTY(TLBytes q READ q WRITE setQ NOTIFY qChanged)
 	Q_PROPERTY(TLInt128 nonce READ nonce WRITE setNonce NOTIFY nonceChanged)
 	Q_PROPERTY(TLInt128 serverNonce READ serverNonce WRITE setServerNonce NOTIFY serverNonceChanged)
 	Q_PROPERTY(TLInt256 newNonce READ newNonce WRITE setNewNonce NOTIFY newNonceChanged)
@@ -32,12 +32,12 @@ class PQInnerData: public TelegramObject
 	protected:
 		virtual void compileFlags();
 	public:
-		TLString pq() const;
-		void setPq(TLString pq);
-		TLString p() const;
-		void setP(TLString p);
-		TLString q() const;
-		void setQ(TLString q);
+		TLBytes pq() const;
+		void setPq(TLBytes pq);
+		TLBytes p() const;
+		void setP(TLBytes p);
+		TLBytes q() const;
+		void setQ(TLBytes q);
 		TLInt128 nonce() const;
 		void setNonce(TLInt128 nonce);
 		TLInt128 serverNonce() const;
@@ -54,9 +54,9 @@ class PQInnerData: public TelegramObject
 		void newNonceChanged();
 
 	private:
-		TLString _pq;
-		TLString _p;
-		TLString _q;
+		TLBytes _pq;
+		TLBytes _p;
+		TLBytes _q;
 		TLInt128 _nonce;
 		TLInt128 _server_nonce;
 		TLInt256 _new_nonce;

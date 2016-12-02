@@ -26,7 +26,7 @@ QString StickerPackModel::title() const
     if(!this->_stickerset)
         return QString();
 
-    return this->_stickerset->title().toString();
+    return this->_stickerset->title();
 }
 
 QVariant StickerPackModel::data(const QModelIndex &index, int role) const

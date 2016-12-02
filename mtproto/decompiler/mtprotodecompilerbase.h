@@ -6,7 +6,7 @@
 #include "../../types/basic.h"
 
 #define BIT_FIELD_VALUE(flag, bitno) QString((flag & bitno) ? "true" : "false")
-#define ELIDE_LENGTH 50
+#define ELIDE_LENGTH 20
 
 class MTProtoDecompilerBase : public QObject
 {
@@ -20,10 +20,10 @@ class MTProtoDecompilerBase : public QObject
         virtual void decompile(int dcid, int direction, TLLong messageid, const QByteArray& data) = 0;
 
     private:
-        bool isPrintable(const QByteArray& ba);
+        bool isPrintable(const TLString &ba);
 
     protected:
-        QString printableString(const QByteArray& ba);
+        TLString printableString(const TLString &ba);
         template<typename T> void decompileTLVector(QString& result, MTProtoStream& mtstream, bool isbaretype = false);
 
     private:

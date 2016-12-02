@@ -18,7 +18,7 @@ void ChatsTable::insertQuery(QSqlQuery &queryobj, TelegramObject *telegramobject
     Chat* chat = qobject_cast<Chat*>(telegramobject);
 
     queryobj.bindValue(":id", TelegramHelper::identifier(chat));
-    queryobj.bindValue(":title", chat->title().toString());
+    queryobj.bindValue(":title", chat->title());
     queryobj.bindValue(":chat", data);
 
     this->execute(queryobj);

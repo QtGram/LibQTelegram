@@ -14,7 +14,7 @@ class ClientDHInnerData: public TelegramObject
 	Q_PROPERTY(TLInt128 nonce READ nonce WRITE setNonce NOTIFY nonceChanged)
 	Q_PROPERTY(TLInt128 serverNonce READ serverNonce WRITE setServerNonce NOTIFY serverNonceChanged)
 	Q_PROPERTY(TLLong retryId READ retryId WRITE setRetryId NOTIFY retryIdChanged)
-	Q_PROPERTY(TLString gB READ gB WRITE setGB NOTIFY gBChanged)
+	Q_PROPERTY(TLBytes gB READ gB WRITE setGB NOTIFY gBChanged)
 
 	Q_ENUMS(Constructors)
 
@@ -36,8 +36,8 @@ class ClientDHInnerData: public TelegramObject
 		void setServerNonce(TLInt128 server_nonce);
 		TLLong retryId() const;
 		void setRetryId(TLLong retry_id);
-		TLString gB() const;
-		void setGB(TLString g_b);
+		TLBytes gB() const;
+		void setGB(TLBytes g_b);
 
 	signals:
 		void nonceChanged();
@@ -49,7 +49,7 @@ class ClientDHInnerData: public TelegramObject
 		TLInt128 _nonce;
 		TLInt128 _server_nonce;
 		TLLong _retry_id;
-		TLString _g_b;
+		TLBytes _g_b;
 
 };
 

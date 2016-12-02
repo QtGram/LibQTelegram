@@ -6,8 +6,8 @@
 
 #include "../../types/basic.h"
 #include "../../types/telegramobject.h"
-#include "user.h"
 #include "contactlink.h"
+#include "user.h"
 
 class ContactsLink: public TelegramObject
 {

@@ -110,12 +110,12 @@ InputFile *FileUploader::createInputFile() const
     InputFile* inputfile = new InputFile();
     inputfile->setId(this->_localfileid);
     inputfile->setParts(this->_partscount);
-    inputfile->setName(ToTLString(this->_filename));
+    inputfile->setName(this->_filename);
 
     if(!this->_isbigfile)
     {
         inputfile->setConstructorId(TLTypes::InputFile);
-        inputfile->setMd5Checksum(ToTLString(this->_md5hash));
+        inputfile->setMd5Checksum(this->_md5hash);
     }
     else
         inputfile->setConstructorId(TLTypes::InputFileBig);
@@ -127,7 +127,7 @@ InputMedia *FileUploader::createInputMediaPhoto() const
 {
     InputMedia* inputmedia = new InputMedia();
     inputmedia->setConstructorId(TLTypes::InputMediaUploadedPhoto);
-    inputmedia->setCaption(ToTLString(this->_caption));
+    inputmedia->setCaption(this->_caption);
     inputmedia->setFile(this->createInputFile());
 
     return inputmedia;
@@ -138,8 +138,8 @@ InputMedia *FileUploader::createInputMediaDocument() const
     InputMedia* inputmedia = new InputMedia();
     inputmedia->setConstructorId(TLTypes::InputMediaUploadedDocument);
     inputmedia->setFile(this->createInputFile());
-    inputmedia->setMimeType(ToTLString(this->_mimetype));
-    inputmedia->setCaption(ToTLString(this->_caption));
+    inputmedia->setMimeType(this->_mimetype);
+    inputmedia->setCaption(this->_caption);
 
     TLVector<DocumentAttribute*> attributes;
     this->createDocumentAttributes(attributes, inputmedia);

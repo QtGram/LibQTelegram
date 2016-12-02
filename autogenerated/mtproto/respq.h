@@ -13,7 +13,7 @@ class ResPQ: public TelegramObject
 
 	Q_PROPERTY(TLInt128 nonce READ nonce WRITE setNonce NOTIFY nonceChanged)
 	Q_PROPERTY(TLInt128 serverNonce READ serverNonce WRITE setServerNonce NOTIFY serverNonceChanged)
-	Q_PROPERTY(TLString pq READ pq WRITE setPq NOTIFY pqChanged)
+	Q_PROPERTY(TLBytes pq READ pq WRITE setPq NOTIFY pqChanged)
 	Q_PROPERTY(TLVector<TLLong> serverPublicKeyFingerprints READ serverPublicKeyFingerprints WRITE setServerPublicKeyFingerprints NOTIFY serverPublicKeyFingerprintsChanged)
 
 	Q_ENUMS(Constructors)
@@ -34,8 +34,8 @@ class ResPQ: public TelegramObject
 		void setNonce(TLInt128 nonce);
 		TLInt128 serverNonce() const;
 		void setServerNonce(TLInt128 server_nonce);
-		TLString pq() const;
-		void setPq(TLString pq);
+		TLBytes pq() const;
+		void setPq(TLBytes pq);
 		const TLVector<TLLong>& serverPublicKeyFingerprints() const;
 		void setServerPublicKeyFingerprints(const TLVector<TLLong>& server_public_key_fingerprints);
 
@@ -48,7 +48,7 @@ class ResPQ: public TelegramObject
 	private:
 		TLInt128 _nonce;
 		TLInt128 _server_nonce;
-		TLString _pq;
+		TLBytes _pq;
 		TLVector<TLLong> _server_public_key_fingerprints;
 
 };

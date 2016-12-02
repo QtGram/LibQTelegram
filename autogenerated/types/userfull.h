@@ -7,10 +7,10 @@
 #include "../../types/basic.h"
 #include "../../types/telegramobject.h"
 #include "botinfo.h"
-#include "user.h"
 #include "photo.h"
-#include "contactslink.h"
 #include "peernotifysettings.h"
+#include "contactslink.h"
+#include "user.h"
 
 class UserFull: public TelegramObject
 {

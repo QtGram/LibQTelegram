@@ -14,7 +14,7 @@ DCConfig::DCConfig(const QString &host, TLInt port, TLInt dcid, bool isipv6, QOb
     this->_dcoption = new DcOption(this);
     this->_dcoption->setId(dcid);
     this->_dcoption->setIsIpv6(isipv6);
-    this->_dcoption->setIpAddress(ToTLString(host));
+    this->_dcoption->setIpAddress(host);
     this->_dcoption->setPort(port);
 
     this->_id = MakeDCConfigId(this->_dcoption->isIpv6(), this->_dcoption->isMediaOnly(), this->_dcoption->id());
