@@ -24,7 +24,7 @@ class ContactsModel : public TelegramModel
 
     protected:
         virtual QVariant data(const QModelIndex &index, int role) const;
-        virtual int rowCount(const QModelIndex &) const;
+        virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
         virtual QHash<int, QByteArray> roleNames() const;
         virtual void telegramReady();
 
