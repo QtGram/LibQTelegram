@@ -346,6 +346,9 @@ void TelegramConfig::saveConfig()
 {
     QByteArray data;
 
+    if (!_config) {
+        _config = new Config();
+    }
     this->_config->serialize(data);
     this->write(TelegramConfig::CONFIG_FILE, data);
 }
