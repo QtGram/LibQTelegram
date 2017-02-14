@@ -2,8 +2,8 @@
 #define TELEGRAMOBJECT_H
 
 #include <QObject>
-#include "types/basic.h"
-#include "mtproto/mtprotostream.h"
+#include "../types/basic.h"
+#include "../mtproto/mtprotostream.h"
 
 class TelegramObject : public QObject
 {

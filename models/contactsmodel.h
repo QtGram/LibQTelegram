@@ -17,15 +17,16 @@ class ContactsModel : public TelegramModel
     public:
         explicit ContactsModel(QObject *parent = 0);
 
+        QVariant data(const QModelIndex &index, int role) const;
+        int rowCount(const QModelIndex &index = QModelIndex()) const;
+        QHash<int, QByteArray> roleNames() const;
+
     public slots:
         void createDialog(User* user);
         void createChat(const QString &title, const QVariantList &users);
         void createChannel(const QString &title, const QString &description);
 
     protected:
-        virtual QVariant data(const QModelIndex &index, int role) const;
-        virtual int rowCount(const QModelIndex &) const;
-        virtual QHash<int, QByteArray> roleNames() const;
         virtual void telegramReady();
 
     private slots:

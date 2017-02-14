@@ -2,7 +2,7 @@
 #define MTPROTOREPLY_H
 
 #include "mtprotostream.h"
-#include "types/mtproto/mtprotomessage.h"
+#include "../types/mtproto/mtprotomessage.h"
 #include "../config/telegramconfig.h"
 
 class MTProtoReply : public MTProtoStream
