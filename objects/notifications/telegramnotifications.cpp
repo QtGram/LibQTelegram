@@ -60,7 +60,7 @@ void TelegramNotifications::onLoginCompleted()
 
 void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid)
 {
-    if(UpdateHandler_syncing || !DCSessionManager_OwnSession(sessionid))
+    if(UpdateHandler_syncing/* || !DCSessionManager_OwnSession(sessionid)*/)
         return;
 
     if(this->_mute || !this->_telegram || message->isOut() || (message->constructorId() != TLTypes::Message))
