@@ -56,6 +56,7 @@ void TelegramNotifications::onLoginCompleted()
 {
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
 void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid)
@@ -95,5 +96,7 @@ void TelegramNotifications::onReadHistory(Dialog *dialog)
     if((dialog->topMessage() - dialog->readInboxMaxId()) > 0)
         return;
 
-    emit dismissNotification(dialog);
+    if (dialog->unreadCount() == 0) {
+        emit dismissNotification(dialog);
+    }
 }
