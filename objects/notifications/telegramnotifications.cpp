@@ -73,6 +73,10 @@ void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid
 
     PeerNotifySettings* notifysettings = dialog->notifySettings();
 
+    if (!notifysettings) {
+        return;
+    }
+
     if(!message->isMentioned() && (notifysettings->isSilent() || (notifysettings->muteUntil() > 0)))
         return;
 
