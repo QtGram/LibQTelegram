@@ -5,6 +5,7 @@
 // DO NOT EDIT!!!
 
 #include "../config/telegramconfig.h"
+#include "../cache/telegramcache.h"
 #include "tltypes.h"
 #include "types/updatesstate.h"
 #include <QObject>
@@ -21,6 +22,7 @@ class ClientSyncManager: public QObject
 		static void syncState(UpdatesState* serverstate);
 	private:
 		static void syncPts(TLInt pts, UpdatesState* clientstate);
+		static void syncPts(TLInt pts, Dialog* dialog);
 		static void syncQts(TLInt qts, UpdatesState* clientstate);
 		static void syncDate(TLInt date, UpdatesState* clientstate);
 		static void syncSeq(TLInt seq, UpdatesState* clientstate);

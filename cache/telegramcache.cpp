@@ -484,7 +484,9 @@ void TelegramCache::onChannelTooLong(Update *update)
     if(!chat)
         return;
 
-    this->_fetcher->getChannelDifference(chat, update->pts());
+    Dialog* dialog = this->dialog(update->channelId());
+
+    this->_fetcher->getChannelDifference(chat, dialog ? dialog->pts() : update->pts());
 }
 
 void TelegramCache::onUserPhoto(Update *update)

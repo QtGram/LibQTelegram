@@ -5,42 +5,37 @@
 
 void ClientSyncManager::syncUpdate(Update* u, UpdatesState* clientstate) 
 {
-	if(u->constructorId() == TLTypes::UpdateNewMessage)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateDeleteMessages)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateUserPhoto)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateContactRegistered)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateNewAuthorization)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateNewEncryptedMessage)
-		ClientSyncManager::syncQts(u->qts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateEncryption)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateEncryptedMessagesRead)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateChatParticipantAdd)
-		ClientSyncManager::syncDate(u->date(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateReadHistoryInbox)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateReadHistoryOutbox)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateWebPage)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateReadMessagesContents)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateChannelTooLong)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateNewChannelMessage)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateDeleteChannelMessages)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateEditChannelMessage)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
-	else if(u->constructorId() == TLTypes::UpdateEditMessage)
-		ClientSyncManager::syncPts(u->pts(), clientstate);
+    switch(u->constructorId()) {
+    case TLTypes::UpdateNewMessage:
+    case TLTypes::UpdateDeleteMessages:
+    case TLTypes::UpdateReadHistoryInbox:
+    case TLTypes::UpdateReadHistoryOutbox:
+    case TLTypes::UpdateWebPage:
+    case TLTypes::UpdateReadMessagesContents:
+    case TLTypes::UpdateChannelTooLong:
+    case TLTypes::UpdateEditMessage:
+        ClientSyncManager::syncPts(u->pts(), clientstate);
+        break;
+    case TLTypes::UpdateUserPhoto:
+    case TLTypes::UpdateContactRegistered:
+    case TLTypes::UpdateNewAuthorization:
+    case TLTypes::UpdateEncryption:
+    case TLTypes::UpdateEncryptedMessagesRead:
+    case TLTypes::UpdateChatParticipantAdd:
+        ClientSyncManager::syncDate(u->date(), clientstate);
+        break;
+    case TLTypes::UpdateNewChannelMessage:
+        ClientSyncManager::syncPts(u->pts(), TelegramCache_dialog(u->messageUpdatenewchannelmessage()->toId()->channelId()));
+        break;
+    case TLTypes::UpdateEditChannelMessage:
+        ClientSyncManager::syncPts(u->pts(), TelegramCache_dialog(u->message()->toId()->channelId()));
+        break;
+    case TLTypes::UpdateDeleteChannelMessages:
+        ClientSyncManager::syncPts(u->pts(), TelegramCache_dialog(u->channelId()));
+        break;
+    default:
+        break;
+    }
 }
 
 void ClientSyncManager::syncUpdates(Updates* u, UpdatesState* clientstate) 
@@ -77,7 +72,7 @@ void ClientSyncManager::syncUpdates(Updates* u, UpdatesState* clientstate)
 void ClientSyncManager::syncState(UpdatesState* serverstate) 
 {
 	UpdatesState* clientstate = TelegramConfig_clientState;
-	
+
 	ClientSyncManager::syncPts(serverstate->pts(), clientstate);
 	ClientSyncManager::syncQts(serverstate->qts(), clientstate);
 	ClientSyncManager::syncDate(serverstate->date(), clientstate);
@@ -91,6 +86,14 @@ void ClientSyncManager::syncPts(TLInt pts, UpdatesState* clientstate)
 		return;
 	
 	clientstate->setPts(pts);
+}
+
+void ClientSyncManager::syncPts(TLInt pts, Dialog *dialog)
+{
+	if(pts <= dialog->pts())
+		return;
+
+	dialog->setPts(pts);
 }
 
 void ClientSyncManager::syncQts(TLInt qts, UpdatesState* clientstate) 
