@@ -48,6 +48,10 @@ void DCSession::repeatRequests()
 
 MTProtoRequest *DCSession::sendEncrypted(MTProtoStream *mtstream)
 {
+    if (!this->_dc) {
+        return NULL;
+    }
+
     MTProtoRequest* req = new MTProtoRequest(this->_dc->config());
     req->setSessionId(this->_sessionid);
     req->setBody(mtstream); // Take ownership

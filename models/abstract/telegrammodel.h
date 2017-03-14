@@ -8,7 +8,7 @@
 #define Emit_DataChangedRoles(i, roles) emit dataChanged(this->index(i, 0), this->index(i, 0), QVector<int>() << roles)
 #define Emit_DataChangedRangeRoles(first, last, roles) emit dataChanged(this->index(first, 0), this->index(last, 0), QVector<int>() << roles)
 
-#define Safe_MoveIdx(srcidx, destidx) (((destidx >= srcidx) && (destidx <= (srcidx + 1))) ? (destidx + 1) : destidx)
+#define Safe_MoveIdx(srcidx, destidx) (destidx > (srcidx + 1) ? (destidx + 1) : destidx)
 
 class TelegramModel : public QAbstractListModel
 {

@@ -56,11 +56,12 @@ void TelegramNotifications::onLoginCompleted()
 {
     connect(UpdateHandler_instance, &MTProtoUpdateHandler::newSingleMessage, this, &TelegramNotifications::onIncomingMessage, Qt::UniqueConnection);
     connect(TelegramCache_instance, &TelegramCache::readHistory, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
+    connect(TelegramCache_instance, &TelegramCache::dialogUnreadCountChanged, this, &TelegramNotifications::onReadHistory, Qt::UniqueConnection);
 }
 
 void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid)
 {
-    if(UpdateHandler_syncing || !DCSessionManager_OwnSession(sessionid))
+    if(UpdateHandler_syncing/* || !DCSessionManager_OwnSession(sessionid)*/)
         return;
 
     if(this->_mute || !this->_telegram || message->isOut() || (message->constructorId() != TLTypes::Message))
@@ -72,6 +73,10 @@ void TelegramNotifications::onIncomingMessage(Message *message, TLLong sessionid
         return;
 
     PeerNotifySettings* notifysettings = dialog->notifySettings();
+
+    if (!notifysettings) {
+        return;
+    }
 
     if(!message->isMentioned() && (notifysettings->isSilent() || (notifysettings->muteUntil() > 0)))
         return;
@@ -91,5 +96,7 @@ void TelegramNotifications::onReadHistory(Dialog *dialog)
     if((dialog->topMessage() - dialog->readInboxMaxId()) > 0)
         return;
 
-    emit dismissNotification(dialog);
+    if (dialog->unreadCount() == 0) {
+        emit dismissNotification(dialog);
+    }
 }

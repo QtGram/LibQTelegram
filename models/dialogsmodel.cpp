@@ -396,10 +396,13 @@ void DialogsModel::onDialogNewMessage(Dialog *dialog)
     Emit_DataChanged(idx);
     int newidx = this->insertionPoint(dialog);
 
-    if(idx == newidx)
+    if (newidx == idx || newidx == (idx + 1)) {
         return;
+    }
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
+    if (!this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx))) {
+        return;
+    }
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
@@ -423,10 +426,13 @@ void DialogsModel::onDialogNewDraftMessage(Dialog *dialog)
     Emit_DataChanged(idx);
     int newidx = this->insertionPoint(dialog);
 
-    if(idx == newidx)
+    if (newidx == idx || newidx == (idx + 1)) {
         return;
+    }
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
+    if (!this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx))) {
+        return;
+    }
     this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
@@ -441,11 +447,14 @@ void DialogsModel::onDialogDeleteMessage(Dialog *dialog)
     Emit_DataChanged(idx);
     int newidx = this->insertionPoint(dialog, idx);
 
-    if(idx == newidx)
+    if (newidx == idx || newidx == (idx + 1)) {
         return;
+    }
 
-    this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx));
-    this->_dialogs.move(idx, newidx - 1);
+    if (!this->beginMoveRows(QModelIndex(), idx, idx, QModelIndex(), Safe_MoveIdx(idx, newidx))) {
+        return;
+    }
+    this->_dialogs.move(idx, newidx);
     this->endMoveRows();
 }
 
